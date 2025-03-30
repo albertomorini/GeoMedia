@@ -1,9 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.albertomorini.geomedia',
   appName: 'GeoMedia',
-  webDir: 'dist'
+  webDir: 'dist',
+  server: {
+    androidScheme: 'http'
+  }
 };
 
 export default config;

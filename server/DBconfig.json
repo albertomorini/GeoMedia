@@ -1,0 +1,19 @@
+{
+    "server": "localhost", 
+    "port": "1433",
+    "options": {
+        "database" : "GEOMEDIA",
+        "trustedconnection": true,
+        "trustServerCertificate": true,
+  	    "encrypt": false,
+        "enableArithAbort": false
+    },
+    "authentication": {
+        "type": "default",
+        "options": {
+            "userName": "sa",
+            "password": "<MasterAdmin01>"
+        }
+    }
+}
+
