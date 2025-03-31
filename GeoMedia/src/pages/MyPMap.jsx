@@ -22,11 +22,11 @@ const MyPMap = () => {
         // let ask = await Filesystem.requestPermissions()
         try {
             let y = await Filesystem.writeFile({
-                path: file.TITLE+"."+(file.MEDIATYPE.split("/")[1]), //trying
+                path: file.TITLE + "." + (file.MEDIATYPE.split("/")[1]), //trying
                 data: file.MEDIADATA,
                 directory: Directory.Documents,
             });
-            if(y.uri.length>0){
+            if (y.uri.length > 0) {
                 ctx?.showMessage("File saved into Documents folder")
             }
         } catch (error) {
@@ -111,13 +111,9 @@ const MyPMap = () => {
                             (PostSelected?.MEDIATYPE.split("/")[0] == "image") ?
                                 <img src={PostSelected?.MEDIADATA} alt="image" />
                                 :
-                                <IonButton mode="md" color={"success"} onClick={()=>{
+                                <IonButton mode="md" color={"success"} expand="block" onClick={() => {
                                     downloadAudio(PostSelected)
-                                }}>Download</IonButton>
-                                // (PostSelected?.MEDIATYPE.split("/")[0] == "video") ?
-                                // <
-                                // :
-                                //     <a href={PostSelected?.MEDIADATA} download={PostSelected?.TITLE}>Download file({PostSelected?.MEDIATYPE})</a>
+                                }}>Download file</IonButton>
                         }
                     </IonCardContent>
 
