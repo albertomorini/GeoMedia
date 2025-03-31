@@ -1,37 +1,38 @@
-import { IonButton, IonCardContent, IonCardSubtitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonCardContent, IonCardSubtitle, IonContent, IonHeader, IonIcon, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { Map, Marker, ZoomControl } from "pigeon-maps";
-import { useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import NewPost from "../components/NewPost";
 
-import { Geolocation } from "@capacitor/geolocation"
 import { datetime2datehour, doRequest } from "../utility";
 import { close } from "ionicons/icons";
 import { mycontext } from "../App";
 
-const MyPMap = () => {
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
-    // const [UserPosition, setUserPosition] = useState(null) // the current position of user //TODO: default
+const MyPMap = () => {
 
     const [PostList, setPostList] = useState([])
     const [PostSelected, setPostSelected] = useState(null)
     const refModalPost = useRef()
     const ctx = useContext(mycontext)
 
-    // async function getPosition() {
-    //     let check = await Geolocation.checkPermissions()
-    //     // alert(JSON.stringify(check));
 
-    //     if (check.location == "granted" || check.coarseLocation == "granted") {
-
-    //         let location = await Geolocation.getCurrentPosition()
-    //         setUserPosition([location.coords.latitude, location.coords.longitude])
-
-    //     } else {//if(check.location=="prompt" || check.coarseLocation=="prompt") {
-    //         alert("Permission not granted, ask again")
-    //         let x = await Geolocation.requestPermissions()
-    //         alert(JSON.stringify(x))
-    //     }
-    // }
+    async function downloadAudio(file) {
+        let checkPer = await Filesystem.checkPermissions()
+        // let ask = await Filesystem.requestPermissions()
+        try {
+            let y = await Filesystem.writeFile({
+                path: file.TITLE+"."+(file.MEDIATYPE.split("/")[1]), //trying
+                data: file.MEDIADATA,
+                directory: Directory.Documents,
+            });
+            if(y.uri.length>0){
+                ctx?.showMessage("File saved into Documents folder")
+            }
+        } catch (error) {
+            alert(error)
+        }
+    }
 
     function getPosts() {
         if (ctx?.UserPosition != null) {
@@ -75,7 +76,9 @@ const MyPMap = () => {
                         <Marker width={50} anchor={ctx?.UserPosition} color={"#154c79"} />
                         {
                             PostList?.map(s => (
-                                <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={'red'}
+                                <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={
+                                    (s?.MEDIADATA.length > 0) ? '#5078fc' : '#f23c3c'
+                                }
                                     onClick={() => {
                                         setPostSelected(s)
                                         refModalPost?.current?.present()
@@ -86,7 +89,7 @@ const MyPMap = () => {
                     </Map>
             }
 
-            <NewPost reloadPosts={()=>getPosts()}/>
+            <NewPost reloadPosts={() => getPosts()} />
 
             <IonModal ref={refModalPost}>
                 <IonHeader>
@@ -108,7 +111,13 @@ const MyPMap = () => {
                             (PostSelected?.MEDIATYPE.split("/")[0] == "image") ?
                                 <img src={PostSelected?.MEDIADATA} alt="image" />
                                 :
-                                <a href={PostSelected?.MEDIADATA} download={PostSelected?.TITLE}>Download file({PostSelected?.MEDIATYPE})</a>
+                                <IonButton mode="md" color={"success"} onClick={()=>{
+                                    downloadAudio(PostSelected)
+                                }}>Download</IonButton>
+                                // (PostSelected?.MEDIATYPE.split("/")[0] == "video") ?
+                                // <
+                                // :
+                                //     <a href={PostSelected?.MEDIADATA} download={PostSelected?.TITLE}>Download file({PostSelected?.MEDIATYPE})</a>
                         }
                     </IonCardContent>
 

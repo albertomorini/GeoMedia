@@ -1,18 +1,128 @@
 
-import ServerConfig from "../public/AppConfig.json";
+import AppConfig from "../public/AppConfig.json";
+import { IonButton, IonContent,IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { Storage } from '@ionic/storage';
+import { closeCircle } from "ionicons/icons";
+import { useRef, useState, useEffect } from "react";
+const store = new Storage();
+store.create();
 
+
+//NETWORKING
 export const doRequest = (api, body = {}) => {
-    return fetch("http://" + ServerConfig.IPSERVER + ":" + ServerConfig.PORTSERVER + "/" + api, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(body)
-    }).then(res => res.json()).then(res => {
-        return res;
-    }).catch(err => {
-        return err;
-    });
+    return store.get("ServerConfig").then(ServerConfig => {
+        return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(body)
+        }).then(res => res.json()).then(res => {
+            return res;
+        }).catch(err => {
+            return err;
+        });
+    })
 }
 
+
+export const checkConnection2Server = (ipServer = AppConfig.IPSERVER, portServer = AppConfig.PORTSERVER) => {
+    const controller = new AbortController()
+    setTimeout(() => controller.abort(), 10000) //dopo 10 secondi tronchiamo la connessione -> aka è un il request timeout di fetch
+
+    return store.get("ServerConfig").then(cacheConfig => {
+        if (cacheConfig != null) {
+            ipServer = cacheConfig.ipserver;
+            portServer = cacheConfig.port;
+        }
+        return fetch("http://" + ipServer + ":" + portServer + "/checkConnection", {
+            method: "POST",
+            mode: "cors",
+            body: {
+                "hello": 'from_client!'
+            },
+            signal: controller.signal
+        }).then(res => res.json()).then(res => {
+            if (res.HELLO) { //configurazione corretta, la salviamo nelle cache
+                console.log("OK")
+                store.set("ServerConfig", {
+                    ipserver: ipServer,
+                    port: portServer
+                });
+                return true;
+            } else {
+                return false;
+            }
+        }).catch(err => {
+            console.log(err);
+            return false;
+        })
+    })
+}
+
+
+export const ContentConfigServer = () => {
+    const modalSettingRef = useRef();
+    const [IPServer, setIPServer] = useState();
+    const [PortServer, setPortServer] = useState();
+
+    /**
+     * Save the configuration into the cache
+     */
+    async function storeConfig() {
+        let x = await checkConnection2Server(IPServer, PortServer);
+        if (x) {
+            store.set("ServerConfig", {
+                ipserver: IPServer,
+                port: PortServer
+            });
+            modalSettingRef?.current?.dismiss();
+
+        }
+    }
+
+    async function checkConnection() {
+        let esito = await checkConnection2Server();
+        if (!esito) {
+            modalSettingRef?.current?.present();
+        }
+    }
+
+    useEffect(() => {
+        checkConnection();
+    }, [])
+
+    return (
+
+        <IonModal ref={modalSettingRef}>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Settings</IonTitle>
+                    <IonButton slot="end" color="danger" onClick={() => { modalSettingRef?.current?.dismiss() }}>
+                        <IonIcon icon={closeCircle} />
+                    </IonButton>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent>
+                <IonLabel>Server IP</IonLabel>
+                <IonInput fill='outline' mode='md' type='text'
+                    onIonInput={(ev) => setIPServer(ev.target.value)}
+                />
+                <br />
+                <IonLabel>Server port</IonLabel>
+                <IonInput fill='outline' mode='md' type='number' max={65535} min={1000}
+                    onIonInput={(ev) => setPortServer(ev.target.value)}
+                />
+                <br />
+                <IonButton expand='block' mode='md' color="success" onClick={() => storeConfig()}>Salve configuration</IonButton>
+            </IonContent>
+        </IonModal>
+
+    )
+}
+
+
+
+//Utility stuff
+////////////////////////////////////////
 
 export function datetime2date(datep = null) {
     let d;

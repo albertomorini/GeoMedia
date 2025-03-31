@@ -38,6 +38,10 @@ var x = http.createServer((req, res) => {
             //nthg
         }
 
+        if(req.url=="/checkConnection"){
+            sendResponse(res,200,{"HELLO":"From server!"})
+        }
+
         try {
             switch (req.url) {
                 case "/doLogin": //LOGIN OR REGISTER

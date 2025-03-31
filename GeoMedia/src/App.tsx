@@ -56,13 +56,14 @@ import Settings from "./pages/Settings";
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 export const mycontext = createContext();
+import { ContentConfigServer } from "./utility";
 
 
 const App: React.FC = () => {
   const [User, setUser] = useState(null)
   const [Message, setMessage] = useState(null)
   const [Color, setColor] = useState(null)
-  const [UserPosition, setUserPosition] = useState(null) // the current position of user //TODO: default
+  const [UserPosition, setUserPosition] = useState(null) // the current position of user 
   const refMessage = useRef()
 
   function showMessage(textmessage, colormessage) {
@@ -140,6 +141,7 @@ const App: React.FC = () => {
 
 
 
+      <ContentConfigServer />
 
 
 

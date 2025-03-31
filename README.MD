@@ -14,3 +14,11 @@ Wireless Network for Mobile Application course held by Professor Claudio Enrico 
 
 - https://pigeon-maps.js.org/
 
+
+## TODO:
+
+- comments on code
+- check prof (ask if enough and so)
+- settings tab 
+  - to change ip address on the run
+  - to see and delete user post
