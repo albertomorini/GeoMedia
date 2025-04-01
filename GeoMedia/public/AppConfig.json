@@ -1,4 +1,4 @@
 {
-    "IPSERVER": "10.0.0.4"
-    , "PORTSERVER": 9911
+    "IPSERVER": "10.0.0.3",
+    "PORTSERVER": 9911
 }

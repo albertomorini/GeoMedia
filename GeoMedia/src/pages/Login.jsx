@@ -23,6 +23,7 @@ const Login = () => {
             }).then(res=>{
                 if(res[0].ESITO==1){ //login done
                     ctx?.User?.setUser(Username)
+                    ctx?.Psw?.setPsw(React_MD5(Password),)
                     ctx.showMessage("Welcome back "+Username,"success")
                 }else{
                     ctx.showMessage("Wrong credentials","danger")

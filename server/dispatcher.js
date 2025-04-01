@@ -11,12 +11,17 @@ function newPost(author,postcontent){
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC NEWPOST @AUTHOR='"+author+"', @POSTCONTENT='"+dummy_pc+"'")
 }
 
-function getPosts(latitude=null,longitude=null){
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC GETPOSTS @LATITUDE= "+latitude+", @LONGITUDE="+longitude)
+function getPosts(latitude=null,longitude=null,username=null){
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC GETPOSTS @LATITUDE= "+latitude+", @LONGITUDE="+longitude+",@USERNAME='"+username+"'")
+}
+
+function deletePost(postid,username,password){ //TODO: to put in secure mode (with user auth and https..) -- NOT IN THIS DEMO/PROJECT
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC DELETEPOST @POSTID="+postid+", @USER='"+username+"', @PASSWORD='"+password+"'")
 }
 
 module.exports = {
     doLogin
     ,newPost
     , getPosts
+    , deletePost
 }

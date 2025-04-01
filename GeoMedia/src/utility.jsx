@@ -1,6 +1,6 @@
 
 import AppConfig from "../public/AppConfig.json";
-import { IonButton, IonContent,IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { Storage } from '@ionic/storage';
 import { closeCircle } from "ionicons/icons";
 import { useRef, useState, useEffect } from "react";
@@ -59,7 +59,7 @@ export const checkConnection2Server = (ipServer = AppConfig.IPSERVER, portServer
 }
 
 
-export const ContentConfigServer = () => {
+export const ContentConfigServer = (props) => {
     const modalSettingRef = useRef();
     const [IPServer, setIPServer] = useState();
     const [PortServer, setPortServer] = useState();
@@ -91,30 +91,39 @@ export const ContentConfigServer = () => {
     }, [])
 
     return (
-
-        <IonModal ref={modalSettingRef}>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Settings</IonTitle>
-                    <IonButton slot="end" color="danger" onClick={() => { modalSettingRef?.current?.dismiss() }}>
-                        <IonIcon icon={closeCircle} />
+        <>
+            {
+                (props?.showButton) ?
+                    <IonButton onClick={() => { modalSettingRef?.current?.present() }} expand="block">
+                        Change server configuration
                     </IonButton>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent>
-                <IonLabel>Server IP</IonLabel>
-                <IonInput fill='outline' mode='md' type='text'
-                    onIonInput={(ev) => setIPServer(ev.target.value)}
-                />
-                <br />
-                <IonLabel>Server port</IonLabel>
-                <IonInput fill='outline' mode='md' type='number' max={65535} min={1000}
-                    onIonInput={(ev) => setPortServer(ev.target.value)}
-                />
-                <br />
-                <IonButton expand='block' mode='md' color="success" onClick={() => storeConfig()}>Salve configuration</IonButton>
-            </IonContent>
-        </IonModal>
+                    :
+                    null
+            }
+            <IonModal ref={modalSettingRef}>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Settings</IonTitle>
+                        <IonButton slot="end" color="danger" onClick={() => { modalSettingRef?.current?.dismiss() }}>
+                            <IonIcon icon={closeCircle} />
+                        </IonButton>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <IonLabel>Server IP</IonLabel>
+                    <IonInput fill='outline' mode='md' type='text'
+                        onIonInput={(ev) => setIPServer(ev.target.value)}
+                    />
+                    <br />
+                    <IonLabel>Server port</IonLabel>
+                    <IonInput fill='outline' mode='md' type='number' max={65535} min={1000}
+                        onIonInput={(ev) => setPortServer(ev.target.value)}
+                    />
+                    <br />
+                    <IonButton expand='block' mode='md' color="success" onClick={() => storeConfig()}>Save configuration</IonButton>
+                </IonContent>
+            </IonModal>
+        </>
 
     )
 }

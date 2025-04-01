@@ -59,7 +59,14 @@ var x = http.createServer((req, res) => {
                     })
                     break
                 case "/getPosts":
-                    dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE).then(resQuery=>{
+                    dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE,body?.USERNAME).then(resQuery=>{
+                        sendResponse(res,200,resQuery)
+                    }).catch(err=>{
+                        sendResponse(res,500,err)
+                    })
+                    break
+                case "/deletePost":
+                    dispatcher.deletePost(body?.POSTID, body?.USERNAME, body?.PASSWORD).then(resQuery=>{
                         sendResponse(res,200,resQuery)
                     }).catch(err=>{
                         sendResponse(res,500,err)

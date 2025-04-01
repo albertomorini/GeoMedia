@@ -33,6 +33,7 @@ const NewPost = (props) => {
                 comment: PostContent.COMMENT,
                 media_b64: media_b64,
                 mediatype: type,
+                mediafilename: media.name,
                 latitude: ctx?.UserPosition[0],
                 longitude: ctx?.UserPosition[1]
             }

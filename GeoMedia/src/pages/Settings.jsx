@@ -1,36 +1,90 @@
-import { IonButton, IonContent, IonHeader, IonInput, IonItemDivider, IonLabel, IonTitle, IonToolbar } from "@ionic/react"
-import { useContext, useState } from "react"
+import { IonButton, IonCardSubtitle, IonCol, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { useContext, useEffect, useState } from "react"
 import { mycontext } from "../App"
+import { ContentConfigServer, datetime2datehour, doRequest } from "../utility";
+import ViewPost from "../components/ViewPost";
+import { open } from "ionicons/icons";
 
 const Settings = () => {
-    const [BaseURL, setBaseURL] = useState(null);
     const ctx = useContext(mycontext);
+    const [PostSelected, setPostSelected] = useState(null)
+
+    const [Posts, setPosts] = useState(null)
+
+    function getPosts() {
+        doRequest("getPosts", {
+            USERNAME: ctx?.User?.User
+        }).then(res => {
+            setPosts(res)
+        })
+    }
+    useEffect(() => {
+        getPosts()
+    }, [])
 
     return (
-        <IonContent>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Settings</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+        <IonContent className="ion-padding">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
 
-            <>
-                <IonLabel>Server base URL</IonLabel>
-                <IonInput type="text" mode="md" fill="outline" />
-            </>
+            <ContentConfigServer showButton={true} expand="block" />
+            <IonButton color={"danger"} expand="block" onClick={() => {
+                if (confirm("Are you sure?")) {
+                    ctx?.showMessage("Okay, bye...", "warning")
+                    ctx?.User?.setUser(null)
+                }
+            }}>
+                LOG OFF
+            </IonButton>
             <IonItemDivider />
-            <IonItemDivider />
             <>
-                <IonButton color={"danger"} expand="block" onClick={() => {
-                    if (confirm("Are you sure?")) {
-                        ctx?.showMessage("Okay, bye...", "warning")
-                        ctx?.User?.setUser(null)
-                    }
-                }}>
-                    LOG OFF
-                </IonButton>
+                <h3>Hello {ctx?.User.User}</h3>
+                <h5>Your posts</h5>
+                <IonItem>
+                    <IonRow style={{ width: "100%" }}>
+                        <IonCol><b>Title</b></IonCol>
+                        <IonCol size="4.5"><b>Date</b></IonCol>
+                        <IonCol><b>Latitude & longitude</b></IonCol>
+                        <IonCol size="2">
+                            <IonButton>
+                                <IonIcon icon={open} />
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                </IonItem>
+                {
+                    Posts?.map(s => (
+                        <IonItem>
+                            <IonRow style={{ width: "100%" }}>
+                                <IonCol>{s?.TITLE}
+                                    <br />
+                                    {s?.COMMENT}
+
+                                </IonCol>
+                                <IonCol size="4.5">{datetime2datehour(s?.POSTDATETIME)}</IonCol>
+                                <IonCol>{s?.LATITUDE.toFixed(2)} <br />{s?.LONGITUDE.toFixed(2)}</IonCol>
+                                <IonCol size="2">
+                                    <IonButton onClick={() => { setPostSelected(s) }}>
+                                        <IonIcon icon={open} />
+                                    </IonButton>
+                                </IonCol>
+
+                            </IonRow>
+                        </IonItem>
+                    ))
+                }
             </>
 
+            <ViewPost PostSelected={PostSelected} reloadPosts={()=>getPosts()}/>
         </IonContent>
     )
 }

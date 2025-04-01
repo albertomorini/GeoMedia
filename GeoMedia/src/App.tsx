@@ -61,6 +61,7 @@ import { ContentConfigServer } from "./utility";
 
 const App: React.FC = () => {
   const [User, setUser] = useState(null)
+  const [Psw, setPsw] = useState(null)
   const [Message, setMessage] = useState(null)
   const [Color, setColor] = useState(null)
   const [UserPosition, setUserPosition] = useState(null) // the current position of user 
@@ -69,13 +70,13 @@ const App: React.FC = () => {
   function showMessage(textmessage, colormessage) {
     setMessage(textmessage)
     setColor(colormessage)
-    console.log(textmessage);
 
     refMessage?.current?.present()
   }
 
   async function getPosition() {
     let check = await Geolocation.checkPermissions()
+
     if (check.location == "granted" || check.coarseLocation == "granted") {
 
       let location = await Geolocation.getCurrentPosition()
@@ -88,6 +89,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getPosition()
+    setInterval(() => {
+      getPosition();
+    }, 5000); //every 5 sec retreive the current position
   }, [])
 
   return (
@@ -99,6 +103,7 @@ const App: React.FC = () => {
       </IonHeader>
       <mycontext.Provider value={{
         "User": { User, setUser },
+        "Psw": { Psw, setPsw },
         "UserPosition": UserPosition,
         "showMessage": (msg, esito) => showMessage(msg, esito),
       }}>
