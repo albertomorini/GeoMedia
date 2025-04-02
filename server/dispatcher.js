@@ -1,3 +1,5 @@
+// associate to each sotred procedure/query a function, thus to better encapsulate and isolate the functionality
+
 const SQL_MANAGER = require("./SQL_MANAGER");
 ////////////////////////////////////////////
 

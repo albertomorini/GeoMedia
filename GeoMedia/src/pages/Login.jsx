@@ -12,10 +12,7 @@ const Login = () => {
     const ctx = useContext(mycontext)
 
     function doLogin() {
- 
-        
         if(Username?.replace(" ","").length>0 && Password?.replace(" ","").length>0 && Password==RepeatPSW ){
-
             doRequest("doLogin", {
                 username: Username,
                 password: React_MD5(Password),

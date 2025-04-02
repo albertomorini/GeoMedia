@@ -1,6 +1,7 @@
-import { IonButton, IonCardSubtitle, IonCol, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonRow, IonTitle, IonToolbar } from "@ionic/react"
-import { useContext, useEffect, useState } from "react"
-import { mycontext } from "../App"
+// settinsg of app such as the server base url and list of posts published by user
+import { IonButton, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonRow } from "@ionic/react";
+import { useContext, useEffect, useState } from "react";
+import { mycontext } from "../App";
 import { ContentConfigServer, datetime2datehour, doRequest } from "../utility";
 import ViewPost from "../components/ViewPost";
 import { open } from "ionicons/icons";
@@ -10,7 +11,7 @@ const Settings = () => {
     const [PostSelected, setPostSelected] = useState(null)
 
     const [Posts, setPosts] = useState(null)
-
+    // get the post of the account logged in
     function getPosts() {
         doRequest("getPosts", {
             USERNAME: ctx?.User?.User
@@ -24,17 +25,8 @@ const Settings = () => {
 
     return (
         <IonContent className="ion-padding">
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
+            <br /><br /><br /><br /><br /><br />
+            <br /><br /><br /><br /><br />
 
             <ContentConfigServer showButton={true} expand="block" />
             <IonButton color={"danger"} expand="block" onClick={() => {

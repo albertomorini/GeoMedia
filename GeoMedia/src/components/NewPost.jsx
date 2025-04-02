@@ -1,5 +1,7 @@
+// Modal for creation of post (comment, media)
+
 import { IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTextarea, IonTitle, IonToolbar } from "@ionic/react";
-import { add, close, ellipseSharp, link } from 'ionicons/icons';
+import { add, close } from 'ionicons/icons';
 import { useRef, useState, useContext } from "react";
 import { doRequest } from "../utility";
 
@@ -10,6 +12,7 @@ const NewPost = (props) => {
     const [PostContent, setPostContent] = useState({})
     const ctx = useContext(mycontext)
 
+    //convert blob in base64 (which we store)
     const toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -17,6 +20,7 @@ const NewPost = (props) => {
         reader.onerror = reject;
     });
 
+    // fetch server to store the content in input
     async function publishNewPost(){
         let media = document.querySelector('#myfile').files[0]
         let type=null

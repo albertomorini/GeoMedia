@@ -1,3 +1,5 @@
+// Module that just create the HTTP Serve and call the methods exposed by dispatcher to retrieve/storea data to database
+
 const http = require("http");
 const dispatcher = require("./dispatcher");
 const port = 9911
@@ -38,7 +40,7 @@ var x = http.createServer((req, res) => {
             //nthg
         }
 
-        if(req.url=="/checkConnection"){
+        if(req.url=="/checkConnection"){ // uitility, client on startup send this request, to make sure its configuratin is correct. If server responds the configuration is right
             sendResponse(res,200,{"HELLO":"From server!"})
         }
 

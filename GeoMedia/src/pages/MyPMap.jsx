@@ -1,3 +1,4 @@
+// main pages, shows the map and fetch server thus to retrieve the posts
 import { IonContent } from "@ionic/react";
 import { Map, Marker, ZoomControl } from "pigeon-maps";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -15,7 +16,7 @@ const MyPMap = () => {
     const refModalPost = useRef()
     const ctx = useContext(mycontext)
 
-
+    // retrieve all post giving the actual position of user (in the server it will be computed the nearest posts)
     function getPosts() {
         if (ctx?.UserPosition != null) {
             doRequest("getPosts", {
