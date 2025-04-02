@@ -1,8 +1,11 @@
 # Geo Media
 
+img[alt=drawing] { width: 200px; }
+
 This is my project for WNMA Course at University of Padua (Master Degree in Computer Science).
 
 Wireless Network for Mobile Application course held by Professor Claudio Enrico Palazzi, aims to study and understand network in mobile application, optimizing and improving traffic and sensors.
+
 
 
 ## Concept
@@ -46,23 +49,23 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 
 **Location permission**
 
-![permission](docs/img/Screenshot_20250402-233423.png){ width: 200px; }
+![permission](docs/img/Screenshot_20250402-233423.png)
 
 **Map**
 
-![mapoverview](docs/img/Screenshot_20250402-233443.png){ width: 200px; }
+![mapoverview](docs/img/Screenshot_20250402-233443.png)
 
 **Post view**
 
-![postview](docs/img/Screenshot_20250402-233452.png){ width: 200px; }
+![postview](docs/img/Screenshot_20250402-233452.png)
 
-![postview2](docs/img/Screenshot_20250402-234034.png){ width: 200px; }
+![postview2](docs/img/Screenshot_20250402-234034.png)
 
 **Post creation**
 
-![postcreation](docs/img/Screenshot_20250402-234025.png){ width: 200px; }
+![postcreation](docs/img/Screenshot_20250402-234025.png)
 
 
 **User account**
 
-![usersettings](docs/img/Screenshot_20250402-234048.png){ width: 200px; }
+![usersettings](docs/img/Screenshot_20250402-234048.png)
