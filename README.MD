@@ -1,7 +1,8 @@
 # Geo Media
+<style>
 
-img[alt=drawing] { width: 200px; }
-
+img{ width: 500px; }
+</style>
 This is my project for WNMA Course at University of Padua (Master Degree in Computer Science).
 
 Wireless Network for Mobile Application course held by Professor Claudio Enrico Palazzi, aims to study and understand network in mobile application, optimizing and improving traffic and sensors.
@@ -17,7 +18,7 @@ This project reflect the "three tier architecture" (https://www.ibm.com/think/to
 - **Application layer**: A simple HTTP server which lsiten the requests and store/retreive the data
 - **Data layer**: A DBMS thus to store, clean, check and manipulate data.
 
-![Architecture](/docs/img/Geomedia_Architecture_Simple.png){width: 300px}
+![Architecture](/docs/img/Geomedia_Architecture_Simple.png)
 
 ## Dependendices and tecnologies
 
