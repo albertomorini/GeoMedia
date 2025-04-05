@@ -67,6 +67,14 @@ var x = http.createServer((req, res) => {
                         sendResponse(res,500,err)
                     })
                     break
+                case "/getMediaPost":
+                    // console.log(body?.POSTID);
+                    dispatcher.getMediaPost(body?.POSTID).then(resQuery=>{
+                        sendResponse(res,200,resQuery)
+                    }).catch(err=>{
+                        sendResponse(res,500,err)
+                    })
+                    break
                 case "/deletePost":
                     dispatcher.deletePost(body?.POSTID, body?.USERNAME, body?.PASSWORD).then(resQuery=>{
                         sendResponse(res,200,resQuery)

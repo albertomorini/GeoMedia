@@ -1,6 +1,6 @@
 //modal to view post and download/store media into document folder android
 import { IonButton, IonCardContent, IonCardSubtitle, IonContent, IonHeader, IonIcon, IonModal, IonTitle, IonToolbar } from "@ionic/react";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { datetime2datehour, doRequest } from "../utility";
 import { close } from "ionicons/icons";
@@ -13,17 +13,19 @@ const ViewPost = (props) => {
     const refModalPost = useRef()
     const ctx = useContext(mycontext)
 
+    const [DataBase64, setDataBase64] = useState(null)
+
     async function downloadAudio(file) {
         let checkPer = await Filesystem.checkPermissions()
         let ask = await Filesystem.requestPermissions()
         try {
             let y = await Filesystem.writeFile({
                 path: file.MEDIAFILENAME,
-                data: file.MEDIADATA,
+                data: DataBase64,
                 directory: Directory.Documents,
             });
             if (y.uri.length > 0) {
-                ctx?.showMessage("File saved into Documents folder","success")
+                ctx?.showMessage("File saved into Documents folder", "success")
             }
         } catch (error) {
             alert(error)
@@ -45,10 +47,24 @@ const ViewPost = (props) => {
         }
     }
 
+    // get the media content in base64, different endpoint due to increment performance
+    function getMediaPost(postid) {
+        doRequest("getMediaPost", {
+            POSTID: postid
+        }).then(res => {
+            //res[0]?.MEDIADATA
+            if (res[0]?.MEDIADATA != null) {
+                setDataBase64(res[0]?.MEDIADATA)
+            }
+        })
+    }
+
+
     useEffect(() => {
 
         if (props?.PostSelected != null) {
             refModalPost?.current?.present()
+            getMediaPost(props?.PostSelected?.ID)
         }
     }, [props?.PostSelected])
 
@@ -59,7 +75,10 @@ const ViewPost = (props) => {
                 <IonHeader>
                     <IonToolbar>
                         <IonTitle>{props?.PostSelected?.TITLE}</IonTitle>
-                        <IonButton slot="end" color={"danger"} onClick={() => { refModalPost?.current?.dismiss() }}>
+                        <IonButton slot="end" color={"danger"} onClick={() => {
+                            refModalPost?.current?.dismiss();
+                            setDataBase64(null)
+                        }}>
                             <IonIcon icon={close} />
                         </IonButton>
                     </IonToolbar>
@@ -72,13 +91,17 @@ const ViewPost = (props) => {
                     <IonCardSubtitle>Posted by {props?.PostSelected?.AUTHOR} at {datetime2datehour(props?.PostSelected?.POSTDATETIME)}</IonCardSubtitle>
                     <IonCardContent>
                         {
-                            (props?.PostSelected?.MEDIADATA?.length > 0) ?
-                                (props?.PostSelected?.MEDIATYPE?.split("/")[0] == "image") ?
-                                    <img src={props?.PostSelected?.MEDIADATA} alt="image" />
-                                    :
+                            (DataBase64?.length > 0) ?
+                                <>
+                                    {(props?.PostSelected?.MEDIATYPE?.split("/")[0] == "image") ?
+                                        <img src={DataBase64} alt="image" />
+                                        :
+                                        null
+                                    }
                                     <IonButton mode="md" color={"success"} expand="block" onClick={() => {
                                         downloadAudio(props?.PostSelected)
                                     }}>Download file</IonButton>
+                                </>
                                 :
                                 null
                         }

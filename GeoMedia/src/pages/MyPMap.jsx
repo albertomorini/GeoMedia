@@ -59,7 +59,7 @@ const MyPMap = () => {
                         {
                             PostList?.map(s => (
                                 <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={
-                                    (s?.MEDIADATA?.length > 0) ? '#d6c531' : '#f23c3c'
+                                    (s?.MEDIATYPE?.length > 0) ? '#d6c531' : '#f23c3c'
                                 }
                                     onClick={() => {
                                         setPostSelected(s)
