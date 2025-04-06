@@ -43,24 +43,43 @@ Android, Social Networks, user location, privacy, client server, multimedia, med
 \section{Introduction}
 In the last decade mobile applications has almost replaced computer programs especially when comes to social media. Not just is more convenient to take the mobile phone over the laptop, but also mobile apps can give more functionality when the apps use some sensors to enrich the user experience.
 The explosion of social media brought media companies to invest and explore almost all functionality of the mobile device, thus to make users feel more connected and satisfied providing more relevant content. In this way users spend more time on these platform, which represent a profit for social media's companies.
+A perfect example is Tinder, a dating app where users can meet each other based on their proximity.
 \\
 For reach this purpose, a lot of sensors can be used to profile the end-user, such as location, not just throught the Access Point / Cell Antenna, but often with a GPS which provide a precise location.
+
+\\ In the other hand, using these features can bring out the drain of battery life, the increase of data usage, and of course some privacy concerns.
+\\ This project aims to create a mobile application where users can share comments or even more, photos, audio, video or similar multimedia data, through a map based on their' location.
+
+\section{Architecture}
+
+Thus to make GeoMedia app works as planned, there are some requirements which not concerns the mobile application itself, but that will helps to reach it's scope.
+The design architectured created is a simple "three tier layer", which see three sub actors work togheter.
+
+\subsection{Presentation layer}
+The presentation layer consists in the "GeoMedia" itself, which take place between users as human and the code and data stored into the servers.
+In fact, users will use the mobile application to look at others users' posts and to share their own.
+This subactor, is responsable also to retreive required data such as user location, user identifier (username) and so.
+
+\subsection{Application layer}
+
+In this project, the application layer is simply an HTTP server, which expose the endpoints to the frontend (presentation layer) and then takes actions when requested by client.
 \\
-A perfect example is Tinder, a dating app where users can meet each other based on their proximity.
+Specifically, to each endpoint, server will manipulate some data via some SQL instruction through the Data Layer.
 
-\section{Ease of Use}
+\subsection{Data layer}
 
-\subsection{Maintaining the Integrity of the Specifications}
+Data Layer consists into a Database Management System (DBMS), able to execute the CRUD operations (Create, Read, Update, Delete) on data stored in some tables.
+\\
+For this project, the DBMS will be used also to create some procedure (SQL Stored Procedure) thus to give to development a more flexible way to modify the select or insert of data.
 
-The IEEEtran class file is used to format your paper and style the text. All margins, 
-column widths, line spaces, and text fonts are prescribed; please do not 
-alter them. You may note peculiarities. For example, the head margin
-measures proportionately more than is customary. This measurement 
-and others are deliberate, using specifications that anticipate your paper 
-as one part of the entire proceedings, and not as an independent document. 
-Please do not revise any of the current designations.
 
-\section{Prepare Your Paper Before Styling}
+
+\section{Android application}
+\section{HTTP Server}
+\section{DBMS}
+\section{Future extensions}
+\section{References}
+
 Before you begin to format your paper, first write and save the content as a 
 separate text file. Complete all content and organizational editing before 
 formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 

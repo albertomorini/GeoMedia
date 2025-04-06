@@ -15,7 +15,7 @@ const ViewPost = (props) => {
 
     const [DataBase64, setDataBase64] = useState(null)
 
-    async function downloadAudio(file) {
+    async function downloadFile(file) {
         let checkPer = await Filesystem.checkPermissions()
         let ask = await Filesystem.requestPermissions()
         try {
@@ -61,7 +61,6 @@ const ViewPost = (props) => {
 
 
     useEffect(() => {
-
         if (props?.PostSelected != null) {
             refModalPost?.current?.present()
             getMediaPost(props?.PostSelected?.ID)
@@ -99,7 +98,7 @@ const ViewPost = (props) => {
                                         null
                                     }
                                     <IonButton mode="md" color={"success"} expand="block" onClick={() => {
-                                        downloadAudio(props?.PostSelected)
+                                        downloadFile(props?.PostSelected)
                                     }}>Download file</IonButton>
                                 </>
                                 :
