@@ -7,12 +7,42 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\documentclass{article}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=-6pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Geomedia: a framework to share comment and multi-media content based on location\\
-{\footnotesize \textsuperscript{*}Project of Wireless Network for Mobile Application, Master Degree in Computer Science at University of Padua}
+\title{Geomedia: a framework to share comments and multi-media content based on location.\\
+{\footnotesize \textsuperscript{*}Project of "Wireless Network for Mobile Application", Master Degree in Computer Science at University of Padua}
 }
 
 \author{\IEEEauthorblockN{ Prof. Claudio Enrico Palazzi}
@@ -31,222 +61,391 @@ alberto.morini@studenti.unipd.it}
 \maketitle
 
 \begin{abstract}
-Nowadays Social Networks are the principal way to create connections among people, platforms like Facebook, Twitter, Instagram and so, suggests to users content and profile based on the geographic location other then accounts with mutual connections and viral contents.
+Nowadays Social Networks are the principal way to create connections among people.
+Platforms like Facebook, Twitter, and Instagram offer users content and profiles based not only on mutual connections and trending content but also on geographic location.
 \\
-GeoMedia is the development of an Android Application which allows users to share comments or multimedia data (i.e. Photos/Videos/Audio) based on theirs' location. Thus users can easily see the content shared throuhg GeoMedia moving across a map.
+GeoMedia is a framework, developed into an Android Application, which provide a medium for users to share comments and multimedia content (such as photos, videos, and audio) based on their location.
+Then, users can easily see the content shared through GeoMedia moving across a geographical map.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Android, Social Networks, user location, privacy, client server, multimedia, media sharing, android location, http, three tier, three tier architecture
+Android, Social Networks, user location, privacy, client server, multimedia, media sharing, android location, http, three-tier, three-tier architecture, SQL, DBMS
 \end{IEEEkeywords}
 
 \section{Introduction}
-In the last decade mobile applications has almost replaced computer programs especially when comes to social media. Not just is more convenient to take the mobile phone over the laptop, but also mobile apps can give more functionality when the apps use some sensors to enrich the user experience.
-The explosion of social media brought media companies to invest and explore almost all functionality of the mobile device, thus to make users feel more connected and satisfied providing more relevant content. In this way users spend more time on these platform, which represent a profit for social media's companies.
-A perfect example is Tinder, a dating app where users can meet each other based on their proximity.
-\\
-For reach this purpose, a lot of sensors can be used to profile the end-user, such as location, not just throught the Access Point / Cell Antenna, but often with a GPS which provide a precise location.
+In the last decade, mobile applications has almost replaced traditional computer programs, especially when comes to social networks. Not only because it is more convenient to use a mobile phone than a laptop, but also because mobile phones can give more functionality by using physical sensors to enrich the user experience.
 
-\\ In the other hand, using these features can bring out the drain of battery life, the increase of data usage, and of course some privacy concerns.
-\\ This project aims to create a mobile application where users can share comments or even more, photos, audio, video or similar multimedia data, through a map based on their' location.
+
+The explosion of social media led media companies to invest and explore almost all functionality of the mobile device, thus to make users feel more connected and satisfied by providing more relevant content. As a result, users spend more time on these platforms, generating profit for social media companies.
+A perfect example is Tinder, a dating app where users can meet each other based on their geographical proximity.
+\\
+For reach this purpose, a variety of sensors can be used to profile the end user, often using the GPS to get the precise location, otherwise opting to the proximal location provided by Access Point / Cell antenna.
+
+However, utilizing these features can lead to faster battery drain, higher data usage, and potential privacy concerns.
+\\
+This project aims to develop a mobile application that allows users to share comments, photos, audio, videos, and other multimedia content on where they are, and then, see the content through a map.
 
 \section{Architecture}
 
-Thus to make GeoMedia app works as planned, there are some requirements which not concerns the mobile application itself, but that will helps to reach it's scope.
-The design architectured created is a simple "three tier layer", which see three sub actors work togheter.
 
-\subsection{Presentation layer}
-The presentation layer consists in the "GeoMedia" itself, which take place between users as human and the code and data stored into the servers.
-In fact, users will use the mobile application to look at others users' posts and to share their own.
-This subactor, is responsable also to retreive required data such as user location, user identifier (username) and so.
-
-\subsection{Application layer}
-
-In this project, the application layer is simply an HTTP server, which expose the endpoints to the frontend (presentation layer) and then takes actions when requested by client.
-\\
-Specifically, to each endpoint, server will manipulate some data via some SQL instruction through the Data Layer.
-
-\subsection{Data layer}
-
-Data Layer consists into a Database Management System (DBMS), able to execute the CRUD operations (Create, Read, Update, Delete) on data stored in some tables.
-\\
-For this project, the DBMS will be used also to create some procedure (SQL Stored Procedure) thus to give to development a more flexible way to modify the select or insert of data.
-
-
-
-\section{Android application}
-\section{HTTP Server}
-\section{DBMS}
-\section{Future extensions}
-\section{References}
-
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
-proofreading, spelling and grammar.
-
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
-
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
-
-\subsection{Units}
-\begin{itemize}
-\item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
-\item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
-\item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
-\item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
-\end{itemize}
-
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
-\begin{equation}
-a+b=\gamma\label{eq}
-\end{equation}
-
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
-
-\subsection{\LaTeX-Specific Advice}
-
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
-
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
-
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
-
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
-
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
-
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
-
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
-
-\subsection{Some Common Mistakes}\label{SCM}
-\begin{itemize}
-\item The word ``data'' is plural, not singular.
-\item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
-\item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
-\item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
-\item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
-\item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
-\item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
-\item Do not confuse ``imply'' and ``infer''.
-\item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
-\item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
-\item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
-\end{itemize}
-An excellent style manual for science writers is \cite{b7}.
-
-\subsection{Authors and Affiliations}
-\textbf{The class file is designed for, but not limited to, six authors.} A 
-minimum of one author is required for all conference articles. Author names 
-should be listed starting from left to right and then moving down to the 
-next line. This is the author sequence that will be used in future citations 
-and by indexing services. Names should not be listed in columns nor group by 
-affiliation. Please keep your affiliations as succinct as possible (for 
-example, do not differentiate among departments of the same organization).
-
-\subsection{Identify the Headings}
-Headings, or heads, are organizational devices that guide the reader through 
-your paper. There are two types: component heads and text heads.
-
-Component heads identify the different components of your paper and are not 
-topically subordinate to each other. Examples include Acknowledgments and 
-References and, for these, the correct style to use is ``Heading 5''. Use 
-``figure caption'' for your Figure captions, and ``table head'' for your 
-table title. Run-in heads, such as ``Abstract'', will require you to apply a 
-style (in this case, italic) in addition to the style provided by the drop 
-down menu to differentiate the head from the text.
-
-Text heads organize the topics on a relational, hierarchical basis. For 
-example, the paper title is the primary text head because all subsequent 
-material relates and elaborates on this one topic. If there are two or more 
-sub-topics, the next level head (uppercase Roman numerals) should be used 
-and, conversely, if there are not at least two sub-topics, then no subheads 
-should be introduced.
-
-\subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
-
-\begin{table}[htbp]
-\caption{Table Type Styles}
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
+To ensure that the GeoMedia app functions as intended, there's the need to design an opportune architecture, event if not strictly related with the application itself; the "three-tier" model adopted, will allows mobile apps to communicate each other without a direct connection.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.}
+{\includegraphics[width=9.5cm]{imgs/Architecture.png}}
+\caption{Design Architecture.}
 \label{fig}
 \end{figure}
 
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
+\subsection{Presentation layer}
+The presentation layer consists of the "GeoMedia" app itself, acting as the interface between the users and the data stored on the servers (by the application and data layers). Users will interact with the mobile application to view others' posts or share their own content.
+In the last case, this layer is for retrieving necessary data, such as the user's location, user identifier (username), and others metadata.
 
-\section*{Acknowledgment}
+\subsection{Application layer}
 
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
+In this project, the application layer is represented by an HTTP server, which exposes endpoints to the frontend (presentation layer) and then process the requests received.
+\\
+Specifically, for each endpoint, server will manipulate data with opportune SQL instruction through the Data Layer.
+
+\subsection{Data layer}
+
+The Data Layer consists of a Database Management System (DBMS), capable of performing CRUD operations (Create, Read, Update, Delete) on data stored in well defined tables.
+\\
+For this project, the DBMS will also be used to create SQL stored procedures, thus to offer to development a more flexible way to modify the select or insert of data queries.
+
+
+\section{Mobile application}
+In way to create a mobile application there are several frameworks and technologies options. For this project has been selected the "Ionic Framework", an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
+One of the key advantages of the Ionic Framework is its ability to integrate  web frameworks such as ReactJS, that offers a major benefit: it efficiently updates the DOM by re-rendering only those components that have changed, preventing unnecessary updates to unchanged elements.\\
+React.js also expose some "hooks" where can be injected the call for personalized functions, thust to execute the code whenever the users interact with the app.
+For example, hooks like useEffect() and useState() respectively allows to call functions at the component startup or when a property change, giving to the development the ease of personalization.
+\\
+As follow an example of a React Component created
+\begin{lstlisting}[language=Java, caption=Map component snippet]
+//various imports ...
+import { useContext, useEffect, useState } from "react";
+const MyPMap = () => { //declare the Map component
+
+    const [PostList, setPostList] = useState([]) //to store the list of posts
+    const ctx = useContext(mycontext)  //use the React context to retrieve data of other components
+    
+    // retrieve all post giving the actual position of user (in the server it will be computed the nearest posts)
+    function getPosts() {
+        if (ctx?.UserPosition != null) {
+            doRequest("getPosts", {
+                latitude: ctx?.UserPosition[0]
+                , longitude: ctx?.UserPosition[1]
+            }).then(res => {
+                setPostList(res)
+            })
+        } else {
+            doRequest("getPosts", {
+                latitude: null
+                , longitude: null
+            }).then(res => {
+                setPostList(res)
+            })
+
+        }
+    }
+    
+    useEffect(() => {
+        getPosts(); //to call the post
+    }, []); //at the startup of component
+    return( //render the graphics
+        <>
+        <Map defaultCenter={ctx?.UserPosition} defaultZoom={11}>
+            <ZoomControl />
+            <Marker width={50} anchor={ctx?.UserPosition} color={"#154c79"} />
+            {
+                PostList?.map(s => (
+                    <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={(s?.MEDIATYPE?.length > 0) ? '#d6c531' : '#f23c3c'}
+                        onClick={() => {
+                            setPostSelected(s) //store the post selected to open it in the opportuned component (viewPost)
+                        }}
+                    />
+                ))
+            }
+        </Map>
+        ...
+        </>
+    );
+}
+export default MyPMap;
+\end{lstlisting}
+
+In the React component declared, has been used also the Pigeon Map as React Component, which renders a geographical map and consents to put some 'marker'.
+In GeoMedia, there are three types of markers.
+\begin{itemize}
+\item Blue marker: the current user location
+\item Red marker: a post with just text (comment)
+\item Yellow marker: a post with a media attached 
+\end{itemize}
+
+At the startup of the component (triggered after the user login), an HTTP request is made to the server to retrieve the posts previously uploaded in GeoMedia, then each post will be rendered as market on the map.
+\\
+The method is parameterized to get all posts, or to make the server compute the post closer to the location provided within a defined range.
+This strategy is can be useful for scenarios like events or gameplays, where users need to be  within a certain area to access exclusive data.
+
+
+Another key component is 'ViewPost.jsx', which serves the purpose to show the comment of the clicked market, by opening a new interface and fetching the server to retrieve any associated multimedia data.
+This component is not limited to just viewing the comment; it also provides the functionality for downloading the attached multimedia file and store into the local storage of the mobile.
+
+\begin{lstlisting}[language=Java, caption=ViewPost]
+const ViewPost = (props) => {
+     const refModalPost = useRef()
+    const ctx = useContext(mycontext)
+    const [DataBase64, setDataBase64] = useState(null) //to store the mediafile attached
+
+    async function downloadFile(file) {
+        let checkPer = await Filesystem.checkPermissions()
+        let ask = await Filesystem.requestPermissions()
+        try {
+            let y = await Filesystem.writeFile({
+                path: file.MEDIAFILENAME,
+                data: DataBase64,
+                directory: Directory.Documents,
+            });
+            if (y.uri.length > 0) {
+                ctx?.showMessage("File saved into Documents folder", "success")
+            }
+        } catch (error) {
+            alert(error)
+        }
+    }
+     // get the media content in base64, different endpoint due to increment performance
+    function getMediaPost(postid) {
+        doRequest("getMediaPost", {
+            POSTID: postid
+        }).then(res => {
+            //res[0]?.MEDIADATA
+            if (res[0]?.MEDIADATA != null) {
+                setDataBase64(res[0]?.MEDIADATA)
+            }
+        })
+    }
+    return(
+    <>
+        <IonModal>
+        </IonModal>
+    </>
+    )
+}
+\end{lstlisting}
+
+\subsection{Ionic Capacitor}
+
+In order to access physical sensors on Android, such as geolocation and file storage, Ionic Capacitor can be integrated into the Ionic Framework. Capacitor is a collection of libraries that make possible the integration of web applications with native components, providing the API to adopt at Javascript level.
+
+Geomedia require to use some defined modules of capacitor, in specific:
+\begin{itemize}
+    \item GeoLocation: to get latitude and longitude coordinate of user logged into the app
+    \item FileSystem: to store file into mobile filesystem whenever users want to download the media uploaded
+\end{itemize}
+
+These plugins can be installed via a shell command, respectively:
+\begin{itemize}
+    \item `\$ npm install @capacitor/geolocation`
+    \item `\$ npm install @capacitor/filesystem'
+\end{itemize}
+
+The geolocation package provide the method `getCurrentPosition()` which returns an Object with parameters like: latitude, longitude, altitude and accuracy for each type of coordinate. The altitude even if not relevant for this project, could be integrated in future development thus to create more peculiar scenario or use cases.
+
+
+\subsection{Building for Android}
+
+A key strength of the Ionic Framework is its ability to build web applications into native mobile apps; in fact the framework acts as a wrapper/interpreter for the webpage, essentially embedding a custom browser inside the app.
+\\
+To create an Android Package (APK) for installing the app, some shell commands are required as reported in the official documentation, such as:
+\begin{itemize}
+    \item 'npm install @capacitor/android' to add the capacitor
+    \item  'npx cap add android' to denote the android platform, since Ionic can also build for "iOS" operating system
+    \item 'npx cap build android' to export the application in production mode and so encapsulate the app into a budle that later will be compiled
+\end{itemize}
+
+
+At this point some modification to the Android Manifest are required thus to declare the necessary permissions and other metadata.
+Specifically, to access the user's geolocation, GeoMedia requires the user to grant permission due to privacy purposes
+\\
+Another modification is to allow clear traffic (HTTP), since from Android 8, only HTTPS packets are allowed by default unless the explicitly declaration in the manifest.
+
+\begin{lstlisting}[language=XML, caption=Snippet of Android Manifest]
+<application
+    android:allowBackup="true"
+    android:icon="@mipmap/mymap"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/mymap_round"
+    android:supportsRtl="true"
+    android:requestLegacyExternalStorage="true"
+    android:largeHeap="true"
+    android:usesCleartextTraffic="true"
+>
+...
+</application>
+...
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-feature android:name="android.hardware.location.gps" />
+        
+\end{lstlisting}
+
+\section{HTTP Server}
+
+The role of application layer is taken by an HTTP Server, which represent a bridge between the data stored and the client app.
+
+GeoMedia HTTP server use NodeJS as engine to start a listening process on a defined network port; evenmore, the server expose also several endpoints exposed, one for each scope of the app.
+
+The content-application shared between client and server is in Application/JSON like, and there are only POST method implemented since every request contains data.
+At each endpoint exposed, corrispond the execution of a SQL Stored Procedure, which it will occupy to execute the respectively query on the determinated tables.
+
+\begin{lstlisting}[language=Java, caption=Snippet of GeoMedia HTTP server]
+const http = require("http");
+const port = 9911
+
+/**
+ * Invia una risposta HTTP
+ * @param {Object} res res of http 
+ * @param {int} status of response 
+ * @param {Object} body 
+ * @param {String} mime 
+ */
+function sendResponse(res, status, body = null, mime = "application/json") {
+    res.writeHead(status, { 'Content-Type': mime, "Access-Control-Allow-Origin": "*" });
+    try {
+        if (mime == "application/json") {
+            res.write(JSON.stringify(body));
+        } else {
+            res.write(body)
+        }
+    } catch (err) {
+        res.write(err);
+    }
+    res.end();
+}
+http.createServer((req, res) => {
+    let body = "";
+    req.on("data", (chunk) => {
+        body += chunk
+    });
+
+    req.on("end", () => {
+        try {
+            body = JSON.parse(body)
+        } catch (error) {
+            //nthg
+        }
+         if(req.url=="/checkConnection"){ // uitility, client on startup send this request, to make sure its configuratin is correct. If server responds the configuration is right
+            sendResponse(res,200,{"HELLO":"From server!"})
+        }
+
+        try {
+            switch (req.url) {
+                case "/doLogin": //LOGIN OR REGISTER
+                    dispatcher.doLogin(body.username, body.password, body.newuser).then(resQuery => {
+                        sendResponse(res, 200, resQuery)
+                    }).catch(err => {
+                        sendResponse(res, 500, err)
+                    })
+                    break;
+                case "/newPost":
+                    dispatcher.newPost(body.author,body.postcontent).then(resQuery=>{
+                        sendResponse(res,200,resQuery)
+                    }).catch(err=>{
+                        sendResponse(res,500,err)
+                    })
+                    break
+               case "/getPosts":
+                    dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE,body?.USERNAME).then(resQuery=>{
+                        sendResponse(res,200,resQuery)
+                    }).catch(err=>{
+                        sendResponse(res,500,err)
+                    })
+                    break
+                ...
+                default:
+                    sendResponse(res, 404, { 'msg': "Unknown path:" + req.url })
+                    break;
+            }
+        } catch (error) {
+            fs.appendFileSync('./log.txt', 'ERROR ,' + Date.now() + ',' + error)
+        }
+
+    })
+}).listen(port);
+
+console.log("Server started on port: "+port);
+
+\end{lstlisting}
+
+
+
+The server represent a single access point, this is a fragile solution in a real-work scenario, since represent a 'single point of failure'; so whenever this node is unvailable, all system is offline.
+There are more solution in order to avoid this problem, one is the replication of the HTTP-server process in different server-machine creating the problem of syncronize these two or more main server.
+\\
+A more sophisticated solution is to change the design of application, adopting a distribuited architecture by creating microservices. Where http process are distribuited in different machines one for each purpose; in example one for retrieve posts, one for manage the account, one to create posts and so on. This solution also can help-s with distribute the traffic overload which can bring to the effect "break the internet" often happened specifically with Social Media.
+
+
+\section{DBMS}
+
+All posts published on GeoMedia are stored into a Database Management System, where Microsoft SQL Server takes the role.
+The DBMS store data into two tables:
+\begin{itemize}
+    \item `USERS` for users' profiles
+    \item `POSTS` for posts 
+\end{itemize}
+
+\begin{lstlisting}[language=SQL, description=Creation of tables]
+CREATE TABLE USERS(
+    ID INT IDENTITY,
+    USERNAME VARCHAR(50) PRIMARY KEY,
+    PASSWORD NVARCHAR(256) NOT NULL, --stored the hash of MD5 function
+);
+CREATE TABLE POSTS(
+	ID INT IDENTITY PRIMARY KEY,
+	AUTHOR VARCHAR(50) FOREIGN KEY REFERENCES USERS(USERNAME),
+	TITLE VARCHAR(50),
+	COMMENT VARCHAR(MAX),
+	MEDIATYPE VARCHAR(100), -- IMAGE/JPG, AUDIO/M4A
+	MEDIADATA NVARCHAR(MAX), --BASE64
+	POSTDATETIME DATETIME,
+	COORD_X FLOAT,
+	COORD_Y FLOAT,
+);
+\end{lstlisting}
+
+The data stored are handled through Stored Procedure which allows faster and more precise modification of the query. In example, to store a post is passed as parameter the autor (user) of the post and all metadata in a JSON (formatted as a string).
+
+\begin{lstlisting}[language=SQL, description=Stored Procedure of post creation]
+CREATE PROCEDURE NEWPOST
+@AUTHOR VARCHAR(50), @POSTCONTENT NVARCHAR(MAX)
+AS
+BEGIN
+	
+	INSERT INTO POSTS(AUTHOR,TITLE,COMMENT,MEDIATYPE,MEDIADATA,POSTDATETIME, LATITUDE, LONGITUDE)
+	SELECT @AUTHOR, JJ.title, JJ.comment, JJ.mediatype, JJ.media_b64,GETDATE(), JJ.latitude ,JJ.longitude 
+	FROM OPENJSON(@POSTCONTENT,'$') WITH(
+		title  VARCHAR(50),
+		comment  VARCHAR(MAX),
+		media_b64  NVARCHAR(MAX),
+		mediatype  VARCHAR(100),
+		latitude FLOAT,
+		longitude FLOAT
+	) JJ
+	
+END;
+
+\end{lstlisting}
+
+
+\section{Future extensions}
+
+- ios
+- "live comments" as trivia games
+- p2p
+
+
+
+
+
 
 \section*{References}
 

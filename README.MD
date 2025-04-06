@@ -18,7 +18,7 @@ This project reflect the "three tier architecture" (https://www.ibm.com/think/to
 - **Application layer**: A simple HTTP server which lsiten the requests and store/retreive the data
 - **Data layer**: A DBMS thus to store, clean, check and manipulate data.
 
-![Architecture](/docs/img/Geomedia_Architecture_Simple.png)
+![Architecture](/docs/img/Architecture.png)
 
 ## Dependendices and tecnologies
 
@@ -54,13 +54,12 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 
 **Map**
 
-![mapoverview](docs/img/Screenshot_20250402-233443.png)
+![mapoverview](docs/img/Map.png)
 
 **Post view**
 
-![postview](docs/img/Screenshot_20250402-233452.png)
+![postview](docs/img/PostView.png)
 
-![postview2](docs/img/Screenshot_20250402-234034.png)
 
 **Post creation**
 

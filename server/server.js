@@ -27,7 +27,7 @@ function sendResponse(res, status, body = null, mime = "application/json") {
     res.end();
 }
 
-var x = http.createServer((req, res) => {
+http.createServer((req, res) => {
     let body = "";
     req.on("data", (chunk) => {
         body += chunk
