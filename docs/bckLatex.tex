@@ -8,6 +8,8 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \documentclass{article}
+
+\usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -114,7 +116,7 @@ For this project, the DBMS will also be used to create SQL stored procedures, th
 
 
 \section{Mobile application}
-In way to create a mobile application there are several frameworks and technologies options. For this project has been selected the "Ionic Framework", an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
+In way to create a mobile application there are several frameworks and technologies options. For this project has been selected the "Ionic Framework" \cite{b1}, an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
 One of the key advantages of the Ionic Framework is its ability to integrate  web frameworks such as ReactJS, that offers a major benefit: it efficiently updates the DOM by re-rendering only those components that have changed, preventing unnecessary updates to unchanged elements.\\
 React.js also expose some "hooks" where can be injected the call for personalized functions, thust to execute the code whenever the users interact with the app.
 For example, hooks like useEffect() and useState() respectively allows to call functions at the component startup or when a property change, giving to the development the ease of personalization.
@@ -173,7 +175,16 @@ const MyPMap = () => { //declare the Map component
 export default MyPMap;
 \end{lstlisting}
 
-In the React component declared, has been used also the Pigeon Map as React Component, which renders a geographical map and consents to put some 'marker'.
+\begin{figure}[htbp]
+\begin{center}
+{\includegraphics[width=5.5cm, height=11cm]{imgs/Map.png}}
+\end{center}
+\caption{Example of Map component.}
+\label{fig}
+\end{figure}
+
+
+In the React component declared, has been used also the Pigeon Map\cite{b8} as React Component, which renders a geographical map and consents to put some 'marker'.
 In GeoMedia, there are three types of markers.
 \begin{itemize}
 \item Blue marker: the current user location
@@ -184,11 +195,13 @@ In GeoMedia, there are three types of markers.
 At the startup of the component (triggered after the user login), an HTTP request is made to the server to retrieve the posts previously uploaded in GeoMedia, then each post will be rendered as market on the map.
 \\
 The method is parameterized to get all posts, or to make the server compute the post closer to the location provided within a defined range.
-This strategy is can be useful for scenarios like events or gameplays, where users need to be  within a certain area to access exclusive data.
+This strategy is can be useful for scenarios like events or game-plays, where users need to be  within a certain area to access exclusive data.
 
 
 Another key component is 'ViewPost.jsx', which serves the purpose to show the comment of the clicked market, by opening a new interface and fetching the server to retrieve any associated multimedia data.
 This component is not limited to just viewing the comment; it also provides the functionality for downloading the attached multimedia file and store into the local storage of the mobile.
+
+
 
 \begin{lstlisting}[language=Java, caption=ViewPost]
 const ViewPost = (props) => {
@@ -232,14 +245,24 @@ const ViewPost = (props) => {
 }
 \end{lstlisting}
 
+
+\begin{figure}[htbp]
+\begin{center}
+{\includegraphics[width=5.5cm, height=11cm]{imgs/PostView.png}}
+\end{center}
+\caption{Example of Post view.}
+\label{fig}
+\end{figure}
+
+
 \subsection{Ionic Capacitor}
 
 In order to access physical sensors on Android, such as geolocation and file storage, Ionic Capacitor can be integrated into the Ionic Framework. Capacitor is a collection of libraries that make possible the integration of web applications with native components, providing the API to adopt at Javascript level.
 
 Geomedia require to use some defined modules of capacitor, in specific:
 \begin{itemize}
-    \item GeoLocation: to get latitude and longitude coordinate of user logged into the app
-    \item FileSystem: to store file into mobile filesystem whenever users want to download the media uploaded
+    \item GeoLocation\cite{b2}: to get latitude and longitude coordinate of user logged into the app
+    \item FileSystem\cite{b3}: to store file into mobile filesystem whenever users want to download the media uploaded
 \end{itemize}
 
 These plugins can be installed via a shell command, respectively:
@@ -259,12 +282,12 @@ To create an Android Package (APK) for installing the app, some shell commands a
 \begin{itemize}
     \item 'npm install @capacitor/android' to add the capacitor
     \item  'npx cap add android' to denote the android platform, since Ionic can also build for "iOS" operating system
-    \item 'npx cap build android' to export the application in production mode and so encapsulate the app into a budle that later will be compiled
+    \item 'npx cap build android' to export the application in production mode and so encapsulate the app into a bundle that later will be compiled
 \end{itemize}
 
 
 At this point some modification to the Android Manifest are required thus to declare the necessary permissions and other metadata.
-Specifically, to access the user's geolocation, GeoMedia requires the user to grant permission due to privacy purposes
+Specifically, to access the user's geolocation, GeoMedia requires the user to grant permission due to privacy purposes.
 \\
 Another modification is to allow clear traffic (HTTP), since from Android 8, only HTTPS packets are allowed by default unless the explicitly declaration in the manifest.
 
@@ -290,12 +313,13 @@ Another modification is to allow clear traffic (HTTP), since from Android 8, onl
 
 \section{HTTP Server}
 
-The role of application layer is taken by an HTTP Server, which represent a bridge between the data stored and the client app.
+In the application layer the HTTP server takes place, which represent the bridge between data stored and the mobile application explained before.
+The GeoMedia HTTP server use NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several path called endpoints, each corrisponde to a specific function within the application. In fact, the server map the request to the execution command of a SQL stored procedure, which handles the designed queries on the respectively tables.
 
-GeoMedia HTTP server use NodeJS as engine to start a listening process on a defined network port; evenmore, the server expose also several endpoints exposed, one for each scope of the app.
+The package handled in this platform has a content-type of JSON (JavaScript Object Notation) thus to allow a rapid extendability of data included and providing an easily human-readable format.
+Only the "POST" method is implemented, since every request/response include data and parameters.
 
-The content-application shared between client and server is in Application/JSON like, and there are only POST method implemented since every request contains data.
-At each endpoint exposed, corrispond the execution of a SQL Stored Procedure, which it will occupy to execute the respectively query on the determinated tables.
+The server requires just one external dependency not included natively, which is 'tedious'\cite{b5} (installable via `\$ npm install tedious`) a module to establish a connection to Microsoft SQL Database (DBMS) then execute query commands and transactions.
 
 \begin{lstlisting}[language=Java, caption=Snippet of GeoMedia HTTP server]
 const http = require("http");
@@ -377,17 +401,27 @@ console.log("Server started on port: "+port);
 \end{lstlisting}
 
 
-
-The server represent a single access point, this is a fragile solution in a real-work scenario, since represent a 'single point of failure'; so whenever this node is unvailable, all system is offline.
-There are more solution in order to avoid this problem, one is the replication of the HTTP-server process in different server-machine creating the problem of syncronize these two or more main server.
+The server represent a single access point, which is a fragile solution in a real-world scenario, as it represents a "single point of failure" where the failure of a this node makes unavailable the whole system.
 \\
-A more sophisticated solution is to change the design of application, adopting a distribuited architecture by creating microservices. Where http process are distribuited in different machines one for each purpose; in example one for retrieve posts, one for manage the account, one to create posts and so on. This solution also can help-s with distribute the traffic overload which can bring to the effect "break the internet" often happened specifically with Social Media.
+There are many alternatives to mitigate this event. One approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
+A more sophisticated solution, is to change the whole design of this solution, creating a distributed architecture by adopting microservices\cite{b6}; where the server is fragmented into multiple smaller process that acts one for each specific function.
+For example, one microservice could handle the retrieving process of the posts, another could manage the accoutns, another the post creation, and so on. This approach not only imrpoves reliability but also helps to distribute traffic loads thust to prevening the system from an overwhelmed; a common problem with social media platforms when a mass requests (of viral contents) happens causing the "break the internet" effect.
 
+
+\begin{figure}[htbp]
+\begin{center}
+{\includegraphics[width=10.5cm, height=7cm]{imgs/microservices.png}}
+\end{center}
+\caption{Example of Map component.}
+\label{fig}
+\end{figure}
 
 \section{DBMS}
 
-All posts published on GeoMedia are stored into a Database Management System, where Microsoft SQL Server takes the role.
-The DBMS store data into two tables:
+All posts published on GeoMedia are stored in a Database Management System (DBMS), where Microsoft SQL Server\cite{b7} serving as the engine.
+
+The DBMS stores data in two primary tables:
+
 \begin{itemize}
     \item `USERS` for users' profiles
     \item `POSTS` for posts 
@@ -412,7 +446,8 @@ CREATE TABLE POSTS(
 );
 \end{lstlisting}
 
-The data stored are handled through Stored Procedure which allows faster and more precise modification of the query. In example, to store a post is passed as parameter the autor (user) of the post and all metadata in a JSON (formatted as a string).
+Data is managed through stored procedures, which allows more efficient and accurate query modifications. For example, when storing a post,
+the author (user) of the post and all associated metadata (as the whole JSON data received by server) are passed as parameters, then manipulated and formatted into SQL. Giving also the isolation and independence from the application layer.
 
 \begin{lstlisting}[language=SQL, description=Stored Procedure of post creation]
 CREATE PROCEDURE NEWPOST
@@ -438,47 +473,34 @@ END;
 
 \section{Future extensions}
 
-- ios
-- "live comments" as trivia games
-- p2p
+In conclusion, GeoMedia offers a simple platform for sharing content on a geographic map. As previously mentioned, there are some key features that could be expanded.
 
+Some ideas include:
 
+\subsection{Live comments}
+A potential feature to temporize posts to be available only at specific times or within a defined geographic area.
+This could be used to create interactive experiences, such as "treasure hunts" or "hide and seek" games.
 
+\subsection{Time capsule}
 
+Extending the concept of limiting content to a specific area, another idea could involve storing posts in small sensors distributed randomly in locations such as forests, mountains, or cities. 
+These sensors would be reachable only with short-range medium like Bluetooth or Wi-Fi, or even NFC.
+\\
+This idea could serve in multiple scenarios, such as a waypoints to mark hiking routes in the mountains, or actingas time capsules at panoramic points.
 
-
-\section*{References}
-
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
-
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
 
 \begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\bibitem{b1} Ionic Framework is cross-platform framework to create web-application and export them to mobile platform. \href{http://www.overleaf.com}{Link}
+\bibitem{b2} Ionic Capacitor - Geolocation package to access to GPS location on mobile devices\href{https://capacitorjs.com/docs/apis/geolocation}{Link}
+\bibitem{b3}Ionic Capactor - FileSystem package to store data on mobile devices\href{https://capacitorjs.com/docs/apis/filesystem}{Link}
+\bibitem{b4} NodeJS as server engine \href{https://nodejs.org/en}{Link}\
+\bibitem{b5}{Tedious - Node Package able to handle SQL Server communication} \href{https://tediousjs.github.io/tedious/}{Link}
+\bibitem{b6} Microservices panoramic and image in figure \href{https://medium.com/the-modern-scientist/introduction-to-microservices-architecture-f0c7eefe79f1}{Link}
+\bibitem{b7} Microsoft SQL Server 2022 as DBMSQ for data layer \href{https://www.microsoft.com/en-us/sql-server/sql-server-2022}{Link}
+\bibitem{b8} Pigeon Map as React Component to render a geographical map \href{https://pigeon-maps.js.org/}{Link}
+
+
 \end{thebibliography}
 \vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
 
 \end{document}
