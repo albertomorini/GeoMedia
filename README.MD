@@ -71,3 +71,5 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 ![usersettings](docs/img/Screenshot_20250402-234048.png)
 
 
+
+
