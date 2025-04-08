@@ -64,7 +64,7 @@ alberto.morini@studenti.unipd.it}
 
 \begin{abstract}
 Nowadays Social Networks are the principal way to create connections among people.
-Platforms like Facebook, Twitter, and Instagram offer users content and profiles based not only on mutual connections and trending content but also on geographic location.
+Platforms like Facebook, Twitter, and Instagram suggest content and profiles based not only on mutual connections and trending content but also on geographic location of the end-user.
 \\
 GeoMedia is a framework, developed into an Android Application, which provide a medium for users to share comments and multimedia content (such as photos, videos, and audio) based on their location.
 Then, users can easily see the content shared through GeoMedia moving across a geographical map.
@@ -75,10 +75,10 @@ Android, Social Networks, user location, privacy, client server, multimedia, med
 \end{IEEEkeywords}
 
 \section{Introduction}
-In the last decade, mobile applications has almost replaced traditional computer programs, especially when comes to social networks. Not only because it is more convenient to use a mobile phone than a laptop, but also because mobile phones can give more functionality by using physical sensors to enrich the user experience.
+In the last decade, mobile applications has almost replaced traditional computer programs, especially when comes to social networks. Not only because it is more convenient to use a mobile phone than a laptop, but also because mobile phones can give more functionality by using physical sensors present to enrich the user experience.
 
 
-The explosion of social media led media companies to invest and explore almost all functionality of the mobile device, thus to make users feel more connected and satisfied by providing more relevant content. As a result, users spend more time on these platforms, generating profit for social media companies.
+The explosion of social media led media companies to invest and explore almost all functionality of the mobile device, thus to make users feel more connected and satisfied by providing more relevant content. As result, users spend more time on these platforms, generating profit for social media companies.
 A perfect example is Tinder, a dating app where users can meet each other based on their geographical proximity.
 \\
 For reach this purpose, a variety of sensors can be used to profile the end user, often using the GPS to get the precise location, otherwise opting to the proximal location provided by Access Point / Cell antenna.
@@ -86,11 +86,15 @@ For reach this purpose, a variety of sensors can be used to profile the end user
 However, utilizing these features can lead to faster battery drain, higher data usage, and potential privacy concerns.
 \\
 This project aims to develop a mobile application that allows users to share comments, photos, audio, videos, and other multimedia content on where they are, and then, see the content through a map.
+\\
+\textbf{The whole source code is public on GitHub via this} \href{https://github.com/albertomorini/GeoMedia}{Link}
+
 
 \section{Architecture}
 
 
-To ensure that the GeoMedia app functions as intended, there's the need to design an opportune architecture, event if not strictly related with the application itself; the "three-tier" model adopted, will allows mobile apps to communicate each other without a direct connection.
+To ensure that the GeoMedia app functions as intended, there's the need to design an opportune architecture, even if not strictly related with the mobile application itself.
+In fact, the "three-tier" model adopted, will allows mobile apps to communicate each other without a direct connection.
 
 \begin{figure}[htbp]
 {\includegraphics[width=9.5cm]{imgs/Architecture.png}}
@@ -99,27 +103,25 @@ To ensure that the GeoMedia app functions as intended, there's the need to desig
 \end{figure}
 
 \subsection{Presentation layer}
-The presentation layer consists of the "GeoMedia" app itself, acting as the interface between the users and the data stored on the servers (by the application and data layers). Users will interact with the mobile application to view others' posts or share their own content.
-In the last case, this layer is for retrieving necessary data, such as the user's location, user identifier (username), and others metadata.
-
+The presentation layer consists in the "GeoMedia" mobile app itself, representing the interaction point between the users and the whole architecutre designed.
+By providing a user interface, allows users to view others users' posts or share their own content; which in the last case, the mobile app as presentation layer has also the duty to retrieve data such as the user's location, username and others metadata even if not directly inserted by user.
 \subsection{Application layer}
 
-In this project, the application layer is represented by an HTTP server, which exposes endpoints to the frontend (presentation layer) and then process the requests received.
+In this project, the application layer is represented by an HTTP server, which exposes endpoints that the frontend (presentation layer) will call via HTTP request.
 \\
 Specifically, for each endpoint, server will manipulate data with opportune SQL instruction through the Data Layer.
 
 \subsection{Data layer}
 
-The Data Layer consists of a Database Management System (DBMS), capable of performing CRUD operations (Create, Read, Update, Delete) on data stored in well defined tables.
+The Data Layer consists of a Database Management System (DBMS), capable of performing CRUD operations (Create, Read, Update, Delete) on data stored in defined tables.
 \\
 For this project, the DBMS will also be used to create SQL stored procedures, thus to offer to development a more flexible way to modify the select or insert of data queries.
 
 
 \section{Mobile application}
 In way to create a mobile application there are several frameworks and technologies options. For this project has been selected the "Ionic Framework" \cite{b1}, an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
-One of the key advantages of the Ionic Framework is its ability to integrate  web frameworks such as ReactJS, that offers a major benefit: it efficiently updates the DOM by re-rendering only those components that have changed, preventing unnecessary updates to unchanged elements.\\
-React.js also expose some "hooks" where can be injected the call for personalized functions, thust to execute the code whenever the users interact with the app.
-For example, hooks like useEffect() and useState() respectively allows to call functions at the component startup or when a property change, giving to the development the ease of personalization.
+One of the key advantages of the Ionic Framework is its ability to integrate  web frameworks such as ReactJS, that offers many functionality such as the updates of data changed in the user interface, or some special functions called "hooks" triggered on particular events that make possible the customizations and the injection of personalized functions.
+For example, the React';s hook "useEffect()" allows to call functions at the component startup or when a property change, givint to the developer the entry point to call some personalized functions; or instead the hook "useState()" allows an automatic render of webcomponent shown in the user interface at the change of the data inside.
 \\
 As follow an example of a React Component created
 \begin{lstlisting}[language=Java, caption=Map component snippet]
@@ -184,7 +186,7 @@ export default MyPMap;
 \end{figure}
 
 
-In the React component declared, has been used also the Pigeon Map\cite{b8} as React Component, which renders a geographical map and consents to put some 'marker'.
+In the React component declared, has been used also the Pigeon Map\cite{b8} provided as a React Component, which renders a geographical map and consents to put some 'marker'.
 In GeoMedia, there are three types of markers.
 \begin{itemize}
 \item Blue marker: the current user location
@@ -192,13 +194,38 @@ In GeoMedia, there are three types of markers.
 \item Yellow marker: a post with a media attached 
 \end{itemize}
 
-At the startup of the component (triggered after the user login), an HTTP request is made to the server to retrieve the posts previously uploaded in GeoMedia, then each post will be rendered as market on the map.
+The custom function 'doRequest()' shown in the map component is a wrapper for an HTTP request to the server; where it's used the nativa Javascript function "fetch" to execute the request
+\begin{lstlisting}[language=Java, description=Method doRequest to fetch server]
+//various import 
+import { Storage } from '@ionic/storage';
+const store = new Storage();
+store.create();
+export const doRequest = (api, body = {}) => {
+    return store.get("ServerConfig").then(ServerConfig => { //get the configuration stored in the cache of the mobile phone
+        return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(body)
+        }).then(res => res.json()).then(res => {
+            return res;
+        }).catch(err => {
+            return err;
+        });
+    })
+}
+\end{lstlisting}
+
+
+Thus to allow a simple configuration of server address, has been installed the "Ionic Storage"\cite{b9} packet, which allows to store data into the application's cache installed in the mobile phones. In order to use this feature an installation is required via `\$ npm install @ionic/storage`
+
+
+At the startup of the component (triggered after the user login), an HTTP request is made to the server to retrieve the posts previously uploaded in GeoMedia, then each post will be rendered as marker on the map.
 \\
 The method is parameterized to get all posts, or to make the server compute the post closer to the location provided within a defined range.
-This strategy is can be useful for scenarios like events or game-plays, where users need to be  within a certain area to access exclusive data.
+This strategy can be useful for scenarios like events or game-plays, where users need to be  within a certain area to access exclusive data.
 
 
-Another key component is 'ViewPost.jsx', which serves the purpose to show the comment of the clicked market, by opening a new interface and fetching the server to retrieve any associated multimedia data.
+Another key component is 'ViewPost.jsx', which shows the comment of the clicked market, by opening a new interface and fetching the server to retrieve any associated multimedia data.
 This component is not limited to just viewing the comment; it also provides the functionality for downloading the attached multimedia file and store into the local storage of the mobile.
 
 
@@ -257,12 +284,12 @@ const ViewPost = (props) => {
 
 \subsection{Ionic Capacitor}
 
-In order to access physical sensors on Android, such as geolocation and file storage, Ionic Capacitor can be integrated into the Ionic Framework. Capacitor is a collection of libraries that make possible the integration of web applications with native components, providing the API to adopt at Javascript level.
+In order to access physical sensors on Android, such as geolocation and file storage, Ionic Capacitor\cite{b10} can be integrated into the Ionic Framework. Capacitor is a collection of libraries that make possible the integration of web applications with native components, providing the API to adopt at Javascript level.
 
-Geomedia require to use some defined modules of capacitor, in specific:
+Geomedia require two specific modules provided by Ionic Capacitor, in specific:
 \begin{itemize}
-    \item GeoLocation\cite{b2}: to get latitude and longitude coordinate of user logged into the app
-    \item FileSystem\cite{b3}: to store file into mobile filesystem whenever users want to download the media uploaded
+    \item GeoLocation\cite{b2}: In way to get latitude and longitude coordinate of user logged into the app
+    \item FileSystem\cite{b3}: In order to store file into mobile filesystem whenever users want to download the media uploaded
 \end{itemize}
 
 These plugins can be installed via a shell command, respectively:
@@ -271,25 +298,27 @@ These plugins can be installed via a shell command, respectively:
     \item `\$ npm install @capacitor/filesystem'
 \end{itemize}
 
-The geolocation package provide the method `getCurrentPosition()` which returns an Object with parameters like: latitude, longitude, altitude and accuracy for each type of coordinate. The altitude even if not relevant for this project, could be integrated in future development thus to create more peculiar scenario or use cases.
+The geolocation package provide the method `getCurrentPosition()` which returns an Object with parameters like: latitude, longitude, altitude and the accuracy for each type of coordinate. The altitude even if not relevant for this project, could be integrated in future development thus to create more peculiar scenario or use cases.
 
 
 \subsection{Building for Android}
 
 A key strength of the Ionic Framework is its ability to build web applications into native mobile apps; in fact the framework acts as a wrapper/interpreter for the webpage, essentially embedding a custom browser inside the app.
 \\
-To create an Android Package (APK) for installing the app, some shell commands are required as reported in the official documentation, such as:
+In order to create an Android Package (APK) for installing the app, some shell commands are required as reported in the official documentation, such as:
 \begin{itemize}
     \item 'npm install @capacitor/android' to add the capacitor
-    \item  'npx cap add android' to denote the android platform, since Ionic can also build for "iOS" operating system
-    \item 'npx cap build android' to export the application in production mode and so encapsulate the app into a bundle that later will be compiled
+    \item  'npx cap add android' to denote the android platform, since IonicFramework can also build for "iOS" operating system
+    \item 'npx cap build android' to export the application in production mode and so encapsulate the app into a bundle that later will be compiled by Android Studio\cite{11} tool and relative SDK 
 \end{itemize}
 
 
-At this point some modification to the Android Manifest are required thus to declare the necessary permissions and other metadata.
-Specifically, to access the user's geolocation, GeoMedia requires the user to grant permission due to privacy purposes.
+At this point, the Android Manifest needs to be modified, by adding the opportune permissions which the users will grant when requested on startup/installation of the app.
+Specifically, the only permission requested is the access to location, if denied the application will not work; a potential solution to this scenario is to use the proximal location provided by antennas of the IPS, but could result in a very different location than the real one.
+
 \\
-Another modification is to allow clear traffic (HTTP), since from Android 8, only HTTPS packets are allowed by default unless the explicitly declaration in the manifest.
+Another customization is to allow clear traffic (HTTP), because since from Android 8 only HTTPS packets are allowed by default.
+In fact, HTTP protocol is an insecure format where data is not encrypted and it's intended to be used just in the development phase, so the explicit declaration in the manifest is required in way to make the Android OS create an exception.
 
 \begin{lstlisting}[language=XML, caption=Snippet of Android Manifest]
 <application
@@ -314,12 +343,12 @@ Another modification is to allow clear traffic (HTTP), since from Android 8, onl
 \section{HTTP Server}
 
 In the application layer the HTTP server takes place, which represent the bridge between data stored and the mobile application explained before.
-The GeoMedia HTTP server use NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several path called endpoints, each corrisponde to a specific function within the application. In fact, the server map the request to the execution command of a SQL stored procedure, which handles the designed queries on the respectively tables.
+The GeoMedia HTTP server use NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several path called endpoints, each corrisponde to a specific function within the application. In fact, the server map the request to the execution command of a SQL stored procedure, which handles the respective queries on the respectively tables.
 
 The package handled in this platform has a content-type of JSON (JavaScript Object Notation) thus to allow a rapid extendability of data included and providing an easily human-readable format.
 Only the "POST" method is implemented, since every request/response include data and parameters.
 
-The server requires just one external dependency not included natively, which is 'tedious'\cite{b5} (installable via `\$ npm install tedious`) a module to establish a connection to Microsoft SQL Database (DBMS) then execute query commands and transactions.
+The server requires just one external dependency not included natively, which is 'tedious'\cite{b5} (installable via `\$ npm install tedious`) a module to establish a connection to Microsoft SQL Database (DBMS) then to execute query commands and transactions.
 
 \begin{lstlisting}[language=Java, caption=Snippet of GeoMedia HTTP server]
 const http = require("http");
@@ -404,8 +433,8 @@ console.log("Server started on port: "+port);
 The server represent a single access point, which is a fragile solution in a real-world scenario, as it represents a "single point of failure" where the failure of a this node makes unavailable the whole system.
 \\
 There are many alternatives to mitigate this event. One approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
-A more sophisticated solution, is to change the whole design of this solution, creating a distributed architecture by adopting microservices\cite{b6}; where the server is fragmented into multiple smaller process that acts one for each specific function.
-For example, one microservice could handle the retrieving process of the posts, another could manage the accoutns, another the post creation, and so on. This approach not only imrpoves reliability but also helps to distribute traffic loads thust to prevening the system from an overwhelmed; a common problem with social media platforms when a mass requests (of viral contents) happens causing the "break the internet" effect.
+A more sophisticated solution, is to change the whole design of this solution, creating a distributed architecture by adopting microservices\cite{b6}; where the server is fragmented into multiple smaller process that acts one for each specific function (as shown in Fig. 4).
+For example, one microservice could handle the retrieving process of the posts, another could manage the accounts, another the post creation, and so on. This approach not only imrpoves reliability but also helps to distribute traffic loads thust to prevening the system from an overwhelmed; a common problem with social media platforms when a mass requests of a viral content happens causing the "break the internet" effect.
 
 
 \begin{figure}[htbp]
@@ -418,7 +447,7 @@ For example, one microservice could handle the retrieving process of the posts, 
 
 \section{DBMS}
 
-All posts published on GeoMedia are stored in a Database Management System (DBMS), where Microsoft SQL Server\cite{b7} serving as the engine.
+All posts and user profile present on GeoMedia are stored in a Database Management System (DBMS), where Microsoft SQL Server\cite{b7} serving as the engine.
 
 The DBMS stores data in two primary tables:
 
@@ -483,10 +512,10 @@ This could be used to create interactive experiences, such as "treasure hunts" o
 
 \subsection{Time capsule}
 
-Extending the concept of limiting content to a specific area, another idea could involve storing posts in small sensors distributed randomly in locations such as forests, mountains, or cities. 
+Extending the concept of limiting the content to a specific area, another idea could involve storing posts in small sensors distributed randomly in places such as forests, mountains, or cities. 
 These sensors would be reachable only with short-range medium like Bluetooth or Wi-Fi, or even NFC.
 \\
-This idea could serve in multiple scenarios, such as a waypoints to mark hiking routes in the mountains, or actingas time capsules at panoramic points.
+This idea gives life to several use cases, such as a waypoints to mark hiking routes in the mountains, or actingas time capsules at panoramic points.
 
 
 \begin{thebibliography}{00}
@@ -498,7 +527,9 @@ This idea could serve in multiple scenarios, such as a waypoints to mark hiking 
 \bibitem{b6} Microservices panoramic and image in figure \href{https://medium.com/the-modern-scientist/introduction-to-microservices-architecture-f0c7eefe79f1}{Link}
 \bibitem{b7} Microsoft SQL Server 2022 as DBMSQ for data layer \href{https://www.microsoft.com/en-us/sql-server/sql-server-2022}{Link}
 \bibitem{b8} Pigeon Map as React Component to render a geographical map \href{https://pigeon-maps.js.org/}{Link}
-
+\bibitem[b9]Ionic Storage to store the configuration of server\href{https://ionicframework.com/docs/react/storage}{Link}
+\bibitem[b10]Ionic Capacitor official website as documentation for the modules installed \href{https://capacitorjs.com/}{Link}
+\bibitem[b11]Android Studio SDK official website, as a tool for building the Android APK \href{https://developer.android.com/studio}{Link}
 
 \end{thebibliography}
 \vspace{12pt}

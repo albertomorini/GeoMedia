@@ -10,7 +10,7 @@ store.create();
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
-    return store.get("ServerConfig").then(ServerConfig => {
+    return store.get("ServerConfig").then(ServerConfig => { //get the configuration stored in the cache of the mobile phones
         return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
             method: "POST",
             mode: "cors",
