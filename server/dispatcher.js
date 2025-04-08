@@ -18,14 +18,10 @@ function getPosts(latitude=null,longitude=null,username=null){
 }
 
 function getMediaPost(postid){
-    console.log(
-        "EXEC GETMEDIAPOST @POSTID=" + postid
-    );
-    
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC GETMEDIAPOST @POSTID="+postid)
 }
 
-function deletePost(postid,username,password){ //TODO: to put in secure mode (with user auth and https..) -- NOT IN THIS DEMO/PROJECT
+function deletePost(postid,username,password){ //TODO: to put in secure mode (not in this version/demo)
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC DELETEPOST @POSTID="+postid+", @USER='"+username+"', @PASSWORD='"+password+"'")
 }
 
