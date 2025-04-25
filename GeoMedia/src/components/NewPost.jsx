@@ -1,7 +1,7 @@
 // Modal for creation of post (comment, media)
 
-import { IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTextarea, IonTitle, IonToolbar } from "@ionic/react";
-import { add, close } from 'ionicons/icons';
+import { IonButton, IonCardSubtitle, IonContent, IonDatetime, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonRow, IonTextarea, IonTitle, IonToggle, IonToolbar } from "@ionic/react";
+import { add, close, cloudUpload } from 'ionicons/icons';
 import { useRef, useState, useContext } from "react";
 import { doRequest } from "../utility";
 
@@ -21,16 +21,16 @@ const NewPost = (props) => {
     });
 
     // fetch server to store the content in input
-    async function publishNewPost(){
+    async function publishNewPost() {
         let media = document.querySelector('#myfile').files[0]
-        let type=null
-        let media_b64=null
-        if(media!=null){
+        let type = null
+        let media_b64 = null
+        if (media != null) {
             type = media?.type
             media_b64 = await toBase64(media);
         }
-        
-        doRequest("newPost",{ 
+
+        doRequest("newPost", {
             author: ctx?.User?.User,
             postcontent: {
                 title: PostContent.TITLE,
@@ -41,15 +41,15 @@ const NewPost = (props) => {
                 latitude: ctx?.UserPosition[0],
                 longitude: ctx?.UserPosition[1]
             }
-        }).then(res=>{
-            if(res[0].ESITO){
+        }).then(res => {
+            if (res[0].ESITO) {
                 refModalPost?.current?.dismiss();
                 props?.reloadPosts()
-            }else{
-                ctx?.showMessage("Something went wrong... try again","danger")
+            } else {
+                ctx?.showMessage("Something went wrong... try again", "danger")
             }
-        }).catch(err=>{
-            ctx?.showMessage("Something went wrong... try again "+err,"danger")
+        }).catch(err => {
+            ctx?.showMessage("Something went wrong... try again " + err, "danger")
         })
     }
 
@@ -82,24 +82,67 @@ const NewPost = (props) => {
                         }} />
                     <br />
                     <IonLabel>Comment</IonLabel>
-                    <IonTextarea mode="md" fill="outline" placeholder="Tell something" 
-                    rows={6}
-                    onIonInput={(ev) => {
-                        let tmp = PostContent;
-                        tmp.COMMENT = ev.target.value
-                        setPostContent({ PostContent, ...tmp })
-                    }} />
+                    <IonTextarea mode="md" fill="outline" placeholder="Tell something"
+                        rows={6}
+                        onIonInput={(ev) => {
+                            let tmp = PostContent;
+                            tmp.COMMENT = ev.target.value
+                            setPostContent({ PostContent, ...tmp })
+                        }} />
                     <br />
                     <IonLabel>Media file</IonLabel>
                     <input id="myfile" type="file" mode="md" fill="outline" placeholder="Add a media" />
                     <br />
                     <br />
+                    <div>
+                        <IonCardSubtitle>Exclusivity</IonCardSubtitle>
+                        <IonToggle value={PostContent.IS_EXCLUSIVE}
+                            id="exclusiveCheck"
+                            onIonChange={(ev) => {
+                                let tmp = PostContent;
+                                tmp.IS_EXCLUSIVE = document.getElementById("exclusiveCheck").checked
+                                setPostContent({ PostContent, ...tmp })
+                            }}
+                        />
+                        {
+                            (PostContent.IS_EXCLUSIVE) ?
+                                <>
+                                    <IonRow>
+                                        <IonLabel><b>Visibility distance</b></IonLabel>
+                                        <IonInput 
+                                        mode="md" fill="outline"
+                                        type="number" placeholder="Insert the meters within post will be visibile"
+                                            onIonInput={(ev) => {
+                                                let tmp = PostContent;
+                                                tmp.AREA_METERS = ev.target.value
+                                                setPostContent({ PostContent, ...tmp })
+                                            }} />
+                                    </IonRow>
+                                    <br />
+                                    <IonRow>
+                                        <IonLabel><b>time availability</b></IonLabel>
+                                        <input type="datetime-local" style={{ widht: "100%" }}
+                                            onInput={(ev) => {
+                                                let tmp = PostContent;
+                                                tmp.DATETIME_AVAILABILITY = ev.target.value
+                                                setPostContent({ PostContent, ...tmp })
+                                            }} />
+                                    </IonRow>
+                                </>
+                                :
+                                null
+                        }
+
+                    </div>
 
                     <IonButton color={"success"} style={{ marginTop: "90%" }} expand="block"
-                    onClick={()=>{
-                        publishNewPost()
-                    }}
-                    >Publish</IonButton>
+                        onClick={() => {
+                            publishNewPost()
+                        }}
+                    >
+                        Publish
+                        <IonIcon icon={cloudUpload} />
+                    </IonButton>
                 </IonContent>
 
             </IonModal>

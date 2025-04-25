@@ -2,7 +2,7 @@ import { IonButton, IonCardTitle, IonContent, IonHeader, IonInput, IonItemDivide
 import { useContext, useState } from "react";
 import { doRequest, React_MD5 } from "../utility";
 
-import {mycontext} from "../App"
+import { mycontext } from "../App"
 
 const Login = () => {
     const [Choiche, setChoiche] = useState("signIN")
@@ -12,22 +12,22 @@ const Login = () => {
     const ctx = useContext(mycontext)
 
     function doLogin() {
-        if(Username?.replace(" ","").length>0 && Password?.replace(" ","").length>0 && Password==RepeatPSW ){
+        if (Username?.replace(" ", "").length > 0 && Password?.replace(" ", "").length > 0 && Password == RepeatPSW) {
             doRequest("doLogin", {
                 username: Username,
                 password: React_MD5(Password),
                 newuser: (Choiche == "signIN") ? false : true
-            }).then(res=>{
-                if(res[0].ESITO==1){ //login done
+            }).then(res => {
+                if (res[0].ESITO == 1) { //login done
                     ctx?.User?.setUser(Username)
                     ctx?.Psw?.setPsw(React_MD5(Password),)
-                    ctx.showMessage("Welcome back "+Username,"success")
-                }else{
-                    ctx.showMessage("Wrong credentials","danger")
+                    ctx.showMessage("Welcome back " + Username, "success")
+                } else {
+                    ctx.showMessage("Wrong credentials", "danger")
                 }
             })
-        }else{
-            ctx?.showMessage("Error - wrong passwords or empty","danger")
+        } else {
+            ctx?.showMessage("Error - wrong passwords or empty", "danger")
         }
 
     }
@@ -57,18 +57,18 @@ const Login = () => {
                     <>
                         <IonLabel>Username</IonLabel>
                         <IonInput mode="md" fill="outline" type="text" placeholder="what's your name?" onIonInput={(ev) => setUsername(ev.target.value)} />
-                            <IonItemDivider mode="md"/>
+                        <IonItemDivider mode="md" />
                         <IonLabel>Password</IonLabel>
-                        <IonInput mode="md" fill="outline" type="password" placeholder="pick a strong one" onIonInput={(ev)=>setPassword(ev.target.value)}/>
-                        <IonLabel>Reapat it please</IonLabel> 
-                        <IonInput mode="md" fill="outline"  type="password" placeholder="repeat your password" onIonInput={(ev) => setRepeatPSW(ev.target.value)} />
+                        <IonInput mode="md" fill="outline" type="password" placeholder="pick a strong one" onIonInput={(ev) => setPassword(ev.target.value)} />
+                        <IonLabel>Reapat it please</IonLabel>
+                        <IonInput mode="md" fill="outline" type="password" placeholder="repeat your password" onIonInput={(ev) => setRepeatPSW(ev.target.value)} />
                     </>
             }
-            <IonButton expand="block" onClick={()=>doLogin()}> 
-                {(Choiche=="signIN")?
-                "LOGIN"
-                :
-                "REGISTER"
+            <IonButton expand="block" onClick={() => doLogin()}>
+                {(Choiche == "signIN") ?
+                    "LOGIN"
+                    :
+                    "REGISTER"
                 }
             </IonButton>
 

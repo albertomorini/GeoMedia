@@ -39,7 +39,7 @@ const MyPMap = () => {
 
     useEffect(() => {
         getPosts();
-    }, [])
+    }, [ctx?.UserPosition])
 
     return (
         <IonContent>
