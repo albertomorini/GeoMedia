@@ -14,7 +14,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, hammer, map, square, triangle } from 'ionicons/icons';
+import { map, person } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,9 +31,9 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import { Geolocation } from "@capacitor/geolocation"
+import { Geolocation } from "@capacitor/geolocation";
 
-import Login from "./pages/Login"
+import Login from "./pages/Login";
 
 /**
  * Ionic Dark Mode
@@ -52,11 +52,11 @@ import './theme/variables.css';
 setupIonicReact();
 
 import MyPMap from "./pages/MyPMap";
-import Settings from "./pages/Settings";
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
+import { ContentConfigServer } from "./utility";
+import Profile from './pages/Profile';
 
 export const mycontext = createContext();
-import { ContentConfigServer } from "./utility";
 
 
 const App: React.FC = () => {
@@ -117,9 +117,9 @@ const App: React.FC = () => {
                 <Route exact path="/DashboardMaps">
                   <MyPMap />
                 </Route>
-                <Route exact path="/Settings">
+                <Route exact path="/Profile">
                   {/* <Tab2 /> */}
-                  <Settings />
+                  <Profile />
                 </Route>
 
                 <Route exact path="/">
@@ -131,9 +131,9 @@ const App: React.FC = () => {
                   <IonIcon aria-hidden="true" icon={map} />
                   <IonLabel>Map</IonLabel>
                 </IonTabButton>
-                <IonTabButton tab="tab2" href="/Settings">
-                  <IonIcon aria-hidden="true" icon={hammer} />
-                  <IonLabel>Settings</IonLabel>
+                <IonTabButton tab="tab2" href="/Profile">
+                  <IonIcon aria-hidden="true" icon={person} />
+                  <IonLabel>Profile</IonLabel>
                 </IonTabButton>
 
               </IonTabBar>

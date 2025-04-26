@@ -2,7 +2,7 @@
 import AppConfig from "../public/AppConfig.json";
 import { IonButton, IonContent, IonHeader, IonIcon, IonInput, IonLabel, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { Storage } from '@ionic/storage';
-import { closeCircle } from "ionicons/icons";
+import { closeCircle, server, settings } from "ionicons/icons";
 import { useRef, useState, useEffect } from "react";
 const store = new Storage();
 store.create();
@@ -94,8 +94,8 @@ export const ContentConfigServer = (props) => {
         <>
             {
                 (props?.showButton) ?
-                    <IonButton onClick={() => { modalSettingRef?.current?.present() }} expand="block">
-                        Change server configuration
+                    <IonButton slot="end" onClick={() => { modalSettingRef?.current?.present() }} expand="block">
+                        <IonIcon icon={settings} />
                     </IonButton>
                     :
                     null

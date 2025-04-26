@@ -1,9 +1,9 @@
 //modal to view post and download/store media into document folder android
-import { IonButton, IonCardContent, IonCardSubtitle, IonContent, IonHeader, IonIcon, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonCardContent, IonCardSubtitle, IonCol, IonContent, IonHeader, IonIcon, IonItemDivider, IonModal, IonRow, IonTitle, IonToolbar } from "@ionic/react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { datetime2datehour, doRequest } from "../utility";
-import { close } from "ionicons/icons";
+import { close, download } from "ionicons/icons";
 
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { mycontext } from "../App";
@@ -99,7 +99,9 @@ const ViewPost = (props) => {
                                     }
                                     <IonButton mode="md" color={"success"} expand="block" onClick={() => {
                                         downloadFile(props?.PostSelected)
-                                    }}>Download file</IonButton>
+                                    }}>Download file
+                                        <IonIcon icon={download} />
+                                    </IonButton>
                                 </>
                                 :
                                 null
@@ -107,7 +109,21 @@ const ViewPost = (props) => {
                     </IonCardContent>
                     {
                         (ctx?.User?.User == props?.PostSelected?.AUTHOR) ?
-                            <IonButton color={"danger"} onClick={() => { deletePost() }} expand="block">DELETE POST</IonButton>
+                            <>
+                                <IonItemDivider mode="md" />
+                                <IonRow>
+                                    <IonCol size='8'>
+                                        <h4>Danger zone</h4>
+                                    </IonCol>
+                                    <IonCol size='4'>
+                                        <IonButton color={"danger"} onClick={() => {
+                                            if (confirm("Sure to delete?")) {
+                                                deletePost()
+                                            }
+                                        }} expand="block">DELETE POST</IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </>
                             :
                             null
                     }

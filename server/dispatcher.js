@@ -9,7 +9,11 @@ function doLogin(username, password, newuser) {
 }
 
 function newPost(author,postcontent){
+    console.log("HEHE");
+    
     let dummy_pc = JSON.stringify(postcontent)
+    console.log(postcontent);
+    
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC NEWPOST @AUTHOR='"+author+"', @POSTCONTENT='"+dummy_pc+"'")
 }
 

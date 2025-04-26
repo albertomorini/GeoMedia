@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { doRequest, React_MD5 } from "../utility";
 
 import { mycontext } from "../App"
+import NewPost from "../components/NewPost";
 
 const Login = () => {
     const [Choiche, setChoiche] = useState("signIN")
@@ -71,7 +72,6 @@ const Login = () => {
                     "REGISTER"
                 }
             </IonButton>
-
 
         </IonContent>
     )
