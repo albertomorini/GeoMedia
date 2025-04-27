@@ -28,6 +28,8 @@ const Profile = () => {
             <br />
             <br />
             <br />
+            <br />
+            <br />
             <IonRow>
                 <IonToolbar>
                     <h3>Hello {ctx?.User.User}</h3>

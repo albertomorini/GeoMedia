@@ -45,7 +45,7 @@ const NewPost = (props) => {
                 longitude: 12.32,
                 IS_EXCLUSIVE: PostContent.IS_EXCLUSIVE,
                 DATETIME_AVAILABILITY: PostContent.DATETIME_AVAILABILITY,
-                AREA_METERS: PostContent.AREA_METERS
+                AREA_KM: PostContent.AREA_KM
             }
         }).then(res => {
             if (res[0].ESITO) {
@@ -128,10 +128,10 @@ const NewPost = (props) => {
                                         <IonLabel><b>Visibility distance</b></IonLabel>
                                         <IonInput
                                             mode="md" fill="outline"
-                                            type="number" placeholder="Insert the meters within post will be visibile"
+                                            type="number" placeholder="Insert the kilometerss within post will be visibile"
                                             onIonInput={(ev) => {
                                                 let tmp = PostContent;
-                                                tmp.AREA_METERS = ev.target.value
+                                                tmp.AREA_KM = ev.target.value
                                                 setPostContent({ PostContent, ...tmp })
                                             }} />
                                     </>

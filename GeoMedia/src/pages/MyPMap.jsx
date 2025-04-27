@@ -56,16 +56,24 @@ const MyPMap = () => {
                         <ZoomControl />
                         <Marker width={50} anchor={ctx?.UserPosition} color={"#154c79"} />
                         {
-                            PostList?.map(s => (
-                                <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={
-                                    (s?.MEDIATYPE?.length > 0) ? '#d6c531' : '#f23c3c'
+                            PostList?.map(s => {
+                                let dummy_color = '#f23c3c' //red
+                                if (s?.MEDIATYPE?.length > 0) {
+                                    dummy_color = "#d6c531"
                                 }
-                                    onClick={() => {
-                                        setPostSelected(s)
-                                        //refModalPost?.current?.present()
-                                    }}
-                                />
-                            ))
+                                if (s?.IS_EXCLUSIVE) {
+                                    dummy_color = "#6fe465"
+                                }
+                                
+                                return (
+                                    <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={dummy_color}
+                                        onClick={() => {
+                                            setPostSelected(s)
+                                        }}
+                                    />
+
+                                )
+                            })
                         }
                     </Map>
             }

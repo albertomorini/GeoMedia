@@ -1,6 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
+  IonContent,
   IonHeader,
   IonIcon,
   IonLabel,
@@ -101,50 +102,51 @@ const App: React.FC = () => {
           <IonTitle>Geomedia</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <mycontext.Provider value={{
-        "User": { User, setUser },
-        "Psw": { Psw, setPsw },
-        "UserPosition": UserPosition,
-        "showMessage": (msg, esito) => showMessage(msg, esito),
-      }}>
-        {(User == null) ?
-          <Login />
-          :
-          <IonReactRouter>
-            <IonTabs>
-              <IonRouterOutlet>
+      <IonContent>
+        <mycontext.Provider value={{
+          "User": { User, setUser },
+          "Psw": { Psw, setPsw },
+          "UserPosition": UserPosition,
+          "showMessage": (msg, esito) => showMessage(msg, esito),
+        }}>
+          {(User == null) ?
+            <Login />
+            :
+            <IonReactRouter>
+              <IonTabs>
+                <IonRouterOutlet>
 
-                <Route exact path="/DashboardMaps">
-                  <MyPMap />
-                </Route>
-                <Route exact path="/Profile">
-                  {/* <Tab2 /> */}
-                  <Profile />
-                </Route>
+                  <Route exact path="/DashboardMaps">
+                    <MyPMap />
+                  </Route>
+                  <Route exact path="/Profile">
+                    {/* <Tab2 /> */}
+                    <Profile />
+                  </Route>
 
-                <Route exact path="/">
-                  <Redirect to="/DashboardMaps" />
-                </Route>
-              </IonRouterOutlet>
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="tab1" href="/DashboardMaps">
-                  <IonIcon aria-hidden="true" icon={map} />
-                  <IonLabel>Map</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="tab2" href="/Profile">
-                  <IonIcon aria-hidden="true" icon={person} />
-                  <IonLabel>Profile</IonLabel>
-                </IonTabButton>
+                  <Route exact path="/">
+                    <Redirect to="/DashboardMaps" />
+                  </Route>
+                </IonRouterOutlet>
+                <IonTabBar slot="bottom">
+                  <IonTabButton tab="tab1" href="/DashboardMaps">
+                    <IonIcon aria-hidden="true" icon={map} />
+                    <IonLabel>Map</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="tab2" href="/Profile">
+                    <IonIcon aria-hidden="true" icon={person} />
+                    <IonLabel>Profile</IonLabel>
+                  </IonTabButton>
 
-              </IonTabBar>
-            </IonTabs>
-          </IonReactRouter>
-        }
-
-
-      </mycontext.Provider>
+                </IonTabBar>
+              </IonTabs>
+            </IonReactRouter>
+          }
 
 
+        </mycontext.Provider>
+
+      </IonContent>
 
       <ContentConfigServer />
 
