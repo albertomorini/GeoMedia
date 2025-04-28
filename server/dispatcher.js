@@ -15,29 +15,11 @@ function newPost(author, postcontent) {
 
 function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
 
-
-    // let coef = areaKM / 111320.0;
-    // let new_lat = post_latitude + coef
-    // let new_long = post_longitude + coef / Math.cos(post_latitude * 0.01745)
-
-    // console.log(Math.abs(new_lat - curr_latitude) * -1000);
-
-    // if (
-    //     (Math.abs(new_lat - curr_latitude)  < areaKM) &&
-    //     (Math.abs(new_long - curr_longitude)  < areaKM)
-    // ) {
-    //     return true
-    // } else {
-    //     return false
-    // }
-
-
     var dLat = (post_latitude - curr_latitude) * Math.PI / 180;
     var dLon = (post_longitude - curr_longitude) * Math.PI / 180;
     var a = 0.5 - Math.cos(dLat) / 2 + Math.cos(curr_latitude * Math.PI / 180) * Math.cos(post_latitude * Math.PI / 180) * (1 - Math.cos(dLon)) / 2;
 
     d = Math.round(6371000 * 2 * Math.asin(Math.sqrt(a))); // in meters
-    console.log(d);
     if (d <= areaKM * 1000) { //transform areaKM to meters
         return true
     } else {

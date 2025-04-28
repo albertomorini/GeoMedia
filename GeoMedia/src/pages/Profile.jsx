@@ -24,11 +24,8 @@ const Profile = () => {
     }, [])
 
     return (
-        <IonContent className="ion-padding">
-            <br />
-            <br />
-            <br />
-            <br />
+        <div className="ion-padding">
+
             <br />
             <IonRow>
                 <IonToolbar>
@@ -87,7 +84,7 @@ const Profile = () => {
 
             <ViewPost PostSelected={PostSelected} reloadPosts={() => getPosts()} />
 
-        </IonContent >
+        </div >
     )
 }
 

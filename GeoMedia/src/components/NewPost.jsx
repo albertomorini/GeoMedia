@@ -135,13 +135,14 @@ const NewPost = (props) => {
                                                 setPostContent({ PostContent, ...tmp })
                                             }} />
                                     </>
+                                    <br />
                                     <>
                                         <IonLabel><b>Time availability</b> (Post will be available since the indicated date)</IonLabel>
                                         <br />
                                         <input type="datetime-local" style={{ width: "100%" }}
                                             onInput={(ev) => {
                                                 let tmp = PostContent;
-                                                
+
                                                 tmp.DATETIME_AVAILABILITY = ev.target.value + ":00"  //add seconds
                                                 setPostContent({ PostContent, ...tmp })
                                             }} />

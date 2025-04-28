@@ -64,7 +64,7 @@ const MyPMap = () => {
                                 if (s?.IS_EXCLUSIVE) {
                                     dummy_color = "#6fe465"
                                 }
-                                
+
                                 return (
                                     <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={dummy_color}
                                         onClick={() => {
@@ -78,22 +78,6 @@ const MyPMap = () => {
                     </Map>
             }
 
-            {/* <Map defaultCenter={[45, 12]} defaultZoom={11}>
-                <ZoomControl />
-                <Marker width={50} anchor={[45,12]} color={"#154c79"} />
-                {
-                    PostList?.map(s => (
-                        <Marker width={50} anchor={[s.LATITUDE, s.LONGITUDE]} color={
-                            (s?.MEDIADATA?.length > 0) ? '#d6c531' : '#f23c3c'
-                        }
-                            onClick={() => {
-                                setPostSelected(s)
-                                //refModalPost?.current?.present()
-                            }}
-                        />
-                    ))
-                }
-            </Map> */}
 
             <NewPost reloadPosts={() => getPosts()} />
 
