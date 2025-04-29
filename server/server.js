@@ -37,6 +37,8 @@ http.createServer((req, res) => {
         try {
             body = JSON.parse(body)
         } catch (error) {
+            console.log(error);
+            
             //nthg
         }
 
@@ -61,14 +63,14 @@ http.createServer((req, res) => {
                     })
                     break
                 case "/getPosts":
-                    dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE,body?.USERNAME).then(resQuery=>{
+                    
+                    dispatcher.getPosts(body?.latitude, body?.longitude,body?.USERNAME).then(resQuery=>{
                         sendResponse(res,200,resQuery)
                     }).catch(err=>{
                         sendResponse(res,500,err)
                     })
                     break
                 case "/getMediaPost":
-                    // console.log(body?.POSTID);
                     dispatcher.getMediaPost(body?.POSTID).then(resQuery=>{
                         sendResponse(res,200,resQuery)
                     }).catch(err=>{
