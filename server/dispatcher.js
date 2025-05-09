@@ -9,14 +9,12 @@ function doLogin(username, password, newuser) {
 }
 
 function newPost(author, postcontent) {
-    let dummy_pc = JSON.stringify(postcontent)
+    let dummy_pc = JSON.stringify(postcontent).replaceAll("'",'')
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC NEWPOST @AUTHOR='" + author + "', @POSTCONTENT='" + dummy_pc + "'")
 }
 
 function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
 
-    console.log(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude);
-    
     var dLat = (post_latitude - curr_latitude) * Math.PI / 180;
     var dLon = (post_longitude - curr_longitude) * Math.PI / 180;
     var a = 0.5 - Math.cos(dLat) / 2 + Math.cos(curr_latitude * Math.PI / 180) * Math.cos(post_latitude * Math.PI / 180) * (1 - Math.cos(dLon)) / 2;
@@ -36,8 +34,6 @@ async function getPosts(curr_latitude = null, curr_longitude = null, username = 
 
     let results = []
     posts.forEach(pp => {
-        console.log(pp.AREA_KM);
-        
         if (pp.AREA_KM != null) { // check if users' position is within the post availability
             if (checkAREA(pp.AREA_KM, pp.LATITUDE, pp.LONGITUDE, curr_latitude, curr_longitude)) {
                 results.push(pp)

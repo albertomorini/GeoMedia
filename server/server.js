@@ -63,7 +63,6 @@ http.createServer((req, res) => {
                     })
                     break
                 case "/getPosts":
-                    
                     dispatcher.getPosts(body?.latitude, body?.longitude,body?.USERNAME).then(resQuery=>{
                         sendResponse(res,200,resQuery)
                     }).catch(err=>{
