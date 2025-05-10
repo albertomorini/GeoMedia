@@ -5,7 +5,6 @@ This is my project for WNMA Course at University of Padua (Master Degree in Comp
 Wireless Network for Mobile Application course held by Professor Claudio Enrico Palazzi, aims to study and understand network in mobile application, optimizing and improving traffic and sensors.
 
 
-
 ## Concept
 
 ### Architecture design
@@ -51,7 +50,8 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 
 **Map**
 
-![mapoverview](docs/img/Map.png)
+![mapoverview](docs/img/Panoramica.png)
+![center](docs/img/Centro.png)
 
 **Post view**
 
@@ -66,7 +66,4 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 **User account**
 
 ![usersettings](docs/img/Screenshot_20250402-234048.png)
-
-
-
 
