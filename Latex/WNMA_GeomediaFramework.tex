@@ -97,17 +97,29 @@ However, utilizing these features can lead to faster battery drain, higher data 
 
 \section{GeoMedia}
 
-This project aims to develop a simple mobile application that allows users to share comments, photos, audio, videos, and other multimedia content on the location where they are; and then, the possibility to navigate through a map to discover others' post
+GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file.
+In fact, the app just provide a geographical map, where users can fill it by posting photos, audios, videos or just a comment. So users are in charge to enrich the map of a city by creting a post, giving others the opportunity to discover secrets spots or facts about a place.
+Unlike ohters app seen before (i.e. Google Maps), the mobile app automatically get the position of the user posting by retrieving data from the GPS placed inside phones, bringing the online social network into the phyisical world. In fact, the app provide the feature to create some exclusive content by choosing to restrict the post published just in a determinate date or in a customizable geographical area.
+
+An interesting scenario could be adopted by the city of Pauda to explain one of it's dictum: ``citta` dei tre senza" (city without the three).
+Which consists in three things that Padua has but not in a proper way:
+\begin{itemize}
+    \item \textit{The Lawn Without Grass}, which is ``Prato della Valle" because the grass in it, is just ornamental is not really really a lawn like the word would intend
+    \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years on Padua
+    \item \textit{Coffee without doors}, and this is the ``Pedrocchi Coffee", because during war time was open all day (so the doors was removed) to provide shelter during the bombings.
+\end{itemize}
+So, the city of Padua could use GeoMedia to place some comments within these locations to tell the story of each particularity or even upload an old photos to shows as it was.
 \\
 
-The whole souce code developed, is available on GitHub. \cite{gh}
+In the end, GeoMedia, offers a full solution to share data in the location of where the end user is, without the effort to pick the right location as usually happens with other social network apps.
+
+The whole source code developed for this project is available on GitHub. \cite{gh}
 
 
 \section{Architecture}
 
-
 To ensure that the GeoMedia app functions as intended, there's the need to design an opportune architecture, even if not strictly related with the mobile application itself.
-In fact, the ``three-tier" model adopted, will allow mobile apps to communicate to each other without a direct connection.
+In fact, the three-tier model adopted will allow mobile apps to communicate to each other without a direct connection among devices.
 
 \begin{figure}[htbp]
 {\includegraphics[width=9.5cm]{imgs/Architecture.png}}
@@ -138,7 +150,7 @@ For example, the React' hook ``useEffect()" allows to call functions at the comp
 
 
 
-\subsection{Functionality and behaviour}
+\subsection{Key functionality}
 
 GeoMedia starts with a log-in component where users can choose to create a new profile or to sign in whenever they already have an account.
 \\
@@ -225,12 +237,15 @@ const MyPMap = () => { //declare the Map component
 export default MyPMap;
 \end{lstlisting}
 
-\begin{figure}[htbp]
-\begin{center}
-{\includegraphics[width=5.5cm, height=11cm]{imgs/Map.png}}
-\end{center}
-\caption{Result of Map component.}
-\label{fig}
+\begin{figure}
+\begin{minipage}{.2\textwidth}
+    \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Panoramica.png}}\label{fig:sub_a}}
+\end{minipage}
+\hfill    
+\begin{minipage}{.2\textwidth}
+    \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Centro.png}}\label{fig:sub_b}}
+\end{minipage}
+    \caption{Combined figure}\label{fig:sub}
 \end{figure}
 
 
@@ -292,6 +307,10 @@ The owner of the comment of course is able to delete it.
 \label{fig}
 \end{figure}
 
+\subsection{Exclusivity}
+
+A cool feature implemented in GeoMedia, is the exclusivity of the post
+
 
 \subsection{HTTP requests}
 
@@ -316,7 +335,7 @@ export const doRequest = (api, body = {}) => {
 \end{lstlisting}
 
 
-Thus to allow a simple configuration of server address, has been installed the ``Ionic Storage" \cite{b9} packet, which allows to store data into the application's cache installed in the mobile phones. In order to use this feature an installation is required via `\$ npm install @ionic/storage'
+To simplify the server configuration in the app, has been installed the ``Ionic Storage" \cite{b9} packet, which allows to store data into the application's cache installed in the mobile phones. In order to use this feature an installation is required via `\$ npm install @ionic/storage'
 
 
 
@@ -565,7 +584,7 @@ END;
 
 \section{Future extensions}
 
-In conclusion, GeoMedia offers a simple platform for sharing content on a geographic map. As previously mentioned, there are some key features that could be expanded.
+In conclusion, GeoMedia offers a platform for sharing content on a geographic map. As previously mentioned, there are some key features that could be expanded.
 
 Some ideas include:
 
