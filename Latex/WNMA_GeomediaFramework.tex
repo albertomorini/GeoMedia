@@ -10,16 +10,7 @@
 
 
 % hyperlinks
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=.,
-    pdftitle={Overleaf Example},
-    pdfpagemode=FullScreen,
-    }
+
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -118,12 +109,18 @@ The whole source code developed for this project is available on GitHub. \cite{g
 
 \section{Architecture}
 
-To ensure that the GeoMedia app functions as intended, there's the need to design an opportune architecture, even if not strictly related with the mobile application itself.
-In fact, the three-tier model adopted will allow mobile apps to communicate to each other without a direct connection among devices.
+To ensure that the GeoMedia app functions as intended, there is the need to design an opportune architecture, even if not strictly related with the mobile application itself.
+In fact, the adopted three-tier architecture makes the app work as intended, as shown in Figure 1:
+\begin{itemize}
+    \item Client layer, represented by mobile phones since GeoMedia is the Android app that serve as interaction point with the users and making HTTP requests to server side
+    \item Application layer, where the HTTP server takes place, by handling the requests received with the opportune functions and logic; for example compute the distance from the given location to the exclusive posts.
+    \item Data layer, represented by the DBMS (DataBase Management System) that store the data in the opportune data structures and retrieve it when asked.
+\end{itemize}
+
 
 \begin{figure}[htbp]
 {\includegraphics[width=9.5cm]{imgs/Architecture.png}}
-\caption{Design Architecture.}
+\caption{Three-tier architecture for GeoMedia.}
 \label{fig}
 \end{figure}
 
@@ -150,17 +147,24 @@ For example, the React' hook ``useEffect()" allows to call functions at the comp
 
 
 
-\subsection{Key functionality}
+\subsection{Key functionality }
 
-GeoMedia starts with a log-in component where users can choose to create a new profile or to sign in whenever they already have an account.
+GeoMedia starts with a log-in component, where users can choose to create a new profile or to sign in whenever they already have an account.
 \\
+Once logged into the app, GeoMedia offers a bottom menu with two sections: 
+\begin{itemize}
+    \item Profile, in this tab users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port)
+    \item  Map, this section is the heart of the app, by offering a navigation through a geographical map to look for the comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish component that allows users to create a new post based on their coordinates.
+\end{itemize}
+
 Then, the app splits into two pages: settings, where users can see their posts as form of list or to change server configuration parameters (i.e. IP Address or HTTP port); or the Map section that will offer a navigation through a geographical map to look for the content posted.
 
 
 In the Map component users can also tap on a market to view the post, or tap on the floating button on the bottom right in way to create a comment.
 
 
-\\The post is composed by some attributes:
+\\
+The post is composed of some attributes:
 \begin{itemize}
     \item Title
     \item Comment
@@ -168,8 +172,11 @@ In the Map component users can also tap on a market to view the post, or tap on 
     \item And others metadata automatically retrieved (longitude, latitude, username, date, ...)
 \end{itemize}
 
-In GeoMedia app, has been used also the Pigeon Map\cite{b8} provided as a React Component, which renders a geographical map and allows to put some ``marker" on it.
+To provide a geographical map has been implemented inside GeoMedia the Pigeon Map\cite{b8} provided as a React Component, that render the graphical map and allows to put some ``markers" on it.
 \\
+TODO
+Each posts published will be in the map as marker, there are four type of 
+provided from the HTTP server following a client request, will be rendered
 Comments published on the platform, are retrieved by an HTTP request through the server, and each post will be rendered in the map as a marker.
 \\There are three types of position indicators.
 \begin{itemize}
@@ -183,7 +190,7 @@ This strategy can be useful for scenarios like events or game-plays, where users
 
 
 \\
-As follow a snippet of Map Component created
+As follows a snippet of Map Component created
 \begin{lstlisting}[language=Java, caption=Map component snippet]
 //various imports ...
 import { useContext, useEffect, useState } from "react";
@@ -243,7 +250,7 @@ export default MyPMap;
 \end{minipage}
 \hfill    
 \begin{minipage}{.2\textwidth}
-    \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Centro.png}}\label{fig:sub_b}}
+    \subfloat{\fbox{\includegraphics[width=\textwidth]{imgs/Screenshots/Centro.png}}}\label{fig:sub_b}}
 \end{minipage}
     \caption{Combined figure}\label{fig:sub}
 \end{figure}
