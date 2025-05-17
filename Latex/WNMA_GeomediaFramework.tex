@@ -67,7 +67,7 @@ cpalazzi@math.unipd.it}
 Nowadays Online Social Networks (OSN) are the principal way to create connections among people and discover places.
 Platforms like Facebook, Twitter, and Instagram suggest content and profiles based not only on mutual connections or trending content but also on geographic location of the end-user.
 \\
-GeoMedia is a platform, developed into an Android mobile application, which provide a medium for users to share comments and multimedia content (such as photos, videos, and audio) based on their location.
+GeoMedia is a platform, developed as an Android mobile application, which provide a medium for users to share comments and multimedia content (such as photos, videos, and audio) based on their location.
 Then, users can easily see the content shared through GeoMedia moving across a geographical map.
 \end{abstract}
 
@@ -84,39 +84,35 @@ A perfect example is Tinder, a dating app where users can meet each other based 
 To reach this purpose, a variety of sensors can be used to profile the end user, often using the GPS to get the precise location, otherwise opting to the proximal location provided by Access Point / Cell antenna.
 
 However, utilizing these features can lead to faster battery drain, higher data usage, and potential privacy concerns.
+GeoMedia represents an open-source alternative, which does not share data to third systems and access to only necessary user information; so limiting the energy consumption and protecting users' privacy.
 \\
 
 \section{GeoMedia}
 
-GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file.
-In fact, the app just provide a geographical map, where users can fill it by posting photos, audios, videos or just a comment. So users are in charge to enrich the map of a city by creting a post, giving others the opportunity to discover secrets spots or facts about a place.
-Unlike ohters app seen before (i.e. Google Maps), the mobile app automatically get the position of the user posting by retrieving data from the GPS placed inside phones, bringing the online social network into the phyisical world. In fact, the app provide the feature to create some exclusive content by choosing to restrict the post published just in a determinate date or in a customizable geographical area.
+GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file in the current user location.
+In fact, the app provides just a geographical map, where users can fill it by posting photos, audios, videos, or just text. So, users are in charge of enriching the map of a city by creating a post, then for example, giving others the opportunity to discover secrets spots or facts about a place.
+Unlike ohters app seen before (i.e. Google Maps), the mobile app automatically get the position of the user posting by retrieving the information from the GPS placed inside the phones, bringing the online social network into the physical world. In fact, the app provides the feature to create some exclusive content by choosing to restrict the post published just in a determinate date and time or in a well defined geographical area.
 
-An interesting scenario could be adopted by the city of Pauda to explain one of it's dictum: ``citta` dei tre senza" (city without the three).
+An interesting scenario could be adopted by the city of Pauda to explain one of it's dictum: ``città dei tre senza" (city without the three).
 Which consists in three things that Padua has but not in a proper way:
 \begin{itemize}
     \item \textit{The Lawn Without Grass}, which is ``Prato della Valle" because the grass in it, is just ornamental is not really really a lawn like the word would intend
-    \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years on Padua
+    \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years in Padua
     \item \textit{Coffee without doors}, and this is the ``Pedrocchi Coffee", because during war time was open all day (so the doors was removed) to provide shelter during the bombings.
 \end{itemize}
-So, the city of Padua could use GeoMedia to place some comments within these locations to tell the story of each particularity or even upload an old photos to shows as it was.
+So, the city of Padua could use GeoMedia to place some comments in these locations to tell the story of each particularity or even upload old photos to show as it was.
 \\
 
-In the end, GeoMedia, offers a full solution to share data in the location of where the end user is, without the effort to pick the right location as usually happens with other social network apps.
+In the end, GeoMedia, offers a full solution to share contents in the location of where the end users is, making the Online Social Network (OSN) interactive with the real world and without the effort to pick the right location as usually happens with other social networks app
 
 The whole source code developed for this project is available on GitHub. \cite{gh}
 
 
-\section{Architecture}
+\section{Architecture}\label{Architecture:panoramic}
 
-To ensure that the GeoMedia app functions as intended, there is the need to design an opportune architecture, even if not strictly related with the mobile application itself.
-In fact, the adopted three-tier architecture makes the app work as intended, as shown in Figure 1:
-\begin{itemize}
-    \item Client layer, represented by mobile phones since GeoMedia is the Android app that serve as interaction point with the users and making HTTP requests to server side
-    \item Application layer, where the HTTP server takes place, by handling the requests received with the opportune functions and logic; for example compute the distance from the given location to the exclusive posts.
-    \item Data layer, represented by the DBMS (DataBase Management System) that store the data in the opportune data structures and retrieve it when asked.
-\end{itemize}
-
+To ensure that the GeoMedia app functions as intended, it is necessary to design an opportune architecture, even if it is not strictly related to the mobile application itself.
+In fact, the adopted three-tier architecture makes the app work as intended, as shown in Figure 1.
+The architecture is composed of three actors: the presentation layer, the application layer, and the data layer.
 
 \begin{figure}[htbp]
 {\includegraphics[width=9.5cm]{imgs/Architecture.png}}
@@ -124,27 +120,29 @@ In fact, the adopted three-tier architecture makes the app work as intended, as 
 \label{fig}
 \end{figure}
 
+
 \subsection{Presentation layer}
-The presentation layer consists in the "GeoMedia" mobile app itself, representing the interaction point between the users and the whole architecture designed.
-By providing a user interface, allows users to view the published comments or to share their own content; which in the last case, the mobile app, as presentation layer, has also the duty to retrieve data such as the user's location, username and other metadata even if not directly inserted by the user.
+Presentation layer also called client layer, is represented by mobile phones since GeoMedia is the Android app that serves as an interaction point with users and the designed back-end architecture.
+\\
+By providing a user interface, users can view the published comments or share their own content; which in the last case, the mobile app, as presentation layer, has also the duty to retrieve data such as the user's location, username and other metadata even if not directly inserted by the user.
 \subsection{Application layer}
 
-In this project, the application layer is represented by an HTTP server, which exposes endpoints that the frontend (presentation layer) will call by making some HTTP request.
+In this project, the application layer is represented by an HTTP server, by handling the requests received with the opportune functions and logic; for example, compute the distance from the given location to the exclusive posts.
+The HTTP server exposes the endpoints that the front-end (presentation layer) will fetch by making some HTTP request.
 \\
-Specifically, for each endpoint, server will manipulate data with opportune SQL instruction through the Data Layer.
+Specifically, for each endpoint, the server will manipulate the contents uploaded with opportune SQL instruction through the Data Layer.
 
 \subsection{Data layer}
 
-The Data Layer consists in a Database Management System (DBMS), capable of performing CRUD operations (Create, Read, Update, Delete) on data stored in defined tables.
+The Data Layer consists into a Database Management System (DBMS), capable of performing CRUD operations (Create, Read, Update, Delete) on data stored in defined tables.
 \\
-For this project, the DBMS will also be used to create SQL stored procedures, offering a more flexible way to modify the select or insert of data queries in future extensions.
+For this project, the DBMS will also be used to create SQL stored procedures, offering a more flexible way to modify the select or insert of data queries in future extensions, without changing the code inside the server program.
 
 
 \section{Mobile application}
-In way to create a mobile application there are several frameworks and technologies options. For this project has been selected the ``Ionic Framework" \cite{b1}, an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
+In way to create a mobile application, there are several frameworks and technologies options. For this project has been selected the ``Ionic Framework" \cite{b1}, an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
 One of the key advantages of the Ionic Framework is its ability to integrate web frameworks like ReactJS, that offers many functionality such as the updates of data changed in the user interface, or some special functions called ``hooks" triggered on particular events that make possible the customizations and the injection of personalized functions.
-For example, the React' hook ``useEffect()" allows to call functions at the component startup or when a property change, giving to the developer the entry point to call some personalized functions; or instead the hook ``useState()" allows an automatic refresh of webcomponent shown in the user interface at the change of the data inside it.
-
+For example, the React' hook ``useEffect()" allows to call functions at the component startup or when a property change, giving to the developer the entry point to call some personalized functions; or instead the hook ``useState()" allows an automatic refresh of components rendered in the user interface at the change of the data inside it.
 
 
 \subsection{Key functionality }
@@ -153,18 +151,12 @@ GeoMedia starts with a log-in component, where users can choose to create a new 
 \\
 Once logged into the app, GeoMedia offers a bottom menu with two sections: 
 \begin{itemize}
-    \item Profile, in this tab users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port)
-    \item  Map, this section is the heart of the app, by offering a navigation through a geographical map to look for the comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish component that allows users to create a new post based on their coordinates.
+    \item \textit{Profile}, in this tab users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port)
+    \item  \textit{Map}, this section is the heart of the app, by offering a navigation through a geographical map to look for the comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish component that allows users to create a new post based on their coordinates.
 \end{itemize}
 
-Then, the app splits into two pages: settings, where users can see their posts as form of list or to change server configuration parameters (i.e. IP Address or HTTP port); or the Map section that will offer a navigation through a geographical map to look for the content posted.
-
-
-In the Map component users can also tap on a market to view the post, or tap on the floating button on the bottom right in way to create a comment.
-
-
 \\
-The post is composed of some attributes:
+A single post is composed of some attributes:
 \begin{itemize}
     \item Title
     \item Comment
@@ -172,21 +164,22 @@ The post is composed of some attributes:
     \item And others metadata automatically retrieved (longitude, latitude, username, date, ...)
 \end{itemize}
 
-To provide a geographical map has been implemented inside GeoMedia the Pigeon Map\cite{b8} provided as a React Component, that render the graphical map and allows to put some ``markers" on it.
+\subsection{Map component}
+
+As cited before, the heart of GeoMedia app is the ``Map" component, that utilizes Pigeon Map\cite{b8}, which is a React component that encapsulates and provides a geographical interactive map; this library also allows to put some ``markers" in specific location (longitude and latitude), which in the case of GeoMedia those points represent a content posted.
+
 \\
-TODO
-Each posts published will be in the map as marker, there are four type of 
-provided from the HTTP server following a client request, will be rendered
-Comments published on the platform, are retrieved by an HTTP request through the server, and each post will be rendered in the map as a marker.
-\\There are three types of position indicators.
+
+There are different types of location indicator:
 \begin{itemize}
-\item Blue marker: the current user location
-\item Red marker: a post with just text
-\item Yellow marker: a post with a media attached 
+\item Blue marker: the current user location (retrieved in real time by GPS)
+\item Red marker: a post with just a comment text
+\item Yellow marker: a post with a media attached
+\item Green marker: an exclusive post, so a content visible only at date and time or in a well defined geographical area range (i.e. within 5 km)
 \end{itemize}
 
-The content extraction is parameterized to get all posts, or to make the server compute the post closer to the physical position provided within a defined range.
-This strategy can be useful for scenarios like events or game-plays, where users need to be  within a certain area to access exclusive data.
+Respecting the three-tier model explained in Section \ref{Architecture:panoramic}, the client mobile application when fetching the server in order to retrieve data, provides the current position of the user. Then, the server as application layer, filters only the relative posts stored in the data layer; then returns an HTTP packet including the uploaded comments and multimedia data related.
+The specific methods to filtering the exclusive content will explained in the dedicated subsection\ref{server:screening}
 
 
 \\
@@ -199,24 +192,16 @@ const MyPMap = () => { //declare the Map component
     const [PostList, setPostList] = useState([]) //to store the list of posts
     const ctx = useContext(mycontext)  //use the React context to retrieve data of other components
     
-    // retrieve all post giving the actual position of user (in the server it will be computed the nearest posts)
     function getPosts() {
         if (ctx?.UserPosition != null) {
-            doRequest("getPosts", {
+            doRequest("getPosts", { //do an HTTP request to server
                 latitude: ctx?.UserPosition[0]
                 , longitude: ctx?.UserPosition[1]
             }).then(res => {
                 setPostList(res)
             })
-        } else {
-            doRequest("getPosts", {
-                latitude: null
-                , longitude: null
-            }).then(res => {
-                setPostList(res)
-            })
-
-        }
+        } 
+        ...
     }
     
     useEffect(() => {
@@ -244,6 +229,8 @@ const MyPMap = () => { //declare the Map component
 export default MyPMap;
 \end{lstlisting}
 
+The results rendered by the Map component can be seen in Figure 2, where in the left scenario two cities are included, useful case to cover wider area such rural landscapes; instead, in the right image, there's a more detailed scenario that enrich the center of a town by marking interesting attraction points with photos and comments.
+
 \begin{figure}
 \begin{minipage}{.2\textwidth}
     \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Panoramica.png}}\label{fig:sub_a}}
@@ -252,82 +239,64 @@ export default MyPMap;
 \begin{minipage}{.2\textwidth}
     \subfloat{\fbox{\includegraphics[width=\textwidth]{imgs/Screenshots/Centro.png}}}\label{fig:sub_b}}
 \end{minipage}
-    \caption{Combined figure}\label{fig:sub}
+    \caption{Example of rendered content by the Map component}\label{fig:sub}
 \end{figure}
 
 
-Another key component is the ``ViewPost" (ViewPost.jsx), which shows the comment of the clicked market, by opening a new interface and ask the server to retrieve any associated multimedia data.
-This component is not limited to just viewing the comment; it also provides the functionality for downloading the attached multimedia file and store into the local storage of the mobile.
+\subsection{Exclusivity}
 
 
-\begin{lstlisting}[language=Java, caption=ViewPost]
-const ViewPost = (props) => {
-     const refModalPost = useRef()
-    const ctx = useContext(mycontext)
-    const [DataBase64, setDataBase64] = useState(null) //to store the mediafile attached
+GeoMedia makes users interact with the real world by retrieving the real location and then fetching the server to gets the contents around them.
+In fact, a user, when creating a new post, can choose to make it exclusive by two factors: date or area.
 
-    async function downloadFile(file) {
-        let checkPer = await Filesystem.checkPermissions()
-        let ask = await Filesystem.requestPermissions()
-        try {
-            let y = await Filesystem.writeFile({
-                path: file.MEDIAFILENAME,
-                data: DataBase64,
-                directory: Directory.Documents,
-            });
-            if (y.uri.length > 0) {
-                ctx?.showMessage("File saved into Documents folder", "success")
-            }
-        } catch (error) {
-            alert(error)
-        }
-    }
-     // get the media content in base64, different endpoint due to increment performance
-    function getMediaPost(postid) {
-        doRequest("getMediaPost", {
-            POSTID: postid
-        }).then(res => {
-            //res[0]?.MEDIADATA
-            if (res[0]?.MEDIADATA != null) {
-                setDataBase64(res[0]?.MEDIADATA)
-            }
-        })
-    }
-    return(
-    <>
-        <IonModal>
-        </IonModal>
-    </>
-    )
-}
-\end{lstlisting}
+An exclusive post by date will be visible from the moment it's been posted to the time indicated.
+Moreover, users can choose a maximum distance within the content will be visible by others, so creating an area like a circle with at the center the location of user posting.
 
-The mediafile is stored as Base64 encode into the data-layer, so the client will be also able to encode and decode the file.
-\\
-The owner of the comment of course is able to delete it.
+As explained before, limited content are represented by green markers, in fact, Figure 3 compared to the right Figure 2, proves the correctly of GeoMedia by retrieving a post limited by area when the user (blue marker) is near.
 
 \begin{figure}[htbp]
 \begin{center}
-{\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/ViewPost.png}}
+{\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/CentroExclusive.png}}
+\end{center}
+\caption{Exclusive retrieving.}
+\label{fig}
+\end{figure}
+
+
+This feature gives live to several use cases, for example GeoMedia could be used to create interactive experiences and games such as: ``scavenger hunt" or ``hide and seek" games.
+
+
+\subsection{View post}
+
+Another key component is the ``ViewPost" as represented in Figure 4, which shows the content in the clicked marker by opening a new interface and fetching the server to retrieve any associated multimedia data.
+Media file attached in a post are retrieved only when the post is going to be opened and not at the start of the application (instead of the list of relative all location markers) due  to efficiency.
+\\
+This component is not limited to just viewing the comment; it also provides the functionality to download the attached multimedia file and store it in the local storage of the mobile device.
+Media files are stored as ``Base64" encoding into the data-layer, so the client is also able to encode and decode the attachments.
+\\
+The owner of the comment, of course, is able to delete it.
+
+\begin{figure}[htbp]
+\begin{center}
+\fbox{{\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/ViewPost.png}}}
 \end{center}
 \caption{Example of Post View.}
 \label{fig}
 \end{figure}
 
-\subsection{Exclusivity}
-
-A cool feature implemented in GeoMedia, is the exclusivity of the post
-
 
 \subsection{HTTP requests}
 
-The custom function 'doRequest()' shown for example in the map component is a wrapper for an HTTP request to the server; where it's used the native JavaScript function "fetch" to make the request
+The custom function doRequest() shown in the snippet of the Map component (Listing 1) is a wrapper to do an HTTP request to the server.
+In fact, clients communicate with the server by adopting the HTTP protocol, then exchanging ``XHR" (XMLHttpRequest) packets whose contains data in JSON (JavaScript Object Notation) format encapsulated into the body of the POST method of HTTP.
+As follows, the code of doRequest method.
 \begin{lstlisting}[language=Java, caption=Method doRequest to fetch server]
 //various import 
 import { Storage } from '@ionic/storage';
-const store = new Storage(); store.create();
+const store = new Storage(); 
+store.create(); //start the cache storage
 export const doRequest = (api, body = {}) => {
-    return store.get("ServerConfig").then(ServerConfig => { //get the config from cache
+    return store.get("ServerConfig").then(ServerConfig => { //get config from cache
         return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
             method: "POST",
             mode: "cors",
@@ -342,7 +311,10 @@ export const doRequest = (api, body = {}) => {
 \end{lstlisting}
 
 
-To simplify the server configuration in the app, has been installed the ``Ionic Storage" \cite{b9} packet, which allows to store data into the application's cache installed in the mobile phones. In order to use this feature an installation is required via `\$ npm install @ionic/storage'
+To simplify the server configuration in the app, has been installed the ``Ionic Storage" \cite{b9} packet, which allows to store data into the application's cache installed in the mobile phones. In order to use this feature an installation is required via terminal command: 
+\begin{lstlisting}[language=Sh]
+$ npm install @ionic/storage
+\end{lstlisting}
 
 
 
@@ -357,26 +329,29 @@ Geomedia require two specific modules of Capacitor, in specific:
 \end{itemize}
 
 These plugins can be installed via a shell command, respectively:
-\begin{itemize}
-    \item `\$ npm install @capacitor/geolocation'
-    \item `\$ npm install @capacitor/filesystem'
-\end{itemize}
+\begin{lstlisting}[language=Sh]
+$ npm install @capacitor/geolocation
+$ npm install @capacitor/filesystem
+\end{lstlisting}
 
-The geolocation package provide the method `getCurrentPosition()` which returns an Object with properties like: latitude, longitude, altitude and the accuracy for each type of coordinate. 
+The geolocation package provides the method getCurrentPosition() which returns an Object with properties: latitude, longitude, altitude; and for each attribute the accuracy.
 \\
 The altitude, even if not relevant for this project, could be integrated in future development thus to create more peculiar scenarios or use cases.
 
 
 \subsection{Building for Android}
 
-A key strength of the Ionic Framework is its ability to build web applications into native mobile apps; in fact the framework acts as a wrapper/interpreter for the webpage, essentially embedding a custom browser inside the app.
+A key strength of the Ionic Framework is its ability to build web applications into native mobile apps; in fact, the framework acts as a wrapper/interpreter for the webpage, essentially embedding a custom browser inside the app.
 \\
 In order to create an Android Package (APK) for installing the app, some shell commands are required as reported in the official documentation, such as:
-\begin{itemize}
-    \item `npm install @capacitor/android' to add the capacitor
-    \item  `npx cap add android' to denote the android platform, since IonicFramework can also build for "iOS" operating system
-    \item `npx cap build android' to export the application in production mode and so encapsulate the app into a bundle that later will be compiled by Android Studio\cite{b11} tool and the relative SDK 
-\end{itemize}
+\begin{lstlisting}[language=Java]
+`npm install @capacitor/android'  //to add the capacitor
+$ npm install @capacitor/filesystem
+`npx cap add android' //to denote the android platform, since IonicFramework can also build for "iOS" operating system
+`npx cap build android' 
+\end{lstlisting}
+With the last command, the application will be deployed in production mode and then encapsulated into a bundle that later will be compiled by Android Studio \cite{b11} tool and the relative SDK.
+
 
 
 At this point, the Android Manifest needs to be modified, by adding the opportune permissions which the users will grant when requested on startup/installation of the app.
@@ -409,116 +384,106 @@ In fact, HTTP protocol is an insecure format where data is not encrypted and it'
 
 \section{HTTP Server}
 
-In the application layer the HTTP server takes place, which represent the bridge between data stored and the mobile application explained before.
-The GeoMedia HTTP server use NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several path called endpoints, each corrisponde to a specific function within the application. In fact, the server map the request to the execution command of an SQL stored procedure, which handles the respective queries on the opportune tables.
-
-The packages handled in this platform has a JSON (JavaScript Object Notation) content-type thus to allow a rapid extendability of data included and providing an easily human-readable format.
-Only the ``POST" method is implemented, since every request/response include data and parameters.
-
+The HTTP server takes place as application layer, which represent the bridge between data stored and the client application explained before.
+The GeoMedia HTTP server uses NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several paths called endpoints, each of which correspond to a specific function within the application. 
+Each path handled by the server has a relative execution command of an SQL stored procedure, passing by parameters the input data and reading the result set as outcome to return to the client.
+\\
+The packages handled in this platform are in JSON (JavaScript Object Notation) content-type thus to allow a rapid extendability of data included and providing an easily human-readable format.
+Only the ``POST" method is implemented, since every request/response include data and parameters encapsulated inside the body of the HTTP packet.
+\\
 The server requires just one external dependency not included natively, which is ``tedious"\cite{b5} (installable via `\$ npm install tedious') a module to establish a connection to Microsoft SQL Database (DBMS) then to execute query commands and transactions.
 
 \begin{lstlisting}[language=Java, caption=Snippet of GeoMedia HTTP server]
 const http = require("http");
 const port = 9911
-
-/**
- * Invia una risposta HTTP
- * @param {Object} res res of http 
- * @param {int} status of response 
- * @param {Object} body 
- * @param {String} mime 
- */
-function sendResponse(res, status, body = null, mime = "application/json") {
-    res.writeHead(status, { 'Content-Type': mime, "Access-Control-Allow-Origin": "*" });
-    try {
-        if (mime == "application/json") {
-            res.write(JSON.stringify(body));
-        } else {
-            res.write(body)
-        }
-    } catch (err) {
-        res.write(err);
-    }
-    res.end();
-}
 http.createServer((req, res) => {
     let body = "";
     req.on("data", (chunk) => {
         body += chunk
     });
-
     req.on("end", () => {
-        try {
+        ...
             body = JSON.parse(body)
-        } catch (error) {
-            //nthg
+        ...
+        switch (req.url) {
+            case "/doLogin": //LOGIN OR REGISTER
+                dispatcher.doLogin(body.username, body.password, body.newuser).then(resQuery => {
+                    sendResponse(res, 200, resQuery) //this method sends back the data
+                }).catch(err => {
+                    sendResponse(res, 500, err)
+                })
+                break;
+            ....
+           case "/getPosts":
+                dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE,body?.USERNAME).then(resQuery=>{
+                    sendResponse(res,200,resQuery)
+                }).catch(err=>{
+                    sendResponse(res,500,err)
+                })
+                break
+            ...
+            default:
+                sendResponse(res, 404, { 'msg': "Unknown path:" + req.url })
+                break;
         }
-         if(req.url=="/checkConnection"){ // uitility, client on startup send this request, to make sure its configuratin is correct. If server responds the configuration is right
-            sendResponse(res,200,{"HELLO":"From server!"})
-        }
-
-        try {
-            switch (req.url) {
-                case "/doLogin": //LOGIN OR REGISTER
-                    dispatcher.doLogin(body.username, body.password, body.newuser).then(resQuery => {
-                        sendResponse(res, 200, resQuery)
-                    }).catch(err => {
-                        sendResponse(res, 500, err)
-                    })
-                    break;
-                case "/newPost":
-                    dispatcher.newPost(body.author,body.postcontent).then(resQuery=>{
-                        sendResponse(res,200,resQuery)
-                    }).catch(err=>{
-                        sendResponse(res,500,err)
-                    })
-                    break
-               case "/getPosts":
-                    dispatcher.getPosts(body?.LATITUDE, body?.LONGITUDE,body?.USERNAME).then(resQuery=>{
-                        sendResponse(res,200,resQuery)
-                    }).catch(err=>{
-                        sendResponse(res,500,err)
-                    })
-                    break
-                ...
-                default:
-                    sendResponse(res, 404, { 'msg': "Unknown path:" + req.url })
-                    break;
-            }
-        } catch (error) {
-            fs.appendFileSync('./log.txt', 'ERROR ,' + Date.now() + ',' + error)
-        }
-
     })
 }).listen(port);
-
-console.log("Server started on port: "+port);
-
 \end{lstlisting}
 
 
-The dispatcher class is just a helper to wrap the execution of stored procedure, for example
+The dispatcher class is just a helper, used to wrap the execution of SQL stored procedure and manipulate data whenever necessary.
+\\
+For example:
 \begin{lstlisting}[language=Java, caption=snippet example of dispatcher.js class]
 const SQL_MANAGER = require("./SQL_MANAGER"); //wrapper for tedious package 
 
-function getPosts(latitude=null,longitude=null,username=null){
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC GETPOSTS @LATITUDE= "+latitude+", @LONGITUDE="+longitude+",@USERNAME='"+username+"'")
+function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
+
+    var dLat = (post_latitude - curr_latitude) * Math.PI / 180;
+    var dLon = (post_longitude - curr_longitude) * Math.PI / 180;
+    var a = 0.5 - Math.cos(dLat) / 2 + Math.cos(curr_latitude * Math.PI / 180) * Math.cos(post_latitude * Math.PI / 180) * (1 - Math.cos(dLon)) / 2;
+
+    d = Math.round(6371000 * 2 * Math.asin(Math.sqrt(a))); // in meters
+    if (d <= areaKM * 1000) { //transform areaKM to meters
+        return true
+    } else {
+        return false
+    }
+}
+
+async function getPosts(curr_latitude = null, curr_longitude = null, username = null) {
+   
+    let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC GETPOSTS @USERNAME='" + username + "'")
+
+    let results = []
+    posts.forEach(pp => {
+        if (pp.AREA_KM != null) { // check if users' position is within the post availability
+            if (checkAREA(pp.AREA_KM, pp.LATITUDE, pp.LONGITUDE, curr_latitude, curr_longitude)) {
+                results.push(pp)
+            }
+        } else {
+            results.push(pp)
+        }
+    })
+    return results
+
 }
 function getMediaPost(postid){
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC GETMEDIAPOST @POSTID="+postid)
 }
-...
-module.exports = {
-    ...
-    , getPosts
-    , getMediaPost
-}
+
 \end{lstlisting}
 
 
+\subsection{Exclusive content}\label{server:screening}
+
+As shown in Listing 5, the filtering for exclusive content is done partially in the application layer.
+In fact, server executes the respective SQL stored procedure into the DBMS which already filters the expired posts limited by date, then server compute the visible radius of each exclusive post then returns just the ones within the users' current location.
+
+//TODO: SPIEGARE IL metodo??
 
 \subsection{Microservices}
-The server represent a single access point, which is a fragile solution in a real-world scenario, as it represents a ``single point of failure" where the failure of a this node makes unavailable the whole system.
+The server represents a single access point, which is a fragile solution in a real-world scenario, as it represents a ``single point of failure" where the failure of this node makes the whole system unavailable.
 \\
 There are many alternatives to mitigate this event. One approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
 A more sophisticated solution, is to change the whole design of this solution, creating a distributed architecture by adopting microservices\cite{b6}; where the server is fragmented into multiple smaller process that acts one for each specific function (as shown in Fig. 4).
@@ -594,10 +559,6 @@ END;
 In conclusion, GeoMedia offers a platform for sharing content on a geographic map. As previously mentioned, there are some key features that could be expanded.
 
 Some ideas include:
-
-\subsection{Live comments}
-A potential feature to temporize posts to be available only at specific times or within a defined geographic area.
-This could be used to create interactive experiences, such as ``scavenger hunt" or ``hide and seek" games.
 
 \subsection{Time capsule}
 
