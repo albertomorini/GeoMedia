@@ -87,6 +87,37 @@ However, utilizing these features can lead to faster battery drain, higher data 
 GeoMedia represents an open-source alternative, which does not share data to third systems and access to only necessary user information; so limiting the energy consumption and protecting users' privacy.
 \\
 
+\section{Related works}
+
+As slightly mentioned before, online social media are growing exponentially in terms of numbers and also of functionality provided; in fact, there are several alternatives to GeoMedia but more complex and more invasive in terms of privacy.
+In example
+\subsection{Google Maps}
+Google Maps\cite{GoogleMaps} is a web mapping platform providing many functionality such as: route directions, traffic conditions and ``Street View"\cite{StreetView} which function consent users to create an immersive 360\textdegree vision in a specific point on the map.
+The last function is the only way to enrich the geographical map with data, but on the other hand is very complex to create a content because it's not a picture or a video but a full panoramic.
+Furthermore, it's not possible to insert a simple description text.
+\\
+Another functionality which allows users to write and post media content (limited to photos or videos) is a reviews or rating of a place such as a bar, museum or attraction point already created by the platform or the owner of the by the business.
+
+\subsection{Foursquare City Guide}
+
+Another Online Social Network that can be used to explore location or share comments across a city, was Foursquare City Guide\cite{FourSquareWiki} owned by Foursquare Labs Inc. \cite{FoursquareOfficialLink} created in 2008, that shut down in October 2024.
+The app provides personalized recommendations of places near a user's current location based on users' previous browsing history and check-in history, allowing users to upload content in the position they are.
+\\
+After the shut down, the features of this social network will be earned by SwarmApp \cite{FoursquareSwarm}, another online social network owned by the same comapany, that allows users to send their location to their friends.
+
+
+\subsection{Instagram}
+Instagram \cite{Instagram} is one of the biggest Online Social Networks of the last decade in terms of active users; the platform is profile-centric by allowing users to enrich their profile with photos or video, and potentially to manually add a location to the post by selecting a nearly place or searching a position (i.e. a museum, a bar, a city).
+\\
+With this functionality, Instagram offers also the possibility to navigate through a map seeing various content published, but cannot limit posts to a defined geographical area.
+The only exclusivity that Instagram can give is with the ``Instagram stories", a feature which limit photos or videos from the moment of publication up to the next 24 hours.
+\\
+Even Instagram can retrieve the location via GPS to place the position in the map near to the end users.
+
+In the end, this platform has a backbone ready to makes what GeoMedia do but not properly centered on that. Another aspect that users might consider is relative to the privacy concerns, since the social network is owned by by Meta Platforms, Inc. a profit company which is well known to share personal data to third parts\cite{MetaPrivacy}
+
+
+
 \section{GeoMedia}
 
 GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file in the current user location.
@@ -289,6 +320,7 @@ The owner of the comment, of course, is able to delete it.
 
 The custom function doRequest() shown in the snippet of the Map component (Listing 1) is a wrapper to do an HTTP request to the server.
 In fact, clients communicate with the server by adopting the HTTP protocol, then exchanging ``XHR" (XMLHttpRequest) packets whose contains data in JSON (JavaScript Object Notation) format encapsulated into the body of the POST method of HTTP.
+\\
 As follows, the code of doRequest method.
 \begin{lstlisting}[language=Java, caption=Method doRequest to fetch server]
 //various import 
@@ -364,11 +396,7 @@ In fact, HTTP protocol is an insecure format where data is not encrypted and it'
 
 \begin{lstlisting}[language=XML, caption=Snippet of Android Manifest]
 <application
-    android:allowBackup="true"
-    android:icon="@mipmap/mymap"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/mymap_round"
-    android:supportsRtl="true"
+    ...
     android:requestLegacyExternalStorage="true"
     android:largeHeap="true"
     android:usesCleartextTraffic="true"
@@ -475,27 +503,32 @@ function getMediaPost(postid){
 \end{lstlisting}
 
 
-\subsection{Exclusive content}\label{server:screening}
+\subsection{Vincenty's formulae for distance computation}\label{server:screening}
 
 As shown in Listing 5, the filtering for exclusive content is done partially in the application layer.
-In fact, server executes the respective SQL stored procedure into the DBMS which already filters the expired posts limited by date, then server compute the visible radius of each exclusive post then returns just the ones within the users' current location.
+In fact, server executes the respective SQL stored procedure into the DBMS which already filters the expired posts limited by date, then server computes the visible radius of each exclusive post, then returns just the ones within the users' current location.
 
-//TODO: SPIEGARE IL metodo??
+The method to compute the distance among the current user location requesting the posts and the position of the limited content within the kilometers chosen, is an implementation of Vincenty's formulae \cite{Vincenty}.
+\\
+This method was developed in 1975 by Thaddeus Vincenty \cite{ThaddeusVincenty} a Polish American geodesist who worked with the U.S. Air Force and later the National Geodetic Survey, and is based on the assumption that the Earth is an oblate spheroid, and hence are more accurate than methods that assume a spherical Earth, such as great-circle distance \cite{GCDWiki}. 
+
+For GeoMedia application, has been implemented just the first method of Vincenty's solution, which computes the location of a point that is a given distance and azimuth (direction) from another point with an accuracy within 0.5 mm on the Earth ellipsoid.
+
 
 \subsection{Microservices}
-The server represents a single access point, which is a fragile solution in a real-world scenario, as it represents a ``single point of failure" where the failure of this node makes the whole system unavailable.
+In the monolithic architecture designed, the server represents a single access node, which is a fragile solution in a real-world scenario, as it represents a ``single point of failure" where the failure of this node makes the whole system unavailable.
 \\
-There are many alternatives to mitigate this event. One approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
-A more sophisticated solution, is to change the whole design of this solution, creating a distributed architecture by adopting microservices\cite{b6}; where the server is fragmented into multiple smaller process that acts one for each specific function (as shown in Fig. 4).
-For example, one microservice could handle the retrieving process of the posts, another could manage the accounts, another the post creation, and so on. This approach not only improves reliability but also helps to distribute traffic loads thus to preventing the system from an overwhelmed; a common problem with social media platforms when a mass requests of a viral content happens, causing the ``break the internet" effect.
-
+There are many alternatives to mitigate this event. A potential approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
+\\
+A more sophisticated solution is to change the whole design, creating a distributed architecture by adopting microservices\cite{b6}. In this scenario, server is fragmented into multiple smaller processes that act one for each specific function, as theorically shown in Figure 5.
+For example, one microservice could handle the post retrieval process, another could manage the accounts, another the creation of the posts, and so on. This approach not only improves reliability but also helps to distribute traffic loads thus to preventing the system from an overwhelmed; a common problem with social media platforms when a mass requests of a viral content happens, causing the ``break the Internet" \cite{BreakTheInternet} effect.
 
 
 \begin{figure}[htbp]
 \begin{left}
-{\includegraphics[width=8.5cm, height=5cm\textwidth]{imgs/microservices.png}}
+\fbox{{\includegraphics[width=8.5cm, height=5cm\textwidth]{imgs/microservices.png}}}
 \end{lef}
-\caption{Example of microservices architecture.}
+\caption{Example of microservices architecture. \cite{b6}}
 \label{fig}
 \end{figure}
 
@@ -503,10 +536,9 @@ For example, one microservice could handle the retrieving process of the posts, 
 
 \section{DBMS}
 
-All posts and user profile present on GeoMedia are stored in a Database Management System (DBMS), where Microsoft SQL Server\cite{b7} serving as the engine.
-
-The DBMS stores data in two primary tables:
-
+Following the three-tier design, DBMS (DataBase Management System) represents the Data-layer, providing the function to maintain and to query data in it. Microsoft SQL Server (MSSQL)\cite{b7} has been selected to implement this role.
+\\
+All the posts and user profiles present in GeoMedia are stored in dedicated structure, specifically in database table:
 \begin{itemize}
     \item `USERS' for users' profiles
     \item `POSTS' for posts 
@@ -531,8 +563,8 @@ CREATE TABLE POSTS(
 );
 \end{lstlisting}
 
-Data is managed through stored procedures, which allows more efficient and accurate query modifications. For example, when storing a post,
-the author (user) of the post and all associated metadata (as the whole JSON data received by server) are passed as parameters, then manipulated and formatted into SQL. Giving also the isolation and independence from the application layer.
+Data is handled through stored procedures, which give to the data layer isolation and independency from the rest of architecture, so further modification (both to application or data layer) would not impact each other.
+In example, when storing a post, all the the content and the author are passed as parameters, then manipulated and formatted into the opportune stored procedure inside the DBMS.
 
 \begin{lstlisting}[language=SQL, caption=Stored Procedure of post creation]
 CREATE PROCEDURE NEWPOST
@@ -558,6 +590,8 @@ END;
 
 In conclusion, GeoMedia offers a platform for sharing content on a geographic map. As previously mentioned, there are some key features that could be expanded.
 
+TODO: richiama i related works
+
 Some ideas include:
 
 \subsection{Time capsule}
@@ -582,6 +616,28 @@ This idea gives life to several use cases, such as a waypoints to mark hiking ro
 \bibitem{b11}Android Studio SDK official website, as a tool for building the Android APK. https://developer.android.com/studio
 \bibitem{b12}React JS as chosen front-end framework. https://react.dev/
 \bibitem{gh}GitHub public repository for GeoMedia project. https://github.com/albertomorini/GeoMedia
+\bibitem{Vincenty} Vincenty solutions of geodesics on the ellipsoid. 
+https://www.movable-type.co.uk/scripts/latlong-vincenty.html
+\bibitem{ThaddeusVincenty} Bibliography of the Polish American geodesist Thaddeus Vincenty. https://en.wikipedia.org/wiki/Thaddeus\_Vincenty
+\bibitem{GCDWiki}Great-circle distance or spherical distance method.
+https://en.wikipedia.org/wiki/Great-circle\_distance
+\bibitem{BreakTheInternet} Break the Internet effect. https://dictionary.cambridge.org/dictionary/english/break-the-internet
+\bibitem{GoogleMaps} Google Maps as social media, provided by Google. https://en.wikipedia.org/wiki/Google\_Maps
+\bibitem{StreetView} Street View, functionality of Google Maps.
+https://en.wikipedia.org/wiki/Google_Street_View
+\bibitem{Instagram} Instagram, Online Social Media owned by Meta Platforms, Inc.
+\bibitem{Meta} Meta Platforms, Inc.
+https://en.wikipedia.org/wiki/Meta_Platforms
+\bibitem{Instagram Stories} Instagram stories functionality, to publish time-limited content
+https://about.instagram.com/features/stories
+\bibitem{MetaPrivacy}Meta Accused Of Still Flouting Privacy Rules With AI Training Data
+https://www.forbes.com/sites/emmawoollacott/2025/05/15/meta-accused-of-still-flouting-privacy-rules-with-ai-training-data/
+\bibitem{FourSquareWiki} Foursquare City Guide as City explorer social media.
+https://en.wikipedia.org/wiki/Foursquare\_City\_Guide
+\bibitem{FoursquareOfficialLink} Foursquare's official home page.
+https://foursquare.com/
+\bibitem{FoursquareSwarm} Foursquare's SwarmApp official home page.
+https://www.swarmapp.com/
 \end{thebibliography}
 
 \vspace{12pt}
