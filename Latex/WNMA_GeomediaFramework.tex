@@ -65,23 +65,23 @@ cpalazzi@math.unipd.it}
 
 \begin{abstract}
 Nowadays Online Social Networks (OSN) are the principal way to create connections among people and discover places.
-Platforms like Facebook, Twitter, and Instagram suggest content and profiles based not only on mutual connections or trending content but also on geographic location of the end-user.
-\\
-GeoMedia is a platform, developed as an Android mobile application, which provide a medium for users to share comments and multimedia content (such as photos, videos, and audio) based on their location.
+Platforms like Facebook, Twitter, and Instagram suggest content and profiles based not only on mutual connections or trending posts but also on geographic location of the end-user.
+
+GeoMedia is a platform, developed as an Android mobile application, that provides a medium for users to share comments and multimedia files (such as photos, videos, and audio) based on their location.
 Then, users can easily see the content shared through GeoMedia moving across a geographical map.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Android, Social Networks, geolocation, microservices, client server, multimedia, media sharing, android location, http, three-tier, three-tier architecture, SQL, DBMS
+Android, Social Networks, Online Social Networks, OSNS, OSN, Social Media, geolocation, microservices, client server, multimedia, media sharing, android location, http, three-tier, three-tier architecture, SQL, DBMS
 \end{IEEEkeywords}
 
 \section{Introduction}
 In the last decade, mobile applications have almost replaced traditional computer programs, especially when it comes to social networks. Not only because it is more convenient to use a mobile phone than a laptop, but also because mobile phones can give more functionality by using the physical sensors present in way to enrich the user experience.
 
 
-The explosion of OSN led media companies to invest and explore almost all functionality of mobile devices, thus to make users feel more connected and satisfied by providing more relevant content. As a result, users spend more time on these platforms, generating profit for social media companies.
+The explosion of OSNS (Online Social Networks) led media companies to invest and explore almost all functionality of mobile devices, thus to make users feel more connected and satisfied by providing more relevant content. As a result, users spend more time on these platforms, generating profit for social media corporations.
 A perfect example is Tinder, a dating app where users can meet each other based on their geographical proximity.
-To reach this purpose, a variety of sensors can be used to profile the end user, often using the GPS to get the precise location, otherwise opting to the proximal location provided by Access Point / Cell antenna.
+To reach this purpose, a variety of sensors can be used to profile the end user, often using the GPS to get a very precise location, otherwise opting to the proximal location provided by Access Point / Cell antenna.
 
 However, utilizing these features can lead to faster battery drain, higher data usage, and potential privacy concerns.
 GeoMedia represents an open-source alternative, which does not share data to third systems and access to only necessary user information; so limiting the energy consumption and protecting users' privacy.
@@ -89,48 +89,49 @@ GeoMedia represents an open-source alternative, which does not share data to thi
 
 \section{Related works}
 
-As slightly mentioned before, online social media are growing exponentially in terms of numbers and also of functionality provided; in fact, there are several alternatives to GeoMedia but more complex and more invasive in terms of privacy.
+As slightly mentioned before, online social media are growing exponentially in terms of numbers and also of functionality provided; in fact, there are several alternatives to GeoMedia but more complex and more invasive in terms of privacy. 
+\\
 In example
 \subsection{Google Maps}
-Google Maps\cite{GoogleMaps} is a web mapping platform providing many functionality such as: route directions, traffic conditions and ``Street View"\cite{StreetView} which function consent users to create an immersive 360\textdegree vision in a specific point on the map.
-The last function is the only way to enrich the geographical map with data, but on the other hand is very complex to create a content because it's not a picture or a video but a full panoramic.
-Furthermore, it's not possible to insert a simple description text.
+Google Maps\cite{GoogleMaps} is a web mapping platform providing many functionality such as: route directions, traffic conditions and ``Street View"\cite{StreetView} which function consent users to create an immersive 360\textdegree \  vision in a specific point on the map.
+The last function is the only way to enrich the geographical map whenever users want, but on the other hand is very complex to create a content because it's not a picture or a video but a full panoramic.
+Furthermore, it is not possible to insert a simple description text.
 \\
 Another functionality which allows users to write and post media content (limited to photos or videos) is a reviews or rating of a place such as a bar, museum or attraction point already created by the platform or the owner of the by the business.
 
 \subsection{Foursquare City Guide}
 
-Another Online Social Network that can be used to explore locations or share comments across a city, was Foursquare City Guide\cite{FourSquareWiki} owned by Foursquare Labs Inc. \cite{FoursquareOfficialLink} created in 2008, that shut down in October 2024.
+Another Online Social Network that can be used to explore locations or share comments across a city was Foursquare City Guide\cite{FourSquareWiki} owned by Foursquare Labs Inc. \cite{FoursquareOfficialLink} created in 2008 and later shut down in October 2024.
+\\
 The app provides personalized recommendations of places near a user's current location based on users' previous browsing history and places visited before, also allowing users to upload content in the position they are.
 \\
-After shutting down, the features of this social network will be earned by Swarm \cite{FoursquareSwarm}, another online social network owned by the same company, that allows users to share their locations with their friends and create a record of their experiences in a personal life-log.
+After shutting down, the features of this social network will be earned by Swarm \cite{FoursquareSwarm}, another social media owned by the same company, which allows users to share their locations with their friends and create a record of their experiences in a personal life-log.
 
 \subsection{Instagram}
-Instagram \cite{Instagram} is one of the biggest Online Social Networks of the last decade in terms of active users; the platform is profile-centric by allowing users to enrich their profile with photos or video, and potentially to manually add a location to the post by selecting a nearly place or searching a position (i.e. a museum, a bar, a city).
+Instagram \cite{Instagram} is one of the biggest Online Social Networks of the last decade in terms of active users; the platform is profile-centric by allowing users to enrich their profile with photos or video, and potentially to manually add a location to the post by selecting a nearly place (i.e. a museum, a bar, a city) or adding specific coordination.
 \\
 With this functionality, Instagram offers also the possibility to navigate through a map seeing various content published, but cannot limit posts to a defined geographical area.
-The only exclusivity that Instagram can give is with the ``Instagram stories", a feature which limit photos or videos from the moment of publication up to the next 24 hours.
+The only exclusivity that Instagram can give is with the ``Instagram stories", a feature which limits photos or videos from the moment of publication up to the next 24 hours.
 \\
-Even Instagram can retrieve the location via GPS to place the position in the map near to the end users.
+Even Instagram can retrieve the location via GPS to place the position in the map near to the end users to shows them more appropriate content.
 
-In the end, this platform has a backbone ready to makes what GeoMedia do but not properly centered on that. Another aspect that users might consider is relative to the privacy concerns, since the social network is owned by by Meta Platforms, Inc. a profit company which is well known to share personal data to third parts\cite{MetaPrivacy}
-
+In the end, this platform has a backbone ready to makes what GeoMedia do, but is not properly centered on that. Another aspect that users might consider is related to privacy concerns, since the social network is owned by Meta Platforms, Inc. a profit company known to share personal data with third parties\cite{MetaPrivacy}
 
 
 \section{GeoMedia}
 
 GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file in the current user location.
 In fact, the app provides just a geographical map, where users can fill it by posting
-not just photos or videso, but also recorded audio, music, files or just text message.
+not just photos or videos, but also recorded audio, music, files, or just textual comment.
 So, users are in charge of enriching the map of a city by creating a post, then for example, giving others the opportunity to discover secrets spots or facts about a place.
 \\
 Unlike others applications seen before (i.e. Google Maps), the mobile app automatically get the location of the user posting by retrieving the information from the GPS placed inside the phones, bringing the online social network into the physical world. In fact, the app provides the feature to create some exclusive content by choosing to restrict the post published just in a determinate date and time or in a well defined geographical area.
 
-An interesting scenario could be adopted by the city of Pauda to explain one of it's dictum: ``città dei tre senza" (city without the three).
+An interesting scenario could be adopted by the city of Pauda to explain one of it's dictum: ``città dei tre senza" (literally: city without the three).
 Which consists in three things that Padua has but not in a proper way:
 \begin{itemize}
-    \item \textit{The Lawn Without Grass}, which is ``Prato della Valle" because the grass in it, is just ornamental is not really really a lawn like the word would intend
-    \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years in Padua
+    \item \textit{The Lawn Without Grass}, which is ``Prato della Valle" because the grass in it, is just ornamental is not really really a lawn like the word would intend.
+    \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years in Padua.
     \item \textit{Coffee without doors}, and this is the ``Pedrocchi Coffee", because during war time was open all day (so the doors was removed) to provide shelter during the bombings.
 \end{itemize}
 So, in this example, the city of Padua could use GeoMedia to place some comments in these locations to tell the story of each particularity or even upload old photos to show as it was.
@@ -145,8 +146,9 @@ The whole source code developed for this project is available on GitHub. \cite{g
 \section{Architecture}\label{Architecture:panoramic}
 
 To ensure that the GeoMedia app functions as intended, it is necessary to design an opportune architecture, even if it is not strictly related to the mobile application itself.
-In fact, the adopted three-tier architecture makes the app work as intended, as shown in Figure 1.
-The architecture is composed of three actors: the presentation layer, the application layer, and the data layer.
+In fact, the adopted three-tier architecture shown in Figure 1, makes the app work as desired.
+\\
+The designed solution is composed of three actors: the presentation layer, the application layer, and the data layer.
 
 \begin{figure}[htbp]
 {\includegraphics[width=9.5cm]{imgs/Architecture.png}}
@@ -158,13 +160,14 @@ The architecture is composed of three actors: the presentation layer, the applic
 \subsection{Presentation layer}
 Presentation layer also called client layer, is represented by mobile phones since GeoMedia is the Android app that serves as an interaction point with users and the designed back-end architecture.
 \\
-By providing a user interface, users can view the published comments or share their own content; which in the last case, the mobile app, as presentation layer, has also the duty to retrieve data such as the user's location, username and other metadata even if not directly inserted by the user.
+By providing a user interface, users can view the published comments or share their own content; which in the last case, the mobile app, as presentation layer, has also the duty to retrieve data such as the current location, username and other metadata even if not directly inserted by the user.
 \subsection{Application layer}
 
-In this project, the application layer is represented by an HTTP server, by handling the requests received with the opportune functions and logic; for example, compute the distance from the given location to the exclusive posts.
+In this project, the application layer is represented by an HTTP server, which handle the requests received with the opportune functions and logic; for example: compute the distance from the given location to the exclusive posts.
+\\
 The HTTP server exposes the endpoints that the front-end (presentation layer) will fetch by making some HTTP request.
 \\
-Specifically, for each endpoint, the server will manipulate the contents uploaded with opportune SQL instruction through the Data Layer.
+Specifically, for each endpoint, the server will manipulate data with opportune SQL instruction through the Data Layer.
 
 \subsection{Data layer}
 
@@ -175,9 +178,10 @@ For this project, the DBMS will also be used to create SQL stored procedures, of
 
 \section{Mobile application}
 In way to create a mobile application, there are several frameworks and technologies options. For this project has been selected the ``Ionic Framework" \cite{b1}, an open source toolkit for building cross-platform mobile, web, and desktop applications using web technologies such as HTML, CSS, and JavaScript.
-One of the key advantages of the Ionic Framework is its ability to integrate web frameworks like ReactJS, that offers many functionality such as the updates of data changed in the user interface, or some special functions called ``hooks" triggered on particular events that make possible the customizations and the injection of personalized functions.
-For example, the React' hook ``useEffect()" allows to call functions at the component startup or when a property change, giving to the developer the entry point to call some personalized functions; or instead the hook ``useState()" allows an automatic refresh of components rendered in the user interface at the change of the data inside it.
-
+One of the key advantages of the Ionic Framework is its ability to integrate web frameworks like ReactJS, that offers many functionality to create a smooth and great user experience.
+\\
+React also has some special functions called ``hooks", which are triggered on particular events making possible injection of personalized functions. In example the hook ``useEffect()" allows to call functions at the component startup or when a property changes, giving to the developer the entry point to call some personalized functions; or instead the hook ``useState()" allows an automatic refresh of components rendered in the user interface at the change of the data inside it.
+In fact, React, through Ionic Framework, has been integrated in the GeoMedia mobile application.
 
 \subsection{Key functionality }
 
@@ -186,7 +190,7 @@ GeoMedia starts with a log-in component, where users can choose to create a new 
 Once logged into the app, GeoMedia offers a bottom menu with two sections: 
 \begin{itemize}
     \item \textit{Profile}, in this tab users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port)
-    \item  \textit{Map}, this section is the heart of the app, by offering a navigation through a geographical map to look for the comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish component that allows users to create a new post based on their coordinates.
+    \item  \textit{Map}, this section is the heart of the app, by offering a navigation through a geographical map to look for comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish function that allows users to create a new post based on their coordinates.
 \end{itemize}
 
 \\
@@ -200,7 +204,7 @@ A single post is composed of some attributes:
 
 \subsection{Map component}
 
-As cited before, the heart of GeoMedia app is the ``Map" component, that utilizes Pigeon Map\cite{b8}, which is a React component that encapsulates and provides a geographical interactive map; this library also allows to put some ``markers" in specific location (longitude and latitude), which in the case of GeoMedia those points represent a content posted.
+As cited before, the heart of GeoMedia app is the ``Map" component, that utilizes Pigeon Map\cite{b8}, which is a React component that encapsulates and provides a geographical interactive map; this library also allows to put some ``markers" in specific location (as longitude and latitude coordinates), which in the case of GeoMedia those points represent a content posted.
 
 \\
 
@@ -212,7 +216,7 @@ There are different types of location indicator:
 \item Green marker: an exclusive post, so a content visible only at date and time or in a well defined geographical area range (i.e. within 5 km)
 \end{itemize}
 
-Respecting the three-tier model explained in Section \ref{Architecture:panoramic}, the client mobile application when fetching the server in order to retrieve data, provides the current position of the user. Then, the server as application layer, filters only the relative posts stored in the data layer; then returns an HTTP packet including the uploaded comments and multimedia data related.
+Respecting the three-tier model explained in Section \ref{Architecture:panoramic}, the client mobile application when fetching the server in order to retrieve data, provides the current position of the user. Then, the server as application layer, filters only the relative posts stored in the data layer; then returns an HTTP packet including the uploaded content with their kind and coordinates.
 The specific methods to filtering the exclusive content will explained in the dedicated subsection\ref{server:screening}
 
 
@@ -265,6 +269,7 @@ export default MyPMap;
 
 The results rendered by the Map component can be seen in Figure 2, where in the left scenario two cities are included, useful case to cover wider area such rural landscapes; instead, in the right image, there's a more detailed scenario that enrich the center of a town by marking interesting attraction points with photos and comments.
 
+
 \begin{figure}
 \begin{minipage}{.2\textwidth}
     \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Panoramica.png}}\label{fig:sub_a}}
@@ -283,8 +288,8 @@ The results rendered by the Map component can be seen in Figure 2, where in the 
 GeoMedia makes users interact with the real world by retrieving the real location and then fetching the server to gets the contents around them.
 In fact, a user, when creating a new post, can choose to make it exclusive by two factors: date or area.
 
-An exclusive post by date will be visible from the moment it's been posted to the time indicated.
-Moreover, users can choose a maximum distance within the content will be visible by others, so creating an area like a circle with at the center the location of user posting.
+An exclusive post by date will be visible from the moment it has been posted to the time indicated. \\
+Instead, users can choose a maximum distance within the marker will be visible by others, like creating a circular area around it visible only if the current user's location is included.
 
 As explained before, limited content are represented by green markers, in fact, Figure 3 compared to the right Figure 2, proves the correctly of GeoMedia by retrieving a post limited by area when the user (blue marker) is near.
 
@@ -297,18 +302,18 @@ As explained before, limited content are represented by green markers, in fact, 
 \end{figure}
 
 
-This feature gives live to several use cases, for example GeoMedia could be used to create interactive experiences and games such as: ``scavenger hunt" or ``hide and seek" games.
+This feature gives live to several use cases, for example GeoMedia could be also used to create interactive experiences and games such as: ``scavenger hunt" or ``hide and seek" games.
 
 
 \subsection{View post}
 
 Another key component is the ``ViewPost" as represented in Figure 4, which shows the content in the clicked marker by opening a new interface and fetching the server to retrieve any associated multimedia data.
-Media file attached in a post are retrieved only when the post is going to be opened and not at the start of the application (instead of the list of relative all location markers) due  to efficiency.
+Media file attached in a post are retrieved only when the post is going to be opened and not at the start of the application (instead of the list of relative all location markers) due to efficiency.
 \\
 This component is not limited to just viewing the comment; it also provides the functionality to download the attached multimedia file and store it in the local storage of the mobile device.
 Media files are stored as ``Base64" encoding into the data-layer, so the client is also able to encode and decode the attachments.
 \\
-The owner of the comment, of course, is able to delete it.
+The owner of the post, of course, is able to delete it.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -317,12 +322,13 @@ The owner of the comment, of course, is able to delete it.
 \caption{Example of Post View.}
 \label{fig}
 \end{figure}
+\FloatBarrier 
 
 
 \subsection{HTTP requests}
 
-The custom function doRequest() shown in the snippet of the Map component (Listing 1) is a wrapper to do an HTTP request to the server.
-In fact, clients communicate with the server by adopting the HTTP protocol, then exchanging ``XHR" (XMLHttpRequest) packets whose contains data in JSON (JavaScript Object Notation) format encapsulated into the body of the POST method of HTTP.
+The custom function doRequest() shown in the snippet of the Map component (Listing 1) is a wrapper to execute an HTTP request to the server.
+In fact, clients communicate with the server by adopting the HTTP protocol, then exchanging ``XHR" (XMLHttpRequest) packets containing data in JSON (JavaScript Object Notation) format encapsulated into the body of the POST method of the protocol.
 \\
 As follows, the code of doRequest method.
 \begin{lstlisting}[language=Java, caption=Method doRequest to fetch server]
@@ -371,7 +377,7 @@ $ npm install @capacitor/filesystem
 
 The geolocation package provides the method getCurrentPosition() which returns an Object with properties: latitude, longitude, altitude; and for each attribute the accuracy.
 \\
-The altitude, even if not relevant for this project, could be integrated in future development thus to create more peculiar scenarios or use cases.
+The altitude, even if not relevant for this project, could be integrated in future development thus to create more peculiar scenarios and use cases.
 
 
 \subsection{Building for Android}
@@ -380,10 +386,10 @@ A key strength of the Ionic Framework is its ability to build web applications i
 \\
 In order to create an Android Package (APK) for installing the app, some shell commands are required as reported in the official documentation, such as:
 \begin{lstlisting}[language=Java]
-`npm install @capacitor/android'  //to add the capacitor
+$ npm install @capacitor/android  //to add the capacitor
 $ npm install @capacitor/filesystem
-`npx cap add android' //to denote the android platform, since IonicFramework can also build for "iOS" operating system
-`npx cap build android' 
+$ npx cap add android //to denote the android platform, since IonicFramework can also build for "iOS" operating system
+$ npx cap build android
 \end{lstlisting}
 With the last command, the application will be deployed in production mode and then encapsulated into a bundle that later will be compiled by Android Studio \cite{b11} tool and the relative SDK.
 
@@ -394,7 +400,7 @@ At this point, the Android Manifest needs to be modified, by adding the opportun
 The only permission requested is the access to location, if denied the application will not work; a potential solution to avoid this scenario is to use the proximal location provided by antennas of the IPS, but could results in a very different position than the real one.
 
 \\
-Another customization is to allow clear traffic (HTTP), because since from Android 8 only HTTPS packets are allowed by default.
+Another customization is to allow clear traffic (HTTP), because since from Android 8 for security reasons, only HTTPS packets are allowed by default.
 In fact, HTTP protocol is an insecure format where data is not encrypted and it's intended to be used just in the development phase, so the explicit declaration in the manifest is required in way to make the Android OS create an exception.
 
 \begin{lstlisting}[language=XML, caption=Snippet of Android Manifest]
@@ -417,13 +423,14 @@ In fact, HTTP protocol is an insecure format where data is not encrypted and it'
 
 The HTTP server takes place as application layer, which represent the bridge between data stored and the client application explained before.
 The GeoMedia HTTP server uses NodeJS\cite{b4} as engine to start a listening process on a designated network port; even more, the server exposes several paths called endpoints, each of which correspond to a specific function within the application. 
-Each path handled by the server has a relative execution command of an SQL stored procedure, passing by parameters the input data and reading the result set as outcome to return to the client.
+Each path handled by the server has a relative execution command of an SQL stored procedure, passing by parameters the input data and reading the result set as outcome, then returning data in JSON notation to the client requesting.
 \\
 The packages handled in this platform are in JSON (JavaScript Object Notation) content-type thus to allow a rapid extendability of data included and providing an easily human-readable format.
-Only the ``POST" method is implemented, since every request/response include data and parameters encapsulated inside the body of the HTTP packet.
+Only the POST method is implemented, since every request/response include data and parameters encapsulated inside the body of the HTTP packet.
 \\
 The server requires just one external dependency not included natively, which is ``tedious"\cite{b5} (installable via `\$ npm install tedious') a module to establish a connection to Microsoft SQL Database (DBMS) then to execute query commands and transactions.
-
+\\
+As follows a snippet of the HTTP server created in order to handle the GeoMedia HTTP requests.
 \begin{lstlisting}[language=Java, caption=Snippet of GeoMedia HTTP server]
 const http = require("http");
 const port = 9911
@@ -511,7 +518,7 @@ function getMediaPost(postid){
 As shown in Listing 5, the filtering for exclusive content is done partially in the application layer.
 In fact, server executes the respective SQL stored procedure into the DBMS which already filters the expired posts limited by date, then server computes the visible radius of each exclusive post, then returns just the ones within the users' current location.
 
-The method to compute the distance among the current user location requesting the posts and the position of the limited content within the kilometers chosen, is an implementation of Vincenty's formulae \cite{Vincenty}.
+The method to compute the distance among the current user location and the position of the limited content within the kilometers chosen, is an implementation of Vincenty's formulae \cite{Vincenty}.
 \\
 This method was developed in 1975 by Thaddeus Vincenty \cite{ThaddeusVincenty} a Polish American geodesist who worked with the U.S. Air Force and later the National Geodetic Survey, and is based on the assumption that the Earth is an oblate spheroid, and hence are more accurate than methods that assume a spherical Earth, such as great-circle distance \cite{GCDWiki}. 
 
@@ -567,25 +574,22 @@ CREATE TABLE POSTS(
 \end{lstlisting}
 
 Data is handled through stored procedures, which give to the data layer isolation and independency from the rest of architecture, so further modification (both to application or data layer) would not impact each other.
+\\
 In example, when storing a post, all the the content and the author are passed as parameters, then manipulated and formatted into the opportune stored procedure inside the DBMS.
 
 \begin{lstlisting}[language=SQL, caption=Stored Procedure of post creation]
-CREATE PROCEDURE NEWPOST
-@AUTHOR VARCHAR(50), @POSTCONTENT NVARCHAR(MAX)
-AS
-BEGIN
-	INSERT INTO POSTS(AUTHOR,TITLE,COMMENT,MEDIATYPE,MEDIADATA,POSTDATETIME, LATITUDE, LONGITUDE)
-	SELECT @AUTHOR, JJ.title, JJ.comment, JJ.mediatype, JJ.media_b64,GETDATE(), JJ.latitude ,JJ.longitude 
-	FROM OPENJSON(@POSTCONTENT,'$') WITH(
-		title  VARCHAR(50),
-		comment  VARCHAR(MAX),
-		media_b64  NVARCHAR(MAX),
-		mediatype  VARCHAR(100),
-		latitude FLOAT,
-		longitude FLOAT
-	) JJ
+CREATE PROCEDURE NEWPOST @AUTHOR VARCHAR(50), @POSTCONTENT NVARCHAR(MAX)
+AS BEGIN
+INSERT INTO POSTS(AUTHOR,TITLE,COMMENT,MEDIATYPE,MEDIADATA,POSTDATETIME, LATITUDE, LONGITUDE)
+SELECT @AUTHOR, JJ.title, JJ.comment, JJ.mediatype, JJ.media_b64,GETDATE(), JJ.latitude ,JJ.longitude 
+FROM OPENJSON(@POSTCONTENT,'$') WITH(
+	title  VARCHAR(50),
+	comment  VARCHAR(MAX),
+	media_b64  NVARCHAR(MAX),
+	mediatype  VARCHAR(100),
+	latitude FLOAT, longitude FLOAT
+) JJ
 END;
-
 \end{lstlisting}
 
 
@@ -599,6 +603,22 @@ These sensors would be reachable only with a short-range medium like Bluetooth o
 This idea gives life to several use cases, such as way-points to mark hiking routes in the mountains, or acting time capsules in some panoramic points.
 
 \begin{thebibliography}{00}
+\bibitem{GoogleMaps} Google Maps as social media, provided by Google. https://en.wikipedia.org/wiki/Google\_Maps
+\bibitem{StreetView} Street View, functionality of Google Maps.
+https://en.wikipedia.org/wiki/Google\_Street\_View
+\bibitem{Instagram} Instagram, Online Social Media owned by Meta Platforms, Inc.
+\bibitem{Meta} Meta Platforms, Inc.
+https://en.wikipedia.org/wiki/Meta\_Platforms
+\bibitem{Instagram Stories} Instagram stories functionality, to publish time-limited content
+https://about.instagram.com/features/stories
+\bibitem{MetaPrivacy}Meta Accused Of Still Flouting Privacy Rules With AI Training Data
+https://www.forbes.com/sites/emmawoollacott/2025/05/15/meta-accused-of-still-flouting-privacy-rules-with-ai-training-data/
+\bibitem{FourSquareWiki} Foursquare City Guide as City explorer social media.
+https://en.wikipedia.org/wiki/Foursquare\_City\_Guide
+\bibitem{FoursquareOfficialLink} Foursquare's official home page.
+https://foursquare.com/
+\bibitem{FoursquareSwarm} Foursquare's SwarmApp official home page.
+https://www.swarmapp.com/
 \bibitem{b1} Ionic Framework is cross-platform framework to create web-application and export them to mobile platform. http://www.overleaf.com
 \bibitem{b2} Ionic Capacitor - Geolocation package to access to GPS location on mobile devices. https://capacitorjs.com/docs/apis/geolocation
 \bibitem{b3}Ionic Capactor - FileSystem package to store data on mobile devices https://capacitorjs.com/docs/apis/filesystem
@@ -619,22 +639,7 @@ https://www.movable-type.co.uk/scripts/latlong-vincenty.html
 https://en.wikipedia.org/wiki/Great-circle\_distance
 \bibitem{BreakTheInternet} The Break the Internet effect. 
 https://dictionary.cambridge.org/dictionary/english/break-the-internet
-\bibitem{GoogleMaps} Google Maps as social media, provided by Google. https://en.wikipedia.org/wiki/Google\_Maps
-\bibitem{StreetView} Street View, functionality of Google Maps.
-https://en.wikipedia.org/wiki/Google\_Street\_View
-\bibitem{Instagram} Instagram, Online Social Media owned by Meta Platforms, Inc.
-\bibitem{Meta} Meta Platforms, Inc.
-https://en.wikipedia.org/wiki/Meta\_Platforms
-\bibitem{Instagram Stories} Instagram stories functionality, to publish time-limited content
-https://about.instagram.com/features/stories
-\bibitem{MetaPrivacy}Meta Accused Of Still Flouting Privacy Rules With AI Training Data
-https://www.forbes.com/sites/emmawoollacott/2025/05/15/meta-accused-of-still-flouting-privacy-rules-with-ai-training-data/
-\bibitem{FourSquareWiki} Foursquare City Guide as City explorer social media.
-https://en.wikipedia.org/wiki/Foursquare\_City\_Guide
-\bibitem{FoursquareOfficialLink} Foursquare's official home page.
-https://foursquare.com/
-\bibitem{FoursquareSwarm} Foursquare's SwarmApp official home page.
-https://www.swarmapp.com/
+
 \end{thebibliography}
 
 \vspace{12pt}
