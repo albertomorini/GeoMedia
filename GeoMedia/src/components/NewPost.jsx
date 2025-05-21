@@ -39,10 +39,8 @@ const NewPost = (props) => {
                 media_b64: media_b64,
                 mediatype: type,
                 mediafilename: media?.name,
-                // latitude: ctx?.UserPosition[0],
-                // longitude: ctx?.UserPosition[1],
-                latitude: 47.89,
-                longitude: 12.32,
+                latitude: ctx?.UserPosition[0],
+                longitude: ctx?.UserPosition[1],
                 IS_EXCLUSIVE: PostContent.IS_EXCLUSIVE,
                 DATETIME_AVAILABILITY: PostContent.DATETIME_AVAILABILITY,
                 AREA_KM: PostContent.AREA_KM
