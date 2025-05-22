@@ -1,11 +1,20 @@
 # Geo Media
 
-This is my project for WNMA Course at University of Padua (Master Degree in Computer Science).
+This project is for WNMA Course at University of Padua (Master Degree in Computer Science).
 
-Wireless Network for Mobile Application course held by Professor Claudio Enrico Palazzi, aims to study and understand network in mobile application, optimizing and improving traffic and sensors.
+Wireless Network for Mobile Application (WNMA) course held by Professor Claudio Enrico Palazzi, aims to study and understand network in mobile application, optimizing and improving traffic and sensors.
 
+
+For a detailed report, check out the report: [WNMA_AlbertoMorini_Geomedia_Report](WNMA_AlbertoMorini_Geomedia_Report.pdf)
 
 ## Concept
+GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file in the current user location.
+In fact, the app provides just a geographical map, where users can fill it by posting not just photos or videos, but also recorded audio, music, files, or just textual comment. So, users are in charge of enriching the map of a city by creating a post, then for example, giving others the opportunity to discover secrets
+spots or facts about a place.
+
+
+GeoMedia makes users interact with the real world by retrieving the current location and then fetching the server to gets the contents around them.
+The method to compute the distance among the current user location and the position of the limited content within the kilometers chosen, is an implementation of Vincenty’s formulae
 
 ### Architecture design
 
@@ -44,26 +53,20 @@ The DBMS chosen is Microsoft SQL Server (MSSQL), which is a solid and very used 
 
 ## Pictures
 
-**Location permission**
 
-![permission](docs/img/Screenshot_20250402-233423.png)
-
-**Map**
-
-![mapoverview](docs/img/Panoramica.png)
-![center](docs/img/Centro.png)
-
-**Post view**
-
-![postview](docs/img/PostView.png)
+| **Location permission** | **login** |
+| ------------ | ------------- |
+| ![permission](docs/img/Screenshot_20250402-233423.png) |![permission](docs/img/Login.png) |
 
 
-**Post creation**
-
-![postcreation](docs/img/Screenshot_20250402-234025.png)
 
 
-**User account**
+| **mapoverview** | **post view** |
+| ------------ | ------------- |
+| ![mapoverview](docs/img/Padua1.png) | ![center](docs/img/Padua2.png) |
 
-![usersettings](docs/img/Screenshot_20250402-234048.png)
+
+| **User account** | **postcreation** |
+| ------------ | ------------- |
+| ![usersettings](docs/img/UserProfile.png) | ![postcreation](docs/img/Pubblicazione.png) |
 

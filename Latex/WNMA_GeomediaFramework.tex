@@ -133,8 +133,19 @@ Which consists in three things that Padua has but not in a proper way:
     \item \textit{Saint without a name}, which is ``Saint Anthony of Padua" (Sant'Antonio da Padova) except that he wasn't from Padua, but from Portugal; and the friar only lived the last of his years in Padua.
     \item \textit{Coffee without doors}, and this is the ``Pedrocchi Coffee", because during war time was open all day (so the doors was removed) to provide shelter during the bombings.
 \end{itemize}
-So, in this example, the city of Padua could use GeoMedia to place some comments in these locations to tell the story of each peculiarity or even upload old photos to show as it was.
+So, in this example, the city of Padua could use GeoMedia to place markers in these locations, thus to tell the story of each peculiarity and maybe upload an old photo to show as it was, as done in Figure 1.
 \\
+
+\begin{figure}
+\begin{minipage}{.2\textwidth}
+    \subfloat{\fbox{\includegraphics[width=\textwidth,height=7.7cm]{imgs/Screenshots/Padua1.png}}}\label{fig:sub_a}}
+\end{minipage}
+\hfill
+\begin{minipage}{.2\textwidth}
+    \subfloat{\fbox{\includegraphics[width=\textwidth,height=7.7cm]{imgs/Screenshots/Padua2.png}}}\label{fig:sub_b}}
+\end{minipage}
+    \caption{Implementation of the use case for the City of Padua}\label{fig:sub}
+\end{figure}
 
 
 In the end, GeoMedia, offers a full solution to share contents in the geographical location of where the end users is; making the Online Social Network (OSN) interactive with the real world and without the effort to pick the right position as usually happens with other social networks app.
@@ -145,7 +156,7 @@ The whole source code developed for this project is available on GitHub. \cite{g
 \section{Architecture}\label{Architecture:panoramic}
 
 To ensure that the GeoMedia app functions as intended, it is necessary to design an opportune architecture, even if it is not strictly related to the mobile application itself.
-In fact, the adopted three-tier architecture shown in Figure 1, makes the app work as desired.
+In fact, the adopted three-tier architecture shown in Figure 2, makes the app work as desired.
 \\
 The designed solution is composed of three actors: the presentation layer, the application layer, and the data layer.
 
@@ -188,9 +199,18 @@ GeoMedia starts with a log-in component, where users can choose to create a new 
 \\
 Once logged into the app, GeoMedia offers a bottom menu with two sections: 
 \begin{itemize}
-    \item \textit{Profile}, in this tab users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port)
+    \item \textit{Profile}, in this tab, shown in Figure 3, users can see their posts as list and open them; or change the server configuration parameters (i.e. IP Address or HTTP port).
     \item  \textit{Map}, this section is the heart of the app, by offering a navigation through a geographical map to look for comments and posts uploaded by other users. Furthermore this tab provide also the access to the publish function that allows users to create a new post based on their coordinates.
 \end{itemize}
+
+\begin{figure}[htbp]
+\begin{center}
+\fbox{{\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/UserProfile.png}}}
+\end{center}
+\caption{Profile section in GeoMedia mobile app.}
+\label{fig}
+\end{figure}
+\FloatBarrier 
 
 \\
 A single post is composed of some attributes:
@@ -266,14 +286,13 @@ const MyPMap = () => { //declare the Map component
 export default MyPMap;
 \end{lstlisting}
 
-The results rendered by the Map component can be seen in Figure 2, where in the left scenario two cities are included, useful case to cover wider area such rural landscapes; instead, in the right image, there's a more detailed scenario that enrich the center of a town by marking interesting attraction points with photos and comments.
+The results rendered by the Map component can be seen in Figure 4, where in the left scenario two cities are included, useful case to cover wider area such rural landscapes; instead, in the right image, there's a more detailed scenario that enrich the center of a town by marking interesting attraction points with photos and comments.
 
 
 \begin{figure}
 \begin{minipage}{.2\textwidth}
     \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Panoramica.png}}\label{fig:sub_a}}
 \end{minipage}
-\hfill    
 \begin{minipage}{.2\textwidth}
     \subfloat{\fbox{\includegraphics[width=\textwidth]{imgs/Screenshots/Centro.png}}}\label{fig:sub_b}}
 \end{minipage}
@@ -283,20 +302,31 @@ The results rendered by the Map component can be seen in Figure 2, where in the 
 
 \subsection{Exclusivity}
 
+GeoMedia makes users interact with the real world by retrieving the current location and then fetching the server to gets the contents around them.
+In fact, a user, when creating a new post (as shown in the left picture of Figure 5) can choose to make it temporized by selecting an expiration date and time (as can be seen in the right picture of Figure 5); or geographically limiting it's visibility by inserting the kilometers within the users need to be in order to view it.
 
-GeoMedia makes users interact with the real world by retrieving the real location and then fetching the server to gets the contents around them.
-In fact, a user, when creating a new post, can choose to make it exclusive by two factors: date or area.
+\begin{figure}
+\begin{minipage}{.2\textwidth}
+    \subfloat{\includegraphics[width=\textwidth]{imgs/Screenshots/Pubblicazione.png}}\label{fig:sub_a}}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+    \subfloat{\fbox{\includegraphics[width=\textwidth]{imgs/Screenshots/DataOra.png}}}\label{fig:sub_b}}
+\end{minipage}
+    \caption{User interfaces for post creation and temporized selection}\label{fig:sub}
+\end{figure}
+
+
 
 An exclusive post by date will be visible from the moment it has been posted to the time indicated. \\
 Moreover, users can choose a maximum distance within the marker will be visible by others, like creating a circular area around it, visible only if the user's current location is included.
 
-As explained before, limited content are represented by green markers, in fact, Figure 3 compared to the right Figure 2, proves the correctly of GeoMedia by retrieving a post limited by area when the user (blue marker) is near.
+As explained before, limited content are represented by green markers, in fact, Figure 6 compared to the right Figure 4, proves the correctly of GeoMedia by retrieving a post limited by area when the user (blue marker) is near.
 
 \begin{figure}[htbp]
 \begin{center}
 {\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/CentroExclusive.png}}
 \end{center}
-\caption{Exclusive retrieving.}
+\caption{Retrieving of limited content by location.}
 \label{fig}
 \end{figure}
 
@@ -306,20 +336,20 @@ This feature gives live to several use cases, for example GeoMedia could be also
 
 \subsection{View post}
 
-Another key component is the ``ViewPost" as represented in Figure 4, which shows the content in the clicked marker by opening a new interface and fetching the server to retrieve any associated multimedia.
+Another key component is the ``ViewPost", which shows the content in the clicked marker by opening a new interface and fetching the server to retrieve any associated multimedia.
 Due to efficiency, media file attached in a post are retrieved from the server only when the posts is going to be opened.
 Instead, the list and relative coordinate of each visible post are requested at the opening of the application and at current location changing (thus to get exclusive posts).
 \\
 This component is not limited to just viewing the comment; it also provides the functionality to download the attached multimedia file and store it in the local storage of the mobile device.
 Media files are stored as ``Base64" encoding into the data-layer, so the client is also able to encode and decode the attachments.
 \\
-The owner of the post, of course, is able to delete it.
+The owner of the post, of course, can delete the content published with the respective button in the section labeled `Danger zone` as shown in Figure 7.
 
 \begin{figure}[htbp]
 \begin{center}
 \fbox{{\includegraphics[width=4.8cm, height=9.5cm\textwidth]{imgs/Screenshots/ViewPost.png}}}
 \end{center}
-\caption{Example of Post View.}
+\caption{Example of the visualization of a post.}
 \label{fig}
 \end{figure}
 \FloatBarrier 
@@ -529,7 +559,8 @@ In the monolithic architecture designed, the server represents a single access n
 \\
 There are many alternatives to mitigate this event. A potential approach is to replicate the HTTP server across different machines, introducing the challenge of synchronizing multiple main servers.
 \\
-A more sophisticated solution is to change the whole design, creating a distributed architecture by adopting microservices\cite{b6}. With this architecture, server is fragmented into multiple smaller processes that act one for each specific function, as theoretically shown in Figure 5.
+A more sophisticated solution is to change the whole design, creating a distributed architecture by adopting microservices\cite{b6}. With this architecture, server is fragmented into multiple smaller processes that act one for each specific function, as theoretically shown in Figure 8.
+\\
 For example, one microservice could handle the post retrieval process, another could manage the accounts, another the creation of the posts, and so on. This approach not only improves reliability, but also helps to distribute traffic loads thus to preventing the system from an overwhelmed; a common problem with social media platforms when a mass request of a viral content happens, causing the ``break the Internet" \cite{BreakTheInternet} effect.
 
 
@@ -637,6 +668,7 @@ https://www.movable-type.co.uk/scripts/latlong-vincenty.html
 \bibitem{GCDWiki}Great-circle distance or spherical distance method.
 https://en.wikipedia.org/wiki/Great-circle\_distance
 \bibitem{BreakTheInternet} The Break the Internet effect. 
+\\
 https://dictionary.cambridge.org/dictionary/english/break-the-internet
 \bibitem{WANET} WANET (Wireless ad hoc Network) explained.
 https://www.extnoc.com/learn/networking/wireless-ad-hoc-network
