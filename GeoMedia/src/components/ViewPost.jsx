@@ -3,7 +3,7 @@ import { IonButton, IonCardContent, IonCardSubtitle, IonCol, IonContent, IonHead
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { datetime2datehour, doRequest } from "../utility";
-import { close, download } from "ionicons/icons";
+import { close, download, trash } from "ionicons/icons";
 
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { mycontext } from "../App";
@@ -85,7 +85,8 @@ const ViewPost = (props) => {
 
                 <IonContent className="ion-padding">
                     <>
-                        <i>{props?.PostSelected?.COMMENT}</i>
+                        {/* <i>{props?.PostSelected?.COMMENT}</i> */}
+                        <i>A beautiful day in Verona!</i>
                     </>
                     <IonCardSubtitle>Posted by {props?.PostSelected?.AUTHOR} at {datetime2datehour(props?.PostSelected?.POSTDATETIME)}</IonCardSubtitle>
                     <IonCardContent>
@@ -111,18 +112,16 @@ const ViewPost = (props) => {
                         (ctx?.User?.User == props?.PostSelected?.AUTHOR) ?
                             <>
                                 <IonItemDivider mode="md" />
-                                <IonRow>
-                                    <IonCol size='8'>
-                                        <h4>Danger zone</h4>
-                                    </IonCol>
-                                    <IonCol size='4'>
-                                        <IonButton color={"danger"} onClick={() => {
-                                            if (confirm("Sure to delete?")) {
-                                                deletePost()
-                                            }
-                                        }} expand="block">DELETE POST</IonButton>
-                                    </IonCol>
-                                </IonRow>
+
+                                <IonButton color={"danger"} onClick={() => {
+                                    if (confirm("Sure to delete?")) {
+                                        deletePost()
+                                    }
+                                }} expand="block"
+                                    size="small"
+                                >DELETE POST
+                                    <IonIcon icon={trash} />
+                                </IonButton>
                             </>
                             :
                             null
