@@ -39,8 +39,8 @@ const NewPost = (props) => {
                 media_b64: media_b64,
                 mediatype: type,
                 mediafilename: media?.name,
-                latitude: ctx?.UserPosition[0],
-                longitude: ctx?.UserPosition[1],
+                latitude: 2,
+                longitude: 3,
                 IS_EXCLUSIVE: PostContent.IS_EXCLUSIVE,
                 DATETIME_AVAILABILITY: PostContent.DATETIME_AVAILABILITY,
                 AREA_KM: PostContent.AREA_KM
@@ -151,7 +151,7 @@ const NewPost = (props) => {
                         }
 
                     </IonRow>
-
+                       
                     <IonButton color={"success"} className="uploadButton" expand="block"
                         onClick={() => {
                             publishNewPost()

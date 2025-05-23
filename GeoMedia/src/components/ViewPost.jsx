@@ -85,8 +85,7 @@ const ViewPost = (props) => {
 
                 <IonContent className="ion-padding">
                     <>
-                        {/* <i>{props?.PostSelected?.COMMENT}</i> */}
-                        <i>A beautiful day in Verona!</i>
+                        <i>{props?.PostSelected?.COMMENT}</i>
                     </>
                     <IonCardSubtitle>Posted by {props?.PostSelected?.AUTHOR} at {datetime2datehour(props?.PostSelected?.POSTDATETIME)}</IonCardSubtitle>
                     <IonCardContent>
@@ -108,6 +107,13 @@ const ViewPost = (props) => {
                                 null
                         }
                     </IonCardContent>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br /> 
                     {
                         (ctx?.User?.User == props?.PostSelected?.AUTHOR) ?
                             <>

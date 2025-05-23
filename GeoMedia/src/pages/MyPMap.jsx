@@ -44,14 +44,7 @@ const MyPMap = () => {
     return (
         <IonContent>
             {
-                (ctx?.UserPosition == null) ?
-                    <>
-                        <br />
-                        <br />
-                        <br />
-                        <b>Please allow location permission</b>
-                    </>
-                    :
+                
                     <Map defaultCenter={ctx?.UserPosition} defaultZoom={11}>
                         <ZoomControl />
                         <Marker width={50} anchor={ctx?.UserPosition} color={"#154c79"} />
