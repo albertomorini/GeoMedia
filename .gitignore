@@ -44,3 +44,4 @@ app-example
 
 #since there is the google maps api key
 app.json 
+geomedia/android/app/src/main/AndroidManifest.xml
