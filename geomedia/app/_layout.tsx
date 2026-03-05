@@ -4,21 +4,44 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { createContext, useState } from 'react';
+import LoginScreen from './login';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+
+interface UserContextType {
+  User: {
+    value: string | null; // could be user id, username, etc.
+    setUser: (user: string | null) => void;
+  };
+}
+export const MyContext = createContext<UserContextType | undefined>(undefined);
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  const [User, setUser] = useState(null)
+  //TODO: exec the login and use context
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
+      <>
+        <MyContext.Provider
+          value={{
+            User: { value: User, setUser }
+          }}
+        >
+          {User != null ?
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+
+            :
+            <LoginScreen setutente={() => { setUser(1) }} />
+          }
+        </MyContext.Provider>
+      </>
       <StatusBar style="auto" />
-    </ThemeProvider>
+    </ThemeProvider >
+
   );
 }
