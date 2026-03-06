@@ -41,7 +41,7 @@ export default function RootLayout() {
           }
         </MyContext.Provider>
       </>
-      <StatusBar style="auto" />
+      <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
     </ThemeProvider >
 
   );

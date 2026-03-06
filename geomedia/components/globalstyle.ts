@@ -22,5 +22,8 @@ export const style = StyleSheet.create({
     },
     success: {
         backgroundColor: "#22c55e"
+    },
+    colors: {
+        geomedia_green: "#bfea7fb9"
     }
 })

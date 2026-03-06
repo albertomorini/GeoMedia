@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { View, Pressable } from 'react-native';
-import { Text, PasswordInput, Input, Button, ControlledInput, OTPInput, Stack, Box, ThemeProvider, useToggleColorMode } from "re-native-ui";
+import { View, Pressable, useColorScheme } from 'react-native';
+import { Text, PasswordInput, Input, Button, ControlledInput, OTPInput, Stack, Box } from "re-native-ui";
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 
 import { useForm } from "react-hook-form"; /// npm install react-hook-form
 import { style } from '@/components/globalstyle';
@@ -65,22 +66,22 @@ export default function LoginScreen(props) {
 
         if (data?.email?.toUpperCase() == "A") {
             props?.setuser({
-                "Name": "Alberto",
+                "Username": "Alberto",
                 "UID": 51
             })
-        }
 
-        if (isLogin) {
+        } else if (isLogin) {
             doLogin(data)
         } else {
             doSignUp(data)
         }
 
     };
+    const colorScheme = useColorScheme()
 
     return (
         <Box p="lg" style={style.center}>
-            <ThemeProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                 <Stack>
 
                     <Text variant="heading" style={style.login.title}>GeoMedia</Text>

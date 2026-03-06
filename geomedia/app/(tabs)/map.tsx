@@ -1,22 +1,21 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Alert, Image, Modal, PermissionsAndroid, Platform, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import { ActivityIndicator, Alert, Modal, PermissionsAndroid, Platform, Pressable, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
-import FloatingButton from '@/components/floatingButton';
 import { MyContext } from '../_layout';
+import { style } from '@/components/globalstyle';
 
 const MapScreen = () => {
 
   const mapRef = useRef(null);
+  const ctx = useContext(MyContext)
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
   const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
+
   const [selectedMarker, setSelectedMarker] = useState(null);
-
-  const ctx = useContext(MyContext)
-
 
   async function requestLocationPermission() {
     if (Platform.OS === 'android') {
@@ -42,7 +41,6 @@ const MapScreen = () => {
     // iOS
     return true;
   }
-
 
   async function getLocation() {
 
@@ -84,56 +82,72 @@ const MapScreen = () => {
 
   }
 
+  /////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////
 
   useEffect(() => {
     console.log(ctx);
-    
+
     getLocation()
   }, [])
 
   return (
     <>
-      <View style={styles.container}>
-        <StatusBar
-          translucent
-          backgroundColor="transparent"
-          barStyle={isDark ? 'dark-content' : 'light-content'}
-        />
+      {
+        UserPosition?.lat == 0 ? //while loading current location
+          <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
+          :
+          <View style={styles.container}>
 
-        <MapView
-          ref={mapRef}
-          // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={styles.map}
-          showsUserLocation={true}
-          followsUserLocation={true}
-          initialRegion={{
-            latitude: UserPosition.lat,
-            longitude: UserPosition.lon,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1,
-          }}
-          zoomEnabled={true}
-          pitchEnabled={true}
-          showsBuildings={true}
-          showsMyLocationButton={true}
-        >
+            <MapView
+              ref={mapRef}
+              // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={styles.map}
+              showsUserLocation={true}
+              followsUserLocation={true}
+              initialRegion={{
+                latitude: UserPosition.lat = 0 ? 51 : UserPosition.lat,
+                longitude: UserPosition.lon = 0 ? 30 : UserPosition.lon,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+              zoomEnabled={true}
+              onMarkerPress={(mrk) => {
+                console.log(mrk)
+              }}
+              camera={{
+                center: {
+                  latitude: UserPosition.lat === 0 ? 51 : UserPosition.lat,
+                  longitude: UserPosition.lon === 0 ? 30 : UserPosition.lon,
+                },
+                pitch: 30, // <-- default pitch in degrees
+                heading: 0, // direction the camera faces (0 = north)
+                // // altitude: 1000, // controls zoom
+                zoom: 13.7, // optional, overrides altitude
+              }}
+              pitchEnabled={true}
+              showsBuildings={true}
+              showsMyLocationButton={true}
+            >
 
-          {/* <Marker
-            key={"second"}
-            coordinate={{
-              latitude: 41.537430,
-              longitude: 20.125250
-            }}
-            pinColor="#448d41" // 👈 change color here
-            title={"Second one"}
-            onPress={() =>
-              setSelectedMarker({
-                title: 'Second one',
-                description: 'This is a custom modal example',
-              })
-            }
-          />
-          {
+              <Marker
+                key={"second"}
+                coordinate={{
+                  latitude: 41.53,
+                  longitude: 20.12
+                }}
+                pinColor="#448d41" // 👈 change color here
+                title={"Second one"}
+                onPress={() =>
+                  setSelectedMarker({
+                    title: 'Second one',
+                    description: 'This is a custom modal example',
+                  })
+                }
+              />
+
+              {/* {
             DraggableLocation != null ?
               <Marker draggable
                 coordinate={DraggableLocation}
@@ -142,38 +156,38 @@ const MapScreen = () => {
               :
               null
           } */}
-        </MapView>
+            </MapView>
 
-        <Modal
-          visible={!!selectedMarker}
-          transparent
-          animationType="slide"
-        >
-          <View style={styles.fullScreenModal}>
-            <View style={styles.modalContent}>
-              <Text style={styles.title}>
-                {selectedMarker?.title}
-              </Text>
-              <Text>{selectedMarker?.description}</Text>
+            <Modal
+              visible={!!selectedMarker}
+              transparent
+              animationType="slide"
+            >
+              <View style={styles.fullScreenModal}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.title}>
+                    {selectedMarker?.title}
+                  </Text>
+                  <Text>{selectedMarker?.description}</Text>
 
-              {/* 
+                  {/* 
               <Image
                 source={{ uri: base64String }}
                 style={{ width: "70%", height: "70%" }}
                 resizeMode="contain"
               /> */}
 
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => setSelectedMarker(null)}
-              >
-                <Text style={{ color: '#fff' }}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() => setSelectedMarker(null)}
+                  >
+                    <Text style={{ color: '#fff' }}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
 
-        {/* 
+            {/* 
         <TouchableOpacity style={styles.fab} onPress={() => {
           setDraggableLocation({
             longitude: UserPosition[0],
@@ -184,7 +198,8 @@ const MapScreen = () => {
         </TouchableOpacity> */}
 
 
-      </View>
+          </View>
+      }
     </>
   )
 }
@@ -192,9 +207,7 @@ const MapScreen = () => {
 export default MapScreen
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 10
-  },
+
   container: {
     flex: 1,
     ...StyleSheet.absoluteFillObject,
