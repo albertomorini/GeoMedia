@@ -24,10 +24,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+
       <>
         <MyContext.Provider
           value={{
-            User: { value: User, setUser }
+            User: { User, setUser }
           }}
         >
           {User != null ?
@@ -36,7 +37,7 @@ export default function RootLayout() {
             </Stack>
 
             :
-            <LoginScreen setutente={() => { setUser(1) }} />
+            <LoginScreen setuser={(user: Object) => { setUser(user) }} />
           }
         </MyContext.Provider>
       </>

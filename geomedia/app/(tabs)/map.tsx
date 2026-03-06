@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Image, Modal, PermissionsAndroid, Platform, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
 import FloatingButton from '@/components/floatingButton';
+import { MyContext } from '../_layout';
 
 const MapScreen = () => {
 
@@ -13,6 +14,8 @@ const MapScreen = () => {
 
   const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
   const [selectedMarker, setSelectedMarker] = useState(null);
+
+  const ctx = useContext(MyContext)
 
 
   async function requestLocationPermission() {
@@ -83,6 +86,8 @@ const MapScreen = () => {
 
 
   useEffect(() => {
+    console.log(ctx);
+    
     getLocation()
   }, [])
 
