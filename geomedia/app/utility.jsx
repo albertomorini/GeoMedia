@@ -1,13 +1,47 @@
+import { ThemedView } from "@/components/themed-view";
+import { Text } from "re-native-ui";
+import { useEffect } from "react";
 
-// import AppConfig from "../public/AppConfig.json";
+// then directly: AsyncStorage.getItem(...)
 
-// import { useRef, useState, useEffect } from "react";
+// import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
+
+
+
+
+
+// export async function SettingsConfig() {
+
+//     const { getItem, setItem } = useAsyncStorage("appDB");
+//     async function checkConnection() {
+//         await setItem('key', 'value');          // set in your "appDB" key
+//         const value = await getItem();          // get from the same key
+//         console.log(value);                     // should be 'value'
+
+//         const config = await AsyncStorage.getItem("srv_config"); // separate key
+//         console.warn(config);
+//     }
+
+
+//     async function init() {
+//         let srvOK = await checkConnection()
+//     }
+
+//     useEffect(() => {
+//         init()
+//     }, [])
+
+//     return (
+//         <Text>Ciao</Text>
+//     )
+// }
+
+
 
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
     // return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
-    console.log("http://10.0.0.3:8765/" + api)
     return fetch("http://10.0.0.3:8765/" + api, {
         method: "POST",
         mode: "cors",

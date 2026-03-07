@@ -4,12 +4,23 @@ const SQL_MANAGER = require("./SQL_MANAGER");
 ////////////////////////////////////////////
 
 
-function doLogin(username, password, newuser) {
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC DoLogin @USERNAME='" + username + "', @PASSWORD='" + password + "'" + ", @NEWUSER=" + newuser)
+function auth_dologin(username, password, email) {
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC AUTH_LOGIN @USERNAME='" + username + "', @PASSWORD='" + password + "'" + ", @EMAIL='" + email + "'")
+}
+function auth_dosignin(username, password, email, name, surname) {
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC [dbo].[AUTH_SIGNIN] "
+        + "@EMAIL='" + email + ","
+        + "@USERNAME='" + username + ","
+        + "@PASSWORD='" + password + ","
+        + "@NAME='" + name + ","
+        + "@SURNAME='" + surname + ","
+    )
 }
 
+/////////////////////////////////////////////
+
 function newPost(author, postcontent) {
-    let dummy_pc = JSON.stringify(postcontent).replaceAll("'",'')
+    let dummy_pc = JSON.stringify(postcontent).replaceAll("'", '')
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC NEWPOST @AUTHOR='" + author + "', @POSTCONTENT='" + dummy_pc + "'")
 }
 
@@ -29,7 +40,7 @@ function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_lo
 }
 
 async function getPosts(curr_latitude = null, curr_longitude = null, username = null) {
-   
+
     let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC GETPOSTS @USERNAME='" + username + "'")
 
     let results = []
@@ -55,7 +66,9 @@ function deletePost(postid, username, password) { //TODO: to put in secure mode 
 }
 
 module.exports = {
-    doLogin,
+    auth_dologin,
+    auth_dosignin,
+    ////////////////
     newPost,
     getPosts,
     deletePost,

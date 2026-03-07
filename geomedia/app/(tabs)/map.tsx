@@ -5,6 +5,8 @@ import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE i
 import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
 import { style } from '@/components/globalstyle';
+import { ThemedView } from '@/components/themed-view';
+import ModalNewPost from '../mycomponents/modalNewPost';
 
 const MapScreen = () => {
 
@@ -73,7 +75,7 @@ const MapScreen = () => {
         Alert.alert('Error getting location', error.message);
       },
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 15000,
         maximumAge: 10000,
       }
@@ -87,8 +89,6 @@ const MapScreen = () => {
   /////////////////////////////////////////////////////////////
 
   useEffect(() => {
-    console.log(ctx);
-
     getLocation()
   }, [])
 
@@ -96,9 +96,11 @@ const MapScreen = () => {
     <>
       {
         UserPosition?.lat == 0 ? //while loading current location
-          <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
+          <ThemedView style={styles.container}>
+            <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
+          </ThemedView>
           :
-          <View style={styles.container}>
+          <ThemedView style={styles.container}>
 
             <MapView
               ref={mapRef}
@@ -107,8 +109,8 @@ const MapScreen = () => {
               showsUserLocation={true}
               followsUserLocation={true}
               initialRegion={{
-                latitude: UserPosition.lat = 0 ? 51 : UserPosition.lat,
-                longitude: UserPosition.lon = 0 ? 30 : UserPosition.lon,
+                latitude: UserPosition.lat == 0 ? 51 : UserPosition.lat,
+                longitude: UserPosition.lon == 0 ? 30 : UserPosition.lon,
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,
               }}
@@ -147,58 +149,11 @@ const MapScreen = () => {
                 }
               />
 
-              {/* {
-            DraggableLocation != null ?
-              <Marker draggable
-                coordinate={DraggableLocation}
-                onDragEnd={(e) => { setDraggableLocation(e.nativeEvent.coordinate) }}
-              />
-              :
-              null
-          } */}
+
             </MapView>
+            <ModalNewPost />
 
-            <Modal
-              visible={!!selectedMarker}
-              transparent
-              animationType="slide"
-            >
-              <View style={styles.fullScreenModal}>
-                <View style={styles.modalContent}>
-                  <Text style={styles.title}>
-                    {selectedMarker?.title}
-                  </Text>
-                  <Text>{selectedMarker?.description}</Text>
-
-                  {/* 
-              <Image
-                source={{ uri: base64String }}
-                style={{ width: "70%", height: "70%" }}
-                resizeMode="contain"
-              /> */}
-
-                  <Pressable
-                    style={styles.closeButton}
-                    onPress={() => setSelectedMarker(null)}
-                  >
-                    <Text style={{ color: '#fff' }}>Close</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
-
-            {/* 
-        <TouchableOpacity style={styles.fab} onPress={() => {
-          setDraggableLocation({
-            longitude: UserPosition[0],
-            latitude: UserPosition[1]
-          })
-        }}>
-          <Text style={styles.fabIcon}>+</Text>
-        </TouchableOpacity> */}
-
-
-          </View>
+          </ThemedView>
       }
     </>
   )
