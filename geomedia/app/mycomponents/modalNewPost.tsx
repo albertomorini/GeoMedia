@@ -1,3 +1,4 @@
+import FloatingButton from "@/components/floatingButton";
 import { style } from "@/components/globalstyle";
 import { ThemedView } from "@/components/themed-view";
 import { Container, Input, Text, ThemeProvider } from "re-native-ui";
@@ -12,6 +13,7 @@ const ModalNewPost = () => {
     const colorScheme = useColorScheme()
     return (
         <ThemedView style={{ flex: 1 }}>
+          
             <ThemeProvider >
                 <TouchableOpacity style={[style.buttons.fab, style.colors.geomedia_blue]} onPress={toggleModal}>
                     <Text style={style.buttons.fabText}>+</Text>

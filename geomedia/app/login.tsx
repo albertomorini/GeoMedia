@@ -8,7 +8,12 @@ import { style } from '@/components/globalstyle';
 import { t } from '@/components/i18n';
 import { doRequest, SettingsConfig } from "./utility"
 
+import * as SecureStore from 'expo-secure-store';
+
+
+
 export default function LoginScreen(props) {
+    const userStorage = createAsyncStorage("geomedia");
 
     const { control, handleSubmit } = useForm({
         defaultValues: { email: "" }
@@ -81,6 +86,27 @@ export default function LoginScreen(props) {
         }
 
     };
+
+
+    async function ff() {
+        await SecureStore.setItemAsync("user", "alberto");
+
+    }
+
+    async function getValueFor(key) {
+        let result = await SecureStore.getItemAsync(key);
+        if (result) {
+            alert("🔐 Here's your value 🔐 \n" + result);
+        } else {
+            alert('No values stored under that key.');
+        }
+    }
+
+
+    useEffect(() => {
+        ff();
+        getValueFor("user")
+    }, [])
 
     return (
         <Box p="lg" style={style.center}>

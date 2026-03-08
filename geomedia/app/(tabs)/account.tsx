@@ -15,6 +15,10 @@ export default function Account() {
     <Box p="md">
 
       <>
+        <ThemedText className="text-lg font-bold">
+          Styled text with proper theme colors
+        </ThemedText>
+
         <View
           style={{
             flexDirection: 'row',
@@ -24,11 +28,9 @@ export default function Account() {
           }}
         >
           <View style={{ flex: 1, paddingRight: 10 }}>
-            <Text variant="heading">
-              <ThemedText>
-                Hello {ctx?.User?.User?.NAME} {ctx?.User?.User?.SURNAME}
-              </ThemedText>
-            </Text>
+            <ThemedText className="text-lg font-bold">
+              Hello {ctx?.User?.User?.NAME} {ctx?.User?.User?.SURNAME}
+            </ThemedText>
 
             <Text variant="caption">
               Your logged as: {ctx?.User?.User?.USERNAME}
