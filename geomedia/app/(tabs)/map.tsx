@@ -148,11 +148,10 @@ const MapScreen = () => {
                   })
                 }
               />
-
-
             </MapView>
             <ModalNewPost />
-
+            {/* TODO: modal to show post */}
+            {/* Search             */}
           </ThemedView>
       }
     </>

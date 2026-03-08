@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { createContext, useState } from 'react';
 import LoginScreen from './login';
+import { ThemedView } from '@/components/themed-view';
 
 
 interface UserContextType {

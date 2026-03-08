@@ -1,19 +1,20 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { MyContext } from '../_layout';
 
 import { Text, Box } from "re-native-ui";
 import { style } from '@/components/globalstyle';
+import { ThemedText } from '@/components/themed-text';
 
 export default function Account() {
 
   const ctx = useContext(MyContext);
 
- 
+
   return (
     <Box p="md">
 
-      <View>
+      <>
         <View
           style={{
             flexDirection: 'row',
@@ -24,7 +25,9 @@ export default function Account() {
         >
           <View style={{ flex: 1, paddingRight: 10 }}>
             <Text variant="heading">
-              Hello {ctx?.User?.User?.NAME} {ctx?.User?.User?.SURNAME}
+              <ThemedText>
+                Hello {ctx?.User?.User?.NAME} {ctx?.User?.User?.SURNAME}
+              </ThemedText>
             </Text>
 
             <Text variant="caption">
@@ -54,7 +57,7 @@ export default function Account() {
             Edit profile
           </Text>
         </TouchableOpacity>
-      </View>
+      </>
 
       <Text variant="heading">Your post</Text>
 

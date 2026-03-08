@@ -1,17 +1,18 @@
 import { style } from "@/components/globalstyle";
-import { Box, Text, ThemeProvider } from "re-native-ui";
+import { ThemedView } from "@/components/themed-view";
+import { Container, Input, Text, ThemeProvider } from "re-native-ui";
 import { useState } from "react";
-import { Modal, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
 
 const ModalNewPost = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => setModalVisible(prev => !prev);
-
+    const colorScheme = useColorScheme()
     return (
-        <View style={{ flex: 1 }}>
-            <ThemeProvider>
+        <ThemedView style={{ flex: 1 }}>
+            <ThemeProvider >
                 <TouchableOpacity style={[style.buttons.fab, style.colors.geomedia_blue]} onPress={toggleModal}>
                     <Text style={style.buttons.fabText}>+</Text>
                 </TouchableOpacity>
@@ -22,18 +23,18 @@ const ModalNewPost = () => {
                     visible={modalVisible}
                     onRequestClose={toggleModal} // Android back button
                 >
-                    <Box style={styles.modalContainer}>
-                        {/* Close button */}
-                        <TouchableOpacity style={[style.buttons.closeButton, style.colors.geomedia_red]} onPress={toggleModal}>
-                            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Close</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity style={[style.buttons.closeButton, style.colors.geomedia_red]} onPress={toggleModal}>
+                        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Close</Text>
+                    </TouchableOpacity>
+                    <ThemedView style={styles.modalContent}>
+                        <Container>
+                            <Input placeholder="Titolo" />
+                        </Container>
+                    </ThemedView>
 
-                        <Text>Nuovo post</Text>
-
-                    </Box>
                 </Modal>
             </ThemeProvider>
-        </View>
+        </ThemedView>
     )
 }
 
@@ -45,13 +46,10 @@ const styles = StyleSheet.create({
 
     modalContainer: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 50,
     },
 
     modalContent: {
-        paddingTop: 100,
-        paddingHorizontal: 20,
-        paddingBottom: 50,
+        width: "100%",
+        height: "100%"
     },
 });
