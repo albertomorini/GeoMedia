@@ -6,14 +6,15 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useForm } from "react-hook-form"; /// npm install react-hook-form
 import { style } from '@/components/globalstyle';
 import { t } from '@/components/i18n';
-import { doRequest, SettingsConfig } from "./utility"
+import { doRequest } from "./utility"
+
 
 import * as SecureStore from 'expo-secure-store';
 
 
 
 export default function LoginScreen(props) {
-    const userStorage = createAsyncStorage("geomedia");
+    
 
     const { control, handleSubmit } = useForm({
         defaultValues: { email: "" }
@@ -88,24 +89,15 @@ export default function LoginScreen(props) {
     };
 
 
-    async function ff() {
+    async function ff(){
         await SecureStore.setItemAsync("user", "alberto");
-
+        let result = await SecureStore.getItemAsync("user");
+        console.log(result);
+        
     }
-
-    async function getValueFor(key) {
-        let result = await SecureStore.getItemAsync(key);
-        if (result) {
-            alert("🔐 Here's your value 🔐 \n" + result);
-        } else {
-            alert('No values stored under that key.');
-        }
-    }
-
 
     useEffect(() => {
-        ff();
-        getValueFor("user")
+        ff()
     }, [])
 
     return (
