@@ -11,6 +11,7 @@ import { NitroDocumentPicker } from 'react-native-nitro-document-picker';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 
+import CameraCapture from "./cameraCapture"
 
 const ModalNewPost = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -62,7 +63,7 @@ const ModalNewPost = () => {
             console.log("Base64 length:", base64String.length);
 
 
-            openBase64File(base64String,name,extension)
+            openBase64File(base64String, name, extension)
             // await saveBase64WithSaveAs(base64String, name, extension)
 
         } catch (error) {
@@ -97,10 +98,13 @@ const ModalNewPost = () => {
                     </TouchableOpacity>
                     <ThemedView style={styles.modalContent}>
 
-                    
+
+                        {/* <CameraCapture /> */}
                         <Button onPress={pickAndReadFile}>
-                            <Text>Daje22</Text>
+                            <Text>Pickfile and share it</Text>
                         </Button>
+
+
                     </ThemedView>
 
                 </Modal>
