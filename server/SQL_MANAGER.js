@@ -7,7 +7,7 @@ const Cypher = require("./CYPHER.js")
 
 ////////////////////////////////////////////////////
 // @return  {[JSON]}  [dizonario js di configurazione]
-function loadConfig(path="./DBconfig.json") {
+function loadConfig(path = "./DBconfig.json") {
     let tmpFile = fs.readFileSync(path, 'utf-8');
     try {
         let config = JSON.parse(tmpFile);
@@ -25,11 +25,11 @@ function loadConfig(path="./DBconfig.json") {
  * @param {string} chiave quale riga prendere (where)
  * @returns {JSON} configurazione
  */
-function loadConfigFromDB(tabella, profile, chiave="DBCONFIG"){
-    return new Promise((res,rej)=>{
-        selectQuery(loadConfig(), "SELECT KEY_VALUE FROM "+tabella+" WHERE PROFILE='"+profile+"' AND KEY_DEF='"+chiave+"'").then(resQuery=>{
+function loadConfigFromDB(tabella, profile, chiave = "DBCONFIG") {
+    return new Promise((res, rej) => {
+        selectQuery(loadConfig(), "SELECT KEY_VALUE FROM " + tabella + " WHERE PROFILE='" + profile + "' AND KEY_DEF='" + chiave + "'").then(resQuery => {
             resQuery.length == 0 ? res(null) : res(JSON.parse((resQuery[0].KEY_VALUE).replace(/\s/g, '')));
-        }).catch(err=>{
+        }).catch(err => {
             rej(err)
         })
     });
@@ -103,7 +103,7 @@ function executeQuery(connection, query) {
  * @return {[Promise]}       [Esito della query, Object]
  */
 function insertQuery(dbConfig, query) {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         createConnection(dbConfig).then(conn => {
             conn.beginTransaction((err) => {
                 if (err) {
@@ -143,25 +143,17 @@ function insertQuery(dbConfig, query) {
  * @param  {[String]} query               [La query come per tabella/vista, come la eseguiamo su MSSQL, non vi sono alterazioni, quindi deve essere corretta]
  * @return {[Promise]}       [Esito della query, Object]
  */
-function selectQuery(dbConfig, query) {
-    return new Promise((resolve, reject)=>{
-        createConnection(dbConfig).then(conn => {
-            executeQuery(conn, query).then(rows => {
-                //console.log(rows.length);
-                conn.close();
-                resolve(rows);
-            }).catch(err => {
-                conn.close();
-                console.log(err);
-                reject(err);
-            });
-
-        }).catch(err => {
-            console.log(err);
-            reject(err);
-        });
-    });
+async function selectQuery(dbConfig, query) {
+    try {
+        let conn = await createConnection(dbConfig)
+        let rows = await executeQuery(conn, query)
+        conn.close()
+        return rows
+    } catch (error) {
+        throw new Error(error)
+    }
 }
+
 
 
 /**

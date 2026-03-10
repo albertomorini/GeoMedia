@@ -3,21 +3,33 @@
 const SQL_MANAGER = require("./SQL_MANAGER");
 ////////////////////////////////////////////
 
-
-function auth_dologin(username, password, email) {
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC AUTH_LOGIN @USERNAME='" + username + "', @PASSWORD='" + password + "'" + ", @EMAIL='" + email + "'")
-}
-function auth_dosignin(username, password, email, name, surname) {
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC [dbo].[AUTH_SIGNIN] "
-        + "@EMAIL='" + email + ","
-        + "@USERNAME='" + username + ","
-        + "@PASSWORD='" + password + ","
-        + "@NAME='" + name + ","
-        + "@SURNAME='" + surname + ","
-    )
+/**
+ * 
+ * @param {string} path must match with procedure name
+ * @param {JSON/OBJECT} body to serialize and pass to the function as `@JSON` parameter
+ * @returns 
+ */
+function generic_query(path, body) {
+    let dummy = JSON.stringify(body).replaceAll("'", "''")
+    console.log(
+        "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'"
+    );
+    
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/","") + " @JSON='" + dummy + "'")
 }
 
 /////////////////////////////////////////////
+
+
+function merge_post(post_content) {
+    let dummy = JSON.stringify(post_content).replaceAll("'", "''");
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC post.POST_MERGE @POST_CONTENT='" + dummy + "'")
+}
+
+
+function hpmedia_link(data){
+    
+}
 
 function newPost(author, postcontent) {
     let dummy_pc = JSON.stringify(postcontent).replaceAll("'", '')
@@ -66,8 +78,9 @@ function deletePost(postid, username, password) { //TODO: to put in secure mode 
 }
 
 module.exports = {
-    auth_dologin,
-    auth_dosignin,
+    generic_query,
+    ////////////////
+    merge_post,
     ////////////////
     newPost,
     getPosts,

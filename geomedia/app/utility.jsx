@@ -42,15 +42,12 @@ import { useEffect } from "react";
 //NETWORKING
 export const doRequest = (api, body = {}) => {
     // return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
-    return fetch("http://10.0.0.3:8765/" + api, {
+    return fetch("http://10.0.0.3:9910/" + api, {
         method: "POST",
         mode: "cors",
+        headers: { "authorization":"mysuperkey"},
         body: JSON.stringify(body)
-    }).then(res => res.json()).then(res => {
-        return res;
-    }).catch(err => {
-        return err;
-    });
+    }).then(res => res.json())
 }
 
 
