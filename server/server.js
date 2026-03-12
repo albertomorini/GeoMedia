@@ -52,6 +52,7 @@ async function handlePath(res, path, body, contentType) {
             case "/auth_login":
             case "/auth_signin":
             case "/profile_editinfo":
+            case "/profile_getpfp":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             /// POST SPECIFIC

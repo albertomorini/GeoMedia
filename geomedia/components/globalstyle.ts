@@ -9,6 +9,7 @@ export const style = StyleSheet.create({
     }
     , center: {
         flex: 3,
+        padding: 5,
         justifyContent: "center",
         alignItems: "center",
         height: 200
@@ -37,6 +38,12 @@ export const style = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: "bold"
+    },
+    subtitle: {
+        // fontFamily: 'Nunito-Bold',
+        fontSize: 15,
+        fontWeight: "bold"
+
     },
     images: {
         profile_picture: {

@@ -9,6 +9,7 @@ import LoginScreen from './login';
 import { ThemedView } from '@/components/themed-view';
 
 
+
 interface UserContextType {
   User: {
     value: string | null; // could be user id, username, etc.
