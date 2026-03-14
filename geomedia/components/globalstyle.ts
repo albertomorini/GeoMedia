@@ -43,7 +43,10 @@ export const style = StyleSheet.create({
         // fontFamily: 'Nunito-Bold',
         fontSize: 15,
         fontWeight: "bold"
-
+    },
+    label: {
+        fontWeight: "bold",
+        textAlign: 'left'
     },
     images: {
         profile_picture: {

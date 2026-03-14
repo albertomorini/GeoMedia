@@ -116,7 +116,7 @@ export default function LoginScreen(props) {
                         (isLogin) ?
 
                             <Stack spacing={12}>
-                                <ThemedText>Email or username</ThemedText>
+                                <ThemedText style={{fontWeight:"bold"}} >Email or username</ThemedText>
                                 <ControlledInput
                                     style={{ width: "100%" }}
                                     name="email"
@@ -124,7 +124,7 @@ export default function LoginScreen(props) {
                                     control={control}
                                     rules={{ required: "Email is required" }}
                                 />
-                                <ThemedText>Password</ThemedText>
+                                <ThemedText style={{ fontWeight: "bold" }}>Password</ThemedText>
                                 <PasswordInput
                                     label=""
                                     style={{ width: "100%" }}

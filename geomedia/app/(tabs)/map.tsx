@@ -7,6 +7,7 @@ import { MyContext } from '../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
 import ModalNewPost from '../mycomponents/modalNewPost';
+import PostWriter from '../mycomponents/post_creator';
 
 const MapScreen = () => {
 
@@ -149,7 +150,8 @@ const MapScreen = () => {
                 }
               />
             </MapView>
-            <ModalNewPost />
+            <PostWriter />
+            {/* <ModalNewPost /> */}
             {/* TODO: modal to show post */}
             {/* Search             */}
           </ThemedView>
