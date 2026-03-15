@@ -14,7 +14,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="map"
+      initialRouteName="index"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
@@ -24,7 +24,7 @@ export default function TabLayout() {
       <Tabs.Screen name="index" options={{ href: null }} />
 
       <Tabs.Screen
-        name="map"
+        name="(map)"
         options={{
           title: t.map,
           tabBarIcon: ({ color }) => (
@@ -34,7 +34,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="account"
+        name="(profile)"
         options={{
           title: t.account,
           tabBarIcon: ({ color }) => (

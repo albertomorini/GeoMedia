@@ -17,6 +17,7 @@ import {
 } from 'react-native-vision-camera';
 
 import RNFS from "react-native-fs";
+import { Slider } from 're-native-ui';
 
 
 // ─── Full-screen Camera Screen ───
@@ -96,9 +97,10 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
             </View>
         );
     }
-
+    
     return (
         <View style={StyleSheet.absoluteFill}>
+            
             <Camera
                 ref={camera}
                 style={StyleSheet.absoluteFill}
@@ -106,12 +108,13 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
                 isActive={true}
                 photo={true}           // enable photo capture
                 video={false}          // enable if you want video later
+                enableZoomGesture={true}
                 torch={flash === 'on' ? 'on' : 'off'} // continuous torch (flash preview)
             />
 
             {/* Top bar - controls */}
             <SafeAreaView style={styles.controlsTop}>
-                <TouchableOpacity style={styles.iconButton} onPress={onClose}>
+                <TouchableOpacity style={[styles.iconButton, styles.iconClose]} onPress={onClose}>
                     <Text style={styles.icon}>✕</Text>
                 </TouchableOpacity>
 
@@ -169,12 +172,12 @@ const styles = StyleSheet.create({
     center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
     controlsTop: {
         position: 'absolute',
-        top: Platform.OS === 'ios' ? 50 : 20,
-        left: 0,
-        right: 0,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        right: 10, // place near right edge
+        flexDirection: 'column', // stack vertically
+        alignItems: 'center', // center buttons horizontally
+        justifyContent: 'flex-start',
+        margin: 5,
+        paddingHorizontal: 0, // remove left/right padding
     },
     controlsBottom: {
         position: 'absolute',
@@ -190,6 +193,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.4)',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    iconClose: {
+        top: 10,
+        marginTop: 40
+    },
+    iconFlash: {
+
     },
     icon: {
         fontSize: 24,

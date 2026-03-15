@@ -11,6 +11,8 @@ import * as SecureStore from 'expo-secure-store';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
 
 
 
@@ -33,8 +35,6 @@ export default function LoginScreen(props) {
             EMAIL: data?.email,
             PASSWORD: React_MD5(password)
         }).then(async res => {
-            console.log(JSON.stringify(res[0]));
-
             await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
             check_cache_login()
         }).catch(err => {
@@ -84,15 +84,11 @@ export default function LoginScreen(props) {
     async function check_cache_login() {
 
         let cache_user = await SecureStore.getItemAsync("user");
-        console.log("cached", cache_user);
-
         if (cache_user != null) {
             try {
                 let j = JSON.parse(cache_user)
-                console.log("j", j);
-                console.log(ctx);
-                
-                ctx?.SetUser(j)
+                console.log(ctx?.User.User);
+                ctx?.User?.setUser(j)
                 // props?.setuser(j)
             } catch (error) {
                 console.error(error);
@@ -107,73 +103,74 @@ export default function LoginScreen(props) {
     }, [])
 
     return (
-        <ThemedView style={style.center}>
-            {/* <SettingsConfig /> */}
-            <Stack >
+     
+            <ThemedView style={style.center}>
+                {/* <SettingsConfig /> */}
+                <Stack >
 
-                <Text variant="heading" style={style.login.title}>GeoMedia</Text>
-                <></>
-                <></>
-                <Box p="lg">
-                    {
-                        (isLogin) ?
+                    <Text variant="heading" style={style.login.title}>GeoMedia</Text>
+                    <></>
+                    <></>
+                    <Box p="lg">
+                        {
+                            (isLogin) ?
 
-                            <Stack spacing={12}>
-                                <ThemedText style={{ fontWeight: "bold" }} >Email or username</ThemedText>
-                                <ControlledInput
-                                    style={{ width: "100%" }}
-                                    name="email"
-                                    placeholder={t.login.placeholderEmail}
-                                    control={control}
-                                    rules={{ required: "Email is required" }}
-                                />
-                                <ThemedText style={{ fontWeight: "bold" }}>Password</ThemedText>
-                                <PasswordInput
-                                    label=""
-                                    style={{ width: "100%" }}
-                                    onChangeText={(val) => { setPassword(val) }}
-                                    error={errorPassword}
-                                    placeholder="Enter your password"
-                                />
-                                <Button onPress={handleSubmit(onSubmit)}>{t?.login.buttonConfirm}</Button>
-                                <></>
-                                <></>
-                                <Button onPress={switchMode}>{t?.login.buttonOther}</Button>
-                            </Stack>
-                            :
-                            <Stack spacing={12}>
-                                <ControlledInput
-                                    style={{ width: "100%" }}
-                                    name="email"
-                                    label="Email"
-                                    placeholder={t.login.placeholderEmail}
-                                    control={control}
-                                    rules={{ required: "Email is required" }}
-                                />
-                                <PasswordInput
-                                    label="Password"
-                                    style={{ width: "100%" }}
-                                    onChangeText={(val) => { setPassword(val) }}
-                                    error={errorPassword}
-                                    placeholder="Enter your password"
-                                />
-                                <PasswordInput
-                                    label="Repeat password"
-                                    style={{ width: "100%" }}
-                                    onChangeText={(val) => { setPasswordRep(val) }}
-                                    error={errorPassword}
-                                    placeholder="Enter your password"
-                                />
-                                <Button onPress={handleSubmit(onSubmit)}>{t?.signup.buttonConfirm}</Button>
-                                <Button onPress={switchMode} style={style.success}> {t?.signup.buttonOther}</Button>
+                                <Stack spacing={12}>
+                                    <ThemedText style={{ fontWeight: "bold" }} >Email or username</ThemedText>
+                                    <ControlledInput
+                                        style={{ width: "100%" }}
+                                        name="email"
+                                        placeholder={t.login.placeholderEmail}
+                                        control={control}
+                                        rules={{ required: "Email is required" }}
+                                    />
+                                    <ThemedText style={{ fontWeight: "bold" }}>Password</ThemedText>
+                                    <PasswordInput
+                                        label=""
+                                        style={{ width: "100%" }}
+                                        onChangeText={(val) => { setPassword(val) }}
+                                        error={errorPassword}
+                                        placeholder="Enter your password"
+                                    />
+                                    <Button onPress={handleSubmit(onSubmit)}>{t?.login.buttonConfirm}</Button>
+                                    <></>
+                                    <></>
+                                    <Button onPress={switchMode}>{t?.login.buttonOther}</Button>
+                                </Stack>
+                                :
+                                <Stack spacing={12}>
+                                    <ControlledInput
+                                        style={{ width: "100%" }}
+                                        name="email"
+                                        label="Email"
+                                        placeholder={t.login.placeholderEmail}
+                                        control={control}
+                                        rules={{ required: "Email is required" }}
+                                    />
+                                    <PasswordInput
+                                        label="Password"
+                                        style={{ width: "100%" }}
+                                        onChangeText={(val) => { setPassword(val) }}
+                                        error={errorPassword}
+                                        placeholder="Enter your password"
+                                    />
+                                    <PasswordInput
+                                        label="Repeat password"
+                                        style={{ width: "100%" }}
+                                        onChangeText={(val) => { setPasswordRep(val) }}
+                                        error={errorPassword}
+                                        placeholder="Enter your password"
+                                    />
+                                    <Button onPress={handleSubmit(onSubmit)}>{t?.signup.buttonConfirm}</Button>
+                                    <Button onPress={switchMode} style={style.success}> {t?.signup.buttonOther}</Button>
 
-                            </Stack>
-                    }
+                                </Stack>
+                        }
 
-                </Box>
-            </Stack>
+                    </Box>
+                </Stack>
 
-            {/* <Box p="lg">
+                {/* <Box p="lg">
                     <Text variant="body">Box with medium padding from theme</Text>
                 </Box>
                 <Box
@@ -194,6 +191,7 @@ export default function LoginScreen(props) {
 
                 </Box> */}
 
-        </ThemedView>
+            </ThemedView>
+     
     );
 }

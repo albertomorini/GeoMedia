@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
-import { MyContext } from '../_layout';
+import { Image, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
+import { MyContext } from '../../_layout';
 
 import { Text, Box } from "re-native-ui";
 import { style } from '@/components/globalstyle';
 
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
-import { doRequest } from '../utility';
+import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
 import { router } from 'expo-router';
 
-export default function Account() {
+export default function Profile() {
 
   const ctx = useContext(MyContext);
   const user = ctx?.User?.User;
@@ -34,11 +34,8 @@ export default function Account() {
     // console.log("logging out");
 
     await SecureStore.deleteItemAsync("user");
-    if (ctx?.setUser) {
-      ctx.setUser(null);
-    }
-    //TODO redirect
-    // router.replace("/LoginScreen");
+    ctx?.User.setUser(null);
+    router.replace("/login");
   }
 
 
@@ -83,14 +80,16 @@ export default function Account() {
         />
       </View>
 
-      <TouchableOpacity
-        onPress={() => console.log("PK")}
+      <Pressable
+        onPress={() => {
+          router.push('ProfileEditor')
+        }}
         style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]}
       >
-        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
           Edit profile
-        </Text>
-      </TouchableOpacity>
+        </ThemedText>
+      </Pressable>
 
       <TouchableOpacity
         onPress={() => logout()}
