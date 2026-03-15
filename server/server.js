@@ -96,6 +96,7 @@ async function handlePath(res, path, body, contentType) {
             case "/post_delete": //TODO: put in the generics?
                 console.log("postid, userpsw to authorization, into a JSON... generics?");
 
+                //TODO: creare tabella segnalazioni
                 break;
             case "/newPost":
                 dummy_res = dispatcher.newPost(body.author, body.postcontent)

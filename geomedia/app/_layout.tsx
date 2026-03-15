@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import LoginScreen from './login';
 import { ThemedView } from '@/components/themed-view';
 
@@ -24,13 +24,19 @@ export default function RootLayout() {
   const [User, setUser] = useState(null)
   //TODO: exec the login and use context
 
+
+  useEffect(() => {
+
+  }, [User])
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 
       <>
         <MyContext.Provider
           value={{
-            User: { User, setUser }
+            User: { User: Object },
+            SetUser: (obj: Object) => setUser(obj)
           }}
         >
           {User != null ?

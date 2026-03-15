@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Text, PasswordInput, Button, ControlledInput, Stack, Box } from "re-native-ui";
 
 import { useForm } from "react-hook-form"; /// npm install react-hook-form
@@ -10,12 +10,13 @@ import { doRequest, React_MD5 } from "./utility";
 import * as SecureStore from 'expo-secure-store';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { MyContext } from './_layout';
 
 
 
 export default function LoginScreen(props) {
 
-
+    const ctx = useContext(MyContext)
     const { control, handleSubmit } = useForm({
         defaultValues: { email: "" }
     });
@@ -89,8 +90,10 @@ export default function LoginScreen(props) {
             try {
                 let j = JSON.parse(cache_user)
                 console.log("j", j);
-
-                props?.setuser(j)
+                console.log(ctx);
+                
+                ctx?.SetUser(j)
+                // props?.setuser(j)
             } catch (error) {
                 console.error(error);
 
@@ -116,7 +119,7 @@ export default function LoginScreen(props) {
                         (isLogin) ?
 
                             <Stack spacing={12}>
-                                <ThemedText style={{fontWeight:"bold"}} >Email or username</ThemedText>
+                                <ThemedText style={{ fontWeight: "bold" }} >Email or username</ThemedText>
                                 <ControlledInput
                                     style={{ width: "100%" }}
                                     name="email"

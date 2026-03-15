@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
+import { router } from 'expo-router';
 
 export default function Account() {
 
@@ -30,16 +31,14 @@ export default function Account() {
 
 
   async function logout() {
-    console.log("logging out");
+    // console.log("logging out");
 
     await SecureStore.deleteItemAsync("user");
-
-    // optional: reset context if setter exists
     if (ctx?.setUser) {
       ctx.setUser(null);
     }
+    //TODO redirect
     // router.replace("/LoginScreen");
-    //TODO: to redirect
   }
 
 
