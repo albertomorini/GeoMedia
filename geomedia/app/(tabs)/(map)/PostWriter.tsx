@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Modal, StyleSheet, TouchableOpacity, Text, TextInput, View } from 'react-native';
-import { Button, TextArea } from 're-native-ui'; // Assuming you have the right imports
+import { StyleSheet, Text, View, useColorScheme, Pressable, TouchableOpacity } from 'react-native';
 import { ThemedView } from "@/components/themed-view"; // Assuming you have custom components
 import { style } from "@/components/globalstyle"; // Assuming custom styles
 
@@ -9,6 +8,7 @@ import { style } from "@/components/globalstyle"; // Assuming custom styles
 
 import CameraCapture from "../../mycomponents/cameraCapture";
 import { ThemedText } from '@/components/themed-text';
+import { ThemedInput } from '@/components/themed-input';
 
 
 const PostWriter = () => {
@@ -17,74 +17,67 @@ const PostWriter = () => {
 
     const toggleModal = () => setModalVisible(prev => !prev);
 
+    const theme = useColorScheme()
+
+
+
     return (
-        <ThemedView style={{ flex: 1 }}>
-            {/* <TouchableOpacity
-                style={[style.buttons.fab, style.colors.geomedia_blue]}
-                onPress={toggleModal}
-            >
-                <Text style={style.buttons.fabText}>+</Text>
-            </TouchableOpacity>
+        <>
 
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={modalVisible}
-                onRequestClose={toggleModal}
-            > */}
-                {showCamera ? (
-                    <CameraCapture
-                        onCapture={(photo) => {
-                            console.log('Photo captured:', photo.path);
-                            // TODO: store the photo URI for upload/preview
-                            setShowCamera(false);
-                        }}
-                        onClose={() => setShowCamera(false)}
-                    />
-                ) : (
-                    // Wrap form content in SafeAreaView + flex:1 to respect insets without pushing off-screen
+            {showCamera ? (
+                <CameraCapture
+                    onCapture={(photo) => {
+                        console.log('Photo captured:', photo.path);
+                        // TODO: store the photo URI for upload/preview
+                        setShowCamera(false);
+                    }}
+                    onClose={() => setShowCamera(false)}
+                />
+            ) : (
+                // Wrap form content in SafeAreaView + flex:1 to respect insets without pushing off-screen
 
-                    <ThemedView style={style.containerContent}>
-                        <ThemedText style={style.label}>Category</ThemedText>
-                        {/* TODO: category picker */}
+                <ThemedView style={style.container}>
 
-                        <ThemedText style={style.label}>Title: </ThemedText>
-                        <TextInput /* your props */ />
 
-                        <ThemedText style={style.label}>Comment (optional):</ThemedText>
-                        <TextArea style={styles.textarea} />
+                    <ThemedText style={style.label}>Category</ThemedText>
+                    {/* //TODO: category picker */}
 
-                        <View style={styles.uploadBox}>
-                            <Text style={styles.title}>Upload a file</Text>
-                            <View style={styles.optionsRow}>
-                                <Button style={styles.option}>
-                                    <Text style={styles.icon}>📄</Text>
-                                    <Text style={styles.label}>Pick a file</Text>
-                                </Button>
+                    <ThemedText style={style.label}>Title: </ThemedText>
+                    {/* <TextInput
+                        style={[styles.input, { backgroundColor: colors.background, color: colors.text }]}
+                        placeholderTextColor={theme === 'dark' ? '#aaa' : '#323232'}
+                    /> */}
+                    <ThemedInput placeholder="Title" type="outlined" />
+                    <ThemedText style={style.label}>Comment:</ThemedText>
+                    <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..' />
 
-                                <Button
-                                    style={styles.option}
-                                    onPress={() => setShowCamera(true)}
-                                >
-                                    <Text style={styles.icon}>📷</Text>
-                                    <Text style={styles.label}>Take a picture</Text>
-                                </Button>
-                            </View>
+
+                    <View style={styles.uploadBox}>
+                        <Text style={styles.title}>Upload a file</Text>
+                        <View style={styles.optionsRow}>
+                            <TouchableOpacity style={styles.option} >
+                                <Text style={styles.icon}>📄</Text>
+                                <Text style={styles.label}>Pick a file</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.option}
+                                onPress={() => setShowCamera(true)}
+                            >
+                                <Text style={styles.icon}>📷</Text>
+                                <Text style={styles.label}>Take a picture</Text>
+                            </TouchableOpacity>
                         </View>
+                    </View>
+                    <TouchableOpacity style={style.colors.geomedia_green}>
+                        <ThemedText>Create</ThemedText>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={[style.buttons.closeButton, style.colors.geomedia_red]}
-                            onPress={toggleModal}
-                        >
-                            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-                                Close
-                            </Text>
-                        </TouchableOpacity>
-                    </ThemedView>
-                )}
-            {/* </Modal> */}
 
-        </ThemedView>
+                </ThemedView>
+            )}
+
+        </>
     );
 };
 export default PostWriter;
@@ -96,9 +89,11 @@ const styles = StyleSheet.create({
     },
     textarea: {
         width: "100%",
-        borderStyle: "dashed"
+        borderStyle: "dashed",
+        // backgroundColor: (theme === "dark" ? "#333" : '#fff'),
+        // text: (theme === "dark" ? "#fff" : '#000'),
+        // border: theme === "dark" ? "#555" : '#ccc',
     },
-
     container: {
         padding: 20,
     },

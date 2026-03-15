@@ -69,7 +69,7 @@ export const style = StyleSheet.create({
             position: 'absolute',
             bottom: 30,
             right: 0,
-            left: 120,
+            left: "80%",
             width: 60,
             height: 60,
             borderRadius: 30,           // circular button
@@ -80,6 +80,7 @@ export const style = StyleSheet.create({
             shadowOpacity: 0.3,
             shadowOffset: { width: 0, height: 2 },
             shadowRadius: 4,
+            flex: 1
         },
         fabText: {
             color: '#fff',

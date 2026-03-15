@@ -1,26 +1,10 @@
 import React, { useState, useRef } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    SafeAreaView,
-    Alert,
-    Platform,
-} from 'react-native';
-import {
-    Camera,
-    useCameraDevice,
-    useCameraPermission,
-    CameraPermissionStatus,
-    TakePhotoOptions,
-} from 'react-native-vision-camera';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Camera, useCameraDevice, useCameraPermission, CameraPermissionStatus, TakePhotoOptions, } from 'react-native-vision-camera';
 
 import RNFS from "react-native-fs";
-import { Slider } from 're-native-ui';
+import { ThemedText } from '@/components/themed-text';
 
-
-// ─── Full-screen Camera Screen ───
 export default function OpenCamera({ onClose }: { onClose: () => void }) {
     const { hasPermission, requestPermission } = useCameraPermission();
     const [cameraPermission, setCameraPermission] = useState<CameraPermissionStatus>('not-determined');
@@ -62,8 +46,6 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
             const base64String = await RNFS.readFile(photo.path, 'base64');
             console.log("Base64 string: ", base64String); // Log base64
 
-
-
         } catch (e) {
             console.error('Failed to take photo', e);
             Alert.alert('Error', 'Could not capture photo');
@@ -97,10 +79,10 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
             </View>
         );
     }
-    
+
     return (
         <View style={StyleSheet.absoluteFill}>
-            
+
             <Camera
                 ref={camera}
                 style={StyleSheet.absoluteFill}
@@ -112,24 +94,33 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
                 torch={flash === 'on' ? 'on' : 'off'} // continuous torch (flash preview)
             />
 
-            {/* Top bar - controls */}
-            <SafeAreaView style={styles.controlsTop}>
+            {/* CONTROLS*/}
+            <ThemedText style={styles.controlsTop}>
+                {/* CLOSE */}
                 <TouchableOpacity style={[styles.iconButton, styles.iconClose]} onPress={onClose}>
                     <Text style={styles.icon}>✕</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconButton} onPress={toggleCamera}>
-                    <Text style={styles.icon}>↺</Text>
-                </TouchableOpacity>
+            </ThemedText>
 
+            <ThemedText style={styles.controlsBottom, styles?.controlsTopLeft}>
+
+                {/* FLASH */}
                 <TouchableOpacity style={styles.iconButton} onPress={toggleFlash}>
-                    <Text style={styles.icon}>
+                    <Text style={styles.icon, styles?.iconFlash}>
                         {flash === 'on' ? '⚡' : flash === 'auto' ? '⚡ auto' : '⚡ off'}
                     </Text>
                 </TouchableOpacity>
-            </SafeAreaView>
+            </ThemedText>
+            <ThemedText style={styles.controlsBottom, styles?.controlsRight}>
 
-            {/* Bottom - capture button */}
+                {/* REVERSE CAMERA */}
+                <TouchableOpacity style={styles.iconButton} onPress={toggleCamera}>
+                    <Text style={styles.icon}>↺</Text>
+                </TouchableOpacity>
+            </ThemedText>
+
+            {/* CAPTURE BUTTON */}
             <View style={styles.controlsBottom}>
                 <TouchableOpacity style={styles.captureButton} onPress={takePhoto}>
                     <View style={styles.captureInner} />
@@ -186,8 +177,25 @@ const styles = StyleSheet.create({
         right: 0,
         alignItems: 'center',
     },
+    controlsTopLeft: {
+        position: 'absolute',
+        right: "70%", // place near right edge
+        left: 0,
+        flexDirection: 'column', // stack vertically
+        alignItems: 'center', // center buttons horizontally
+        justifyContent: 'flex-start',
+        margin: 5,
+        paddingHorizontal: 0, // remove left/right padding
+    },
+    controlsRight: {
+        position: 'absolute',
+        bottom: 40,
+        left: "70%",
+        right: 0,
+        alignItems: 'center',
+    },
     iconButton: {
-        width: 50,
+        width: 70,
         height: 50,
         borderRadius: 25,
         backgroundColor: 'rgba(0,0,0,0.4)',
@@ -196,10 +204,11 @@ const styles = StyleSheet.create({
     },
     iconClose: {
         top: 10,
-        marginTop: 40
+        marginTop: 40,
+        backgroundColor: 'rgba(208, 63, 63, 0.4)',
     },
     iconFlash: {
-
+        fontSize: 14
     },
     icon: {
         fontSize: 24,
