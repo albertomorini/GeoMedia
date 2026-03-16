@@ -1,34 +1,110 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, useColorScheme, Pressable, TouchableOpacity } from 'react-native';
-import { ThemedView } from "@/components/themed-view"; // Assuming you have custom components
-import { style } from "@/components/globalstyle"; // Assuming custom styles
-
-// import * as DocumentPicker from 'expo-document-picker';
-
-
-import CameraCapture from "../../mycomponents/cameraCapture";
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { ThemedView } from "@/components/themed-view";
+import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 
+import CameraCapture from "../../mycomponents/cameraCapture";
+
+
+/// FILE SYSTEMS
+
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { doRequest } from '@/app/utility';
+////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const PostWriter = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [showCamera, setShowCamera] = useState(false);   // ← new state
 
-    const toggleModal = () => setModalVisible(prev => !prev);
+    const [postData, setPostData] = useState({
+        ID: null,
+        TITLE: null,
+        COMMENT: null,
+        AUTHOR_ID: null, //TODO: context
+    })
 
-    const theme = useColorScheme()
+    const [showCamera, setShowCamera] = useState(false);   // camera control
+    const [filesAttached, setFilesAttached] = useState([]); //array for multiple?
 
 
+    const file_share = async (base64Data: any, fileName: string, fileType: string) => {
+        try {
+            // Define path in cache directory
+            const path = `${RNFS.CachesDirectoryPath}/${fileName}.${fileType}`;
+
+            // Write the file
+            await RNFS.writeFile(path, base64Data, 'base64');
+            console.log('File written to:', path);
+
+            // Open with Share / Other apps
+            await Share.open({
+                url: `file://${path}`,
+                type: `${fileType === 'pdf' ? 'application/pdf' : 'image/*'}`, // adjust MIME type
+            });
+
+        } catch (error) {
+            console.log('Error opening file:', error);
+        }
+    };
+
+
+    async function file_pick() {
+        try {
+            const result = await DocumentPicker.getDocumentAsync({
+                type: "*/*",
+                multiple: true,
+                copyToCacheDirectory: true,
+            });
+
+            if (result.canceled) return;
+
+            let files = []
+            for (const asset of result.assets) {
+                const { name, uri } = asset; //filename and uri path
+
+                //BASE64 computing
+                const file = new FileSystem.File(uri); //load the file
+                const base64 = await file.base64();
+
+                files.push({
+                    filename: name,
+                    base64: base64
+                })
+            }
+
+            setFilesAttached(prev => [...prev, ...files]);
+
+        } catch (error) {
+            console.error("Error picking or reading file:", error);
+            Alert.alert("Error reading files", error)
+        }
+    }
+
+
+
+    function savePost() {
+        doRequest("post_merge", {
+            postdata: postData
+        }).then(res => {
+
+        })
+    }
 
     return (
         <>
 
             {showCamera ? (
                 <CameraCapture
-                    onCapture={(photo) => {
-                        console.log('Photo captured:', photo.path);
-                        // TODO: store the photo URI for upload/preview
+                    storePhoto={(b64) => {
+                        let files = [{
+                            filename: Date.now() + '.jpg',
+                            base64: b64
+                        }]
+                        setFilesAttached(prev => [...prev, ...files]);
                         setShowCamera(false);
                     }}
                     onClose={() => setShowCamera(false)}
@@ -43,19 +119,26 @@ const PostWriter = () => {
                     {/* //TODO: category picker */}
 
                     <ThemedText style={style.label}>Title: </ThemedText>
-                    {/* <TextInput
-                        style={[styles.input, { backgroundColor: colors.background, color: colors.text }]}
-                        placeholderTextColor={theme === 'dark' ? '#aaa' : '#323232'}
-                    /> */}
-                    <ThemedInput placeholder="Title" type="outlined" />
+                    <ThemedInput placeholder="Title" type="outlined" onChange={(text) => {
+                        setPostData(prev => ({
+                            ...prev,
+                            TITLE: text
+                        }));
+                    }} />
                     <ThemedText style={style.label}>Comment:</ThemedText>
-                    <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..' />
-
+                    <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..'
+                        onChange={(text) => {
+                            setPostData(prev => ({
+                                ...prev,
+                                COMMENT: text
+                            }));
+                        }}
+                    />
 
                     <View style={styles.uploadBox}>
                         <Text style={styles.title}>Upload a file</Text>
                         <View style={styles.optionsRow}>
-                            <TouchableOpacity style={styles.option} >
+                            <TouchableOpacity style={styles.option} onPress={() => { file_pick() }}>
                                 <Text style={styles.icon}>📄</Text>
                                 <Text style={styles.label}>Pick a file</Text>
                             </TouchableOpacity>
@@ -69,6 +152,16 @@ const PostWriter = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
+
+                    {
+                        filesAttached?.map(f => (
+                            <ThemedText key={f?.filename}>
+                                {f?.filename}
+                            </ThemedText>
+                        ))
+                    }
+
+
                     <TouchableOpacity style={style.colors.geomedia_green}>
                         <ThemedText>Create</ThemedText>
                     </TouchableOpacity>

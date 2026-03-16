@@ -5,7 +5,9 @@ import { Camera, useCameraDevice, useCameraPermission, CameraPermissionStatus, T
 import RNFS from "react-native-fs";
 import { ThemedText } from '@/components/themed-text';
 
-export default function OpenCamera({ onClose }: { onClose: () => void }) {
+export default function OpenCamera(
+    { onClose, storePhoto }: { onClose: () => void; storePhoto: (b64: string) => void }
+) {
     const { hasPermission, requestPermission } = useCameraPermission();
     const [cameraPermission, setCameraPermission] = useState<CameraPermissionStatus>('not-determined');
 
@@ -39,13 +41,15 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
 
             const photo = await camera.current.takePhoto({
                 flash: flash,
+                fileType: 'jpg',
                 qualityPrioritization: 'balanced',
                 enableShutterSound: false, // iOS only
             } satisfies TakePhotoOptions);
 
             const base64String = await RNFS.readFile(photo.path, 'base64');
-            console.log("Base64 string: ", base64String); // Log base64
 
+            // return { base64: base64String, format: "jpg" }
+            return base64String
         } catch (e) {
             console.error('Failed to take photo', e);
             Alert.alert('Error', 'Could not capture photo');
@@ -122,11 +126,14 @@ export default function OpenCamera({ onClose }: { onClose: () => void }) {
 
             {/* CAPTURE BUTTON */}
             <View style={styles.controlsBottom}>
-                <TouchableOpacity style={styles.captureButton} onPress={takePhoto}>
+                <TouchableOpacity style={styles.captureButton} onPress={async () => {
+                    let b64 = await takePhoto();
+                    storePhoto(b64)
+                }}>
                     <View style={styles.captureInner} />
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     );
 }
 

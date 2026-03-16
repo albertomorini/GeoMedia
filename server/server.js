@@ -4,8 +4,10 @@ const http = require("http");
 const dispatcher = require("./dispatcher");
 const port = 9910
 const fs = require("fs")
-const SHARED_KEY = fs.readFileSync("API_KEY.txt", "utf8")
-const PATH_UPLOADS = "./_UPLOADS"
+const config = JSON.parse(fs.readFileSync("./config.json"))
+
+const SHARED_KEY = config.SHARED_KEY
+const PATH_UPLOADS = config.FOLDERS.UPLOADS
 
 /**
  * Invia una risposta HTTP
@@ -40,7 +42,7 @@ function checkAuth(key) {
  * @param {string} contentType request content-type if available
  * @returns {Promise} null if already satisfied, otherwise the result set from query execution 
  */
-async function handlePath(res, path, body, contentType) {
+async function dispatchReq(res, path, body, contentType) {
     console.log(path, body);
 
     let dummy_res = Promise.resolve(null);
@@ -50,56 +52,31 @@ async function handlePath(res, path, body, contentType) {
                 sendResponse(res, 200, { "HELLO": "From server!" })
                 break;
             case "/auth_login":
-            case "/auth_signin":
+            case "/auth_signin": //TODO: extract to incapsulate mail sending
+            case "/auth_password_forgot":
+            case "/auth_password_reset":
             case "/profile_editinfo":
             case "/profile_getpfp":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-                let post_id = body?.id
+
+                let post_id = await dispatcher.merge_post(body)
                 let files = body.attachments;
-                let paths = []
-                if (post_id != undefined) {
-                    //retrieve the files and merge them with 
-                    //TODO: merge the file
+                let x = dispatcher.hpmedia_merge_folder(post_id, files)
+                if (x) {
+                    sendResponse(res, 200, { "post_id": post_id, "OK": true })
                 } else {
-                    post_id = await dispatcher.merge_post(body)
-                    let post_folder = PATH_UPLOADS + "/" + post_id
-
-                    fs.mkdirSync(post_folder)
-                    //store new files
-                    files.forEach(hpmedia => {
-                        //TODO: here?
-                        if (hpmedia?.changed) { // to set 
-
-                        }
-                        let dummyfile = post_folder + "/" + hpmedia?.filname + "." + hpmedia.extension
-                        // if (!fs.existsSync(dummyfile)){ //Overwriting wouldn't work
-                        fs.writeFileSync(dummyfile, Buffer.from(hpmedia.b64, "base64"))
-                        paths.push({
-                            "path": dummyfile,
-                            "filename": hpmedia?.filname,
-                            "extension": hpmedia.extension
-                        })
-
-                        // }
-                    });
+                    sendResponse(res, 200, { "post_id": post_id, "OK": false })
                 }
-                let hpmedia_link = await dispatcher.generic_query("hpmedia.HYPERMEDIA_LINK", paths)
-                sendResponse(res, 200, {
-                    "ok": true,
-                    "id": post_id
-                })
+
 
                 break;
             case "/post_delete": //TODO: put in the generics?
                 console.log("postid, userpsw to authorization, into a JSON... generics?");
 
                 //TODO: creare tabella segnalazioni
-                break;
-            case "/newPost":
-                dummy_res = dispatcher.newPost(body.author, body.postcontent)
                 break;
             // case "/getPosts":
             //     dummy_res = dispatcher.getPosts(body?.latitude, body?.longitude, body?.USERNAME)
@@ -114,7 +91,7 @@ async function handlePath(res, path, body, contentType) {
         return dummy_res
     } catch (error) {
         fs.appendFileSync('./log.txt', 'ERROR ,' + Date.now() + ',' + error + "/n")
-        console.log("Error on handlepath: ", error);
+        console.log("Error on dispatchReq: ", error);
     }
 }
 
@@ -146,7 +123,7 @@ http.createServer((req, res) => {
             })
         } else {
             try {
-                handlePath(res, req.url, json_body, contentType).then(resQuery => {
+                dispatchReq(res, req.url, json_body, contentType).then(resQuery => {
                     if (resQuery != null) { //otherwise already handled on the method path
                         sendResponse(res, 200, resQuery)
                     }

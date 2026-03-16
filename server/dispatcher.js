@@ -1,6 +1,12 @@
 // associate to each sotred procedure/query a function, thus to better encapsulate and isolate the functionality
-
+//TODO: to rename this class in helper?
 const SQL_MANAGER = require("./SQL_MANAGER");
+const fs = require("fs")
+const config = JSON.parse(fs.readFileSync("./config.json"))
+const path = require("path");
+
+const PATH_UPLOADS = config.FOLDERS.UPLOADS
+
 ////////////////////////////////////////////
 
 /**
@@ -14,8 +20,8 @@ function generic_query(path, body) {
     console.log(
         "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'"
     );
-    
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/","") + " @JSON='" + dummy + "'")
+
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
 /////////////////////////////////////////////
@@ -26,15 +32,42 @@ function merge_post(post_content) {
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC post.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 
+async function hpmedia_merge_folder(postid, attachments) {
+    try {
+        let post_folder = path.join(PATH_UPLOADS, String(postid))
 
-function hpmedia_link(data){
-    
+        if (!fs.existsSync(post_folder)) {
+            fs.mkdirSync(post_folder, { recursive: true })
+        }
+
+        let files_to_keep = []
+        attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
+            var buffer = Buffer.from(f.base64.split(";base64,")[1], 'base64', f.base64.length) //REMOVE BASE64
+            const filepath = path.join(postFolder, `${f.filename}.${f.extension}`);
+            fs.writeFileSync(filepath, buffer, { encoding: 'utf8' });
+            files_to_keep.push(filepath)
+            // SQL_MANAGER.insertQuery(SQL_MANAGER.loadConfig(), "INSERT INTO DBO.[HYPERMEDIA](FILEPATH,MEDIA_FILENAME,MEDIA_TYPE,MEDIA_EXTENSION,POST_ID) VALUES('"
+            //     + filepath + "','"
+            //     + f.filename + "','"
+            //     + f.extension + "',"
+            //     + postid + "',"
+            //     + ")")
+        })
+
+
+        file_present = fs.readdirSync(post_folder)
+        filename_attached = attachments.map(f => f.filename + "." + f.extension)
+        file_to_remove = file_present.filter(f => !filename_attached.includes(f))
+        file_to_remove.forEach(f => {
+            fs.unlinkSync(f)
+        })
+        return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(files_to_keep).replaceAll("'", "''") + "',@POSTID=" + postid)
+    } catch (error) {
+        //TODO: 2 logrr
+        return new Promise.resolve([{ "OK": false, "MSG": error }])
+    }
 }
 
-function newPost(author, postcontent) {
-    let dummy_pc = JSON.stringify(postcontent).replaceAll("'", '')
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC NEWPOST @AUTHOR='" + author + "', @POSTCONTENT='" + dummy_pc + "'")
-}
 
 function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
 
@@ -82,8 +115,10 @@ module.exports = {
     ////////////////
     merge_post,
     ////////////////
-    newPost,
     getPosts,
     deletePost,
     getMediaPost
+    ///////////////
+
+    , hpmedia_merge_folder
 }

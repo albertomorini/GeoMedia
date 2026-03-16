@@ -1,0 +1,6 @@
+{
+    "SHARED_KEY": "mysuperkey",
+    "FOLDERS": {
+        "UPLOADS": "./_UPLOADS"
+    }
+}
