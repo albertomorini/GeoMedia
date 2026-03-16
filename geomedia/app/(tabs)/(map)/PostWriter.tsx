@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
+import Geolocation from '@react-native-community/geolocation';
 
 import CameraCapture from "../../mycomponents/cameraCapture";
 
@@ -15,16 +16,23 @@ import Share from 'react-native-share';
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { doRequest } from '@/app/utility';
+import { MyContext } from '@/app/_layout';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 const PostWriter = () => {
 
+    const ctx = useContext(MyContext)
     const [postData, setPostData] = useState({
         ID: null,
         TITLE: null,
         COMMENT: null,
-        AUTHOR_ID: null, //TODO: context
+        AUTHOR_ID: ctx?.User?.User?.UID, //TODO: context
+    })
+
+    const [currLocation, setCurrLocation] = useState({
+        lat: null,
+        lon: null
     })
 
     const [showCamera, setShowCamera] = useState(false);   // camera control
@@ -72,6 +80,7 @@ const PostWriter = () => {
 
                 files.push({
                     filename: name,
+                    updated: true,
                     base64: base64
                 })
             }
@@ -85,14 +94,39 @@ const PostWriter = () => {
     }
 
 
+    async function savePost() {
 
-    function savePost() {
+
+        let dummy_body = postData
+        dummy_body.LATITUDE = currLocation.lat
+        dummy_body.LONGITUDE = currLocation.lon
+        dummy_body.attachments = filesAttached
+
         doRequest("post_merge", {
             postdata: postData
         }).then(res => {
-
+            console.log("POST MERGE RETURNED::", res);
+            if (res?.OK) {
+                setPostData(prev => ({
+                    ...prev,
+                    ID: res?.post_id
+                }))
+            } else {
+                Alert.alert("Post not saved: " + res?.MSG)
+            }
         })
     }
+
+    useEffect(() => {
+        Geolocation.getCurrentPosition(info => {
+            console.log(info?.coords?.latitude,
+                info?.coords?.longitude)
+            setCurrLocation({
+                lat: info?.coords?.latitude,
+                lon: info?.coords?.longitude
+            })
+        });
+    }, [])
 
     return (
         <>
@@ -102,6 +136,7 @@ const PostWriter = () => {
                     storePhoto={(b64) => {
                         let files = [{
                             filename: Date.now() + '.jpg',
+                            updated: true,
                             base64: b64
                         }]
                         setFilesAttached(prev => [...prev, ...files]);
@@ -119,7 +154,7 @@ const PostWriter = () => {
                     {/* //TODO: category picker */}
 
                     <ThemedText style={style.label}>Title: </ThemedText>
-                    <ThemedInput placeholder="Title" type="outlined" onChange={(text) => {
+                    <ThemedInput placeholder="Title" type="outlined" onChangeText={(text) => {
                         setPostData(prev => ({
                             ...prev,
                             TITLE: text
@@ -127,7 +162,7 @@ const PostWriter = () => {
                     }} />
                     <ThemedText style={style.label}>Comment:</ThemedText>
                     <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..'
-                        onChange={(text) => {
+                        onChangeText={(text) => {
                             setPostData(prev => ({
                                 ...prev,
                                 COMMENT: text
@@ -162,10 +197,16 @@ const PostWriter = () => {
                     }
 
 
-                    <TouchableOpacity style={style.colors.geomedia_green}>
-                        <ThemedText>Create</ThemedText>
-                    </TouchableOpacity>
+                    <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => { savePost() }}>
+                        {
+                            postData?.ID == null ?
+                                <ThemedText>Create</ThemedText>
+                                :
+                                <ThemedText>Update</ThemedText>
 
+                        }
+                    </TouchableOpacity>
+                       
 
                 </ThemedView>
             )}

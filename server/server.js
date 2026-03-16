@@ -62,8 +62,17 @@ async function dispatchReq(res, path, body, contentType) {
             /// POST SPECIFIC
             case "/post_merge": //creation, update
 
-                let post_id = await dispatcher.merge_post(body)
-                let files = body.attachments;
+                console.log(">>", body);
+
+                let query_results = await dispatcher.merge_post(body.postdata)
+                if(!query_results[0].OK){
+                    //TODO return error
+                    sendResponse(res,500,{"OK":false,"MSG":query_results[1].MSG})
+                    return null
+                }
+                let post_id = query_results[0].ID
+
+                let files = body.postdata.attachments;
                 let x = dispatcher.hpmedia_merge_folder(post_id, files)
                 if (x) {
                     sendResponse(res, 200, { "post_id": post_id, "OK": true })
@@ -78,12 +87,6 @@ async function dispatchReq(res, path, body, contentType) {
 
                 //TODO: creare tabella segnalazioni
                 break;
-            // case "/getPosts":
-            //     dummy_res = dispatcher.getPosts(body?.latitude, body?.longitude, body?.USERNAME)
-            // case "/getMediaPost":
-            //     dummy_res = dispatcher.getMediaPost(body?.POSTID)
-            // case "/deletePost":
-            //     dummy_res = dispatcher.deletePost(body?.POSTID, body?.USERNAME, body?.PASSWORD)
             default:
                 sendResponse(res, 404, { 'msg': "Unknown path:" + path })
                 break;

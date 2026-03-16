@@ -29,7 +29,11 @@ function generic_query(path, body) {
 
 function merge_post(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC post.POST_MERGE @POST_CONTENT='" + dummy + "'")
+    console.log(
+
+    );
+
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 
 async function hpmedia_merge_folder(postid, attachments) {
@@ -42,21 +46,17 @@ async function hpmedia_merge_folder(postid, attachments) {
 
         let files_to_keep = []
         attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
-            var buffer = Buffer.from(f.base64.split(";base64,")[1], 'base64', f.base64.length) //REMOVE BASE64
-            const filepath = path.join(postFolder, `${f.filename}.${f.extension}`);
+            var buffer = Buffer.from(f.base64, 'base64', f.base64.length) //REMOVE BASE64
+            const filepath = path.join(post_folder, f.filename);
+            console.log("Storing file: ",filepath);
+            
             fs.writeFileSync(filepath, buffer, { encoding: 'utf8' });
             files_to_keep.push(filepath)
-            // SQL_MANAGER.insertQuery(SQL_MANAGER.loadConfig(), "INSERT INTO DBO.[HYPERMEDIA](FILEPATH,MEDIA_FILENAME,MEDIA_TYPE,MEDIA_EXTENSION,POST_ID) VALUES('"
-            //     + filepath + "','"
-            //     + f.filename + "','"
-            //     + f.extension + "',"
-            //     + postid + "',"
-            //     + ")")
         })
 
 
         file_present = fs.readdirSync(post_folder)
-        filename_attached = attachments.map(f => f.filename + "." + f.extension)
+        filename_attached = attachments.map(f => f.filename)
         file_to_remove = file_present.filter(f => !filename_attached.includes(f))
         file_to_remove.forEach(f => {
             fs.unlinkSync(f)
@@ -64,7 +64,9 @@ async function hpmedia_merge_folder(postid, attachments) {
         return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(files_to_keep).replaceAll("'", "''") + "',@POSTID=" + postid)
     } catch (error) {
         //TODO: 2 logrr
-        return new Promise.resolve([{ "OK": false, "MSG": error }])
+        console.log(error);
+
+        // return new Promise.resolve([{ "OK": false, "MSG": error }])
     }
 }
 
