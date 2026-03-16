@@ -171,7 +171,7 @@ const PostWriter = () => {
                     />
 
                     <View style={styles.uploadBox}>
-                        <Text style={styles.title}>Upload a file</Text>
+                        <ThemedText style={styles.title}>Upload a file</ThemedText>
                         <View style={styles.optionsRow}>
                             <TouchableOpacity style={styles.option} onPress={() => { file_pick() }}>
                                 <Text style={styles.icon}>📄</Text>
@@ -206,7 +206,7 @@ const PostWriter = () => {
 
                         }
                     </TouchableOpacity>
-                       
+
 
                 </ThemedView>
             )}

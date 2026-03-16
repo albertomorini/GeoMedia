@@ -71,7 +71,8 @@ export default function ProfileEditor() {
         }).then(async res => {
             let newinfo = res[0];
             newinfo.AUTH = 1
-            // await SecureStore.setItemAsync("user", JSON.stringify(newinfo));
+            await SecureStore.setItemAsync("user", JSON.stringify(newinfo));
+            ctx?.User?.setUser(newinfo)
             // getProfilePic()
         })
     }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { MyContext } from '../../_layout';
 
@@ -9,7 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 
 export default function Profile() {
 
@@ -39,9 +39,13 @@ export default function Profile() {
   }
 
 
-  useEffect(() => {
-    getProfilePic()
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+
+      getProfilePic()
+
+    }, [])
+  );
 
   return (
     <Box p="md">
