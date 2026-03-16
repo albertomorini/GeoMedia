@@ -11,8 +11,6 @@ import * as SecureStore from 'expo-secure-store';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
-import { KeyboardAvoidingView, Platform } from 'react-native';
-import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
 
 
 

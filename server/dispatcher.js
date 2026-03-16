@@ -17,9 +17,6 @@ const PATH_UPLOADS = config.FOLDERS.UPLOADS
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
-    console.log(
-        "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'"
-    );
 
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
@@ -29,10 +26,6 @@ function generic_query(path, body) {
 
 function merge_post(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
-    console.log(
-
-    );
-
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 
@@ -48,8 +41,8 @@ async function hpmedia_merge_folder(postid, attachments) {
         attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
             var buffer = Buffer.from(f.base64, 'base64', f.base64.length) //REMOVE BASE64
             const filepath = path.join(post_folder, f.filename);
-            console.log("Storing file: ",filepath);
-            
+            console.log("Storing file: ", filepath);
+
             fs.writeFileSync(filepath, buffer, { encoding: 'utf8' });
             files_to_keep.push(filepath)
         })

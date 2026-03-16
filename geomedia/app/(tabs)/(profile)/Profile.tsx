@@ -71,7 +71,7 @@ export default function Profile() {
         </View>
 
         <Image
-          source={{ uri: ProfilePic }}
+          source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
           style={{
             width: 80,
             height: 80,
