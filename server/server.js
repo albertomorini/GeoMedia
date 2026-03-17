@@ -46,28 +46,45 @@ async function dispatchReq(res, path, body, contentType) {
     console.log(path, body);
 
     let dummy_res = Promise.resolve(null);
+    let query_results = null;
     try {
         switch (path) {
             case "/checkConnection": // uitility, client on startup send this request, to make sure its configuratin is correct. If server responds the configuration is right
                 sendResponse(res, 200, { "HELLO": "From server!" })
                 break;
             case "/auth_login":
-            case "/auth_signin": //TODO: extract to incapsulate mail sending
             case "/auth_password_forgot":
             case "/auth_password_reset":
             case "/profile_editinfo":
             case "/profile_getpfp":
+            case "/auth_check_otp":
                 dummy_res = dispatcher.generic_query(path, body)
+                break;
+            case "/auth_signin": //TODO: extract to incapsulate mail sending
+                query_results = await dispatcher.generic_query(path, body)
+                console.log(query_results);
+
+                query_results = query_results[0]
+                console.log(query_results);
+
+                if (query_results.AUTH == 2) {
+                    //TODO: send via email
+                    delete query_results.OTP //
+                    sendResponse(res, 200, query_results)
+                } else {
+                    sendResponse(res, 401, query_results)
+                }
+                dummy_res = null;
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
 
                 console.log(">>", body);
 
-                let query_results = await dispatcher.merge_post(body.postdata)
-                if(!query_results[0].OK){
+                query_results = await dispatcher.merge_post(body.postdata)
+                if (!query_results[0].OK) {
                     //TODO return error
-                    sendResponse(res,500,{"OK":false,"MSG":query_results[1].MSG})
+                    sendResponse(res, 500, { "OK": false, "MSG": query_results[1].MSG })
                     return null
                 }
                 let post_id = query_results[0].ID

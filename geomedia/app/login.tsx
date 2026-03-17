@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Text, PasswordInput, Button, ControlledInput, Stack, Box } from "re-native-ui";
+import { Text, PasswordInput, Button, ControlledInput, Stack, Box, OTPInput } from "re-native-ui";
 
 import { useForm } from "react-hook-form"; /// npm install react-hook-form
 import { style } from '@/components/globalstyle';
@@ -11,6 +11,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
+import { ThemedInput } from '@/components/themed-input';
 
 
 
@@ -21,10 +22,13 @@ export default function LoginScreen(props) {
         defaultValues: { email: "" }
     });
     const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState(null); //TODO: the check if already exists
     const [password, setPassword] = useState("");
     const [passwordRep, setPasswordRep] = useState("");
     const [errorPassword, seterrorPassword] = useState("");
-    const [pin, setPin] = useState("");
+
+    ///
+    const [OTP, setOTP] = useState(null);
 
     //////////////////////////////////////////////////////////////////
 
@@ -62,8 +66,26 @@ export default function LoginScreen(props) {
             }, 1200)
         } else {
             //TODO: do request
-            doRequest("signup")
+            doRequest("auth_signin", {
+                EMAIL: data?.email,
+                USERNAME: username,
+                PASSWORD: password
+            }).then(res => {
+                console.log(res);
+                setOTP("")
+            })
         }
+    }
+
+    function check_otp() {
+        doRequest("auth_check_otp", {
+            USERNAME: username,
+            OTP: OTP
+        }).then(async res => {
+            console.log(res);
+            await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
+            check_cache_login()
+        })
     }
 
     function switchMode() {
@@ -84,22 +106,16 @@ export default function LoginScreen(props) {
 
 
     async function check_cache_login() {
-
         let cache_user = await SecureStore.getItemAsync("user");
-        console.log(">", cache_user);
-
         if (cache_user != null) {
             try {
                 let j = JSON.parse(cache_user)
-                console.log(ctx?.User.User);
                 ctx?.User?.setUser(j)
-                // props?.setuser(j)
             } catch (error) {
                 console.error(error);
 
             }
         }
-
     }
 
     useEffect(() => {
@@ -142,58 +158,71 @@ export default function LoginScreen(props) {
                                 <Button onPress={switchMode}>{t?.login.buttonOther}</Button>
                             </Stack>
                             :
-                            <Stack spacing={12}>
-                                <ControlledInput
-                                    style={{ width: "100%" }}
-                                    name="email"
-                                    label="Email"
-                                    placeholder={t.login.placeholderEmail}
-                                    control={control}
-                                    rules={{ required: "Email is required" }}
-                                />
-                                <PasswordInput
-                                    label="Password"
-                                    style={{ width: "100%" }}
-                                    onChangeText={(val) => { setPassword(val) }}
-                                    error={errorPassword}
-                                    placeholder="Enter your password"
-                                />
-                                <PasswordInput
-                                    label="Repeat password"
-                                    style={{ width: "100%" }}
-                                    onChangeText={(val) => { setPasswordRep(val) }}
-                                    error={errorPassword}
-                                    placeholder="Enter your password"
-                                />
-                                <Button onPress={handleSubmit(onSubmit)}>{t?.signup.buttonConfirm}</Button>
-                                <Button onPress={switchMode} style={style.success}> {t?.signup.buttonOther}</Button>
+                            <>
+                                {
+                                    (OTP != null) ?
+                                        <>
+                                            <OTPInput
+                                                label="Check your inbox for OTP"
+                                                value={OTP}
+                                                onChangeText={setOTP}
+                                                length={6}
+                                            />
+                                            <Button onPress={() => check_otp()}>
+                                                check otp
+                                            </Button>
+                                        </>
+                                        :
+                                        <>
+                                            <ControlledInput
+                                                style={{ width: "100%" }}
+                                                name="email"
+                                                label="Email"
+                                                placeholder={t.login.placeholderEmail}
+                                                control={control}
+                                                rules={{ required: "Email is required" }}
+                                            />
 
-                            </Stack>
+                                            <ThemedText>Username</ThemedText>
+
+                                            <ThemedInput
+                                                type="outlined"
+                                                placeholder="Username"
+                                                onChangeText={(text) => setUsername(text)}
+                                            />
+
+                                            <PasswordInput
+                                                label="Password"
+                                                style={{ width: "100%" }}
+                                                onChangeText={(val) => setPassword(val)}
+                                                error={errorPassword}
+                                                placeholder="Enter your password"
+                                            />
+
+                                            <PasswordInput
+                                                label="Repeat password"
+                                                style={{ width: "100%" }}
+                                                onChangeText={(val) => setPasswordRep(val)}
+                                                error={errorPassword}
+                                                placeholder="Enter your password"
+                                            />
+
+                                            <Button onPress={handleSubmit(onSubmit)}>
+                                                {t?.signup.buttonConfirm}
+                                            </Button>
+
+                                            <Button onPress={switchMode} style={style.success}>
+                                                {t?.signup.buttonOther}
+                                            </Button>
+                                        </>
+                                }
+                            </>
                     }
 
                 </Box>
             </Stack>
 
-            {/* <Box p="lg">
-                    <Text variant="body">Box with medium padding from theme</Text>
-                </Box>
-                <Box
-                    bg="secondary"
-                    style={{
-                        borderRadius: 12,
-                        shadowColor: "#000",
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.1,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        paddingLeft: 50,
-                        paddingRight: 50
-                    }}
-                >
 
-                    <OTPInput label="5-Digit PIN" value={pin} onChangeText={setPin} length={5} />
-
-                </Box> */}
 
         </ThemedView>
 
