@@ -64,15 +64,13 @@ async function hpmedia_merge_folder(postid, attachments) {
     }
 }
 
-
-async function auth_signin(procedure, body) {
+async function auth_signin(procedure, body, ip, headers) {
     try {
         query_results = await generic_query(procedure, body)
         query_results = query_results[0]
         if (query_results.AUTH == 2) {
             let x = mailer.send_email_otp(body?.EMAIL, { "USERNAME": body?.USERNAME, "OTP": query_results.OTP })
-            console.log(x); //TODO: logs on file/db
-
+            //TODO: logs on file/db
             delete query_results.OTP
         }
         return query_results

@@ -61,8 +61,8 @@ async function dispatchReq(res, path, body, contentType) {
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             case "/auth_signin": //TODO: extract to incapsulate mail sending
-                
-                query_results = await dispatcher.auth_signin(path,body)
+
+                query_results = await dispatcher.auth_signin(path, body)
                 if (query_results.AUTH == 2) {
                     delete query_results.OTP //
                     sendResponse(res, 200, query_results)
@@ -73,8 +73,6 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-
-                console.log(">>", body);
 
                 query_results = await dispatcher.merge_post(body.postdata)
                 if (!query_results[0].OK) {
@@ -127,6 +125,9 @@ http.createServer((req, res) => {
         let json_body = {}
         try {
             json_body = JSON.parse(body)
+            /// always include, let the stored procedure decide if utilize them or not
+            json_body.IP = req.socket.remoteAddress
+            json_body.HEADERS = headers
         } catch (error) { }
 
         if (authHeader == null || authHeader == undefined || !checkAuth(authHeader)) {
