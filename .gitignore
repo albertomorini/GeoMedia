@@ -55,3 +55,6 @@ AndroidManifest.xml
 geomedia/android/app/release/app-release.apk
 
 server/_UPLOADS
+
+server/config.json
+server/config.json

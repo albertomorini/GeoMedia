@@ -10,7 +10,6 @@ import { ThemedView } from '@/components/themed-view';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 
 
-
 interface UserContextType {
   User: {
     value: string | null; // could be user id, username, etc.
@@ -31,33 +30,33 @@ export default function RootLayout() {
   }, [User])
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // adjust if you have a top header
-    >
-      <ScrollView contentContainerStyle={{ flex: 1 }}
-        keyboardShouldPersistTaps="handled">
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 
-          <>
-            <MyContext.Provider
-              value={{
-                User: { User, setUser },
-              }}
-            >
-              {User != null ?
-                <Stack>
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                </Stack>
+    <ScrollView contentContainerStyle={{ flex: 1 }} keyboardShouldPersistTaps="never">
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemedView style={{
+          width: "100%", height: "100%", flex: 1
+        }}>
+          <MyContext.Provider
+            value={{
+              User: { User, setUser },
+            }}
+          >
+            {User != null ?
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
 
-                :
+              :
+              <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "padding"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // adjust if you have a top header
+              >
                 <LoginScreen setuser={(user: Object) => { setUser(user) }} />
-              }
-            </MyContext.Provider>
-          </>
-          <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
-        </ThemeProvider >
-      </ScrollView>
-    </ KeyboardAvoidingView >
+              </ KeyboardAvoidingView >
+            }
+          </MyContext.Provider>
+        </ThemedView>
+        <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
+      </ThemeProvider>
+    </ScrollView>
   );
 }

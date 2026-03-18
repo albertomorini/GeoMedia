@@ -1,15 +1,28 @@
 // app/(map)/_layout.tsx
+import { HapticTab } from '@/components/haptic-tab';
+import { t } from '@/components/i18n';
+import { Colors } from '@/constants/theme';
 import { Stack } from 'expo-router';
+import { useColorScheme } from 'react-native';
 
 export default function MapLayout() {
+
+    const colorScheme = useColorScheme();
+
     return (
         <Stack
             screenOptions={{
-                headerShown: false, // default no header; override per screen below
+                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+                headerShown: true,
+                tabBarButton: HapticTab,
+                gestureEnabled: true
             }}
         >
             <Stack.Screen
                 name="index"
+                options={{
+                    title: t?.map
+                }}
             />
 
             <Stack.Screen
@@ -17,8 +30,6 @@ export default function MapLayout() {
                 options={{
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
                     title: 'New Post',
-                    headerStyle: { backgroundColor: '#fff' },
-                    headerTintColor: '#000',
                     animation: 'slide_from_right', // optional
                 }}
             />

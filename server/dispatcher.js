@@ -5,6 +5,7 @@ const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))
 const path = require("path");
 
+const mailer = require("./mailer")
 const PATH_UPLOADS = config.FOLDERS.UPLOADS
 
 ////////////////////////////////////////////
@@ -64,6 +65,24 @@ async function hpmedia_merge_folder(postid, attachments) {
 }
 
 
+async function auth_signin(procedure, body) {
+    try {
+        query_results = await generic_query(procedure, body)
+        query_results = query_results[0]
+        if (query_results.AUTH == 2) {
+            let x = mailer.send_email_otp(body?.EMAIL, { "USERNAME": body?.USERNAME, "OTP": query_results.OTP })
+            console.log(x); //TODO: logs on file/db
+
+            delete query_results.OTP
+        }
+        return query_results
+
+    } catch (error) {
+        return { "error": error, "AUTH": 0 }
+    }
+}
+
+
 function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
 
     var dLat = (post_latitude - curr_latitude) * Math.PI / 180;
@@ -109,6 +128,8 @@ module.exports = {
     generic_query,
     ////////////////
     merge_post,
+    ////////////////
+    auth_signin,
     ////////////////
     getPosts,
     deletePost,

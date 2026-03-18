@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Image, Linking, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { MyContext } from '../../_layout';
 
 import { Text, Box } from "re-native-ui";
@@ -10,8 +10,11 @@ import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
 import { router, useFocusEffect } from 'expo-router';
+import { ThemedView } from '@/components/themed-view';
 
 export default function Profile() {
+
+  const my_email = 'albmor.dev@gmail.com'
 
   const ctx = useContext(MyContext);
   const user = ctx?.User?.User;
@@ -37,6 +40,19 @@ export default function Profile() {
     ctx?.User.setUser(null);
     router.replace("/login");
   }
+
+  const emailMe = () => {
+    const url = `mailto:${my_email}?subject=${encodeURIComponent("GEOMEDIA")}`;
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (!supported) {
+          console.warn("Can't handle mailto link:", url);
+        } else {
+          return Linking.openURL(url);
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
 
 
   useFocusEffect(
@@ -99,16 +115,19 @@ export default function Profile() {
         onPress={() => logout()}
         style={[style?.buttons?.full_screen, style?.colors?.geomedia_red]}
       >
-        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
           Log out
-        </Text>
+        </ThemedText>
       </TouchableOpacity>
 
-      <Text variant="heading">Your post</Text>
+      {/* <ThemedText variant="heading">Your post</ThemedText>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
-      </ScrollView>
+      </ScrollView> */}
 
+      <ThemedView>
+        <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
+      </ThemedView>
     </Box>
   );
 }

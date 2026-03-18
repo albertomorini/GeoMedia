@@ -6,7 +6,7 @@ import { ThemedInput } from "@/components/themed-input";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useContext, useEffect, useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -99,55 +99,57 @@ export default function ProfileEditor() {
     }, []);
 
     return (
-        <ThemedView style={style.container}>
+        <ThemedView style={{ height: "100%" }}>
+            <ThemedView style={style.container}>
 
-            <View style={{ alignItems: 'center', marginVertical: 20 }} >
-                <Pressable onPress={() => { upload_picture() }}>
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
-                            style={{
-                                width: 120,
-                                height: 120,
-                                borderRadius: 40,
-                            }}
+                <ThemedView style={{ alignItems: 'center', paddingVertical: 20 }} >
+                    <Pressable onPress={() => { upload_picture() }}>
+                        <ThemedView style={styles.imageContainer}>
+                            <Image
+                                source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
+                                style={{
+                                    width: 120,
+                                    height: 120,
+                                    borderRadius: 40,
+                                }}
 
-                        />
+                            />
 
-                        <View style={styles.textBackground}>
-                            <ThemedText style={styles.overlayText}>Tap to edit picture</ThemedText>
-                        </View>
-                    </View>
-                </Pressable>
-            </View>
+                            <ThemedView style={styles.textBackground}>
+                                <ThemedText style={styles.overlayText}>Tap to edit picture</ThemedText>
+                            </ThemedView>
+                        </ThemedView>
+                    </Pressable>
+                </ThemedView>
 
-            <ThemedText>Username</ThemedText>
-            <ThemedInput type="outlined" value={userInfo?.USERNAME} onChangeText={(text) => {
-                setUserInfo(prev => ({
-                    ...prev,
-                    USERNAME: text
-                }))
-            }} />
-            <ThemedText>Name</ThemedText>
-            <ThemedInput type="outlined" value={userInfo?.NAME} onChangeText={(text) => {
-                setUserInfo(prev => ({
-                    ...prev,
-                    NAME: text
-                }))
-            }} />
-            <ThemedText>Surname</ThemedText>
-            <ThemedInput type="outlined" value={userInfo?.SURNAME} onChangeText={(text) => {
-                setUserInfo(prev => ({
-                    ...prev,
-                    SURNAME: text
-                }))
-            }} />
-            {/* //TODO: password? */}
+                <ThemedText>Username</ThemedText>
+                <ThemedInput type="outlined" value={userInfo?.USERNAME} onChangeText={(text) => {
+                    setUserInfo(prev => ({
+                        ...prev,
+                        USERNAME: text
+                    }))
+                }} />
+                <ThemedText>Name</ThemedText>
+                <ThemedInput type="outlined" value={userInfo?.NAME} onChangeText={(text) => {
+                    setUserInfo(prev => ({
+                        ...prev,
+                        NAME: text
+                    }))
+                }} />
+                <ThemedText>Surname</ThemedText>
+                <ThemedInput type="outlined" value={userInfo?.SURNAME} onChangeText={(text) => {
+                    setUserInfo(prev => ({
+                        ...prev,
+                        SURNAME: text
+                    }))
+                }} />
+                {/* //TODO: password? */}
 
-            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
-                <ThemedText>Save</ThemedText>
-            </TouchableOpacity>
+                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
+                    <ThemedText>Save</ThemedText>
+                </TouchableOpacity>
 
+            </ThemedView>
         </ThemedView>
     )
 }

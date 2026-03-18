@@ -61,14 +61,9 @@ async function dispatchReq(res, path, body, contentType) {
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             case "/auth_signin": //TODO: extract to incapsulate mail sending
-                query_results = await dispatcher.generic_query(path, body)
-                console.log(query_results);
-
-                query_results = query_results[0]
-                console.log(query_results);
-
+                
+                query_results = await dispatcher.auth_signin(path,body)
                 if (query_results.AUTH == 2) {
-                    //TODO: send via email
                     delete query_results.OTP //
                     sendResponse(res, 200, query_results)
                 } else {

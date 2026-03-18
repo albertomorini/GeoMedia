@@ -3,6 +3,7 @@ import { Alert, Image, Modal, PermissionsAndroid, Platform, Pressable, StatusBar
 export const style = StyleSheet.create({
     container: {
         padding: 10,
+        width: "100%",
     }
     , containerContent: {
         paddingTop: 50
