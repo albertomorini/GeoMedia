@@ -1,18 +1,17 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, useColorScheme } from 'react-native';
+import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
 
-const MapViewer = () => {
+const MapViewer = forwardRef((props, ref) => { //BUG: not working
 
     const mapRef = useRef(null);
     const ctx = useContext(MyContext)
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
 
     const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
 
@@ -59,6 +58,7 @@ const MapViewer = () => {
             position => {
                 const { latitude, longitude } = position.coords;
                 setUserPosition({ lat: latitude, lon: longitude });
+                console.log(latitude, longitude);
 
                 // set map with center on user location 
                 mapRef.current?.animateToRegion({
@@ -83,11 +83,17 @@ const MapViewer = () => {
 
     }
 
+    // useImperativeHandle(ref, () => ({
+    //     proc: async (code) => {
+    //     }
+    // }))
+
     /////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////
 
     useEffect(() => {
+
         getLocation()
     }, [])
 
@@ -131,29 +137,35 @@ const MapViewer = () => {
                             showsBuildings={true}
                             showsMyLocationButton={true}
                         >
+                            {(props?.isPicking) ?
+                                <>
+                                    <TouchableOpacity style={styles.fab}>
+                                        <ThemedText>Confirm pick</ThemedText>
+                                    </TouchableOpacity>
+                                    {UserPosition?.lat !== 0 && UserPosition?.lon !== 0 && (
+                                        <Marker
+                                            key="picker"
+                                            coordinate={{
+                                                latitude: 45.9582311,
+                                                longitude: 12.3
+                                            }}
+                                            pinColor="#da5353"
+                                            title="Post location"
+                                        />
+                                    )}
+                                </>
+                                :
+                                null //for now, in reading to render all the post an filters etc (maybe an opportuned componet like 'MarkersRender')
 
-                            <Marker
-                                key={"second"}
-                                coordinate={{
-                                    latitude: 41.53,
-                                    longitude: 20.12
-                                }}
-                                pinColor="#448d41" // 👈 change color here
-                                title={"Second one"}
-                                onPress={() =>
-                                    setSelectedMarker({
-                                        title: 'Second one',
-                                        description: 'This is a custom modal example',
-                                    })
-                                }
-                            />
+                            }
+
                         </MapView>
 
                     </ThemedView>
             }
         </>
     )
-}
+})
 
 export default MapViewer
 

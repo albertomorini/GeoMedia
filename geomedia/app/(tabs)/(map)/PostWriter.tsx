@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, ScrollViewComponent, ScrollViewBase } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
@@ -17,6 +17,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
+import MapViewer from '@/app/mycomponents/MapViewer';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -206,6 +207,10 @@ const PostWriter = () => {
 
                         }
                     </TouchableOpacity>
+
+                    <ThemedView style={{ width: "100%", height: "50%" }}>
+                        <MapViewer isPicking={true}/>
+                    </ThemedView>
 
 
                 </ThemedView>
