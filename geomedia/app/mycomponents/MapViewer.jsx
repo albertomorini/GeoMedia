@@ -7,6 +7,7 @@ import { MyContext } from '../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { Button } from 're-native-ui';
 
 const MapViewer = forwardRef((props, ref) => { //BUG: not working
 
@@ -93,7 +94,6 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
     /////////////////////////////////////////////////////////////
 
     useEffect(() => {
-
         getLocation()
     }, [])
 
@@ -114,8 +114,8 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
                             showsUserLocation={true}
                             followsUserLocation={true}
                             initialRegion={{
-                                latitude: UserPosition.lat == 0 ? 51 : UserPosition.lat,
-                                longitude: UserPosition.lon == 0 ? 30 : UserPosition.lon,
+                                latitude: UserPosition.lat,
+                                longitude: UserPosition.lon,
                                 latitudeDelta: 0.1,
                                 longitudeDelta: 0.1,
                             }}
@@ -125,8 +125,8 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
                             }}
                             camera={{
                                 center: {
-                                    latitude: UserPosition.lat === 0 ? 51 : UserPosition.lat,
-                                    longitude: UserPosition.lon === 0 ? 30 : UserPosition.lon,
+                                    latitude: UserPosition.lat,
+                                    longitude: UserPosition.lon,
                                 },
                                 pitch: 30, // <-- default pitch in degrees
                                 heading: 0, // direction the camera faces (0 = north)
@@ -137,30 +137,28 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
                             showsBuildings={true}
                             showsMyLocationButton={true}
                         >
-                            {(props?.isPicking) ?
-                                <>
-                                    <TouchableOpacity style={styles.fab}>
-                                        <ThemedText>Confirm pick</ThemedText>
-                                    </TouchableOpacity>
-                                    {UserPosition?.lat !== 0 && UserPosition?.lon !== 0 && (
-                                        <Marker
-                                            key="picker"
-                                            coordinate={{
-                                                latitude: 45.9582311,
-                                                longitude: 12.3
-                                            }}
-                                            pinColor="#da5353"
-                                            title="Post location"
-                                        />
-                                    )}
-                                </>
-                                :
-                                null //for now, in reading to render all the post an filters etc (maybe an opportuned componet like 'MarkersRender')
-
+                            {props?.isPicking &&
+                                <Marker
+                                    key="picker"
+                                    coordinate={{
+                                        latitude: UserPosition.lat + 0.001,
+                                        longitude: UserPosition.lon + 0.001
+                                    }}
+                                    draggable
+                                    onDragEnd={async (e) => {
+                                        const { latitude, longitude } = e.nativeEvent.coordinate;
+                                        setSelectedMarker({ latitude, longitude });
+                                    }}
+                                    pinColor="#da5353"
+                                    title="Post location (drag me)"
+                                />
                             }
-
                         </MapView>
-
+                        <Button style={styles.fab} onPress={() => {
+                            props?.returnLocationChoosen(selectedMarker)
+                        }}>
+                            <ThemedText>Pick</ThemedText>
+                        </Button>
                     </ThemedView>
             }
         </>

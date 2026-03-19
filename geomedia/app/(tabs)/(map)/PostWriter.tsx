@@ -209,7 +209,10 @@ const PostWriter = () => {
                     </TouchableOpacity>
 
                     <ThemedView style={{ width: "100%", height: "50%" }}>
-                        <MapViewer isPicking={true}/>
+                        <MapViewer isPicking={true} returnLocationChoosen={(coords: Object) => {
+                            //TODO: set the coordinate into the post object`
+                            console.log(">>", coords?.latitude)
+                        }} />
                     </ThemedView>
 
 
