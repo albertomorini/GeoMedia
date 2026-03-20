@@ -2,6 +2,7 @@
 export const it = {
     map: "Mappa",
     account: "Profilo",
+    categories:"Categorie",
     login: {
         placeholderEmail: "Inserisci la tua email",
         placeholderPassord: "Inserisci la password",
@@ -24,6 +25,7 @@ export const it = {
 export const en = {
     map: "Map",
     account: "Account",
+    categories: "Categories",
     login: {
         placeholderEmail: "Enter you email",
         placeholderPassord: "Enter you password",

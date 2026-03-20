@@ -9,14 +9,15 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { Button } from 're-native-ui';
 
-const MapViewer = forwardRef((props, ref) => { //BUG: not working
+const MapViewer = forwardRef((props, ref) => {
 
     const mapRef = useRef(null);
     const ctx = useContext(MyContext)
+    /////////////////////////////////////////////////////////////
 
     const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
-
     const [selectedMarker, setSelectedMarker] = useState(null);
+
 
     async function requestLocationPermission() {
         if (Platform.OS === 'android') {
@@ -84,12 +85,6 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
 
     }
 
-    // useImperativeHandle(ref, () => ({
-    //     proc: async (code) => {
-    //     }
-    // }))
-
-    /////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////
 
@@ -100,7 +95,7 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
     return (
         <>
             {
-                UserPosition?.lat == 0 ? //while loading current location
+                UserPosition?.lat == 0 ? //render a spinner while loading current location
                     <ThemedView style={styles.container}>
                         <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
                     </ThemedView>
@@ -109,7 +104,7 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
 
                         <MapView
                             ref={mapRef}
-                            // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                            // provider={PROVIDER_GOOGLE} // LATER: to check with google for design
                             style={styles.map}
                             showsUserLocation={true}
                             followsUserLocation={true}
@@ -128,9 +123,8 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
                                     latitude: UserPosition.lat,
                                     longitude: UserPosition.lon,
                                 },
-                                pitch: 30, // <-- default pitch in degrees
+                                pitch: 30, // like the angle
                                 heading: 0, // direction the camera faces (0 = north)
-                                // // altitude: 1000, // controls zoom
                                 zoom: 13.7, // optional, overrides altitude
                             }}
                             pitchEnabled={true}
@@ -154,11 +148,14 @@ const MapViewer = forwardRef((props, ref) => { //BUG: not working
                                 />
                             }
                         </MapView>
-                        <Button style={styles.fab} onPress={() => {
-                            props?.returnLocationChoosen(selectedMarker)
-                        }}>
-                            <ThemedText>Pick</ThemedText>
-                        </Button>
+                        {
+                            props?.isPicking &&
+                            <Button style={styles.fab} onPress={() => {
+                                props?.returnLocationChoosen(selectedMarker)
+                            }}>
+                                <ThemedText>Pick</ThemedText>
+                            </Button>
+                        }
                     </ThemedView>
             }
         </>

@@ -1,101 +1,49 @@
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, ScrollViewComponent, ScrollViewBase } from 'react-native';
+import { TouchableOpacity, Alert, Switch } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import Geolocation from '@react-native-community/geolocation';
 
-import CameraCapture from "../../mycomponents/cameraCapture";
 
 
 /// FILE SYSTEMS
 
-import RNFS from 'react-native-fs';
-import Share from 'react-native-share';
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
 import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
-import MapViewer from '@/app/mycomponents/MapViewer';
+import FileWriter from '@/app/mycomponents/file/FileWriter';
+import ExclusivityPicking from '@/app/mycomponents/ExclusivityPicking';
+import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 const PostWriter = () => {
 
     const ctx = useContext(MyContext)
+    const [fullScreenCamera, setFullScreenCamera] = useState(false)
+
+
+    /////////////////////////////////////////////////////////////
     const [postData, setPostData] = useState({
         ID: null,
         TITLE: null,
         COMMENT: null,
-        AUTHOR_ID: ctx?.User?.User?.UID, //TODO: context
+        AUTHOR_ID: ctx?.User?.User?.UID
     })
 
-    const [currLocation, setCurrLocation] = useState({
+    const [currLocation, setCurrLocation] = useState({ // for posting in current location
         lat: null,
         lon: null
     })
 
-    const [showCamera, setShowCamera] = useState(false);   // camera control
-    const [filesAttached, setFilesAttached] = useState([]); //array for multiple?
+    const [exclusivity, setExclusivity] = useState(false);
 
 
-    const file_share = async (base64Data: any, fileName: string, fileType: string) => {
-        try {
-            // Define path in cache directory
-            const path = `${RNFS.CachesDirectoryPath}/${fileName}.${fileType}`;
-
-            // Write the file
-            await RNFS.writeFile(path, base64Data, 'base64');
-            console.log('File written to:', path);
-
-            // Open with Share / Other apps
-            await Share.open({
-                url: `file://${path}`,
-                type: `${fileType === 'pdf' ? 'application/pdf' : 'image/*'}`, // adjust MIME type
-            });
-
-        } catch (error) {
-            console.log('Error opening file:', error);
-        }
-    };
+    //////////////////////////////////////////////////////////////////////
 
 
-    async function file_pick() {
-        try {
-            const result = await DocumentPicker.getDocumentAsync({
-                type: "*/*",
-                multiple: true,
-                copyToCacheDirectory: true,
-            });
-
-            if (result.canceled) return;
-
-            let files = []
-            for (const asset of result.assets) {
-                const { name, uri } = asset; //filename and uri path
-
-                //BASE64 computing
-                const file = new FileSystem.File(uri); //load the file
-                const base64 = await file.base64();
-
-                files.push({
-                    filename: name,
-                    updated: true,
-                    base64: base64
-                })
-            }
-
-            setFilesAttached(prev => [...prev, ...files]);
-
-        } catch (error) {
-            console.error("Error picking or reading file:", error);
-            Alert.alert("Error reading files", error)
-        }
-    }
-
-
-    async function savePost() {
+    async function save_post() {
 
 
         let dummy_body = postData
@@ -118,159 +66,101 @@ const PostWriter = () => {
         })
     }
 
-    useEffect(() => {
+    function load_current_location() {
         Geolocation.getCurrentPosition(info => {
-            console.log(info?.coords?.latitude,
-                info?.coords?.longitude)
+
             setCurrLocation({
                 lat: info?.coords?.latitude,
                 lon: info?.coords?.longitude
             })
         });
+    }
+
+    useEffect(() => {
+        load_current_location()
     }, [])
 
+
+
+
+    // {/* {
+    //                     filesAttached?.map(f => (
+    //                         <ThemedText key={f?.filename}>
+    //                             {f?.filename}
+    //                         </ThemedText>
+    //                     ))
+    //                 } */}
+
     return (
-        <>
+        <ThemedView style={style.container, {
+            flex: 1,
+            padding: 20,
+            overflow: "visible",
+        }}>
 
-            {showCamera ? (
-                <CameraCapture
-                    storePhoto={(b64) => {
-                        let files = [{
-                            filename: Date.now() + '.jpg',
-                            updated: true,
-                            base64: b64
-                        }]
-                        setFilesAttached(prev => [...prev, ...files]);
-                        setShowCamera(false);
-                    }}
-                    onClose={() => setShowCamera(false)}
-                />
-            ) : (
-                // Wrap form content in SafeAreaView + flex:1 to respect insets without pushing off-screen
+            <ThemedText style={style.label}>Category</ThemedText>
+            {/* //TODO: category picker */}
 
-                <ThemedView style={style.container}>
+            <ThemedText style={style.label}>Title: </ThemedText>
+            <ThemedInput placeholder="Title" type="outlined" onChangeText={(text) => {
+                setPostData(prev => ({
+                    ...prev,
+                    TITLE: text
+                }));
+            }} />
+            <ThemedText style={style.label}>Comment:</ThemedText>
+            <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..'
+                onChangeText={(text) => {
+                    setPostData(prev => ({
+                        ...prev,
+                        COMMENT: text
+                    }));
+                }}
+            />
 
+            <FileWriter fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)} />
 
-                    <ThemedText style={style.label}>Category</ThemedText>
-                    {/* //TODO: category picker */}
-
-                    <ThemedText style={style.label}>Title: </ThemedText>
-                    <ThemedInput placeholder="Title" type="outlined" onChangeText={(text) => {
-                        setPostData(prev => ({
-                            ...prev,
-                            TITLE: text
-                        }));
-                    }} />
-                    <ThemedText style={style.label}>Comment:</ThemedText>
-                    <ThemedInput multiline={true} type="outlined" placeholder='Add a comment..'
-                        onChangeText={(text) => {
-                            setPostData(prev => ({
-                                ...prev,
-                                COMMENT: text
-                            }));
-                        }}
-                    />
-
-                    <View style={styles.uploadBox}>
-                        <ThemedText style={styles.title}>Upload a file</ThemedText>
-                        <View style={styles.optionsRow}>
-                            <TouchableOpacity style={styles.option} onPress={() => { file_pick() }}>
-                                <Text style={styles.icon}>📄</Text>
-                                <Text style={styles.label}>Pick a file</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={styles.option}
-                                onPress={() => setShowCamera(true)}
-                            >
-                                <Text style={styles.icon}>📷</Text>
-                                <Text style={styles.label}>Take a picture</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    {
-                        filesAttached?.map(f => (
-                            <ThemedText key={f?.filename}>
-                                {f?.filename}
-                            </ThemedText>
-                        ))
-                    }
-
-
-                    <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => { savePost() }}>
-                        {
-                            postData?.ID == null ?
-                                <ThemedText>Create</ThemedText>
-                                :
-                                <ThemedText>Update</ThemedText>
-
-                        }
-                    </TouchableOpacity>
-
-                    <ThemedView style={{ width: "100%", height: "50%" }}>
+            {/* <ThemedView style={{ width: "100%", height: "50%" }}>
                         <MapViewer isPicking={true} returnLocationChoosen={(coords: Object) => {
                             //TODO: set the coordinate into the post object`
                             console.log(">>", coords?.latitude)
-                        }} />
-                    </ThemedView>
+                            }} />
+                            </ThemedView> */}
+
+            <ThemedView style={{
+                flexDirection: 'row',    // Put text and switch in a row
+                alignItems: 'center',
+                margin: 20,
+                width: "100%"
+            }}>
+                <ThemedText>Exclusivity</ThemedText>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={exclusivity ? "#78f54b" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={() => { setExclusivity(!exclusivity) }}
+                    value={exclusivity}
+                />
+            </ThemedView>
+
+            {exclusivity &&
+                <ExclusivityPicking />
+            }
 
 
-                </ThemedView>
-            )}
+            {fullScreenCamera ? null :
 
-        </>
+                <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => { save_post() }}>
+                    {
+                        postData?.ID == null ?
+                            <ThemedText>Create</ThemedText>
+                            :
+                            <ThemedText>Update</ThemedText>
+
+                    }
+                </TouchableOpacity>
+            }
+        </ThemedView>
     );
 };
 export default PostWriter;
-
-const styles = StyleSheet.create({
-    modalContent: {
-        flex: 1,
-        padding: 10
-    },
-    textarea: {
-        width: "100%",
-        borderStyle: "dashed",
-        // backgroundColor: (theme === "dark" ? "#333" : '#fff'),
-        // text: (theme === "dark" ? "#fff" : '#000'),
-        // border: theme === "dark" ? "#555" : '#ccc',
-    },
-    container: {
-        padding: 20,
-    },
-    uploadBox: {
-        borderWidth: 2,
-        borderColor: "#aaa",
-        borderStyle: "dashed",
-        borderRadius: 12,
-        padding: 20,
-        alignItems: "center",
-    },
-    title: {
-        fontSize: 16,
-        marginBottom: 15,
-        color: "#444",
-    },
-    optionsRow: {
-        flexDirection: "row",
-        gap: 20,
-    },
-    option: {
-        alignItems: "center",
-        padding: 12,
-        borderRadius: 10,
-        backgroundColor: "#f5f5f5",
-        minWidth: 110,
-    },
-    icon: {
-        fontSize: 26,
-        marginBottom: 6,
-    },
-    label: {
-        fontSize: 14,
-        color: "#333",
-    },
-});
-
-

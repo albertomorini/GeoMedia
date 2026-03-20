@@ -33,6 +33,16 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="(categories)"
+        options={{
+          title: t.categories,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="layers-outline" size={28} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="(profile)"
         options={{
           title: t.account,

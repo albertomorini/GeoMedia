@@ -43,7 +43,6 @@ function checkAuth(key) {
  * @returns {Promise} null if already satisfied, otherwise the result set from query execution 
  */
 async function dispatchReq(res, path, body, contentType) {
-    console.log(path, body);
 
     let dummy_res = Promise.resolve(null);
     let query_results = null;
