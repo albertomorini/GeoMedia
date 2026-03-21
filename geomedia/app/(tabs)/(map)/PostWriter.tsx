@@ -12,9 +12,10 @@ import Geolocation from '@react-native-community/geolocation';
 
 import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
-import FileWriter from '@/app/mycomponents/file/FileWriter';
+import FileHandler from '@/app/mycomponents/file/FileHandler';
 import ExclusivityPicking from '@/app/mycomponents/ExclusivityPicking';
 import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
+import { Collapsible } from '@/components/ui/collapsible';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -118,35 +119,30 @@ const PostWriter = () => {
                 }}
             />
 
-            <FileWriter fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)} />
+            <FileHandler fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)} />
 
-            {/* <ThemedView style={{ width: "100%", height: "50%" }}>
-                        <MapViewer isPicking={true} returnLocationChoosen={(coords: Object) => {
-                            //TODO: set the coordinate into the post object`
-                            console.log(">>", coords?.latitude)
-                            }} />
-                            </ThemedView> */}
-
-            <ThemedView style={{
-                flexDirection: 'row',    // Put text and switch in a row
-                alignItems: 'center',
-                margin: 20,
-                width: "100%"
-            }}>
-                <ThemedText>Exclusivity</ThemedText>
-                <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={exclusivity ? "#78f54b" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => { setExclusivity(!exclusivity) }}
-                    value={exclusivity}
-                />
-            </ThemedView>
-
-            {exclusivity &&
-                <ExclusivityPicking />
+            {fullScreenCamera ? null :
+                <>
+                    <ThemedView style={{
+                        flexDirection: 'row',    // Put text and switch in a row
+                        alignItems: 'center',
+                        margin: 20,
+                        width: "100%"
+                    }}>
+                        <ThemedText>Exclusivity</ThemedText>
+                        <Switch
+                            trackColor={{ false: "#767577", true: "#81b0ff" }}
+                            thumbColor={exclusivity ? "#78f54b" : "#f4f3f4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={() => { setExclusivity(!exclusivity) }}
+                            value={exclusivity}
+                        />
+                    </ThemedView>
+                    {exclusivity &&
+                        <ExclusivityPicking />
+                    }
+                </>
             }
-
 
             {fullScreenCamera ? null :
 

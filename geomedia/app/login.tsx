@@ -147,6 +147,7 @@ export default function LoginScreen(props) {
                         {
                             (OTP != null) ?
                                 <>
+                                    <ThemedText>Check your inbox ({email})</ThemedText>
                                     <OTPInput
                                         label="Check your inbox for OTP"
                                         value={OTP}

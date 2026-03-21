@@ -125,9 +125,7 @@ export default function Profile() {
       <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
       </ScrollView> */}
 
-      <ThemedView>
         <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
-      </ThemedView>
     </Box>
   );
 }
