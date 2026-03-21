@@ -4,7 +4,7 @@ import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-nat
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { useState } from "react";
+import { forwardRef, RefObject, useImperativeHandle, useState } from "react";
 
 import CameraCapture from "./cameraCapture";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,7 +14,7 @@ import { Collapsible } from "@/components/ui/collapsible";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
 
-const FileHandler = (props: any) => {
+const FileHandler = forwardRef((props: any, ref: any) => {
     const [showCamera, setShowCamera] = useState(false);   // camera control
 
     const [filesAttached, setFilesAttached] = useState([])
@@ -81,7 +81,7 @@ const FileHandler = (props: any) => {
     function remove_attachment(filename) {
 
         Alert.alert(
-            "Post deletion", 
+            "Post deletion",
             "Are you sure you want to proceed?",
             [
                 {
@@ -104,6 +104,16 @@ const FileHandler = (props: any) => {
         );
 
     }
+    ///////////////////
+
+    useImperativeHandle(ref, () => ({
+        return_files: () => {
+            console.log("HERE");
+
+            return filesAttached
+        },
+    }), [filesAttached]); // re-create handle when value changes (or remove dependency if not needed)
+
 
     return (
         <>
@@ -209,7 +219,7 @@ const FileHandler = (props: any) => {
             )}
         </>
     )
-}
+})
 
 export default FileHandler;
 

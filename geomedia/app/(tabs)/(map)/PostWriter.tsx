@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { TouchableOpacity, Alert, Switch } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
@@ -23,7 +23,7 @@ const PostWriter = () => {
 
     const ctx = useContext(MyContext)
     const [fullScreenCamera, setFullScreenCamera] = useState(false)
-
+    const refFileHandler = useRef()
 
     /////////////////////////////////////////////////////////////
     const [postData, setPostData] = useState({
@@ -47,6 +47,8 @@ const PostWriter = () => {
     async function save_post() {
 
 
+        let files = refFileHandler?.current?.return_files()
+        postData.files = files //TODO: check on backend
         let dummy_body = postData
         dummy_body.LATITUDE = currLocation.lat
         dummy_body.LONGITUDE = currLocation.lon
@@ -119,7 +121,11 @@ const PostWriter = () => {
                 }}
             />
 
-            <FileHandler fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)} />
+            <FileHandler
+                fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)}  //in order to make the camera fullscreen
+                ref={refFileHandler}
+
+            />
 
             {fullScreenCamera ? null :
                 <>
