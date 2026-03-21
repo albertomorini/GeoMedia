@@ -1,7 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { Alert, Modal, Switch, TouchableOpacity } from 'react-native';
 
 import SegmentedControl from '@react-native-community/segmented-control';
 import { ThemedView } from '@/components/themed-view';
@@ -11,15 +10,30 @@ import { Ionicons } from '@expo/vector-icons';
 import RangeTimePicker from './RangeTimePicker';
 import { ThemedInput } from '@/components/themed-input';
 
-export default function ExclusivityPicking() {
+const ExclusivityPicking = forwardRef((props, ref) => {
     const [selectedOptions, setSelectedOptions] = useState(0);
     const segmentsOptions = ['Date & Time', 'Location']
 
+    const refTimeRange = useRef()
     //////////
     const [ModalMapVisibity, setModalMapVisibility] = useState(false)
     const [areaKM, setAreaKM] = useState(null);
     const [isRemote, setIsRemote] = useState()
+    const [coordinateChosen, setCoordinateChosen] = useState(null)
     //////////
+
+    useImperativeHandle(ref, () => ({
+        getExclusivities: () => {
+            let range = refTimeRange?.current?.getRanges()
+            return {
+                area_km: areaKM,
+                coordinate_chosen: coordinateChosen,
+                is_remote: isRemote,
+                date_start: range.start,
+                data_end: range.end
+            }
+        }
+    }), []);
 
     return (
         <ThemedView>
@@ -31,10 +45,11 @@ export default function ExclusivityPicking() {
             {(() => {
                 switch (selectedOptions) {
                     case 0: //datetime
-                        return <RangeTimePicker />
+                        return <RangeTimePicker ref={refTimeRange} />
 
                     case 1: //map picking
                         return <>
+
                             <ThemedInput type='outlined' placeholder='Area of visibility in KM' onChangeText={(txt) => {
                                 if (isNaN(txt)) {
                                     Alert.alert("Must be a number")
@@ -49,7 +64,7 @@ export default function ExclusivityPicking() {
                                     margin: 20,
                                     width: "100%"
                                 }}>
-                                    <ThemedText>Is remote?</ThemedText>
+                                    <ThemedText>Using current location, is remote?</ThemedText>
                                     <Switch
                                         trackColor={{ false: style.switch.track_color_false, true: style.switch.track_color_true }}
                                         thumbColor={isRemote ? style.switch.thumb_color_true : style.switch.thumb_color_false}
@@ -61,10 +76,11 @@ export default function ExclusivityPicking() {
 
                             </>
 
+
                             {isRemote &&
-                                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => { setModalMapVisibility(true) }}>
+                                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue, { flexDirection: "row" }]} onPress={() => { setModalMapVisibility(true) }}>
                                     <ThemedText>Choose the location</ThemedText>
-                                    <Ionicons name="map-outline" size={28} color={"green"} />
+                                    <Ionicons name="map-outline" size={28} color={"white"} />
                                 </TouchableOpacity>
                             }
                             <ThemedView>
@@ -79,7 +95,7 @@ export default function ExclusivityPicking() {
                                     <>
                                         <MapPicking returnLocationChoosen={(coords) => {
                                             setModalMapVisibility(false); // close the modal
-                                            //store the coordinate
+                                            setCoordinateChosen(coords)
                                         }} />
                                     </>
                                 </Modal>
@@ -89,4 +105,6 @@ export default function ExclusivityPicking() {
             })()}
         </ThemedView>
     );
-}
+});
+
+export default ExclusivityPicking;

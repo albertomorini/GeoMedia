@@ -1,13 +1,10 @@
-import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StatusBar, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import { Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
-import { style } from '@/components/globalstyle';
-import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { Button } from 're-native-ui';
 
 const MapPicking = forwardRef((props, ref) => {
 
@@ -32,7 +29,6 @@ const MapPicking = forwardRef((props, ref) => {
                         buttonPositive: 'OK',
                     }
                 );
-
                 return granted === PermissionsAndroid.RESULTS.GRANTED;
             } catch (err) {
                 console.warn(err);
@@ -40,7 +36,6 @@ const MapPicking = forwardRef((props, ref) => {
             }
         }
 
-        // iOS
         return true;
     }
 
@@ -81,15 +76,24 @@ const MapPicking = forwardRef((props, ref) => {
                 maximumAge: 10000,
             }
         );
-
-
     }
-
 
     /////////////////////////////////////////////////////////////
 
+    const markerRef = useRef()
+
     useEffect(() => {
-        getLocation()
+        getLocation();
+
+        // show title when mounted
+        setTimeout(() => {
+            markerRef.current?.showCallout();
+        }, 500);
+
+        // hide it after 5 sec
+        setTimeout(() => {
+            markerRef.current?.hideCallout();
+        }, 5500);
     }, [])
 
     return (
@@ -107,7 +111,7 @@ const MapPicking = forwardRef((props, ref) => {
                 }}
                 zoomEnabled={true}
                 onMarkerPress={(mrk) => {
-                    console.log(mrk);
+                    // console.log(mrk);
                 }}
                 camera={{
                     center: {
@@ -123,6 +127,7 @@ const MapPicking = forwardRef((props, ref) => {
                 showsMyLocationButton={true}
             >
                 <Marker
+                    ref={markerRef}
                     key="picker"
                     coordinate={{
                         latitude: UserPosition.lat + 0.001,
@@ -133,6 +138,7 @@ const MapPicking = forwardRef((props, ref) => {
                         const { latitude, longitude } = e.nativeEvent.coordinate;
                         setSelectedMarker({ latitude, longitude });
                     }}
+
                     pinColor="#da5353"
                     title="Post location (drag me)"
                 />
@@ -145,9 +151,9 @@ const MapPicking = forwardRef((props, ref) => {
                     bottom: 60, // Position at the bottom
                     right: 20,  // Align to the right
                     backgroundColor: '#3b5998', // Background color
-                    width: 60,
+                    width: 120,
                     height: 60,
-                    borderRadius: 30, // Circular button
+                    borderRadius: 20, // Circular button
                     justifyContent: 'center',
                     alignItems: 'center',
                     elevation: 5, // Add some shadow on Android
@@ -160,7 +166,7 @@ const MapPicking = forwardRef((props, ref) => {
                     props?.returnLocationChoosen(selectedMarker);
                 }}
             >
-                <ThemedText style={styles.fabText}>Pick</ThemedText>
+                <ThemedText style={styles.fabText}>Confirm</ThemedText>
             </TouchableOpacity>
         </View>
     )
@@ -181,5 +187,5 @@ const styles = StyleSheet.create({
     map: {
         ...StyleSheet.absoluteFillObject,
     },
-  
+
 })
