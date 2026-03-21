@@ -1,99 +1,92 @@
 import { ThemedText } from '@/components/themed-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
-import { Button, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
 
 import SegmentedControl from '@react-native-community/segmented-control';
 import { ThemedView } from '@/components/themed-view';
-import MapViewer from './MapViewer';
 import { style } from '@/components/globalstyle';
+import MapPicking from './MapPicking';
+import { Ionicons } from '@expo/vector-icons';
+import RangeTimePicker from './RangeTimePicker';
+import { ThemedInput } from '@/components/themed-input';
 
 export default function ExclusivityPicking() {
-    const [date, setDate] = useState(new Date());
-    const [mode, setMode] = useState(null); // 'date' | 'time'
-    const [show, setShow] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState(0);
+    const segmentsOptions = ['Date & Time', 'Location']
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
-
-    const showPicker = (currentMode) => {
-        setMode(currentMode);
-        setShow(true);
-    };
-
-    const onChange = (event, selectedDate) => {
-        if (!selectedDate) {
-            setShow(false);
-            return;
-        }
-
-        let newDate = new Date(date);
-        if (mode === 'date') {
-            newDate.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-            setDate(newDate);
-            showPicker('time'); // show time after date
-        } else if (mode === 'time') {
-            newDate.setHours(selectedDate.getHours(), selectedDate.getMinutes());
-            setShow(false);
-        }
-        console.log("ISO: ", newDate, "Locale: ", newDate?.toLocaleString());
-        setDate(newDate);
-    };
+    //////////
+    const [ModalMapVisibity, setModalMapVisibility] = useState(false)
+    const [areaKM, setAreaKM] = useState(null);
+    const [isRemote, setIsRemote] = useState()
+    //////////
 
     return (
         <ThemedView>
             <SegmentedControl
-                values={['Date&Time', 'Location']}
-                selectedIndex={selectedIndex}
-                onChange={(event) => setSelectedIndex(event.nativeEvent.selectedSegmentIndex)}
+                values={segmentsOptions}
+                selectedIndex={selectedOptions}
+                onChange={(event) => setSelectedOptions(event.nativeEvent.selectedSegmentIndex)}
             />
-            <ThemedText>{selectedIndex}</ThemedText>
-            {
-                (selectedIndex == 1) ? //TODO: improve, maintainability 
-                    <ThemedView style={{ height: "100%" }}>
-                        <MapViewer isPicking={true} />
-                    </ThemedView>
-                    :
-                    <View>
-                        <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => showPicker('date')}>
-                            <ThemedText>Pick date & time</ThemedText>
-                        </TouchableOpacity>
+            {(() => {
+                switch (selectedOptions) {
+                    case 0: //datetime
+                        return <RangeTimePicker />
 
+                    case 1: //map picking
+                        return <>
+                            <ThemedInput type='outlined' placeholder='Area of visibility in KM' onChangeText={(txt) => {
+                                if (isNaN(txt)) {
+                                    Alert.alert("Must be a number")
+                                } else {
+                                    setAreaKM(txt)
+                                }
+                            }} />
+                            <>
+                                <ThemedView style={{
+                                    flexDirection: 'row',    // Put text and switch in a row
+                                    alignItems: 'center',
+                                    margin: 20,
+                                    width: "100%"
+                                }}>
+                                    <ThemedText>Is remote?</ThemedText>
+                                    <Switch
+                                        trackColor={{ false: style.switch.track_color_false, true: style.switch.track_color_true }}
+                                        thumbColor={isRemote ? style.switch.thumb_color_true : style.switch.thumb_color_false}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={() => { setIsRemote(!isRemote) }}
+                                        value={isRemote}
+                                    />
+                                </ThemedView>
 
-                        {show && (
-                            <DateTimePicker
-                                value={date}
-                                mode={mode}
-                                is24Hour={true}
-                                display="default"
-                                onValueChange={onChange}
-                            />
-                        )}
+                            </>
 
-
-                    </View>
-            }
-            {/* 
-            <ThemedText>ISO: {date.toString()}</ThemedText>
-            <ThemedText>LOCALE: {date.toLocaleString()}</ThemedText> */}
-            {/* 
-            <ThemedText>Selected: {selectedIndex}</ThemedText>
- */}
-
-
-
+                            {isRemote &&
+                                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => { setModalMapVisibility(true) }}>
+                                    <ThemedText>Choose the location</ThemedText>
+                                    <Ionicons name="map-outline" size={28} color={"green"} />
+                                </TouchableOpacity>
+                            }
+                            <ThemedView>
+                                <Modal
+                                    animationType="slide"
+                                    transparent={false}
+                                    visible={ModalMapVisibity}
+                                    onRequestClose={() => {
+                                        setModalMapVisibility(false)
+                                    }}
+                                >
+                                    <>
+                                        <MapPicking returnLocationChoosen={(coords) => {
+                                            setModalMapVisibility(false); // close the modal
+                                            //store the coordinate
+                                        }} />
+                                    </>
+                                </Modal>
+                            </ThemedView>
+                        </>
+                }
+            })()}
         </ThemedView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',    // Put text and switch in a row
-        alignItems: 'center',
-        margin: 20,
-    },
-    label: {
-        flex: 1,                 // Take remaining space
-        fontSize: 16,
-    },
-});

@@ -97,5 +97,12 @@ export const style = StyleSheet.create({
             borderRadius: 8,
             zIndex: 10,
         },
+    },
+    switch: {
+        track_color_true: "#81b0ff",
+        track_color_false: "#767577",
+        thumb_color_true: "#aeb8c8",
+        thumb_color_false: "#f4f3f4",
+
     }
 })
