@@ -20,9 +20,11 @@ import { Collapsible } from '@/components/ui/collapsible';
 
 const PostWriter = () => {
 
+
     const ctx = useContext(MyContext)
     const [fullScreenCamera, setFullScreenCamera] = useState(false)
     const refFileHandler = useRef()
+    const refExclusivity = useRef()
 
     /////////////////////////////////////////////////////////////
     const [postData, setPostData] = useState({
@@ -45,6 +47,8 @@ const PostWriter = () => {
 
     async function save_post() {
 
+        let x = refExclusivity?.current?.getExclusivities()
+        console.log(">>", x)
 
         let files = refFileHandler?.current?.return_files()
         postData.files = files //TODO: check on backend
@@ -53,19 +57,19 @@ const PostWriter = () => {
         dummy_body.LONGITUDE = currLocation.lon
         dummy_body.attachments = filesAttached
 
-        doRequest("post_merge", {
-            postdata: postData
-        }).then(res => {
-            console.log("POST MERGE RETURNED::", res);
-            if (res?.OK) {
-                setPostData(prev => ({
-                    ...prev,
-                    ID: res?.post_id
-                }))
-            } else {
-                Alert.alert("Post not saved: " + res?.MSG)
-            }
-        })
+        // doRequest("post_merge", {
+        //     postdata: postData
+        // }).then(res => {
+        //     console.log("POST MERGE RETURNED::", res);
+        //     if (res?.OK) {
+        //         setPostData(prev => ({
+        //             ...prev,
+        //             ID: res?.post_id
+        //         }))
+        //     } else {
+        //         Alert.alert("Post not saved: " + res?.MSG)
+        //     }
+        // })
     }
 
     function load_current_location() {
@@ -148,7 +152,7 @@ const PostWriter = () => {
                                     value={exclusivity}
                                 />
                             </ThemedView>
-                            {exclusivity && <ExclusivityPicking />}
+                            {exclusivity && <ExclusivityPicking ref={refExclusivity} />}
                         </>
                     )}
 

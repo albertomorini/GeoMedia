@@ -25,12 +25,14 @@ const ExclusivityPicking = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         getExclusivities: () => {
             let range = refTimeRange?.current?.getRanges()
+            console.log(range);
+            
             return {
                 area_km: areaKM,
                 coordinate_chosen: coordinateChosen,
                 is_remote: isRemote,
-                date_start: range.start,
-                data_end: range.end
+                date_start: range?.start,
+                data_end: range?.end
             }
         }
     }), []);
