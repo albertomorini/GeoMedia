@@ -4,7 +4,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/themed-text";
 import { style } from "@/components/globalstyle";
 
-const DateTimeRangePicker = forwardRef((ref, props) => {
+const DateTimeRangePicker = forwardRef((props, ref) => {
     const [start, setStart] = useState(null); // Initially null, meaning no date selected
     const [end, setEnd] = useState(null);
 
@@ -29,7 +29,7 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
         setStart(updated);
 
         // if start is greater than end, update end to start
-        if (updated > end) {
+        if (end && updated > end) {
             setEnd(updated);
         }
 
@@ -72,7 +72,7 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
                 end: end
             }
         }
-    }), []);
+    }), [start,end]);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,12 +98,12 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
 
             }
 
-            {/* START PICKERS */}
+            {/* ------------------------ PICKERS */}
             {mode === "startDate" && (
                 <DateTimePicker
                     value={start || new Date()} // Use current date as fallback
                     mode="date"
-                    onChange={handleStartDate}
+                    onValueChange={handleStartDate}
                     maximumDate={end || new Date()} // Prevent picking start date after end date
                 />
             )}
@@ -113,7 +113,7 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
                     value={start}
                     mode="time"
                     is24Hour={true}
-                    onChange={handleStartTime}
+                    onValueChange={handleStartTime}
                 />
             )}
 
@@ -122,7 +122,7 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
                 <DateTimePicker
                     value={end || new Date()} // Use current date as fallback
                     mode="date"
-                    onChange={handleEndDate}
+                    onValueChange={handleEndDate}
                     minimumDate={start || new Date()} // Prevent picking end date before start date
                 />
             )}
@@ -132,7 +132,7 @@ const DateTimeRangePicker = forwardRef((ref, props) => {
                     value={end}
                     mode="time"
                     is24Hour={true}
-                    onChange={handleEndTime}
+                    onValueChange={handleEndTime}
                 />
             )}
         </View>

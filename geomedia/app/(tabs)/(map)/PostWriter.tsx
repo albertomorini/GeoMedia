@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { TouchableOpacity, Alert, Switch, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { TouchableOpacity, Switch, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
@@ -10,11 +10,9 @@ import Geolocation from '@react-native-community/geolocation';
 
 /// FILE SYSTEMS
 
-import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
 import ExclusivityPicking from '@/app/mycomponents/ExclusivityPicking';
-import { Collapsible } from '@/components/ui/collapsible';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -55,7 +53,7 @@ const PostWriter = () => {
         let dummy_body = postData
         dummy_body.LATITUDE = currLocation.lat
         dummy_body.LONGITUDE = currLocation.lon
-        dummy_body.attachments = filesAttached
+        dummy_body.attachments = files
 
         // doRequest("post_merge", {
         //     postdata: postData

@@ -9,8 +9,13 @@ import MapPicking from './MapPicking';
 import { Ionicons } from '@expo/vector-icons';
 import RangeTimePicker from './RangeTimePicker';
 import { ThemedInput } from '@/components/themed-input';
+import { Route } from 'expo-router/build/Route';
 
 const ExclusivityPicking = forwardRef((props, ref) => {
+
+    function HomeScreen() {
+        const navigation = useNavigation();
+
     const [selectedOptions, setSelectedOptions] = useState(0);
     const segmentsOptions = ['Date & Time', 'Location']
 
@@ -25,8 +30,14 @@ const ExclusivityPicking = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         getExclusivities: () => {
             let range = refTimeRange?.current?.getRanges()
-            console.log(range);
-            
+            console.log("Inside exclusivity handler", {
+                area_km: areaKM,
+                coordinate_chosen: coordinateChosen,
+                is_remote: isRemote,
+                date_start: range?.start,
+                data_end: range?.end
+            });
+
             return {
                 area_km: areaKM,
                 coordinate_chosen: coordinateChosen,
@@ -35,7 +46,7 @@ const ExclusivityPicking = forwardRef((props, ref) => {
                 data_end: range?.end
             }
         }
-    }), []);
+    }), [areaKM,coordinateChosen,isRemote]);
 
     return (
         <ThemedView>
