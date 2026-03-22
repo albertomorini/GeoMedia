@@ -6,15 +6,17 @@ import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
 import { ThemedText } from '@/components/themed-text';
 
-const MapPicking = forwardRef((props, ref) => {
+const MapPicking = (props, ref) => {
 
     const mapRef = useRef(null);
     const ctx = useContext(MyContext)
     /////////////////////////////////////////////////////////////
 
     const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
-    const [selectedMarker, setSelectedMarker] = useState(null);
-
+    const [selectedMarker, setSelectedMarker] = useState({
+        latitude: props?.coordinateChosen?.latitude,
+        longitude: props?.coordinateChosen?.longitude
+    });
 
     async function requestLocationPermission() {
         if (Platform.OS === 'android') {
@@ -130,8 +132,8 @@ const MapPicking = forwardRef((props, ref) => {
                     ref={markerRef}
                     key="picker"
                     coordinate={{
-                        latitude: UserPosition.lat + 0.001,
-                        longitude: UserPosition.lon + 0.001
+                        latitude: (selectedMarker?.latitude == undefined) ? (UserPosition.lat + 0.001) : selectedMarker?.latitude,
+                        longitude: (selectedMarker?.longitude == undefined) ? (UserPosition.lon + 0.001) : selectedMarker?.longitude,
                     }}
                     draggable
                     onDragEnd={async (e) => {
@@ -170,7 +172,7 @@ const MapPicking = forwardRef((props, ref) => {
             </TouchableOpacity>
         </View>
     )
-})
+};
 
 export default MapPicking
 

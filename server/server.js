@@ -72,7 +72,8 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-
+                    console.log(body);
+                    
                 query_results = await dispatcher.merge_post(body.postdata)
                 if (!query_results[0].OK) {
                     //TODO return error

@@ -4,7 +4,7 @@ import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-nat
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { forwardRef, RefObject, useImperativeHandle, useState } from "react";
+import { forwardRef,  useImperativeHandle, useState } from "react";
 
 import CameraCapture from "./cameraCapture";
 import { Ionicons } from "@expo/vector-icons";

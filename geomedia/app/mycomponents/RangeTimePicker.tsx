@@ -3,10 +3,12 @@ import { View, Button, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/themed-text";
 import { style } from "@/components/globalstyle";
+import { ThemedView } from "@/components/themed-view";
+import { Ionicons } from "@expo/vector-icons";
 
 const DateTimeRangePicker = forwardRef((props, ref) => {
-    const [start, setStart] = useState(null); // Initially null, meaning no date selected
-    const [end, setEnd] = useState(null);
+    const [start, setStart] = useState(props?.start); // Initially null, meaning no date selected
+    const [end, setEnd] = useState(props?.end);
 
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
 
@@ -72,31 +74,32 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                 end: end
             }
         }
-    }), [start,end]);
+    }), [start, end]);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <View style={{ padding: 20 }}>
-            <ThemedText>The post will be visible from:</ThemedText>
-            {start ? (
-                <ThemedText>{formatDateTime(start)}</ThemedText>
-            ) : (
-                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
-                    <ThemedText>Choose availability date</ThemedText>
-                </TouchableOpacity>
-            )}
+            <ThemedText style={style.label}>The post will be visible from:</ThemedText>
+
+            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
+                {start != null ?
+                    <ThemedText >{formatDateTime(start)}</ThemedText>
+                    :
+                    <ThemedText>From now</ThemedText>
+                }
+            </TouchableOpacity>
 
 
-            <ThemedText>The Post will not be visible after:</ThemedText>
-            {end ?
-                <ThemedText>{formatDateTime(end)}</ThemedText>
-                :
-                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("endDate")}>
-                    <ThemedText>Choose expiring date</ThemedText>
-                </TouchableOpacity>
+            <ThemedText style={style.label}>The Post will not be visible after:</ThemedText>
 
-            }
+            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("endDate")}>
+                {end == null ?
+                    <ThemedText>No expiration</ThemedText>
+                    :
+                    <ThemedText >{formatDateTime(end)}</ThemedText>
+                }
+            </TouchableOpacity>
 
             {/* ------------------------ PICKERS */}
             {mode === "startDate" && (
@@ -123,6 +126,10 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     value={end || new Date()} // Use current date as fallback
                     mode="date"
                     onValueChange={handleEndDate}
+                    onTouchCancel={() => {
+                        console.log("ANULLA");
+                        setEnd(null)
+                    }}
                     minimumDate={start || new Date()} // Prevent picking end date before start date
                 />
             )}

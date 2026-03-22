@@ -36,9 +36,16 @@ export default function MapLayout() {
             <Stack.Screen
                 name="ExclusivityPicking"
                 options={{
-                    presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
-                    title: 'New Post',
-                    animation: 'slide_from_bottom', // optional
+                    presentation: 'formSheet', //
+                    title: 'Exclusive',
+                    sheetAllowedDetents: [0.9, 1],      // 90% and 100% snap points
+                    sheetInitialDetent: 0.9,            // start at 90%
+                    sheetLargestUndimmedDetent: 0.9,    // background stays dimmed until fully expanded (optional)
+                    sheetGrabberVisible: true,          // shows drag handle at top (nice UX)
+                    sheetCornerRadius: 24,              // optional rounded corners
+                    sheetExpandsWhenScrolledToEdge: false, // prevents auto-expand on scroll (optional)
+
+                    animation: 'slide_from_bottom',
                 }}
             />
         </Stack>
