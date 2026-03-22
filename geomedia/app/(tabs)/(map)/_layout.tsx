@@ -33,6 +33,14 @@ export default function MapLayout() {
                     animation: 'slide_from_right', // optional
                 }}
             />
+            <Stack.Screen
+                name="ExclusivityPicking"
+                options={{
+                    presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
+                    title: 'New Post',
+                    animation: 'slide_from_bottom', // optional
+                }}
+            />
         </Stack>
     );
 }
