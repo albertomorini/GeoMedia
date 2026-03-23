@@ -8,6 +8,7 @@ import { createContext, useEffect, useState } from 'react';
 import LoginScreen from './login';
 import { ThemedView } from '@/components/themed-view';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 
 interface UserContextType {
@@ -24,6 +25,9 @@ export default function RootLayout() {
   const [User, setUser] = useState(null)
   //TODO: exec the login and use context
 
+  function showToast(data: Object) {
+    Toast.show(data);
+  }
 
   useEffect(() => {
 
@@ -36,11 +40,18 @@ export default function RootLayout() {
         <ThemedView style={{
           width: "100%", height: "100%", flex: 1
         }}>
+
+          <Toast
+            config={{
+            }}
+          />
           <MyContext.Provider
             value={{
               User: { User, setUser },
+              showToast: (data: Object) => showToast(data)
             }}
           >
+
             {User != null ?
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

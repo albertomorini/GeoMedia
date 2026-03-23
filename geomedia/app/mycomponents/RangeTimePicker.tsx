@@ -9,7 +9,7 @@ import SegmentedControl from "@react-native-community/segmented-control";
 const DateTimeRangePicker = forwardRef((props, ref) => {
     const [start, setStart] = useState(props?.start); // Initially null, meaning no date selected
     const [end, setEnd] = useState(props?.end);
-    const [isRecurrent, setIsRecurrent] = useState(props?.isRecurrent)
+    const [isRecurrent, setIsRecurrent] = useState(props?.isRecurrent == null ? "Never" : props?.isRecurrent)
 
     const recurrencyOptions = ["Never", "Monthly", "Yearly"]
 

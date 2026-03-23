@@ -29,8 +29,9 @@ const PostWriter = () => {
 
 
     const ctx = useContext(MyContext)
-    const [fullScreenCamera, setFullScreenCamera] = useState(false)
     const refFileHandler = useRef()
+    const [fullScreenCamera, setFullScreenCamera] = useState(false)
+    ////////////////////////////////////////////////////////////////////
 
     const [ModalMapVisibity, setModalMapVisibility] = useState(false)
 
@@ -42,6 +43,10 @@ const PostWriter = () => {
         latitude: null,
         longitude: null,
     })
+
+    /// for excluivity bottom menu
+    const snapPoints = useMemo(() => ['90%', '100%'], []);
+    const bottomSheetRef = useRef()
 
     /////////////////////////////////////////////////////////////
     const [postData, setPostData] = useState({
@@ -56,24 +61,20 @@ const PostWriter = () => {
         VISIBILITY_AREA_KM: 2, //default 2km
     })
 
-
-
     //////////////////////////////////////////////////////////////////////
 
 
     async function save_post() {
 
-
         let files = refFileHandler?.current?.return_files()
 
         let dummy_body = postData
-        //check if a remote position has been setted, then replace the current one with that one
+        /// position chosen, if not chosen automatically use the current one
         dummy_body.LATITUDE = coordinateChosen.latitude
         dummy_body.LONGITUDE = coordinateChosen.longitude
-        //TODO: decide if the area is set a default values or must be setted by user
+        dummy_body.attachments = files //attach files
 
-        dummy_body.attachments = files //todo: check on beckaend for naming convention
-
+        // the exclusivity (date, recurrency, viewers) are already setted by the modal
 
         doRequest("post_merge", {
             postdata: dummy_body
@@ -84,12 +85,14 @@ const PostWriter = () => {
                     ...prev,
                     ID: res?.post_id
                 }))
+                console.log(ctx);
 
-                Toast.show({
-                    type: 'success',
-                    position: 'bottom',
-                    text1: 'Post created',
-
+                /// TODO: check, not working now
+                ctx?.showToast({
+                    type: 'success',        // 'success', 'error', 'info'
+                    text1: 'Post saved!',
+                    position: 'bottom',     // <-- Set position to bottom
+                    visibilityTime: 3000,   // duration in ms
                 });
             } else {
                 Alert.alert("Post not saved: " + res?.MSG)
@@ -114,28 +117,10 @@ const PostWriter = () => {
         return coordinateChosen?.latitude == currentLocation.latitude && coordinateChosen.longitude == currentLocation.longitude
     }
 
-    // DISMISSED THUS TO USE PROPS/REF
-    //    const params = useLocalSearchParams();
-    // useEffect(() => {
-    //     load_current_location()
-    //     if (!params.postdata) return;
-
-    //     try {
-    //         const dummy_postdata = JSON.parse(params.postdata as string);
-    //         console.log(">>>", dummy_postdata);
-
-    //         setPostData(dummy_postdata);
-    //     } catch (err) {
-    //         console.error("Failed to parse", err);
-    //     }
-    // }, [params.postdata])
-
     useEffect(() => {
         load_current_location()
     }, [])
 
-    const snapPoints = useMemo(() => ['90%', '100%'], []);
-    const bottomSheetRef = useRef()
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -236,40 +221,6 @@ const PostWriter = () => {
                             ref={refFileHandler}
                         />
 
-                        {/* show exclusivity button only if theres no camera open */}
-                        {/* {!fullScreenCamera && (
-                            <>
-                                <TouchableOpacity
-                                    style={[style.buttons.full_screen, style.colors.geomedia_blue]}
-                                    onPress={() => {
-                                        if (Object.keys(postData).length > 0 && postData) {
-                                            let files = refFileHandler?.current?.return_files()
-
-                                            let dummy_body = postData
-                                            //check if a remote position has been setted, then replace the current one with that one
-                                            dummy_body.LATITUDE = coordinateChosen.latitude
-                                            dummy_body.LONGITUDE = coordinateChosen.longitude
-
-                                            dummy_body.attachments = files //todo: check on beckaend for naming convention
-
-
-                                            router.push({
-                                                pathname: '/ExclusivityPicking',
-                                                params: {
-                                                    postdata: JSON.stringify(dummy_body), /// pass just the exclusivity sections
-                                                }
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <ThemedText >Exclusivity </ThemedText>
-                                </TouchableOpacity>
-
-                            </>
-                        )} */}
-
-
-
                         <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
                             bottomSheetRef.current?.snapToIndex(0);
 
@@ -296,7 +247,7 @@ const PostWriter = () => {
                             backgroundStyle={{
                                 borderTopLeftRadius: 24,
                                 borderTopRightRadius: 24,
-                                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // dynamic
+                                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                             }}
                         >
                             <BottomSheetView style={{ flex: 1 }}>
@@ -307,13 +258,12 @@ const PostWriter = () => {
                                             setPostData(prev => ({
                                                 ...prev,
                                                 EXCLUSIVITY: obj
-                                            }))
+                                            }));
+                                            bottomSheetRef?.current?.close()
                                         }} />
                                 </ThemedView>
                             </BottomSheetView>
                         </BottomSheet>
-
-
                     </ThemedView>
                 </KeyboardAvoidingView>
             </ScrollView >
