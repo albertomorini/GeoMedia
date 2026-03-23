@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, PermissionsAndroid, Platform, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const style = StyleSheet.create({
     container: {

@@ -132,8 +132,8 @@ const MapPicking = (props, ref) => {
                     ref={markerRef}
                     key="picker"
                     coordinate={{
-                        latitude: (selectedMarker?.latitude == undefined) ? (UserPosition.lat + 0.001) : selectedMarker?.latitude,
-                        longitude: (selectedMarker?.longitude == undefined) ? (UserPosition.lon + 0.001) : selectedMarker?.longitude,
+                        latitude: (selectedMarker?.latitude == undefined) ? (UserPosition.lat + 0.005) : selectedMarker?.latitude,
+                        longitude: (selectedMarker?.longitude == undefined) ? (UserPosition.lon + 0.005) : selectedMarker?.longitude,
                     }}
                     draggable
                     onDragEnd={async (e) => {

@@ -1,14 +1,17 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { View, Button, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/themed-text";
 import { style } from "@/components/globalstyle";
 import { ThemedView } from "@/components/themed-view";
-import { Ionicons } from "@expo/vector-icons";
+import SegmentedControl from "@react-native-community/segmented-control";
 
 const DateTimeRangePicker = forwardRef((props, ref) => {
     const [start, setStart] = useState(props?.start); // Initially null, meaning no date selected
     const [end, setEnd] = useState(props?.end);
+    const [isRecurrent, setIsRecurrent] = useState(props?.isRecurrent)
+
+    const recurrencyOptions = ["Never", "Monthly", "Yearly"]
 
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
 
@@ -79,7 +82,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <View style={{ padding: 20 }}>
+        <ThemedView style={{ padding: 20 }}>
             <ThemedText style={style.label}>The post will be visible from:</ThemedText>
 
             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
@@ -142,7 +145,15 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     onValueChange={handleEndTime}
                 />
             )}
-        </View>
+
+            <ThemedText style={style?.label}>Recurrent?</ThemedText>
+            <SegmentedControl
+                values={recurrencyOptions}
+                selectedIndex={isRecurrent}
+                onChange={(event) => setIsRecurrent(event.nativeEvent.selectedSegmentIndex)}
+            />
+
+        </ThemedView>
     );
 })
 

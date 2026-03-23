@@ -33,7 +33,8 @@ export default function MapLayout() {
                     animation: 'slide_from_right', // optional
                 }}
             />
-            <Stack.Screen
+            {/* USE A PROPS INSIDE POST WRITER */}
+            {/* <Stack.Screen
                 name="ExclusivityPicking"
                 options={{
                     presentation: 'formSheet', //
@@ -47,7 +48,7 @@ export default function MapLayout() {
 
                     animation: 'slide_from_bottom',
                 }}
-            />
+            /> */}
         </Stack>
     );
 }
