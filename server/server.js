@@ -72,8 +72,10 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-                    console.log(body);
-                    
+                let files = body.postdata.attachments;
+
+                delete body.postdata.attachments
+
                 query_results = await dispatcher.merge_post(body.postdata)
                 if (!query_results[0].OK) {
                     //TODO return error
@@ -82,7 +84,6 @@ async function dispatchReq(res, path, body, contentType) {
                 }
                 let post_id = query_results[0].ID
 
-                let files = body.postdata.attachments;
                 let x = dispatcher.hpmedia_merge_folder(post_id, files)
                 if (x) {
                     sendResponse(res, 200, { "post_id": post_id, "OK": true })

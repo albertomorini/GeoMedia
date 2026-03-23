@@ -27,6 +27,7 @@ function generic_query(path, body) {
 
 function merge_post(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
+    console.log("EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 
@@ -38,14 +39,20 @@ async function hpmedia_merge_folder(postid, attachments) {
             fs.mkdirSync(post_folder, { recursive: true })
         }
 
-        let files_to_keep = []
+        let hypermedia_reference = []
         attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
             var buffer = Buffer.from(f.base64, 'base64', f.base64.length) //REMOVE BASE64
             const filepath = path.join(post_folder, f.filename);
             console.log("Storing file: ", filepath);
 
             fs.writeFileSync(filepath, buffer, { encoding: 'utf8' });
-            files_to_keep.push(filepath)
+            hypermedia_reference.push({
+                "filename": f.filename,
+                "filepath": filepath,
+                "mimetype": f.mimetype,
+                "post_id": postid
+            })
+            hypermedia_reference.push(filepath)
         })
 
 
@@ -55,7 +62,14 @@ async function hpmedia_merge_folder(postid, attachments) {
         file_to_remove.forEach(f => {
             fs.unlinkSync(f)
         })
-        return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(files_to_keep).replaceAll("'", "''") + "',@POSTID=" + postid)
+        console.log("Storing in hypermedia table: ", hypermedia_reference);
+
+        console.log(
+            "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid
+        );
+        
+
+        return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid)
     } catch (error) {
         //TODO: 2 logrr
         console.log(error);
