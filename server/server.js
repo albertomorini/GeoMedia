@@ -103,9 +103,11 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             case "/post_get_fullpost":
                 query_results = await dispatcher.generic_query("post_get_fullpost", body)
-                query_results.attachments = await hpmedia_read_folder(body?.postid)
-                query_results.attachments = [] //TODO: implement in dispatcher
-                sendResponse(res, 200, resQuery)
+                let ff  = await dispatcher.hpmedia_read_folder(body?.postid)
+                query_results[0]["attachments"] = ff
+                console.log(query_results);
+                
+                sendResponse(res, 200, query_results)
                 break;
             /////////////////////////////////?//////////////////////////////////////////////////////////////////?
             default:

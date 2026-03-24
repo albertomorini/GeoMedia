@@ -78,16 +78,11 @@ async function hpmedia_merge_folder(postid, attachments) {
 }
 
 async function hpmedia_read_folder(postid) {
-
-    let post_folder = path.join(PATH_UPLOADS, String(postid))
     let files = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_GETFILES @POSTID=" + postid)
-
-    files = files.map(f => {
-        f.base64 = fs.readFileSync(f?.FILEPATH,{encoding:"base64"})
+    return files.map(f => {
+        f.BASE64 = fs.readFileSync(f?.FILEPATH, { encoding: "base64" })
+        return f
     })
-
-    console.log(files);
-    
 }
 
 async function auth_signin(procedure, body, ip, headers) {

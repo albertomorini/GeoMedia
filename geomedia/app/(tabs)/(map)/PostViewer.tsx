@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Image } from "react-native";
 
 
 const PostViewer = () => {
@@ -27,6 +27,8 @@ const PostViewer = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 setPostData(resQuery[0])
+                console.log("!@@@>",resQuery);
+                
             }).catch(err => {
                 Alert.alert("Error reading post", err)
             })
@@ -35,7 +37,7 @@ const PostViewer = () => {
 
     useEffect(() => {
         loadFullPost()
-    }, [params])
+    }, [])
 
     return (
         <>
@@ -48,6 +50,19 @@ const PostViewer = () => {
 
                 <ThemedText>{postData?.TITLE}</ThemedText>
                 <ThemedText>{postData?.COMMENT}</ThemedText>
+
+                {
+                    postData?.attachments?.map(p => (
+                        <Image
+                            source={{ uri: `data:image/jpeg;base64,${p?.BASE64}` }}
+                            style={{
+                                width: 180,
+                                height: 180,
+                                borderRadius: 40,
+                            }}
+                        />
+                    ))
+                }
 
             </ThemedView>
         </>
