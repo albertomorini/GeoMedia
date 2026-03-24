@@ -17,7 +17,7 @@ export default function Profile() {
   const my_email = 'albmor.dev@gmail.com'
 
   const ctx = useContext(MyContext);
-  const user = ctx?.User?.User;
+  const user = ctx?.User?.User
   const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
 
   function getProfilePic() {
@@ -125,7 +125,7 @@ export default function Profile() {
       <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
       </ScrollView> */}
 
-        <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
+      <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
     </Box>
   );
 }

@@ -18,7 +18,6 @@ const PATH_UPLOADS = config.FOLDERS.UPLOADS
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
-
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
@@ -67,7 +66,7 @@ async function hpmedia_merge_folder(postid, attachments) {
         console.log(
             "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid
         );
-        
+
 
         return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid)
     } catch (error) {
@@ -76,6 +75,19 @@ async function hpmedia_merge_folder(postid, attachments) {
 
         // return new Promise.resolve([{ "OK": false, "MSG": error }])
     }
+}
+
+async function hpmedia_read_folder(postid) {
+
+    let post_folder = path.join(PATH_UPLOADS, String(postid))
+    let files = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_GETFILES @POSTID=" + postid)
+
+    files = files.map(f => {
+        f.base64 = fs.readFileSync(f?.FILEPATH,{encoding:"base64"})
+    })
+
+    console.log(files);
+    
 }
 
 async function auth_signin(procedure, body, ip, headers) {
@@ -102,6 +114,8 @@ function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_lo
     var a = 0.5 - Math.cos(dLat) / 2 + Math.cos(curr_latitude * Math.PI / 180) * Math.cos(post_latitude * Math.PI / 180) * (1 - Math.cos(dLon)) / 2;
 
     d = Math.round(6371000 * 2 * Math.asin(Math.sqrt(a))); // in meters
+
+    console.log(d, areaKM * 1000)
     if (d <= areaKM * 1000) { //transform areaKM to meters
         return true
     } else {
@@ -110,22 +124,19 @@ function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_lo
 
 }
 
-async function getPosts(curr_latitude = null, curr_longitude = null, username = null) {
+async function post_get_map(uid, current_position, collection_chosen = []) {
 
-    let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC GETPOSTS @USERNAME='" + username + "'")
+    let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC POST_GET_MAP @UID='" + uid + "', @COLLECTIONS_CHOSEN='" + JSON.stringify(collection_chosen) + "'")
 
     let results = []
     posts.forEach(pp => {
-        if (pp.AREA_KM != null) { // check if users' position is within the post availability
-            if (checkAREA(pp.AREA_KM, pp.LATITUDE, pp.LONGITUDE, curr_latitude, curr_longitude)) {
-                results.push(pp)
-            }
-        } else {
+        // check if users' position is within the post availability
+        if (checkAREA(pp.VISIBILITY_AREA_KM, pp.LATITUDE, pp.LONGITUDE, current_position.latitude, current_position.longitude)) {
+            console.log(">", pp)
             results.push(pp)
         }
     })
     return results
-
 }
 
 function getMediaPost(postid) {
@@ -143,10 +154,11 @@ module.exports = {
     ////////////////
     auth_signin,
     ////////////////
-    getPosts,
+    post_get_map,
     deletePost,
     getMediaPost
     ///////////////
 
     , hpmedia_merge_folder
+    , hpmedia_read_folder
 }

@@ -59,8 +59,8 @@ async function dispatchReq(res, path, body, contentType) {
             case "/auth_check_otp":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
-            case "/auth_signin": //TODO: extract to incapsulate mail sending
-
+            /////////////////////////////////?//////////////////////////////////////////////////////////////////?
+            case "/auth_signin":
                 query_results = await dispatcher.auth_signin(path, body)
                 if (query_results.AUTH == 2) {
                     delete query_results.OTP //
@@ -68,7 +68,6 @@ async function dispatchReq(res, path, body, contentType) {
                 } else {
                     sendResponse(res, 401, query_results)
                 }
-                dummy_res = null;
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
@@ -98,6 +97,17 @@ async function dispatchReq(res, path, body, contentType) {
 
                 //TODO: creare tabella segnalazioni
                 break;
+            case "/post_get_map":
+                query_results = await dispatcher.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
+                sendResponse(res, 200, query_results)
+                break;
+            case "/post_get_fullpost":
+                query_results = await dispatcher.generic_query("post_get_fullpost", body)
+                query_results.attachments = await hpmedia_read_folder(body?.postid)
+                query_results.attachments = [] //TODO: implement in dispatcher
+                sendResponse(res, 200, resQuery)
+                break;
+            /////////////////////////////////?//////////////////////////////////////////////////////////////////?
             default:
                 sendResponse(res, 404, { 'msg': "Unknown path:" + path })
                 break;

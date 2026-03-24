@@ -25,7 +25,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-const PostWriter = () => {
+const PostCreator = () => {
 
 
     const ctx = useContext(MyContext)
@@ -53,7 +53,7 @@ const PostWriter = () => {
         ID: null,
         TITLE: null,
         COMMENT: null,
-        AUTHOR_ID: ctx?.User?.User?.UID,
+        AUTHOR_ID: ctx?.getUID(),
         EXCLUSIVITY: {
             DATERANGE: { DATE_START: null, DATE_END: null },
             USERS: { viewers: [] }
@@ -271,7 +271,7 @@ const PostWriter = () => {
 
     );
 };
-export default PostWriter;
+export default PostCreator;
 
 
 const styles = StyleSheet.create({

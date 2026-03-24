@@ -48,6 +48,7 @@ export default function RootLayout() {
           <MyContext.Provider
             value={{
               User: { User, setUser },
+              getUID: () => { return User?.UID },
               showToast: (data: Object) => showToast(data)
             }}
           >

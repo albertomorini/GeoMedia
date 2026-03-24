@@ -2,12 +2,30 @@
 import { HapticTab } from '@/components/haptic-tab';
 import { t } from '@/components/i18n';
 import { Colors } from '@/constants/theme';
-import { Stack } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
 export default function MapLayout() {
 
     const colorScheme = useColorScheme();
+
+    // const [postTitle, setPostTitle] = useState(null)
+
+    // function getPostTitle() {
+    //     let title = null
+    //     try {
+    //         title = params.title ? JSON.parse(params.title as string) : null;
+    //         console.log("TITLE: ", title)
+    //         setPostTitle(postTitle)
+    //     } catch (error) {
+    //         title = null
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     getPostTitle()
+    // }, [params])
 
     return (
         <Stack
@@ -26,11 +44,25 @@ export default function MapLayout() {
             />
 
             <Stack.Screen
-                name="PostWriter"
+                name="PostCreator"
                 options={{
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
                     title: 'New Post',
-                    animation: 'slide_from_right', // optional
+                    animation: 'slide_from_right',
+                }}
+            />
+            <Stack.Screen
+                name="PostViewer"
+                options={{
+                    presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
+                    
+                    animation: 'slide_from_bottom',
+                    sheetAllowedDetents: [0.9, 1],
+                    sheetInitialDetent: 0.9,
+                    sheetLargestUndimmedDetent: 0.9,
+                    sheetGrabberVisible: true,
+                    sheetCornerRadius: 24,
+                    sheetExpandsWhenScrolledToEdge: true,
                 }}
             />
             {/* USE A PROPS INSIDE POST WRITER */}

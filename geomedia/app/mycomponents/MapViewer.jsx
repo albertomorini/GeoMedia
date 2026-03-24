@@ -1,20 +1,37 @@
 import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import { ActivityIndicator, Alert, Button, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
+import { doRequest } from '../utility';
+import { ThemedText } from '@/components/themed-text';
+import { router } from 'expo-router';
 
 const MapViewer = forwardRef((props, ref) => {
 
-    const mapRef = useRef(null);
     const ctx = useContext(MyContext)
+    const mapRef = useRef(null);
+
+    const [postMarkers, setPostMarkers] = useState(null)
     /////////////////////////////////////////////////////////////
 
-    const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
+    const [UserPosition, setUserPosition] = useState({ latitude: 0, longitude: 0 });
 
+    // return true if current position changed within a delta (100m)
+    function positionChanged(latitude, longitude, currentPosition = UserPosition) {
+        const MIN_DELTA = 0.001; // ~100m
+
+        if (
+            Math.abs(latitude - currentPosition.latitude) > MIN_DELTA ||
+            Math.abs(longitude - currentPosition.longitude) > MIN_DELTA
+        ) {
+            return true
+        }
+        return false
+    }
 
     async function requestLocationPermission() {
         if (Platform.OS === 'android') {
@@ -56,8 +73,10 @@ const MapViewer = forwardRef((props, ref) => {
         Geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
-                setUserPosition({ lat: latitude, lon: longitude });
-                console.log(latitude, longitude);
+                if (positionChanged(latitude, longitude, UserPosition)) {
+                    setUserPosition(prev => ({ ...prev, latitude: latitude, longitude: longitude }));
+                    get_posts_map({ latitude: latitude, longitude: longitude })
+                }
 
                 // set map with center on user location 
                 mapRef.current?.animateToRegion({
@@ -84,15 +103,30 @@ const MapViewer = forwardRef((props, ref) => {
 
 
     /////////////////////////////////////////////////////////////
+    function get_posts_map(curPos = UserPosition) {
+        console.log(ctx?.getUID())
+        doRequest("post_get_map", {
+            uid: ctx?.getUID(),
+            current_position: curPos,
+            collection_chosen: []
+        }).then(resQuery => {
+            console.log(">", resQuery);
 
+            setPostMarkers(resQuery)
+        }).catch(err => {
+            Alert.alert("Error retrieving posts: ", err)
+        })
+    }
+
+    /////////////////////////////////////////////////////////////
     useEffect(() => {
-        getLocation()
+        getLocation();
     }, [])
 
     return (
         <>
             {
-                UserPosition?.lat == 0 ? //render a spinner while loading current location
+                UserPosition?.latitude == 0 ? //render a spinner while loading current location
                     <ThemedView style={styles.container}>
                         <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
                     </ThemedView>
@@ -106,19 +140,24 @@ const MapViewer = forwardRef((props, ref) => {
                             showsUserLocation={true}
                             followsUserLocation={true}
                             initialRegion={{
-                                latitude: UserPosition.lat,
-                                longitude: UserPosition.lon,
+                                latitude: UserPosition.latitude,
+                                longitude: UserPosition.longitude,
                                 latitudeDelta: 0.1,
                                 longitudeDelta: 0.1,
                             }}
-                            zoomEnabled={true}
-                            onMarkerPress={(mrk) => {
-                                console.log(mrk)
+                            onUserLocationChange={(event) => {
+                                const { latitude, longitude } = event.nativeEvent.coordinate;
+
+                                if (positionChanged(latitude, longitude)) {
+                                    setUserPosition({ latitude: latitude, longitude: longitude });
+                                    get_posts_map({ latitude: latitude, longitude: longitude }) //retrieve new posts
+                                }
                             }}
+                            zoomEnabled={true}
                             camera={{
                                 center: {
-                                    latitude: UserPosition.lat,
-                                    longitude: UserPosition.lon,
+                                    latitude: UserPosition.latitude,
+                                    longitude: UserPosition.longitude,
                                 },
                                 pitch: 30, // like the angle
                                 heading: 0, // direction the camera faces (0 = north)
@@ -128,7 +167,29 @@ const MapViewer = forwardRef((props, ref) => {
                             showsBuildings={true}
                             showsMyLocationButton={true}
                         >
-                            {/* //TODO: render the markers  */}
+                            {//rendering the markers
+                                postMarkers?.map((p, index) => (
+                                    <Marker
+                                        key={p?.ID}
+                                        coordinate={{
+                                            latitude: p?.LATITUDE,
+                                            longitude: p?.LONGITUDE,
+                                        }}
+                                        pinColor="#4f892e"
+                                        title={p?.TITLE}
+                                        onPress={() => { ///redirect to post viewer
+                                            router.push({
+                                                pathname: '/PostViewer',
+                                                title: p?.TITLE,
+                                                params: {
+                                                    postid: p?.ID,
+                                                    title: p?.TITLE //todo: parse uri?
+                                                }
+                                            });
+                                        }}
+                                    />
+                                ))
+                            }
                         </MapView>
                     </ThemedView>
             }

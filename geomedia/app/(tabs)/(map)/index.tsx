@@ -11,7 +11,7 @@ export default function MapScreen() {
             <MapViewer />
             <TouchableOpacity
                 style={[style.buttons.fab, style.colors.geomedia_blue]}
-                onPress={() => router.push('PostWriter')}
+                onPress={() => router.push('PostCreator')}
             >
                 <ThemedText style={style.buttons.fabText}>+</ThemedText>
             </TouchableOpacity>
