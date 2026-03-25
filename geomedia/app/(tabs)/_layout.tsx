@@ -4,12 +4,15 @@ import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-import { t } from "../../components/i18n";
+
 
 import { Ionicons } from '@expo/vector-icons';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { t } = useLanguage();
+
 
   return (
     <Tabs

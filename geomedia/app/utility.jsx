@@ -1,159 +1,138 @@
 import { ThemedView } from "@/components/themed-view";
 import { Text } from "re-native-ui";
-import { useEffect } from "react";
+import { useState } from "react";
+import * as SecureStore from 'expo-secure-store';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedInput } from "@/components/themed-input";
+import { Modal, TouchableOpacity } from "react-native";
+import { style } from "@/components/globalstyle";
+import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "@/components/LanguageProvider";
 
-// then directly: AsyncStorage.getItem(...)
-
-// import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
-
-
-
-
-
-// export async function SettingsConfig() {
-
-//     const { getItem, setItem } = useAsyncStorage("appDB");
-//     async function checkConnection() {
-//         await setItem('key', 'value');          // set in your "appDB" key
-//         const value = await getItem();          // get from the same key
-//         console.log(value);                     // should be 'value'
-
-//         const config = await AsyncStorage.getItem("srv_config"); // separate key
-//         console.warn(config);
-//     }
+const URL = "http://10.0.0.3:9911"
 
 
-//     async function init() {
-//         let srvOK = await checkConnection()
-//     }
+async function load_config() {
+    let config = await SecureStore.getItemAsync("config");
+    console.log(">>", config);
+    if (config != null) {
+        URL = config.URL
+    }
+    // return cache_user;
+}
+load_config()
 
-//     useEffect(() => {
-//         init()
-//     }, [])
 
-//     return (
-//         <Text>Ciao</Text>
-//     )
-// }
+
+
+export const SettingsConfig = () => {
+
+    const [modalSettings, setModalSettings] = useState(false)
+    const [newUrl, setNewURL] = useState(null)
+
+    async function checkConnection() {
+        await setItem('key', 'value');          // set in your "appDB" key
+        const value = await getItem();          // get from the same key
+        console.log(value);                     // should be 'value'
+
+        const config = await AsyncStorage.getItem("srv_config"); // separate key
+        console.warn(config);
+    }
+
+    const { changeLang } = useLanguage();
+
+    async function init() {
+        let cache_user = await SecureStore.getItemAsync("config");
+        console.log(cache_user);
+        return cache_user;
+
+    }
+
+
+    return (
+
+        <ThemedView style={style.container}>
+            <ThemedView style={{
+                position: "absolute",
+                top: 160,
+                left: 0,
+                right: 0,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 16, // spacing between IT and EN (or use margin if not supported)
+                transform: [{ translateY: -10 }],
+            }}>
+                <TouchableOpacity onPress={() => changeLang("IT")}>
+                    <ThemedText>🇮🇹</ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => changeLang("EN")}>
+                    <ThemedText>🇬🇧</ThemedText>
+                </TouchableOpacity>
+
+            </ThemedView>
+
+            <TouchableOpacity style={{
+                position: "absolute",
+                top: 150,
+                right: 20,
+            }} onPress={() => {
+                setModalSettings(true)
+            }}>
+
+                <Ionicons name="cog-outline" size={28} color={"#bfea7fb9"} />
+            </TouchableOpacity>
+
+            <Modal visible={modalSettings}
+                transparent={true}
+                animationType="slide">
+                <ThemedView style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                }}>
+                    <ThemedView
+                        style={{
+                            width: 300,
+                            padding: 20,
+                            backgroundColor: "white",
+                            borderRadius: 10,
+                        }}
+                    >
+                        <ThemedInput type="outlined" placeholder="protocol://name:port" onChangeText={(text) => {
+                            setNewURL(text)
+                        }} />
+
+                        <TouchableOpacity onPress={() => setVisible(false)} style={style?.colors.geomedia_red}>
+                            <Text style={{ marginTop: 20 }}>Close</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setVisible(false)} style={style?.colors.geomedia_green}>
+                            <Text style={{ marginTop: 20 }}>Confirm</Text>
+                        </TouchableOpacity>
+                    </ThemedView>
+                </ThemedView>
+            </Modal>
+
+
+        </ThemedView>
+    )
+}
 
 
 
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
+
     // return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
     return fetch("http://10.0.0.3:9910/" + api, {
         method: "POST",
         mode: "cors",
-        headers: { "authorization":"mysuperkey"},
+        headers: { "authorization": "mysuperkey" },
         body: JSON.stringify(body)
     }).then(res => res.json())
 }
-
-
-// export const checkConnection2Server = (ipServer = AppConfig.IPSERVER, portServer = AppConfig.PORTSERVER) => {
-//     const controller = new AbortController()
-//     setTimeout(() => controller.abort(), 10000) //dopo 10 secondi tronchiamo la connessione -> aka è un il request timeout di fetch
-
-//     return store.get("ServerConfig").then(cacheConfig => {
-//         if (cacheConfig != null) {
-//             ipServer = cacheConfig.ipserver;
-//             portServer = cacheConfig.port;
-//         }
-//         return fetch("http://" + ipServer + ":" + portServer + "/checkConnection", {
-//             method: "POST",
-//             mode: "cors",
-//             body: {
-//                 "hello": 'from_client!'
-//             },
-//             signal: controller.signal
-//         }).then(res => res.json()).then(res => {
-//             if (res.HELLO) { //configurazione corretta, la salviamo nelle cache
-//                 console.log("OK")
-//                 store.set("ServerConfig", {
-//                     ipserver: ipServer,
-//                     port: portServer
-//                 });
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         }).catch(err => {
-//             console.log(err);
-//             return false;
-//         })
-//     })
-// }
-
-
-// export const ContentConfigServer = (props) => {
-//     const modalSettingRef = useRef();
-//     const [IPServer, setIPServer] = useState();
-//     const [PortServer, setPortServer] = useState();
-
-//     /**
-//      * Save the configuration into the cache
-//      */
-//     async function storeConfig() {
-//         let x = await checkConnection2Server(IPServer, PortServer);
-//         if (x) {
-//             store.set("ServerConfig", {
-//                 ipserver: IPServer,
-//                 port: PortServer
-//             });
-//             modalSettingRef?.current?.dismiss();
-
-//         }
-//     }
-
-//     async function checkConnection() {
-//         let esito = await checkConnection2Server();
-//         if (!esito) {
-//             modalSettingRef?.current?.present();
-//         }
-//     }
-
-//     useEffect(() => {
-//         checkConnection();
-//     }, [])
-
-//     return (
-//         <>
-//             {
-//                 (props?.showButton) ?
-//                     <IonButton slot="end" onClick={() => { modalSettingRef?.current?.present() }} expand="block">
-//                         <IonIcon icon={settings} />
-//                     </IonButton>
-//                     :
-//                     null
-//             }
-//             <IonModal ref={modalSettingRef}>
-//                 <IonHeader>
-//                     <IonToolbar>
-//                         <IonTitle>Settings</IonTitle>
-//                         <IonButton slot="end" color="danger" onClick={() => { modalSettingRef?.current?.dismiss() }}>
-//                             <IonIcon icon={closeCircle} />
-//                         </IonButton>
-//                     </IonToolbar>
-//                 </IonHeader>
-//                 <IonContent>
-//                     <IonLabel>Server IP</IonLabel>
-//                     <IonInput fill='outline' mode='md' type='text'
-//                         onIonInput={(ev) => setIPServer(ev.target.value)}
-//                     />
-//                     <br />
-//                     <IonLabel>Server port</IonLabel>
-//                     <IonInput fill='outline' mode='md' type='number' max={65535} min={1000}
-//                         onIonInput={(ev) => setPortServer(ev.target.value)}
-//                     />
-//                     <br />
-//                     <IonButton expand='block' mode='md' color="success" onClick={() => storeConfig()}>Save configuration</IonButton>
-//                 </IonContent>
-//             </IonModal>
-//         </>
-
-//     )
-// }
 
 
 

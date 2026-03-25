@@ -1,6 +1,7 @@
 // app/(map)/_layout.tsx
 import { HapticTab } from '@/components/haptic-tab';
-import { t } from '@/components/i18n';
+import { useLanguage } from '@/components/LanguageProvider';
+
 import { Colors } from '@/constants/theme';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
@@ -8,6 +9,8 @@ import { useColorScheme } from 'react-native';
 export default function CategoriesLayout() {
 
     const colorScheme = useColorScheme();
+    const { t } = useLanguage();
+
 
     return (
         <Stack

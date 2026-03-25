@@ -1,8 +1,10 @@
+import * as SecureStore from 'expo-secure-store';
+
 
 export const it = {
     map: "Mappa",
     account: "Profilo",
-    categories:"Categorie",
+    categories: "Categorie",
     login: {
         placeholderEmail: "Inserisci la tua email",
         placeholderPassord: "Inserisci la password",
@@ -41,6 +43,3 @@ export const en = {
         diffPass: "Password not matching",
     }
 }
-
-
-export const t = it; // current language
