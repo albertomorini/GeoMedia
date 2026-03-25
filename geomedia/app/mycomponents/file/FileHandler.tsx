@@ -111,7 +111,10 @@ const FileHandler = forwardRef((props: any, ref: any) => {
         return_files: () => {
             return filesAttached
         },
-    }), [filesAttached]); // re-create handle when value changes (or remove dependency if not needed)
+        load_files: (files) => { //allows to pass existent files
+            setFilesAttached(files)
+        }
+    }), [filesAttached]); 
 
 
     return (

@@ -1,13 +1,12 @@
 import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Button, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
-import { MyContext } from '../_layout';
+import { MyContext } from '../../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
-import { doRequest } from '../utility';
-import { ThemedText } from '@/components/themed-text';
+import { doRequest } from '../../utility';
 import { router } from 'expo-router';
 
 const MapViewer = forwardRef((props, ref) => {
@@ -138,6 +137,8 @@ const MapViewer = forwardRef((props, ref) => {
                             // provider={PROVIDER_GOOGLE} // LATER: to check with google for design
                             style={styles.map}
                             showsUserLocation={true}
+                            toolbarEnabled={true}
+                            // mapPadding={{ top: 0, right: 20, bottom: 100, left: 0 }} // push buttons
                             followsUserLocation={true}
                             initialRegion={{
                                 latitude: UserPosition.latitude,
@@ -182,7 +183,6 @@ const MapViewer = forwardRef((props, ref) => {
                                                 pathname: '/PostViewer',
                                                 params: {
                                                     postid: p?.ID,
-                                                    title: p?.TITLE //todo: parse uri?
                                                 }
                                             });
                                         }}

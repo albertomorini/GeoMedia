@@ -29,6 +29,8 @@ const PostCreator = () => {
 
 
     const ctx = useContext(MyContext)
+    const params = useLocalSearchParams();
+
     const refFileHandler = useRef()
     const [fullScreenCamera, setFullScreenCamera] = useState(false)
     ////////////////////////////////////////////////////////////////////
@@ -60,6 +62,7 @@ const PostCreator = () => {
         },
         VISIBILITY_AREA_KM: 2, //default 2km
     })
+
 
     //////////////////////////////////////////////////////////////////////
 
@@ -117,8 +120,34 @@ const PostCreator = () => {
         return coordinateChosen?.latitude == currentLocation.latitude && coordinateChosen.longitude == currentLocation.longitude
     }
 
+
+    function loadFullPost() {
+        let postid = null;
+        try {
+            postid = params.postid ? JSON.parse(params.postid as string) : null;
+        } catch (e) {
+            console.error("Failed to parse postData", e);
+            postid = null;
+        }
+        if (postid != null) {
+            doRequest("post_get_fullpost", {
+                "postid": postid,
+                "uid": ctx?.getUID()
+            }).then(resQuery => {
+                let x = resQuery[0]
+                setPostData(x)
+                refFileHandler?.current?.load_files(x.attachments)
+            }).catch(err => {
+                Alert.alert("Error reading post", err)
+            })
+        }
+    }
+
     useEffect(() => {
         load_current_location()
+        if (params != null) {
+            loadFullPost()
+        }
     }, [])
 
 
@@ -162,9 +191,10 @@ const PostCreator = () => {
                                 }));
                             }}
                         />
-                        <ThemedText style={style.label}>Area of visibility (in KM):</ThemedText>
-                        <ThemedInput type='outlined' placeholder='Area of visibility in KM'
-                            value={postData?.VISIBILITY_AREA_KM}
+                        <ThemedText style={style.label}>Area of visibility (in KM): </ThemedText>
+                        <ThemedInput type='outlined'
+                            value={postData?.VISIBILITY_AREA_KM.toString()}
+                            placeholder='Area of visibility in KM'
                             onChangeText={(txt) => {
                                 if (isNaN(txt)) {
                                     Alert.alert("Must be a number")

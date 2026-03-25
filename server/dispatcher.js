@@ -26,7 +26,6 @@ function generic_query(path, body) {
 
 function merge_post(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
-    console.log("EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 
@@ -61,12 +60,6 @@ async function hpmedia_merge_folder(postid, attachments) {
         file_to_remove.forEach(f => {
             fs.unlinkSync(f)
         })
-        console.log("Storing in hypermedia table: ", hypermedia_reference);
-
-        console.log(
-            "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid
-        );
-
 
         return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC HPMEDIA_MERGEFILE @FILESNAME_ATTACHED='" + JSON.stringify(hypermedia_reference).replaceAll("'", "''") + "',@POSTID=" + postid)
     } catch (error) {
@@ -110,7 +103,6 @@ function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_lo
 
     d = Math.round(6371000 * 2 * Math.asin(Math.sqrt(a))); // in meters
 
-    console.log(d, areaKM * 1000)
     if (d <= areaKM * 1000) { //transform areaKM to meters
         return true
     } else {
@@ -127,7 +119,6 @@ async function post_get_map(uid, current_position, collection_chosen = []) {
     posts.forEach(pp => {
         // check if users' position is within the post availability
         if (checkAREA(pp.VISIBILITY_AREA_KM, pp.LATITUDE, pp.LONGITUDE, current_position.latitude, current_position.longitude)) {
-            console.log(">", pp)
             results.push(pp)
         }
     })

@@ -57,6 +57,7 @@ async function dispatchReq(res, path, body, contentType) {
             case "/profile_editinfo":
             case "/profile_getpfp":
             case "/auth_check_otp":
+            case "/interactions_likepost":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             /////////////////////////////////?//////////////////////////////////////////////////////////////////?
@@ -90,12 +91,6 @@ async function dispatchReq(res, path, body, contentType) {
                     sendResponse(res, 200, { "post_id": post_id, "OK": false })
                 }
 
-
-                break;
-            case "/post_delete": //TODO: put in the generics?
-                console.log("postid, userpsw to authorization, into a JSON... generics?");
-
-                //TODO: creare tabella segnalazioni
                 break;
             case "/post_get_map":
                 query_results = await dispatcher.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
