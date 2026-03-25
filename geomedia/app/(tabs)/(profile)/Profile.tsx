@@ -11,10 +11,12 @@ import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Profile() {
 
   const my_email = 'albmor.dev@gmail.com'
+  const { changeLang } = useLanguage();
 
   const ctx = useContext(MyContext);
   const user = ctx?.User?.User
@@ -127,6 +129,28 @@ export default function Profile() {
       </ScrollView> */}
 
         <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
+
+      </ThemedView>
+      <ThemedView style={{
+        position: "absolute",
+        bottom: 40, // distance from bottom
+        left: 5,
+        right: 0,
+        flexDirection: "row",
+        justifyContent: "start",
+
+        alignItems: "center",
+        gap: 16,
+        transform: [{ translateY: -10 }],
+      }}>
+        <ThemedText style={style?.label}>Change language:</ThemedText>
+
+        <TouchableOpacity onPress={() => changeLang("IT")}>
+          <ThemedText accessibilityLabel="Italian" style={{fontSize:20}}>🇮🇹</ThemedText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLang("EN")}>
+          <ThemedText accessibilityLabel="English" style={{fontSize:20}}>🇬🇧</ThemedText>
+        </TouchableOpacity>
 
       </ThemedView>
     </ThemedView>

@@ -66,6 +66,13 @@ export const style = StyleSheet.create({
             justifyContent: 'center',
             marginVertical: 10,      // optional spacing
         },
+        small:{
+            width:"20%",
+            borderRadius: 8,         // optional rounded corners
+            alignItems: 'center',    // center text horizontally
+            justifyContent: 'center',
+            marginVertical: 10, 
+        },
         fab: {
             position: 'absolute',
             bottom: 30,

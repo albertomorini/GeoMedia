@@ -9,16 +9,14 @@ import { style } from "@/components/globalstyle";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const URL = "http://10.0.0.3:9911"
+let URL = "http://10.0.0.3:9911"
 
 
 async function load_config() {
     let config = await SecureStore.getItemAsync("config");
-    console.log(">>", config);
     if (config != null) {
-        URL = config.URL
+        URL = config
     }
-    // return cache_user;
 }
 load_config()
 
@@ -28,26 +26,16 @@ load_config()
 export const SettingsConfig = () => {
 
     const [modalSettings, setModalSettings] = useState(false)
-    const [newUrl, setNewURL] = useState(null)
-
-    async function checkConnection() {
-        await setItem('key', 'value');          // set in your "appDB" key
-        const value = await getItem();          // get from the same key
-        console.log(value);                     // should be 'value'
-
-        const config = await AsyncStorage.getItem("srv_config"); // separate key
-        console.warn(config);
-    }
+    const [protocol, setProtocol] = useState(null)
+    const [servername, setServerName] = useState(null)
+    const [port, setPort] = useState(null)
 
     const { changeLang } = useLanguage();
 
-    async function init() {
-        let cache_user = await SecureStore.getItemAsync("config");
-        console.log(cache_user);
-        return cache_user;
 
+    function confirmNewURI() {
+        SecureStore.setItemAsync("config", protocol + "://" + servername + ":" + port);
     }
-
 
     return (
 
@@ -60,14 +48,14 @@ export const SettingsConfig = () => {
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: 16, // spacing between IT and EN (or use margin if not supported)
+                gap: 16,
                 transform: [{ translateY: -10 }],
             }}>
                 <TouchableOpacity onPress={() => changeLang("IT")}>
-                    <ThemedText>🇮🇹</ThemedText>
+                    <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => changeLang("EN")}>
-                    <ThemedText>🇬🇧</ThemedText>
+                    <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
                 </TouchableOpacity>
 
             </ThemedView>
@@ -87,35 +75,60 @@ export const SettingsConfig = () => {
                 transparent={true}
                 animationType="slide">
                 <ThemedView style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    top: "20%",
                     backgroundColor: "rgba(0,0,0,0.5)",
+                    borderWidth: 3,
+
                 }}>
                     <ThemedView
                         style={{
-                            width: 300,
                             padding: 20,
-                            backgroundColor: "white",
                             borderRadius: 10,
+                           
+                            justifyContent: "space-between",
                         }}
                     >
-                        <ThemedInput type="outlined" placeholder="protocol://name:port" onChangeText={(text) => {
-                            setNewURL(text)
+                        <ThemedText style={style.label}>Protocol</ThemedText>
+                        <ThemedInput type="outlined" placeholder="https" onChangeText={(text) => {
+                            setProtocol(text)
+                        }} />
+                        <ThemedText style={style.label}>Server name</ThemedText>
+                        <ThemedInput type="outlined" placeholder="geomediasrv" onChangeText={(text) => {
+                            setServerName(text)
+                        }} />
+                        <ThemedText style={style.label}>Port</ThemedText>
+                        <ThemedInput type="outlined" placeholder="9911" onChangeText={(text) => {
+                            setPort(text)
                         }} />
 
-                        <TouchableOpacity onPress={() => setVisible(false)} style={style?.colors.geomedia_red}>
-                            <Text style={{ marginTop: 20 }}>Close</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setVisible(false)} style={style?.colors.geomedia_green}>
-                            <Text style={{ marginTop: 20 }}>Confirm</Text>
-                        </TouchableOpacity>
+                        <ThemedView
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                marginTop: 20,
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => setModalSettings(false)}
+                                style={[style?.colors.geomedia_red,style.buttons.small]}
+                            >
+                                <Text>Close</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={confirmNewURI}
+                                style={[style?.colors.geomedia_green, style.buttons.small]}
+                            >
+                                <Text>Confirm</Text>
+                            </TouchableOpacity>
+                        </ThemedView>
+
                     </ThemedView>
                 </ThemedView>
-            </Modal>
+            </Modal >
 
 
-        </ThemedView>
+        </ThemedView >
     )
 }
 
@@ -124,9 +137,7 @@ export const SettingsConfig = () => {
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
-
-    // return fetch("http://" + ServerConfig.ipserver + ":" + ServerConfig.port + "/" + api, {
-    return fetch("http://10.0.0.3:9910/" + api, {
+    return fetch(URL + api, {
         method: "POST",
         mode: "cors",
         headers: { "authorization": "mysuperkey" },
