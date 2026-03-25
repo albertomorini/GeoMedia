@@ -4,13 +4,14 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert, Dimensions, Pressable, TouchableOpacity } from "react-native";
+import { Alert, Dimensions, TouchableOpacity } from "react-native";
 
 import { Image } from 'expo-image'; //BETTER PERFORMANCE COMPARED TO NATIVE ONE
 
 import Carousel from 'react-native-reanimated-carousel';
 import { Ionicons } from "@expo/vector-icons";
 import { style } from "@/components/globalstyle";
+import { file_share } from "@/app/mycomponents/file/FileHandler";
 const width = Dimensions.get('window').width;
 
 const PostViewer = () => {
@@ -52,89 +53,99 @@ const PostViewer = () => {
                     title: postData?.TITLE,
                 }}
             />
-            <ThemedView style={style.container}>
+            <ThemedView style={{ height: "100%" }}>
+                <ThemedView style={style.container}>
+                    <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
+                    <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
+                    <Carousel
+                        width={width}
+                        height={250}
+                        data={postData?.attachments?.filter(f => f?.MIME_TYPE == "image/jpeg")}
+                        pagingEnabled
+                        snapEnabled
+                        loop={false}
+                        mode="parallax"
+                        modeConfig={{
+                            parallaxScrollingScale: 0.9,
+                            parallaxScrollingOffset: 52,
+                        }}
+                        windowSize={3}
+                        renderItem={({ item }) => (
+                            <ThemedView style={{ flex: 1 }}>
+                                <Image
+                                    source={{ uri: `data:image/jpeg;base64,${item?.BASE64}` }}
+                                    style={{ width: '100%', height: '100%' }}
+                                    contentFit="cover"
+                                    transition={200}
+                                />
 
-                <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
-                <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
-                <Carousel
-                    width={width}
-                    height={250}
-                    data={postData?.attachments} //TODO: filter by mime type
-                    pagingEnabled
-                    snapEnabled
-                    loop={false}
-                    mode="parallax"
-                    modeConfig={{
-                        parallaxScrollingScale: 0.9,
-                        parallaxScrollingOffset: 52,
-                    }}
-                    windowSize={3}
-                    renderItem={({ item }) => (
-                        <ThemedView style={{ flex: 1 }}>
-                            <Image
-                                source={{ uri: `data:image/jpeg;base64,${item?.BASE64}` }}
-                                style={{ width: '100%', height: '100%' }}
-                                contentFit="cover"
-                                transition={200}
-                            />
+                                <TouchableOpacity //DOWNLOAD BUTTON
+                                    onPress={() => {
+                                        file_share(item.BASE64, item.FILENAME, item.MIME_TYPE)
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 15,
+                                        right: 15,
+                                        backgroundColor: 'rgba(0,0,0,0.6)',
+                                        paddingVertical: 8,
+                                        paddingHorizontal: 12,
+                                        borderRadius: 8,
+                                    }}
+                                >
+                                    <ThemedText style={{ color: 'white' }}>Share
 
-                            <TouchableOpacity //DOWNLOAD BUTTON
-                                onPress={() => console.log(item.filename)}
+                                        <Ionicons name="share-outline" size={28} color={"lightblue"} />
+                                    </ThemedText>
+
+                                </TouchableOpacity>
+                            </ThemedView>
+                        )}
+                    />
+
+                    <ThemedView style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                    }}>
+                        <ThemedText style={{
+                            fontSize: 16,
+                            fontWeight: "500",
+                        }}>Views: 22</ThemedText>
+
+                        <ThemedView style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 8
+                        }}>
+                            <ThemedText style={{
+                                fontSize: 16,
+                                fontWeight: "500",
+                            }}>Likes: 33</ThemedText>
+
+                            {/* Heart button */}
+                            <TouchableOpacity
+                                onPress={() => console.log("HEY")}
                                 style={{
-                                    position: 'absolute',
-                                    bottom: 15,
-                                    right: 15,
-                                    backgroundColor: 'rgba(0,0,0,0.6)',
-                                    paddingVertical: 8,
-                                    paddingHorizontal: 12,
-                                    borderRadius: 8,
+                                    backgroundColor: 'rgba(0,0,0,0.4)',
+                                    padding: 8,
+                                    borderRadius: 20,
                                 }}
                             >
-                                <ThemedText style={{ color: 'white' }}>Download</ThemedText>
-
-                            </TouchableOpacity>
-                            <TouchableOpacity //REMOVE BUTTON //TODO: to show only in editing!!!
-                                onPress={() => console.log(item.filename)}
-                                style={{
-                                    position: 'absolute',
-                                    top: 15,
-                                    right: 15,
-                                    backgroundColor: 'rgba(206, 38, 38, 0.6)',
-                                    paddingVertical: 8,
-                                    paddingHorizontal: 12,
-                                    borderRadius: 8,
-                                }}
-                            >
-                                <ThemedText style={{ color: 'white' }}>Remove</ThemedText>
-
+                                <Ionicons
+                                    name='heart'
+                                    color={"red"}
+                                    // name={isLiked ? 'heart' : 'heart-outline'}
+                                    size={24}
+                                // color={isLiked ? 'red' : 'white'}
+                                />
                             </TouchableOpacity>
                         </ThemedView>
-                    )}
-                />
 
-                <ThemedView style={[{ flex: 1 },style.containerContent]} >
-                    <ThemedText style={[style.label]}>This post has  views</ThemedText>
-
-                    <TouchableOpacity
-                        onPress={() => console.log("HEY")}
-                        style={{
-                            position: 'absolute',
-                            top: 40,
-                            right: 15,
-                            backgroundColor: 'rgba(0,0,0,0.4)',
-                            padding: 8,
-                            borderRadius: 20,
-                        }}
-                    >
-                        <Ionicons
-                            name='heart'
-                            color={"red"}
-                            // name={isLiked ? 'heart' : 'heart-outline'}
-                            size={24}
-                        // color={isLiked ? 'red' : 'white'}
-                        />
-                    </TouchableOpacity>
-                </ThemedView>
+                    </ThemedView >
+                </ThemedView >
             </ThemedView >
         </>
     );

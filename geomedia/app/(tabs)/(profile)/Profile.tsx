@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
 import { router, useFocusEffect } from 'expo-router';
+import { ThemedView } from '@/components/themed-view';
 
 export default function Profile() {
 
@@ -63,68 +64,71 @@ export default function Profile() {
   );
 
   return (
-    <Box p="md">
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 10,
-        }}
-      >
-        <View style={{ flex: 1, paddingRight: 10 }}>
-          <ThemedText className="text-lg font-bold" style={style.subtitle}>
-            Hello {user?.NAME} {user?.SURNAME}
-          </ThemedText>
+    <ThemedView style={{ height: "100%" }}>
+      <ThemedView style={style.container}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 10,
+          }}
+        >
+          <View style={{ flex: 1, paddingRight: 10 }}>
+            <ThemedText className="text-lg font-bold" style={style.subtitle}>
+              Hello {user?.NAME} {user?.SURNAME}
+            </ThemedText>
 
-          <Text variant="caption">
-            Your logged as: {user?.USERNAME}
-          </Text>
+            <Text variant="caption">
+              Your logged as: {user?.USERNAME}
+            </Text>
 
-          <Text
-            variant="caption"
-            style={{ fontStyle: 'italic', marginTop: 2 }}
-          >
-            Mail address: {user?.EMAIL ?? 'Not provided'}
-          </Text>
+            <Text
+              variant="caption"
+              style={{ fontStyle: 'italic', marginTop: 2 }}
+            >
+              Mail address: {user?.EMAIL ?? 'Not provided'}
+            </Text>
+          </View>
+
+          <Image
+            source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+            }}
+          />
         </View>
 
-        <Image
-          source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
+        <Pressable
+          onPress={() => {
+            router.push('ProfileEditor')
           }}
-        />
-      </View>
+          style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]}
+        >
+          <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+            Edit profile
+          </ThemedText>
+        </Pressable>
 
-      <Pressable
-        onPress={() => {
-          router.push('ProfileEditor')
-        }}
-        style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]}
-      >
-        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-          Edit profile
-        </ThemedText>
-      </Pressable>
+        <TouchableOpacity
+          onPress={() => logout()}
+          style={[style?.buttons?.full_screen, style?.colors?.geomedia_red]}
+        >
+          <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+            Log out
+          </ThemedText>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => logout()}
-        style={[style?.buttons?.full_screen, style?.colors?.geomedia_red]}
-      >
-        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-          Log out
-        </ThemedText>
-      </TouchableOpacity>
-
-      {/* <ThemedText variant="heading">Your post</ThemedText>
+        {/* <ThemedText variant="heading">Your post</ThemedText>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
       </ScrollView> */}
 
-      <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
-    </Box>
+        <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
+
+      </ThemedView>
+    </ThemedView>
   );
 }

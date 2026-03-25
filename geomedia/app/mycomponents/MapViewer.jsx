@@ -92,9 +92,9 @@ const MapViewer = forwardRef((props, ref) => {
                 Alert.alert('Error getting location', error.message);
             },
             {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
                 timeout: 15000,
-                maximumAge: 10000,
+                maximumAge: 0,
             }
         );
 
