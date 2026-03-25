@@ -180,7 +180,6 @@ const MapViewer = forwardRef((props, ref) => {
                                         onPress={() => { ///redirect to post viewer
                                             router.push({
                                                 pathname: '/PostViewer',
-                                                title: p?.TITLE,
                                                 params: {
                                                     postid: p?.ID,
                                                     title: p?.TITLE //todo: parse uri?

@@ -6,7 +6,9 @@ import { ThemedInput } from "@/components/themed-input";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useContext, useEffect, useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert,  Pressable, StyleSheet, TouchableOpacity } from "react-native";
+
+import {Image} from "expo-image"
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";

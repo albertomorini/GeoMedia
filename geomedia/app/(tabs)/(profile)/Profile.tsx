@@ -1,7 +1,7 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { Image, Linking, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
+import { useCallback, useContext, useState } from 'react';
+import { Linking, Pressable, TouchableOpacity, View } from 'react-native';
 import { MyContext } from '../../_layout';
-
+import { Image } from "expo-image"; // really, huge improveement
 import { Text, Box } from "re-native-ui";
 import { style } from '@/components/globalstyle';
 
@@ -10,7 +10,6 @@ import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/account_icon';
 import { router, useFocusEffect } from 'expo-router';
-import { ThemedView } from '@/components/themed-view';
 
 export default function Profile() {
 

@@ -47,7 +47,6 @@ export default function OpenCamera(
             } satisfies TakePhotoOptions);
 
             const base64String = await RNFS.readFile(photo.path, 'base64');
-
             // return { base64: base64String, format: "jpg" }
             return base64String
         } catch (e) {

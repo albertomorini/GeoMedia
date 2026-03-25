@@ -4,8 +4,14 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert, Image } from "react-native";
+import { Alert, Dimensions, Pressable, TouchableOpacity } from "react-native";
 
+import { Image } from 'expo-image'; //BETTER PERFORMANCE COMPARED TO NATIVE ONE
+
+import Carousel from 'react-native-reanimated-carousel';
+import { Ionicons } from "@expo/vector-icons";
+import { style } from "@/components/globalstyle";
+const width = Dimensions.get('window').width;
 
 const PostViewer = () => {
     const params = useLocalSearchParams();
@@ -27,8 +33,8 @@ const PostViewer = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 setPostData(resQuery[0])
-                console.log("!@@@>",resQuery);
-                
+                console.log("!@@@>", resQuery);
+
             }).catch(err => {
                 Alert.alert("Error reading post", err)
             })
@@ -46,25 +52,90 @@ const PostViewer = () => {
                     title: postData?.TITLE,
                 }}
             />
-            <ThemedView>
+            <ThemedView style={style.container}>
 
-                <ThemedText>{postData?.TITLE}</ThemedText>
-                <ThemedText>{postData?.COMMENT}</ThemedText>
+                <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
+                <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
+                <Carousel
+                    width={width}
+                    height={250}
+                    data={postData?.attachments} //TODO: filter by mime type
+                    pagingEnabled
+                    snapEnabled
+                    loop={false}
+                    mode="parallax"
+                    modeConfig={{
+                        parallaxScrollingScale: 0.9,
+                        parallaxScrollingOffset: 52,
+                    }}
+                    windowSize={3}
+                    renderItem={({ item }) => (
+                        <ThemedView style={{ flex: 1 }}>
+                            <Image
+                                source={{ uri: `data:image/jpeg;base64,${item?.BASE64}` }}
+                                style={{ width: '100%', height: '100%' }}
+                                contentFit="cover"
+                                transition={200}
+                            />
 
-                {
-                    postData?.attachments?.map(p => (
-                        <Image
-                            source={{ uri: `data:image/jpeg;base64,${p?.BASE64}` }}
-                            style={{
-                                width: 180,
-                                height: 180,
-                                borderRadius: 40,
-                            }}
+                            <TouchableOpacity //DOWNLOAD BUTTON
+                                onPress={() => console.log(item.filename)}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 15,
+                                    right: 15,
+                                    backgroundColor: 'rgba(0,0,0,0.6)',
+                                    paddingVertical: 8,
+                                    paddingHorizontal: 12,
+                                    borderRadius: 8,
+                                }}
+                            >
+                                <ThemedText style={{ color: 'white' }}>Download</ThemedText>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity //REMOVE BUTTON //TODO: to show only in editing!!!
+                                onPress={() => console.log(item.filename)}
+                                style={{
+                                    position: 'absolute',
+                                    top: 15,
+                                    right: 15,
+                                    backgroundColor: 'rgba(206, 38, 38, 0.6)',
+                                    paddingVertical: 8,
+                                    paddingHorizontal: 12,
+                                    borderRadius: 8,
+                                }}
+                            >
+                                <ThemedText style={{ color: 'white' }}>Remove</ThemedText>
+
+                            </TouchableOpacity>
+                        </ThemedView>
+                    )}
+                />
+
+                <ThemedView style={[{ flex: 1 },style.containerContent]} >
+                    <ThemedText style={[style.label]}>This post has  views</ThemedText>
+
+                    <TouchableOpacity
+                        onPress={() => console.log("HEY")}
+                        style={{
+                            position: 'absolute',
+                            top: 40,
+                            right: 15,
+                            backgroundColor: 'rgba(0,0,0,0.4)',
+                            padding: 8,
+                            borderRadius: 20,
+                        }}
+                    >
+                        <Ionicons
+                            name='heart'
+                            color={"red"}
+                            // name={isLiked ? 'heart' : 'heart-outline'}
+                            size={24}
+                        // color={isLiked ? 'red' : 'white'}
                         />
-                    ))
-                }
-
-            </ThemedView>
+                    </TouchableOpacity>
+                </ThemedView>
+            </ThemedView >
         </>
     );
 }
