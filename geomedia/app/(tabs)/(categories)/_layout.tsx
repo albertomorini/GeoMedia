@@ -21,10 +21,20 @@ export default function CategoriesLayout() {
                 gestureEnabled: true
             }}
         >
+
             <Stack.Screen
                 name="CategoriesList"
                 options={{
                     title: t?.categories
+                }}
+            />
+            <Stack.Screen
+                name="CategoryCreator"
+                options={{
+                    title: t?.categories,
+                    presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
+                    animation: 'slide_from_right',
+
                 }}
             />
 

@@ -2,7 +2,7 @@
 
 const http = require("http");
 const dispatcher = require("./dispatcher");
-const port = 9910
+const port = 9911
 const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))
 
@@ -58,6 +58,7 @@ async function dispatchReq(res, path, body, contentType) {
             case "/profile_getpfp":
             case "/auth_check_otp":
             case "/interactions_likepost":
+            case "/collections_get":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
             /////////////////////////////////?//////////////////////////////////////////////////////////////////?

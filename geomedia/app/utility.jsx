@@ -84,7 +84,7 @@ export const SettingsConfig = () => {
                         style={{
                             padding: 20,
                             borderRadius: 10,
-                           
+
                             justifyContent: "space-between",
                         }}
                     >
@@ -110,7 +110,7 @@ export const SettingsConfig = () => {
                         >
                             <TouchableOpacity
                                 onPress={() => setModalSettings(false)}
-                                style={[style?.colors.geomedia_red,style.buttons.small]}
+                                style={[style?.colors.geomedia_red, style.buttons.small]}
                             >
                                 <Text>Close</Text>
                             </TouchableOpacity>
@@ -137,7 +137,10 @@ export const SettingsConfig = () => {
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
-    return fetch(URL + api, {
+    console.log(URL);
+
+    // return fetch(URL  + api, { //TODO: CHECK IT
+    return fetch("http://10.0.0.3:9911/"+ api, {
         method: "POST",
         mode: "cors",
         headers: { "authorization": "mysuperkey" },
