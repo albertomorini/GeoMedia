@@ -249,6 +249,7 @@ const PostCreator = () => {
                         <FileHandler
                             fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)}
                             ref={refFileHandler}
+                            postid={postData?.ID}
                         />
 
                         <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {

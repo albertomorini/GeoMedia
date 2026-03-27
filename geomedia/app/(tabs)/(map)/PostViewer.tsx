@@ -122,6 +122,7 @@ const PostViewer = () => {
                             )}
                         />
                     }
+{/* //TODO: list the other type of file */}
 
                     <ThemedView style={{
                         flexDirection: "row",

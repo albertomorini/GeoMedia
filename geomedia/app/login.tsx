@@ -19,20 +19,21 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 
 export default function LoginScreen(props) {
-    
+
     const { t } = useLanguage();
     const ctx = useContext(MyContext)
     const [isLogin, setIsLogin] = useState(true);
     //////////////////////////////////////////////////
 
     const [email, setEmail] = useState(null)
-    const [username, setUsername] = useState(null); //TODO: the check if already exists
+    const [username, setUsername] = useState(null);
     const [password, setPassword] = useState("");
     const [passwordRep, setPasswordRep] = useState("");
     const [errorPassword, seterrorPassword] = useState("");
 
     ///
     const [OTP, setOTP] = useState(null);
+    const [validUsername, setValidUsername] = useState(false);
 
     //////////////////////////////////////////////////////////////////
 
@@ -55,8 +56,15 @@ export default function LoginScreen(props) {
     }
 
     function checkValidityPassword(password: string) {
-        //TODO: to implement
-        return true;
+        const minLength = 6;
+        const hasNumber = /\d/;
+        const hasUppercase = /[A-Z]/;
+
+        return (
+            password.length >= minLength &&
+            hasNumber.test(password) &&
+            hasUppercase.test(password)
+        );
     }
 
     function doSignUp() {
@@ -68,8 +76,9 @@ export default function LoginScreen(props) {
             alert(t?.signup?.weakPassword)
         } else if (password != passwordRep) {
             seterrorPassword(t?.signup?.diffPass)
+        } else if (validUsername) {
+            seterrorPassword("Username already taken!")
         } else {
-            console.log("HERE");
             doRequest("auth_signin", {
                 EMAIL: email,
                 USERNAME: username,
@@ -96,6 +105,22 @@ export default function LoginScreen(props) {
         })
     }
 
+    function check_username(username: string) {
+        doRequest("auth_check_username", {
+            username: username
+        }).then(resQuery => {
+            if (resQuery[0]?.OK) {
+                //TODO: make the border green
+                setValidUsername(true)
+            } else {
+                //TODO: make the border red
+            }
+        })
+        // IF EXISTS (SELECT * FROM USERS WHERE USERNAME=@USERNAME)
+        //     SELECT 1 AS OK
+        // ELSE
+        //     SELECT 0 AS OK
+    }
 
     //////////////////////////////////////////////////////////////////
     function switchMode() {
@@ -168,7 +193,13 @@ export default function LoginScreen(props) {
                                         <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
 
                                         <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
-                                        <ThemedInput type='outlined' name="email" placeholder={"Username"} onChangeText={(text) => { setUsername(text) }} />
+                                        <ThemedInput type='outlined' name="email" placeholder={"Username"} onChangeText={(text) => {
+                                            setUsername(text)
+                                        }}
+                                            onBlur={() => {
+                                                check_username(text);
+                                            }}
+                                        />
 
                                         <ThemedText style={[style.label, { textAlign: "left" }]} >Password</ThemedText>
 

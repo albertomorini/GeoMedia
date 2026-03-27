@@ -58,16 +58,19 @@ async function dispatchReq(res, path, body, contentType) {
             case "/profile_getpfp":
             case "/auth_check_otp":
             case "/interactions_likepost":
+            case "/hpmedia_remove": //TODO: to implement in SQL
             case "/collections_get":
                 dummy_res = dispatcher.generic_query(path, body)
                 break;
-            /////////////////////////////////?//////////////////////////////////////////////////////////////////?
+            ////___________________________________________________________________
+            ////___________________________________________________________________
             case "/auth_signin":
                 query_results = await dispatcher.auth_signin(path, body)
                 if (query_results.AUTH == 2) {
-                    delete query_results.OTP //
+                    delete query_results.OTP //do not send the OTP via http, is sent via email (otherwise would be worthless)
                     sendResponse(res, 200, query_results)
                 } else {
+                    dispatcher.writeLog("AUTH failed for: " + JSON.stringify(body), "SIGNIN")
                     sendResponse(res, 401, query_results)
                 }
                 break;
@@ -75,21 +78,20 @@ async function dispatchReq(res, path, body, contentType) {
             case "/post_merge": //creation, update
                 let files = body.postdata.attachments;
 
-                delete body.postdata.attachments
+                delete body.postdata.attachments // do not pass files to SQL
 
                 query_results = await dispatcher.merge_post(body.postdata)
                 if (!query_results[0].OK) {
-                    //TODO return error
                     sendResponse(res, 500, { "OK": false, "MSG": query_results[1].MSG })
-                    return null
-                }
-                let post_id = query_results[0].ID
-
-                let x = dispatcher.hpmedia_merge_folder(post_id, files)
-                if (x) {
-                    sendResponse(res, 200, { "post_id": post_id, "OK": true })
                 } else {
-                    sendResponse(res, 200, { "post_id": post_id, "OK": false })
+                    let post_id = query_results[0].ID
+
+                    let x = dispatcher.hpmedia_merge_folder(post_id, files)
+                    if (x) {
+                        sendResponse(res, 200, { "post_id": post_id, "OK": true })
+                    } else {
+                        sendResponse(res, 500, { "post_id": post_id, "OK": false })
+                    }
                 }
 
                 break;
@@ -99,21 +101,23 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             case "/post_get_fullpost":
                 query_results = await dispatcher.generic_query("post_get_fullpost", body)
-                let ff  = await dispatcher.hpmedia_read_folder(body?.postid)
+                let ff = await dispatcher.hpmedia_read_folder(body?.postid)
                 query_results[0]["attachments"] = ff
-                console.log(query_results);
-                
                 sendResponse(res, 200, query_results)
                 break;
-            /////////////////////////////////?//////////////////////////////////////////////////////////////////?
+            case "/post_delete":
+                query_results = await dispatchReq.post_delete(body?.postid, body?.password)
+                break;
+            ////______________________________________________________________________________
+            ////______________________________________________________________________________
             default:
                 sendResponse(res, 404, { 'msg': "Unknown path:" + path })
                 break;
         }
         return dummy_res
     } catch (error) {
-        fs.appendFileSync('./log.txt', 'ERROR ,' + Date.now() + ',' + error + "/n")
-        console.log("Error on dispatchReq: ", error);
+        console.error("Error on dispatchReq: ", error);
+        dispatchReq.writeLog(error, "ERROR")
     }
 }
 
@@ -153,14 +157,14 @@ http.createServer((req, res) => {
                         sendResponse(res, 200, resQuery)
                     }
                 }).catch(error => {
-                    fs.appendFileSync('./log.txt', 'ERROR_ENDPOINT' + ',' + Date.now() + ',' + error + "/n")
+                    dispatchReq.writeLog(error, "ERROR_ENDPOINT");
                     if (error != null) {
                         sendResponse(res, 500, { "Internal_Server_Error": error })
                     }
                 })
             } catch (error) {
                 sendResponse(res, 500, { "Internal_Server_Error": error })
-                fs.appendFileSync('./log.txt', 'ERROR ,' + Date.now() + ',' + error + "/n")
+                dispatchReq.writeLog(error)
             }
         }
     })

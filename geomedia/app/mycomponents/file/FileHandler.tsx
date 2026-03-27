@@ -15,6 +15,7 @@ import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
 import Carousel from "react-native-reanimated-carousel";
 import { Image } from "expo-image";
+import { doRequest } from "@/app/utility";
 const width = Dimensions.get('window').width;
 
 
@@ -98,6 +99,14 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             filesAttached.pop(index)
                             setFilesAttached([...filesAttached])
                         }
+                        if (props?.postid != undefined) { //post exists, do the request to unbind the file, otherwise not existing is a local modification
+                            doRequest("hpmedia_remove", {
+                                "postid": 1,
+                                "filename": FILENAME
+                            }).then(resQuery => {
+                                //TODO: toast?
+                            })
+                        }
                     },
                 },
             ],
@@ -114,7 +123,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
         load_files: (files) => { //allows to pass existent files
             setFilesAttached(files)
         }
-    }), [filesAttached]); 
+    }), [filesAttached]);
 
 
     return (
@@ -187,8 +196,8 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                                                 <ThemedText style={{ color: 'white' }}>Download</ThemedText>
 
                                             </TouchableOpacity>
-                                            <TouchableOpacity //REMOVE BUTTON //TODO: to show only in editing!!!
-                                                onPress={() => console.log(item.FILENAME)}
+                                            <TouchableOpacity //REMOVE BUTTON
+                                                onPress={() => remove_attachment(item.FILENAME)}
                                                 style={{
                                                     position: 'absolute',
                                                     top: 15,
