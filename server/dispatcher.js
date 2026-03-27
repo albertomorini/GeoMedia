@@ -95,7 +95,7 @@ async function hpmedia_merge_folder(postid, attachments) {
     } catch (error) {
         writeLog("Error on merge_folder: " + error, "HPMEDIA")
         console.error(error);
-        return new Promise.resolve([{ "OK": false, "MSG": error }])
+        return Promise.resolve([{ "OK": false, "MSG": error }])
     }
 }
 
