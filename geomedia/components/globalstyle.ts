@@ -111,5 +111,12 @@ export const style = StyleSheet.create({
         thumb_color_true: "#aeb8c8",
         thumb_color_false: "#f4f3f4",
 
+    },
+    circleIcon:{
+        width: 45,
+        height: 45,
+        borderRadius: 22.5,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

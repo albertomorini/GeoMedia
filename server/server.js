@@ -80,7 +80,7 @@ async function dispatchReq(res, path, body, contentType) {
 
                 delete body.postdata.attachments // do not pass files to SQL
 
-                query_results = await dispatcher.merge_post(body.postdata)
+                query_results = await dispatcher.post_merge(body.postdata)
                 if (!query_results[0].OK) {
                     sendResponse(res, 500, { "OK": false, "MSG": query_results[1].MSG })
                 } else {
@@ -94,6 +94,9 @@ async function dispatchReq(res, path, body, contentType) {
                     }
                 }
 
+                break;
+            case "/collection_merge":
+                query_results = await dispatcher.collection_merge(body.categorydata)
                 break;
             case "/post_get_map":
                 query_results = await dispatcher.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);

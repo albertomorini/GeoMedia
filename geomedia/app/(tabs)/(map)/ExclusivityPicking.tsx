@@ -10,7 +10,7 @@ import RangeTimePicker from '../../mycomponents/RangeTimePicker';
 const ExclusivityPicking = (props) => {
 
     const [selectedOptions, setSelectedOptions] = useState(0);
-    const segmentsOptions = ['Date & Time', 'Users']
+    const segmentsOptions = props?.isCategory ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
 
     const refTimeRange = useRef()
     ////////////////////////////////////////////////////////////
@@ -26,8 +26,11 @@ const ExclusivityPicking = (props) => {
                     DATE_END: range?.end,
                     IS_RECURRENT: range?.isrecurrent
                 }
-                excl.USERS = {
+                excl.VIEWERS = {
                     viewer: ['chiara', 'dexter']
+                }
+                excl.CREATORS = {
+                    viewer: ['albertomorini', 'dexter']
                 }
                 props?.setExclusivity(excl)
 

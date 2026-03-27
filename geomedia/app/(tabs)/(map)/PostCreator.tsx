@@ -167,8 +167,7 @@ const PostCreator = () => {
                         {/* //TODO: implement category picker */}
 
                         <ThemedText style={style.label}>Title: </ThemedText>
-                        <ThemedInput
-                            placeholder="Title"
+                        <ThemedInput placeholder="Title"
                             value={postData?.TITLE}
                             type="outlined"
                             onChangeText={(text) => {
@@ -284,6 +283,7 @@ const PostCreator = () => {
                             <BottomSheetView style={{ flex: 1 }}>
                                 <ThemedView>
                                     <ExclusivityPicking
+                                        isCategory={false}
                                         exclusivity={postData?.EXCLUSIVITY}
                                         setExclusivity={(obj) => {
                                             setPostData(prev => ({

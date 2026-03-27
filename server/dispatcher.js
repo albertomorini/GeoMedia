@@ -28,6 +28,7 @@ function writeLog(message, scope = "ERROR") {
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
+    console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
@@ -38,10 +39,19 @@ function generic_query(path, body) {
  * @param {JSON} post_content the metadata of the post
  * @returns {Object} the post modified/created without attachments, just the metadata
  */
-function merge_post(post_content) {
+function post_merge(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
+function collection_merge(collection) {
+    let dummy = JSON.stringify(collection).replaceAll("'", "''");
+    console.log(
+        "EXEC dbo.COLLECTION_MERGE @JSON = '" + dummy + "'"
+    )
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.COLLECTION_MERGE @JSON='" + dummy + "'")
+}
+
+
 
 /**
  * 
@@ -162,9 +172,9 @@ async function post_get_map(uid, current_position, collection_chosen = []) {
     return results
 }
 
-async function post_delete(postid,password) {
-    writeLog("Requested deletion for: "+postid+" = with pas[10]"+password.substring(0,10)); // i do not like to log the whole password, since hashed, the first 5chars are quite enough to give us and idea if correct or not
-    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(),"EXEC POST_DELETE @POSTID="+postid+", @PASSWORD='"+password+"'")
+async function post_delete(postid, password) {
+    writeLog("Requested deletion for: " + postid + " = with pas[10]" + password.substring(0, 10)); // i do not like to log the whole password, since hashed, the first 5chars are quite enough to give us and idea if correct or not
+    return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC POST_DELETE @POSTID=" + postid + ", @PASSWORD='" + password + "'")
 }
 
 
@@ -175,11 +185,12 @@ module.exports = {
     ////////////////
     , auth_signin
     ////////////////
-    , merge_post
+    , post_merge
     , post_get_map
     , post_delete
     ///////////////
-
+    , collection_merge
+    ///////////////
     , hpmedia_merge_folder
     , hpmedia_read_folder
 }
