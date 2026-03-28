@@ -8,7 +8,7 @@ import { style } from '@/components/globalstyle';
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
 import { doRequest } from '../../utility';
-import { default_account_profilepic } from '@/assets/images/account_icon';
+import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';

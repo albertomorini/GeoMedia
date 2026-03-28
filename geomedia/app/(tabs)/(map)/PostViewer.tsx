@@ -4,15 +4,12 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert, Dimensions, TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 
-import { Image } from 'expo-image'; //BETTER PERFORMANCE COMPARED TO NATIVE ONE
 
-import Carousel from 'react-native-reanimated-carousel';
 import { Ionicons } from "@expo/vector-icons";
 import { style } from "@/components/globalstyle";
-import { file_share } from "@/app/mycomponents/file/FileHandler";
-const width = Dimensions.get('window').width;
+import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 
 const PostViewer = () => {
     const params = useLocalSearchParams();
@@ -75,54 +72,9 @@ const PostViewer = () => {
                 <ThemedView style={style.container}>
                     <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
                     <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
-                    {postData?.attachments?.filter(f => f?.MIME_TYPE == "image/jpeg").length > 0 &&
-                        <Carousel
-                            width={width}
-                            height={250}
-                            data={postData?.attachments?.filter(f => f?.MIME_TYPE == "image/jpeg")}
-                            pagingEnabled
-                            snapEnabled
-                            loop={false}
-                            mode="parallax"
-                            modeConfig={{
-                                parallaxScrollingScale: 0.9,
-                                parallaxScrollingOffset: 52,
-                            }}
-                            windowSize={3}
-                            renderItem={({ item }) => (
-                                <ThemedView style={{ flex: 1 }}>
-                                    <Image
-                                        source={{ uri: `data:image/jpeg;base64,${item?.BASE64}` }}
-                                        style={{ width: '100%', height: '100%' }}
-                                        contentFit="cover"
-                                        transition={200}
-                                    />
-
-                                    <TouchableOpacity //DOWNLOAD BUTTON
-                                        onPress={() => {
-                                            file_share(item.BASE64, item.FILENAME, item.MIME_TYPE)
-                                        }}
-                                        style={{
-                                            position: 'absolute',
-                                            bottom: 15,
-                                            right: 15,
-                                            backgroundColor: 'rgba(0,0,0,0.6)',
-                                            paddingVertical: 8,
-                                            paddingHorizontal: 12,
-                                            borderRadius: 8,
-                                        }}
-                                    >
-                                        <ThemedText style={{ color: 'white' }}>Share
-
-                                            <Ionicons name="share-outline" size={28} color={"lightblue"} />
-                                        </ThemedText>
-
-                                    </TouchableOpacity>
-                                </ThemedView>
-                            )}
-                        />
+                    {postData?.attachments?.length > 0 &&
+                        <CarouselFileViewer attachments={postData?.attachments} isEdit={false} />
                     }
-{/* //TODO: list the other type of file */}
 
                     <ThemedView style={{
                         flexDirection: "row",

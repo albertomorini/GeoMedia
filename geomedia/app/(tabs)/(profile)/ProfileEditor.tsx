@@ -1,6 +1,6 @@
 import { MyContext } from "@/app/_layout";
 import { doRequest } from "@/app/utility";
-import { default_account_profilepic } from "@/assets/images/account_icon";
+import { default_account_profilepic } from "@/assets/images/default_pictures";
 import { style } from "@/components/globalstyle";
 import { ThemedInput } from "@/components/themed-input";
 import { ThemedText } from "@/components/themed-text";
