@@ -76,9 +76,10 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-                let files = body.postdata.attachments;
+                console.log(body.postdata.attachments)
+                let files = JSON.parse(JSON.stringify(body.postdata.attachments));
 
-                delete body.postdata.attachments // do not pass files to SQL
+                delete body.postdata.attachments // avoid to pass files to SQL
 
                 query_results = await geomedia_helper.post_merge(body.postdata)
                 if (!query_results[0].OK) {

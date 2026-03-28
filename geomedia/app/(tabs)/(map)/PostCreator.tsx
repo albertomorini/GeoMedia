@@ -50,7 +50,7 @@ const PostCreator = () => {
     })
 
     /// for excluivity bottom menu
-    const snapPoints = useMemo(() => ["50%",'90%'], []);
+    const snapPoints = useMemo(() => ["50%", '90%'], []);
     const exclusivity_sheet_handler = useRef()
     const category_sheet_handler = useRef()
 
@@ -83,7 +83,7 @@ const PostCreator = () => {
 
     async function save_post() {
 
-        let files = refFileHandler?.current?.return_files()
+        let files = await refFileHandler?.current?.return_files()
 
         let dummy_body = postData
         /// position chosen, if not chosen automatically use the current one
@@ -96,7 +96,6 @@ const PostCreator = () => {
         doRequest("post_merge", {
             postdata: dummy_body
         }).then(res => {
-            console.log("POST MERGE RETURNED::", res);
             if (res?.OK) {
                 setPostData(prev => ({
                     ...prev,
@@ -135,7 +134,7 @@ const PostCreator = () => {
                 )
             },
             error => {
-                console.log('Location error:', error);
+                console.error('Location error:', error);
                 Alert.alert('Error getting location', error.message);
             },
             {
@@ -337,12 +336,9 @@ const PostCreator = () => {
                             <BottomSheetView style={{ flex: 1 }}>
                                 <ThemedView>
                                     <CategoriesList
+                                        // backOnPost={postData}
                                         selectedCategory={(cat: Object) => {
-                                            console.log("category_chosen on postcreator",
-                                                cat
-                                            )
                                             category_sheet_handler?.current?.close()
-
                                             setPostData(prev => ({
                                                 ...prev,
                                                 COLLECTION_ID: cat?.ID,

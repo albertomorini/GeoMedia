@@ -24,10 +24,8 @@ const ListItem = (props: any) => {
             COLOR: "#c4aaaa"
         }
         let og_data = props?.DATA
-        console.log("HERE, og",og_data);
         
         if (searchText?.length == 0){
-            console.log([new_cat, ...og_data])
             return [new_cat,...og_data]
         }else{
             let filtered = og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))

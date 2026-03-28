@@ -57,6 +57,7 @@ const MapPicking = (props, ref) => {
             position => {
                 const { latitude, longitude } = position.coords;
                 setUserPosition({ lat: latitude, lon: longitude });
+                setSelectedMarker({latitude:latitude,longitude:longitude})
                 console.log(latitude, longitude);
 
                 // set map with center on user location 
@@ -73,7 +74,7 @@ const MapPicking = (props, ref) => {
                 Alert.alert('Error getting location', error.message);
             },
             {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
                 timeout: 15000,
                 maximumAge: 10000,
             }

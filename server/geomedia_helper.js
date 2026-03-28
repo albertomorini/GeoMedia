@@ -44,9 +44,6 @@ function post_merge(post_content) {
 }
 function collection_merge(collection) {
     let dummy = JSON.stringify(collection).replaceAll("'", "''");
-    console.log(
-        "EXEC dbo.COLLECTION_MERGE @JSON = '" + dummy + "'"
-    )
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.COLLECTION_MERGE @JSON='" + dummy + "'")
 }
 
@@ -68,15 +65,16 @@ async function hpmedia_merge_folder(postid, attachments) {
 
         let hypermedia_reference = []
         attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
-            var buffer = Buffer.from(f.base64, 'base64', f.base64.length) //REMOVE BASE64
-            const filepath = path.join(post_folder, f.filename);
+
+            var buffer = Buffer.from(f.BASE64, 'base64', f.BASE64.length) //REMOVE BASE64
+            const filepath = path.join(post_folder, f.FILENAME);
             console.log("Storing file: ", filepath);
 
             fs.writeFileSync(filepath, buffer, { encoding: 'utf8' });
             hypermedia_reference.push({
-                "filename": f.filename,
+                "filename": f.FILENAME,
                 "filepath": filepath,
-                "mimetype": f.mimetype,
+                "mimetype": f.MIME_TYPE,
                 "post_id": postid
             })
             hypermedia_reference.push(filepath)
@@ -84,7 +82,7 @@ async function hpmedia_merge_folder(postid, attachments) {
 
 
         file_present = fs.readdirSync(post_folder)
-        filename_attached = attachments.map(f => f.filename)
+        filename_attached = attachments.map(f => f.FILENAME)
         file_to_remove = file_present.filter(f => !filename_attached.includes(f))
         file_to_remove.forEach(f => {
             fs.unlinkSync(f)
