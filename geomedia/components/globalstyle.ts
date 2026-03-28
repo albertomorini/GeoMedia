@@ -34,6 +34,9 @@ export const style = StyleSheet.create({
         },
         geomedia_red: {
             backgroundColor: "#f66868"
+        },
+        geomedia_gray:{
+            backgroundColor: "#b0b0b0"
         }
     },
     title: {

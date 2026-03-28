@@ -130,7 +130,6 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     mode="date"
                     onValueChange={handleEndDate}
                     onTouchCancel={() => {
-                        console.log("ANULLA");
                         setEnd(null)
                     }}
                     minimumDate={start || new Date()} // Prevent picking end date before start date

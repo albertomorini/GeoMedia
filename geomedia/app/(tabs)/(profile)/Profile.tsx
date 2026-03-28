@@ -36,8 +36,6 @@ export default function Profile() {
 
 
   async function logout() {
-    // console.log("logging out");
-
     await SecureStore.deleteItemAsync("user");
     ctx?.User.setUser(null);
     router.replace("/login");
@@ -66,8 +64,8 @@ export default function Profile() {
   );
 
   return (
-    <ThemedView style={{ height: "100%" }}>
-      <ThemedView style={style.container}>
+    <>
+      <ThemedView style={[style.container, { height: "100%" }]}>
         <View
           style={{
             flexDirection: 'row',
@@ -146,13 +144,13 @@ export default function Profile() {
         <ThemedText style={style?.label}>Change language:</ThemedText>
 
         <TouchableOpacity onPress={() => changeLang("IT")}>
-          <ThemedText accessibilityLabel="Italian" style={{fontSize:20}}>🇮🇹</ThemedText>
+          <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => changeLang("EN")}>
-          <ThemedText accessibilityLabel="English" style={{fontSize:20}}>🇬🇧</ThemedText>
+          <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
         </TouchableOpacity>
 
       </ThemedView>
-    </ThemedView>
+    </>
   );
 }

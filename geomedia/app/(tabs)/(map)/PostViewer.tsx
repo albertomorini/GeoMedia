@@ -31,8 +31,6 @@ const PostViewer = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 setPostData(resQuery[0])
-                console.log("!@@@>", resQuery);
-
             }).catch(err => {
                 Alert.alert("Error reading post", err)
             })

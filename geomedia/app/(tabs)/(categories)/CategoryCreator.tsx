@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useRef, useState } from "react";
-import { StyleSheet, Switch, TouchableOpacity, useColorScheme } from "react-native";
+import { Switch, TouchableOpacity, useColorScheme } from "react-native";
 import ExclusivityPicking from "../(map)/ExclusivityPicking";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -41,15 +41,14 @@ const CategoryCreator = () => {
     });
 
     function save_category() {
-        console.log(categoryData)
         doRequest("collection_merge", {
             categorydata: categoryData
         }).then(resQuery => {
+            //TODO: SET THE ID
             console.log("collection merge, res: ", resQuery)
         })
 
     }
-
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -172,7 +171,6 @@ const CategoryCreator = () => {
                                     }
                                 }}
                                 setExclusivity={(obj) => {
-                                    console.log(obj)
                                     setCategoryData(prev => ({
                                         ...prev,
                                         CREATORS: obj.CREATORS,

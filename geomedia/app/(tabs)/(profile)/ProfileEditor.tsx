@@ -47,8 +47,6 @@ export default function ProfileEditor() {
 
             if (result.type === "cancel") return;
 
-            console.log(result.assets);
-
             const { name, uri } = result.assets[0];
 
             // Read file as base64

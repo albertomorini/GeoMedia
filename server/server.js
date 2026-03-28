@@ -105,6 +105,9 @@ async function dispatchReq(res, path, body, contentType) {
             case "/post_get_fullpost":
                 query_results = await dispatcher.generic_query("post_get_fullpost", body)
                 let ff = await dispatcher.hpmedia_read_folder(body?.postid)
+                if (ff == undefined || ff.length == 0) {
+                    ff = []
+                }
                 query_results[0]["attachments"] = ff
                 sendResponse(res, 200, query_results)
                 break;
@@ -120,7 +123,7 @@ async function dispatchReq(res, path, body, contentType) {
         return dummy_res
     } catch (error) {
         console.error("Error on dispatchReq: ", error);
-        dispatchReq.writeLog(error, "ERROR")
+        dispatcher.writeLog(error, "ERROR")
     }
 }
 
@@ -160,14 +163,14 @@ http.createServer((req, res) => {
                         sendResponse(res, 200, resQuery)
                     }
                 }).catch(error => {
-                    dispatchReq.writeLog(error, "ERROR_ENDPOINT");
+                    dispatcher.writeLog(error, "ERROR_ENDPOINT");
                     if (error != null) {
                         sendResponse(res, 500, { "Internal_Server_Error": error })
                     }
                 })
             } catch (error) {
                 sendResponse(res, 500, { "Internal_Server_Error": error })
-                dispatchReq.writeLog(error)
+                dispatcher.writeLog(error)
             }
         }
     })

@@ -112,9 +112,6 @@ const MapPicking = (props, ref) => {
                     longitudeDelta: 0.1,
                 }}
                 zoomEnabled={true}
-                onMarkerPress={(mrk) => {
-                    // console.log(mrk);
-                }}
                 camera={{
                     center: {
                         latitude: UserPosition.lat,

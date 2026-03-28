@@ -1,25 +1,28 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { TouchableOpacity, Switch, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, ToastAndroid, Modal, useColorScheme } from 'react-native';
+import { TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Modal, useColorScheme, ScrollView } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
 import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import Geolocation from '@react-native-community/geolocation';
 
-import Toast from 'react-native-toast-message';
 
 /// FILE SYSTEMS
 
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { doRequest } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
 import MapPicking from '@/app/mycomponents/MapPicking';
 
+//////////////////////////////
+// bottom sheet and exclusivity/category handling
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import CategoriesList from '../(categories)/CategoriesList';
+import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,12 +50,17 @@ const PostCreator = () => {
     })
 
     /// for excluivity bottom menu
-    const snapPoints = useMemo(() => ['90%', '100%'], []);
-    const bottomSheetRef = useRef()
+    const snapPoints = useMemo(() => ["50%",'90%'], []);
+    const exclusivity_sheet_handler = useRef()
+    const category_sheet_handler = useRef()
 
     /////////////////////////////////////////////////////////////
+
+
+
     const [postData, setPostData] = useState({
         ID: null,
+        COLLECTION_ID: null,
         TITLE: null,
         COMMENT: null,
         AUTHOR_ID: ctx?.getUID(),
@@ -61,6 +69,12 @@ const PostCreator = () => {
             USERS: { viewers: [] }
         },
         VISIBILITY_AREA_KM: 2, //default 2km
+        ///////////
+        // these are not stored on post but dinamically loaded and inherited by category/collection
+        COLOR: null,
+        ICON: null,
+        CATEGORY_NAME: null,
+        REMOTE_POSTING_ENABLED: false
     })
 
 
@@ -88,7 +102,6 @@ const PostCreator = () => {
                     ...prev,
                     ID: res?.post_id
                 }))
-                console.log(ctx);
 
                 /// TODO: check, not working now
                 ctx?.showToast({
@@ -104,16 +117,33 @@ const PostCreator = () => {
     }
 
     function load_current_location() {
-        Geolocation.getCurrentPosition(info => {
-            setCoordinateChosen({
-                latitude: info?.coords?.latitude,
-                longitude: info?.coords?.longitude,
-            })
-            setCurrentLocation({
-                latitude: info?.coords?.latitude,
-                longitude: info?.coords?.longitude,
-            })
-        });
+        Geolocation.getCurrentPosition(
+            position => {
+                setCoordinateChosen(
+                    prev => ({
+                        ...prev,
+                        "latitude": position?.coords?.latitude,
+                        "longitude": position?.coords?.longitude,
+                    })
+                )
+                setCurrentLocation(
+                    prev => ({
+                        ...prev,
+                        "latitude": position?.coords?.latitude,
+                        "longitude": position?.coords?.longitude,
+                    })
+                )
+            },
+            error => {
+                console.log('Location error:', error);
+                Alert.alert('Error getting location', error.message);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0,
+            }
+        );
     }
 
     function isUsingCurrentLocation() {
@@ -144,7 +174,9 @@ const PostCreator = () => {
     }
 
     useEffect(() => {
+        // setInterval(() => {
         load_current_location()
+        // }, 1000);
         if (params != null) {
             loadFullPost()
         }
@@ -155,16 +187,32 @@ const PostCreator = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
 
             <ScrollView
-                contentContainerStyle={styles.scrollViewContentContainer}
+                contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps="handled" // Adjusted to allow tapping to dismiss keyboard
             >
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={{ flex: 1 }}
                 >
-                    <ThemedView style={[styles.container, { flex: 1, padding: 20, overflow: 'visible' }]}>
+                    <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
                         <ThemedText style={style.label}>Category</ThemedText>
-                        {/* //TODO: implement category picker */}
+                        {postData?.COLLECTION_ID == null ?
+                            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
+                                category_sheet_handler?.current?.snapToIndex(0)
+                            }}>
+                                <ThemedText>Select category</ThemedText>
+                            </TouchableOpacity>
+                            :
+                            <ItemIconizable
+                                onPress={() => {
+                                    category_sheet_handler?.current?.snapToIndex(0)
+                                }}
+                                item={{
+                                    ICON: postData?.ICON,
+                                    COLOR: postData?.COLOR,
+                                    TITLE: postData?.CATEGORY_NAME
+                                }} />
+                        }
 
                         <ThemedText style={style.label}>Title: </ThemedText>
                         <ThemedInput placeholder="Title"
@@ -218,9 +266,15 @@ const PostCreator = () => {
                             }
 
                             <TouchableOpacity
-                                style={[style.buttons.full_screen, (isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
+                                disabled={!postData?.REMOTE_POSTING_ENABLED}
+                                style={[style.buttons.full_screen, (!postData?.REMOTE_POSTING_ENABLED ? style.colors.geomedia_gray : isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
                                 onPress={() => { setModalMapVisibility(true) }}>
-                                <ThemedText>Choose the location</ThemedText>
+                                {
+                                    postData?.REMOTE_POSTING_ENABLED ?
+                                        <ThemedText>Choose the location</ThemedText>
+                                        :
+                                        <ThemedText>Disabled by category</ThemedText>
+                                }
                                 <Ionicons name="map-outline" size={28} color={"white"} />
                             </TouchableOpacity>
                             <ThemedView>
@@ -252,7 +306,7 @@ const PostCreator = () => {
                         />
 
                         <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
-                            bottomSheetRef.current?.snapToIndex(0);
+                            exclusivity_sheet_handler.current?.snapToIndex(0);
 
                         }}>
                             <ThemedText>Exclusivity</ThemedText>
@@ -270,7 +324,40 @@ const PostCreator = () => {
                         )}
 
                         <BottomSheet
-                            ref={bottomSheetRef}
+                            ref={category_sheet_handler}
+                            index={-1} // start closed
+                            snapPoints={snapPoints}
+                            enablePanDownToClose={true} // drag down to close
+                            backgroundStyle={{
+                                borderTopLeftRadius: 24,
+                                borderTopRightRadius: 24,
+                                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                            }}
+                        >
+                            <BottomSheetView style={{ flex: 1 }}>
+                                <ThemedView>
+                                    <CategoriesList
+                                        selectedCategory={(cat: Object) => {
+                                            console.log("category_chosen on postcreator",
+                                                cat
+                                            )
+                                            category_sheet_handler?.current?.close()
+
+                                            setPostData(prev => ({
+                                                ...prev,
+                                                COLLECTION_ID: cat?.ID,
+                                                CATEGORY_NAME: cat?.TITLE,
+                                                COLOR: cat?.COLOR,
+                                                ICON: cat?.ICON,
+                                                REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
+                                            }))
+                                        }} />
+                                </ThemedView>
+                            </BottomSheetView>
+                        </BottomSheet>
+
+                        <BottomSheet
+                            ref={exclusivity_sheet_handler}
                             index={-1} // start closed
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
@@ -290,32 +377,19 @@ const PostCreator = () => {
                                                 ...prev,
                                                 EXCLUSIVITY: obj
                                             }));
-                                            bottomSheetRef?.current?.close()
+                                            exclusivity_sheet_handler?.current?.close()
                                         }} />
                                 </ThemedView>
                             </BottomSheetView>
                         </BottomSheet>
+
+
+
                     </ThemedView>
                 </KeyboardAvoidingView>
             </ScrollView >
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
 
     );
 };
 export default PostCreator;
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    scrollViewContentContainer: {
-        flexGrow: 1, // allows the scrollview to grow
-    },
-    exclusivityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 20,
-        width: '100%',
-    },
-});

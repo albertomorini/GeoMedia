@@ -84,7 +84,6 @@ export default function LoginScreen(props) {
                 USERNAME: username,
                 PASSWORD: React_MD5(password)
             }).then(res => {
-                console.log(res);
                 if (res.AUTH == 2) { //pending OTP
                     setOTP("")
                 } else {
@@ -99,7 +98,6 @@ export default function LoginScreen(props) {
             USERNAME: username,
             OTP: OTP
         }).then(async res => {
-            console.log(res);
             await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
             check_cache_login()
         })
@@ -144,7 +142,6 @@ export default function LoginScreen(props) {
 
     useEffect(() => {
         check_cache_login()
-        console.log(t)
     }, [t])
 
     return (

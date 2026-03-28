@@ -1,5 +1,5 @@
 import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -8,6 +8,7 @@ import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
 import { doRequest } from '../../utility';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 const MapViewer = forwardRef((props, ref) => {
 
@@ -69,7 +70,7 @@ const MapViewer = forwardRef((props, ref) => {
             Geolocation.requestAuthorization();
         }
 
-        Geolocation.getCurrentPosition(
+        return Geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
                 if (positionChanged(latitude, longitude, UserPosition)) {
@@ -84,7 +85,7 @@ const MapViewer = forwardRef((props, ref) => {
                     latitudeDelta: 0.03, //zoom
                     longitudeDelta: 0.03, //zoom
                 }, 1000);
-
+                return { latitude: latitude, longitude: longitude }
             },
             error => {
                 console.log('Location error:', error);
@@ -103,14 +104,12 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
     function get_posts_map(curPos = UserPosition) {
-        console.log(ctx?.getUID())
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
             collection_chosen: []
         }).then(resQuery => {
-            console.log(">", resQuery);
-
+            console.log("readed posts: ", resQuery)
             setPostMarkers(resQuery)
         }).catch(err => {
             Alert.alert("Error retrieving posts: ", err)
@@ -138,7 +137,6 @@ const MapViewer = forwardRef((props, ref) => {
                             style={styles.map}
                             showsUserLocation={true}
                             toolbarEnabled={true}
-                            // mapPadding={{ top: 0, right: 20, bottom: 100, left: 0 }} // push buttons
                             followsUserLocation={true}
                             initialRegion={{
                                 latitude: UserPosition.latitude,
@@ -176,7 +174,7 @@ const MapViewer = forwardRef((props, ref) => {
                                             latitude: p?.LATITUDE,
                                             longitude: p?.LONGITUDE,
                                         }}
-                                        pinColor="#4f892e"
+                                        pinColor={p?.COLOR}
                                         title={p?.TITLE}
                                         onPress={() => { ///redirect to post viewer
                                             router.push({
