@@ -1,7 +1,7 @@
-// Module that just create the HTTP Serve and call the methods exposed by dispatcher to retrieve/storea data to database
+// Module that just create the HTTP Serve and call the methods exposed by geomedia_helper to retrieve/storea data to database
 
 const http = require("http");
-const dispatcher = require("./dispatcher");
+const geomedia_helper = require("./geomedia_helper");
 const port = 9911
 const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))
@@ -35,7 +35,7 @@ function checkAuth(key) {
 }
 
 /**
- * link the URI path of the HTTP REST server to the execution of query or opportuned method logic applied in the dispatcher classF
+ * link the URI path of the HTTP REST server to the execution of query or opportuned method logic applied in the geomedia_helper classF
  * @param {object} res  response handler to HTTP request
  * @param {string} path req.url requested
  * @param {object} body body of the request
@@ -60,17 +60,17 @@ async function dispatchReq(res, path, body, contentType) {
             case "/interactions_likepost":
             case "/hpmedia_remove": //TODO: to implement in SQL
             case "/collections_get":
-                dummy_res = dispatcher.generic_query(path, body)
+                dummy_res = geomedia_helper.generic_query(path, body)
                 break;
             ////___________________________________________________________________
             ////___________________________________________________________________
             case "/auth_signin":
-                query_results = await dispatcher.auth_signin(path, body)
+                query_results = await geomedia_helper.auth_signin(path, body)
                 if (query_results.AUTH == 2) {
                     delete query_results.OTP //do not send the OTP via http, is sent via email (otherwise would be worthless)
                     sendResponse(res, 200, query_results)
                 } else {
-                    dispatcher.writeLog("AUTH failed for: " + JSON.stringify(body), "SIGNIN")
+                    geomedia_helper.writeLog("AUTH failed for: " + JSON.stringify(body), "SIGNIN")
                     sendResponse(res, 401, query_results)
                 }
                 break;
@@ -80,13 +80,13 @@ async function dispatchReq(res, path, body, contentType) {
 
                 delete body.postdata.attachments // do not pass files to SQL
 
-                query_results = await dispatcher.post_merge(body.postdata)
+                query_results = await geomedia_helper.post_merge(body.postdata)
                 if (!query_results[0].OK) {
                     sendResponse(res, 500, { "OK": false, "MSG": query_results[1].MSG })
                 } else {
                     let post_id = query_results[0].ID
 
-                    let x = dispatcher.hpmedia_merge_folder(post_id, files)
+                    let x = geomedia_helper.hpmedia_merge_folder(post_id, files)
                     if (x) {
                         sendResponse(res, 200, { "post_id": post_id, "OK": true })
                     } else {
@@ -96,15 +96,15 @@ async function dispatchReq(res, path, body, contentType) {
 
                 break;
             case "/collection_merge":
-                query_results = await dispatcher.collection_merge(body.categorydata)
+                query_results = await geomedia_helper.collection_merge(body.categorydata)
                 break;
             case "/post_get_map":
-                query_results = await dispatcher.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
+                query_results = await geomedia_helper.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
                 sendResponse(res, 200, query_results)
                 break;
             case "/post_get_fullpost":
-                query_results = await dispatcher.generic_query("post_get_fullpost", body)
-                let ff = await dispatcher.hpmedia_read_folder(body?.postid)
+                query_results = await geomedia_helper.generic_query("post_get_fullpost", body)
+                let ff = await geomedia_helper.hpmedia_read_folder(body?.postid)
                 if (ff == undefined || ff.length == 0) {
                     ff = []
                 }
@@ -123,7 +123,7 @@ async function dispatchReq(res, path, body, contentType) {
         return dummy_res
     } catch (error) {
         console.error("Error on dispatchReq: ", error);
-        dispatcher.writeLog(error, "ERROR")
+        geomedia_helper.writeLog(error, "ERROR")
     }
 }
 
@@ -163,14 +163,14 @@ http.createServer((req, res) => {
                         sendResponse(res, 200, resQuery)
                     }
                 }).catch(error => {
-                    dispatcher.writeLog(error, "ERROR_ENDPOINT");
+                    geomedia_helper.writeLog(error, "ERROR_ENDPOINT");
                     if (error != null) {
                         sendResponse(res, 500, { "Internal_Server_Error": error })
                     }
                 })
             } catch (error) {
                 sendResponse(res, 500, { "Internal_Server_Error": error })
-                dispatcher.writeLog(error)
+                geomedia_helper.writeLog(error)
             }
         }
     })

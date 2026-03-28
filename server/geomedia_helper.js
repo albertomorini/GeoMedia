@@ -1,5 +1,4 @@
 // associate to each sotred procedure/query a function, thus to better encapsulate and isolate the functionality
-//TODO: to rename this class in helper?
 const SQL_MANAGER = require("./SQL_MANAGER");
 const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))

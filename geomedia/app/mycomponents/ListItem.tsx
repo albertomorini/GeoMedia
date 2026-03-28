@@ -8,11 +8,37 @@ import ItemIconizable from "./ItemIconizable";
 
 const ListItem = (props: any) => {
     const [searchText, setSearchText] = useState("")
+
+
     const renderItem = ({ item }) => (
         <ItemIconizable item={item} onPress={() => {
             props?.pickedItem(item)
         }} />
     );
+
+    function filterData() {
+        let new_cat = {
+            ID: "new_item",
+            TITLE: "new "+props?.label, //todo: generalize with props
+            ICON: "add",
+            COLOR: "#c4aaaa"
+        }
+        let og_data = props?.DATA
+        console.log("HERE, og",og_data);
+        
+        if (searchText?.length == 0){
+            console.log([new_cat, ...og_data])
+            return [new_cat,...og_data]
+        }else{
+            let filtered = og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
+            if(filtered?.length==0){
+                return [new_cat]
+            }else{
+                return filtered
+            }
+        }
+    }
+
     return (
         <ThemedView style={[style?.container, { height: "100%" }]}>
             <ThemedView style={{
@@ -44,7 +70,7 @@ const ListItem = (props: any) => {
             </ThemedView>
             <ThemedView style={{ flex: 1 }}>
                 <FlashList
-                    data={props?.DATA?.filter(i => searchText?.length == 0 ? i : i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))} //filtering on full data
+                    data={filterData()} //filtering on full data
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     estimatedItemSize={props?.estimatedSize}

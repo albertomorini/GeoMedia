@@ -1,11 +1,8 @@
 import { MyContext } from "@/app/_layout";
 import ListItem from "@/app/mycomponents/ListItem";
 import { doRequest } from "@/app/utility";
-import { style } from "@/components/globalstyle";
-import { ThemedText } from "@/components/themed-text";
 import { router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
 
 
 const CategoriesList = (props) => {
@@ -18,6 +15,7 @@ const CategoriesList = (props) => {
             uid: ctx?.getUID(),
             mode: "R"
         }).then(resQuery => {
+            // let x = [, ...]
             setCategories(resQuery)
         })
     }
@@ -32,28 +30,16 @@ const CategoriesList = (props) => {
                 DATA={categories}
                 pickedItem={(pickeditem) => {
                     /// on category lists/ profile show the post as lis
-                    try {
+                    if (pickeditem.ID == "new_item") {
+                        router.push('CategoryCreator') //TODO: router on category creator to come back here and refreshing categories
+                    }else{
                         props?.selectedCategory(pickeditem)
-                    } catch (error) {
-                        
                     }
                 }}
                 isImage={false} //we render icons, not expo-image
                 estimatedSize={80}
+                label="category"
             />
-
-            {props?.isPicking ? null : // in picking (from post) hide button creation //TODO: OR MAYBE NOT??
-                <TouchableOpacity
-                    style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
-                    onPress={() => {
-                        router.push('CategoryCreator')
-
-                    }}
-                >
-                    <ThemedText style={style.buttons.fabText}>+</ThemedText>
-                </TouchableOpacity >
-            }
-
         </>
     )
 }
