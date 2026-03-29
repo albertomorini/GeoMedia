@@ -92,7 +92,7 @@ const PostCreator = () => {
         dummy_body.attachments = files //attach files
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
-        console.log("POSTCREATION",dummy_body)
+        console.log("POSTCREATION", dummy_body)
 
         doRequest("post_merge", {
             postdata: dummy_body
@@ -165,7 +165,15 @@ const PostCreator = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0]
-                setPostData(x)
+                setPostData(prev => ({
+                    ...prev,
+                    ...x,
+                    EXCLUSIVITY: {
+                        ...prev.EXCLUSIVITY,
+                        VIEWERS: JSON.parse(x?.VIEWERS)
+                        //TODO: check for DATERANGE
+                    }
+                }));
                 refFileHandler?.current?.load_files(x.attachments)
             }).catch(err => {
                 Alert.alert("Error reading post", err)
