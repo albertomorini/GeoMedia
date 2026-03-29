@@ -1,5 +1,5 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
+import { forwardRef, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Modal, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -9,16 +9,28 @@ import { ThemedView } from '@/components/themed-view';
 import { doRequest } from '../../utility';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/themed-text';
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import CategoriesList from "../(categories)/CategoriesList"
+
 
 const MapViewer = forwardRef((props, ref) => {
 
     const ctx = useContext(MyContext)
     const mapRef = useRef(null);
+    const colorScheme = useColorScheme()
 
     const [postMarkers, setPostMarkers] = useState(null)
     /////////////////////////////////////////////////////////////
 
     const [UserPosition, setUserPosition] = useState({ latitude: 0, longitude: 0 });
+
+    const snapPoints = useMemo(() => ['50%', '90%'], []);
+    const categoryPickerSheet = useRef()
+
+    const [catsChosen, setCatsChosen] = useState([]);
+
 
     // return true if current position changed within a delta (100m)
     function positionChanged(latitude, longitude, currentPosition = UserPosition) {
@@ -122,7 +134,8 @@ const MapViewer = forwardRef((props, ref) => {
     }, [])
 
     return (
-        <>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+
             {
                 UserPosition?.latitude == 0 ? //render a spinner while loading current location
                     <ThemedView style={styles.container}>
@@ -188,9 +201,53 @@ const MapViewer = forwardRef((props, ref) => {
                                 ))
                             }
                         </MapView>
+                        <TouchableOpacity
+                            style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
+                            onPress={() => router.push('PostCreator')}
+                        >
+                            <ThemedText style={style.buttons.fabText}>+</ThemedText>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[style.buttons.fab, style.colors.geomedia_gray, { bottom: 130 }]}
+                            onPress={() => {
+                                categoryPickerSheet?.current?.snapToIndex(0)
+                            }}
+                        >
+                            <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
+                        </TouchableOpacity>
+
+
+                        <BottomSheet
+                            ref={categoryPickerSheet}
+                            index={-1} // start closed
+                            snapPoints={snapPoints}
+                            enablePanDownToClose={true} // drag down to close
+                            onClose={() => {
+                                console.log("HEYYY",catsChosen)
+                                //TODO: reload post passing what selected
+                            }}
+                            backgroundStyle={{
+                                borderTopWidth: 1,
+                                borderEndWidth: 1,
+                                borderStartWidth: 1,
+                                borderColor: colorScheme === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+
+                                borderTopLeftRadius: 24,
+                                borderTopRightRadius: 24,
+                                backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                            }}
+                        >
+                            <BottomSheetView style={{ flex: 1 }}>
+                                <ThemedView>
+                                    <CategoriesList isSelectable={true} allowCreation={false} onSelect={(cats) => {
+                                        setCatsChosen([...cats])
+                                    }} />
+                                </ThemedView>
+                            </BottomSheetView>
+                        </BottomSheet>
                     </ThemedView>
             }
-        </>
+        </GestureHandlerRootView>
     )
 })
 

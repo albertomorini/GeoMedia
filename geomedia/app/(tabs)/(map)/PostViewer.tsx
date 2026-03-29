@@ -12,8 +12,8 @@ import { style } from "@/components/globalstyle";
 import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 
 const PostViewer = () => {
-    const params = useLocalSearchParams();
     const ctx = useContext(MyContext)
+    const params = useLocalSearchParams();
     const [postData, setPostData] = useState(null)
 
     function loadFullPost() {

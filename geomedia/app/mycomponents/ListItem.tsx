@@ -8,6 +8,7 @@ import ItemIconizable from "./ItemIconizable";
 
 const ListItem = (props: any) => {
     const [searchText, setSearchText] = useState("")
+    const [selectedItems, setSelectedItems] = useState(props?.itemSelected == undefined ? [] : props?.itemSelected);
 
 
     const renderItem = ({ item }) => (
@@ -16,25 +17,56 @@ const ListItem = (props: any) => {
         }} />
     );
 
-    function filterData() {
+    const toggleSelect = (id) => {
+        if (selectedItems.includes(id)) {
+            setSelectedItems(selectedItems.filter((item) => item !== id));
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
+        props?.pickedItem(selectedItems)
+    };
+
+    const renderItemSelectable = ({ item }) => {
+        const isSelected = selectedItems.includes(item.ID);
+        return (
+            <TouchableOpacity
+                style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: 2,
+                }}
+                onPress={() => toggleSelect(item.ID)}
+            >
+
+                <ItemIconizable item={item} onPress={() => {
+                    toggleSelect(item.ID)
+                }} />
+
+                <Ionicons
+                    name={isSelected ? "checkbox-outline" : "square-outline"}
+                    size={28}
+                    style={{ color: "#6891bd" }}
+                />
+            </TouchableOpacity>
+        );
+    };
+
+    function filterData(allowCreation = false) {
+        let og_data = props?.DATA
+        let filtered = og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
+
         let new_cat = {
             ID: "new_item",
-            TITLE: "new "+props?.label, //todo: generalize with props
+            TITLE: "new " + props?.label,
             ICON: "add",
             COLOR: "#c4aaaa"
         }
-        let og_data = props?.DATA
-        
-        if (searchText?.length == 0){
-            return [new_cat,...og_data]
-        }else{
-            let filtered = og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
-            if(filtered?.length==0){
-                return [new_cat]
-            }else{
-                return filtered
-            }
+        if (searchText?.length == 0 && allowCreation) {
+            return [new_cat, ...og_data]
+        } else if (filtered?.length == 0 && allowCreation) {
+            return [new_cat]
         }
+        return filtered
     }
 
     return (
@@ -68,8 +100,8 @@ const ListItem = (props: any) => {
             </ThemedView>
             <ThemedView style={{ flex: 1 }}>
                 <FlashList
-                    data={filterData()} //filtering on full data
-                    renderItem={renderItem}
+                    data={filterData(props?.allowCreation)} //filtering on full data
+                    renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     estimatedItemSize={props?.estimatedSize}
                 />

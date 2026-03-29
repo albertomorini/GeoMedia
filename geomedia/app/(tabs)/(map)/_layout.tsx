@@ -22,7 +22,7 @@ export default function MapLayout() {
             }}
         >
             <Stack.Screen
-                name="index"
+                name="MapViewer"
                 options={{
                     title: t?.map
                 }}

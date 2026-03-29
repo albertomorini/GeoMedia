@@ -20,7 +20,7 @@ const CategoriesList = (props) => {
         })
     }
 
-    useEffect(() => { 
+    useEffect(() => {
         getListCategories()
     }, [])
 
@@ -30,15 +30,22 @@ const CategoriesList = (props) => {
                 DATA={categories}
                 pickedItem={(pickeditem) => {
                     /// on category lists/ profile show the post as lis
-                    router.push('CategoryCreator') //TODO: router on category creator to come back here and refreshing categories --> and even for modify the category
-                    if (pickeditem.ID == "new_item") {
-                        props?.selectedCategory(pickeditem)
-                    }else{
-                        props?.selectedCategory(pickeditem)
+                    if (pickeditem?.iD == "new_item") {
+
+                        router.push({
+                            pathname: '/CategoryCreator',
+                            params: {
+                                collectionid: pickeditem?.ID,
+                            }
+                        })
                     }
+                    props?.onSelect(pickeditem)
                 }}
+                isSelectable={props?.isSelectable}
+                itemSelected={props?.itemSelected}
                 isImage={false} //we render icons, not expo-image
                 estimatedSize={80}
+                allowCreation={props?.allowCreation ?? true}
                 label="category"
             />
         </>

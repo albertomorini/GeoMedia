@@ -60,6 +60,7 @@ async function dispatchReq(res, path, body, contentType) {
             case "/interactions_likepost":
             case "/hpmedia_remove": //TODO: to implement in SQL
             case "/collections_get":
+            case "/collections_get_fullcollection":
                 dummy_res = geomedia_helper.generic_query(path, body)
                 break;
             ////___________________________________________________________________
@@ -76,7 +77,6 @@ async function dispatchReq(res, path, body, contentType) {
                 break;
             /// POST SPECIFIC
             case "/post_merge": //creation, update
-                console.log(body.postdata.attachments)
                 let files = JSON.parse(JSON.stringify(body.postdata.attachments));
 
                 delete body.postdata.attachments // avoid to pass files to SQL

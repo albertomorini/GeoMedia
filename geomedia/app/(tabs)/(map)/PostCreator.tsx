@@ -328,6 +328,10 @@ const PostCreator = () => {
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
                             backgroundStyle={{
+                                borderTopWidth: 1,
+                                borderEndWidth: 1,
+                                borderStartWidth: 1,
+                                borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                                 borderTopLeftRadius: 24,
                                 borderTopRightRadius: 24,
                                 backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
@@ -336,8 +340,8 @@ const PostCreator = () => {
                             <BottomSheetView style={{ flex: 1 }}>
                                 <ThemedView>
                                     <CategoriesList
-                                        // backOnPost={postData}
-                                        selectedCategory={(cat: Object) => {
+                                        allowCreation={false}
+                                        onSelect={(cat: Object) => {
                                             category_sheet_handler?.current?.close()
                                             setPostData(prev => ({
                                                 ...prev,
@@ -358,6 +362,11 @@ const PostCreator = () => {
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
                             backgroundStyle={{
+                                borderTopWidth: 1,
+                                borderEndWidth: 1,
+                                borderStartWidth: 1,
+                                borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+
                                 borderTopLeftRadius: 24,
                                 borderTopRightRadius: 24,
                                 backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho

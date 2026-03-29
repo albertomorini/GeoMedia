@@ -80,9 +80,9 @@ export const style = StyleSheet.create({
             position: 'absolute',
             bottom: 30,
             right: 0,
-            left: "80%",
-            width: 60,
-            height: 60,
+            left: "83%",
+            width: 50,
+            height: 50,
             borderRadius: 30,           // circular button
             justifyContent: 'center',
             alignItems: 'center',
