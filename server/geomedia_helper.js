@@ -27,7 +27,7 @@ function writeLog(message, scope = "ERROR") {
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
-    console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
+    // console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
@@ -40,14 +40,13 @@ function generic_query(path, body) {
  */
 function post_merge(post_content) {
     let dummy = JSON.stringify(post_content).replaceAll("'", "''");
+    console.log(dummy)
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.POST_MERGE @POST_CONTENT='" + dummy + "'")
 }
 function collection_merge(collection) {
     let dummy = JSON.stringify(collection).replaceAll("'", "''");
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.COLLECTION_MERGE @JSON='" + dummy + "'")
 }
-
-
 
 /**
  * 

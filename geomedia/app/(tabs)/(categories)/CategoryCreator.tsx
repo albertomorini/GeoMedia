@@ -8,7 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Switch, TouchableOpacity, useColorScheme } from "react-native";
 import ExclusivityPicking from "../(map)/ExclusivityPicking";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { doRequest } from "@/app/utility";
 import { useLocalSearchParams } from "expo-router";
@@ -184,14 +184,20 @@ const CategoryCreator = () => {
                     index={-1} // start closed
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // drag down to close
+                    keyboardBehavior="interactive"
+                    keyboardBlurBehavior="restore"
+                    handleIndicatorStyle={{ backgroundColor: 'gray' }}
                     backgroundStyle={{
                         borderTopLeftRadius: 24,
                         borderTopRightRadius: 24,
                         backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                     }}
                 >
-                    <BottomSheetView style={{ flex: 1 }}>
-                        <ThemedView>
+                    <BottomSheetScrollView style={{ flex: 1 }}
+                        contentContainerStyle={{ paddingBottom: 20 }}
+                        // keyboardShouldPersistTaps="handled"
+                    >
+                        <>
                             <ExclusivityPicking
                                 isCategory={true} //allowing creators
                                 EXCLUSIVITY={{
@@ -212,8 +218,8 @@ const CategoryCreator = () => {
                                     }));
                                     bottomSheetRef?.current?.close()
                                 }} />
-                        </ThemedView>
-                    </BottomSheetView>
+                        </>
+                    </BottomSheetScrollView>
                 </BottomSheet>
 
             </ThemedView>

@@ -7,7 +7,6 @@ const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))
 
 const SHARED_KEY = config.SHARED_KEY
-const PATH_UPLOADS = config.FOLDERS.UPLOADS
 
 /**
  * Invia una risposta HTTP
@@ -58,9 +57,10 @@ async function dispatchReq(res, path, body, contentType) {
             case "/profile_getpfp":
             case "/auth_check_otp":
             case "/interactions_likepost":
-            case "/hpmedia_remove": //TODO: to implement in SQL
+            case "/hpmedia_remove":
             case "/collections_get":
             case "/collections_get_fullcollection":
+            case "/users_list":
                 dummy_res = geomedia_helper.generic_query(path, body)
                 break;
             ////___________________________________________________________________

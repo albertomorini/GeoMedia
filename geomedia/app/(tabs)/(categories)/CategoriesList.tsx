@@ -30,8 +30,9 @@ const CategoriesList = (props) => {
                 DATA={categories}
                 pickedItem={(pickeditem) => {
                     /// on category lists/ profile show the post as lis
-                    if (pickeditem?.iD == "new_item") {
-
+                    try {
+                        props?.onSelect(pickeditem)
+                    } catch (error) {
                         router.push({
                             pathname: '/CategoryCreator',
                             params: {
@@ -39,7 +40,6 @@ const CategoriesList = (props) => {
                             }
                         })
                     }
-                    props?.onSelect(pickeditem)
                 }}
                 isSelectable={props?.isSelectable}
                 itemSelected={props?.itemSelected}

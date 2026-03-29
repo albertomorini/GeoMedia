@@ -119,9 +119,8 @@ const MapViewer = forwardRef((props, ref) => {
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
-            collection_chosen: []
+            collection_chosen: catsChosen
         }).then(resQuery => {
-            console.log("readed posts: ", resQuery)
             setPostMarkers(resQuery)
         }).catch(err => {
             Alert.alert("Error retrieving posts: ", err)

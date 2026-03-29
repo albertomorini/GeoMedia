@@ -18,7 +18,7 @@ import MapPicking from '@/app/mycomponents/MapPicking';
 
 //////////////////////////////
 // bottom sheet and exclusivity/category handling
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CategoriesList from '../(categories)/CategoriesList';
@@ -66,7 +66,7 @@ const PostCreator = () => {
         AUTHOR_ID: ctx?.getUID(),
         EXCLUSIVITY: {
             DATERANGE: { DATE_START: null, DATE_END: null },
-            USERS: { viewers: [] }
+            VIEWERS: []
         },
         VISIBILITY_AREA_KM: 2, //default 2km
         ///////////
@@ -92,6 +92,7 @@ const PostCreator = () => {
         dummy_body.attachments = files //attach files
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
+        console.log("POSTCREATION",dummy_body)
 
         doRequest("post_merge", {
             postdata: dummy_body
@@ -173,9 +174,7 @@ const PostCreator = () => {
     }
 
     useEffect(() => {
-        // setInterval(() => {
         load_current_location()
-        // }, 1000);
         if (params != null) {
             loadFullPost()
         }
@@ -337,7 +336,10 @@ const PostCreator = () => {
                                 backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                             }}
                         >
-                            <BottomSheetView style={{ flex: 1 }}>
+                            <BottomSheetScrollView style={{ flex: 1 }}
+                                contentContainerStyle={{ paddingBottom: 20 }}
+                                keyboardShouldPersistTaps="handled"
+                            >
                                 <ThemedView>
                                     <CategoriesList
                                         allowCreation={false}
@@ -353,7 +355,7 @@ const PostCreator = () => {
                                             }))
                                         }} />
                                 </ThemedView>
-                            </BottomSheetView>
+                            </BottomSheetScrollView>
                         </BottomSheet>
 
                         <BottomSheet
@@ -372,12 +374,16 @@ const PostCreator = () => {
                                 backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                             }}
                         >
-                            <BottomSheetView style={{ flex: 1 }}>
+                            <BottomSheetScrollView style={{ flex: 1 }}
+                                contentContainerStyle={{ paddingBottom: 20 }}
+                                keyboardShouldPersistTaps="handled"
+                            >
                                 <ThemedView>
                                     <ExclusivityPicking
                                         isCategory={false}
                                         exclusivity={postData?.EXCLUSIVITY}
                                         setExclusivity={(obj) => {
+                                            console.log(obj)
                                             setPostData(prev => ({
                                                 ...prev,
                                                 EXCLUSIVITY: obj
@@ -385,7 +391,7 @@ const PostCreator = () => {
                                             exclusivity_sheet_handler?.current?.close()
                                         }} />
                                 </ThemedView>
-                            </BottomSheetView>
+                            </BottomSheetScrollView>
                         </BottomSheet>
 
 

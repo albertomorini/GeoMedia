@@ -2,7 +2,7 @@ import { style } from "@/components/globalstyle";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 import ItemIconizable from "./ItemIconizable";
 
@@ -12,9 +12,11 @@ const ListItem = (props: any) => {
 
 
     const renderItem = ({ item }) => (
-        <ItemIconizable item={item} onPress={() => {
-            props?.pickedItem(item)
-        }} />
+        <ItemIconizable item={item}
+            isImage={props?.isImage}
+            onPress={() => {
+                props?.pickedItem(item)
+            }} />
     );
 
     const toggleSelect = (id) => {
@@ -38,9 +40,11 @@ const ListItem = (props: any) => {
                 onPress={() => toggleSelect(item.ID)}
             >
 
-                <ItemIconizable item={item} onPress={() => {
-                    toggleSelect(item.ID)
-                }} />
+                <ItemIconizable item={item}
+                    isImage={props?.isImage}
+                    onPress={() => {
+                        toggleSelect(item.ID)
+                    }} />
 
                 <Ionicons
                     name={isSelected ? "checkbox-outline" : "square-outline"}
@@ -53,21 +57,25 @@ const ListItem = (props: any) => {
 
     function filterData(allowCreation = false) {
         let og_data = props?.DATA
-        let filtered = og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
+        let filtered = searchText.trim().length == 0 ? og_data : og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
 
-        let new_cat = {
+        let new_item = {
             ID: "new_item",
             TITLE: "new " + props?.label,
             ICON: "add",
             COLOR: "#c4aaaa"
         }
         if (searchText?.length == 0 && allowCreation) {
-            return [new_cat, ...og_data]
+            return [new_item, ...og_data]
         } else if (filtered?.length == 0 && allowCreation) {
-            return [new_cat]
+            return [new_item]
         }
         return filtered
     }
+
+    useEffect(() => {
+        
+    }, [props?.DATA])
 
     return (
         <ThemedView style={[style?.container, { height: "100%" }]}>
