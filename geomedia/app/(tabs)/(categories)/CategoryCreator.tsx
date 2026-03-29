@@ -50,7 +50,7 @@ const CategoryCreator = () => {
         try {
             collectionid = params.collectionid ? JSON.parse(params.collectionid as string) : null;
         } catch (e) {
-            console.error("Failed to parse postData", e);
+            console.error("Failed to parse category data", e);
             collectionid = null;
         }
         if (collectionid != null) {
@@ -59,7 +59,12 @@ const CategoryCreator = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0];
-                setCategoryData(x)
+                setCategoryData(prev => ({
+                    ...prev,
+                    ...x,
+                    VIEWERS: JSON.parse(x?.VIEWERS),
+                    CREATORS: JSON.parse(x?.CREATORS),
+                }));
             }).catch(err => {
                 Alert.alert("Err loading category", err)
             })
@@ -70,8 +75,12 @@ const CategoryCreator = () => {
         doRequest("collection_merge", {
             categorydata: categoryData
         }).then(resQuery => {
-            //TODO: SET THE ID
-            console.log("collection merge, res: ", resQuery)
+            if (resQuery[0]?.OK) {
+                setCategoryData(prev => ({
+                    ...prev,
+                    ID: resQuery[0]?.ID
+                }))
+            }
         })
     }
 
@@ -195,7 +204,7 @@ const CategoryCreator = () => {
                 >
                     <BottomSheetScrollView style={{ flex: 1 }}
                         contentContainerStyle={{ paddingBottom: 20 }}
-                        // keyboardShouldPersistTaps="handled"
+                    // keyboardShouldPersistTaps="handled"
                     >
                         <>
                             <ExclusivityPicking
@@ -205,7 +214,9 @@ const CategoryCreator = () => {
                                         "DATE_START": categoryData?.EXCL_DATE_START,
                                         "DATE_END": categoryData?.EXCL_DATE_END,
                                         "IS_RECURRENT": categoryData?.RECURRENT
-                                    }
+                                    },
+                                    "CREATORS": categoryData?.CREATORS,
+                                    "VIEWERS": categoryData?.VIEWERS,
                                 }}
                                 setExclusivity={(obj) => {
                                     setCategoryData(prev => ({

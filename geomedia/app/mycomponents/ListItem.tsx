@@ -2,13 +2,13 @@ import { style } from "@/components/globalstyle";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 import ItemIconizable from "./ItemIconizable";
 
-const ListItem = (props: any) => {
+const ListItem = forwardRef((props: any, ref: any) => {
     const [searchText, setSearchText] = useState("")
-    const [selectedItems, setSelectedItems] = useState(props?.itemSelected == undefined ? [] : props?.itemSelected);
+    const [selectedItems, setSelectedItems] = useState([]);
 
 
     const renderItem = ({ item }) => (
@@ -25,7 +25,6 @@ const ListItem = (props: any) => {
         } else {
             setSelectedItems([...selectedItems, id]);
         }
-        props?.pickedItem(selectedItems)
     };
 
     const renderItemSelectable = ({ item }) => {
@@ -73,9 +72,22 @@ const ListItem = (props: any) => {
         return filtered
     }
 
-    useEffect(() => {
-        
-    }, [props?.DATA])
+    useImperativeHandle(ref, () => ({
+
+        get_item_selected: () => {
+            return selectedItems
+        },
+        load_item_selected: (items: Array) => {
+            if (Array.isArray(items)) {
+                setSelectedItems(items);
+                // items?.forEach(s => {
+                //     console.log(s)
+                //     toggleSelect(s)
+                // })
+            }
+        }
+
+    }))
 
     return (
         <ThemedView style={[style?.container, { height: "100%" }]}>
@@ -86,7 +98,6 @@ const ListItem = (props: any) => {
                 borderRadius: 10,
                 paddingHorizontal: 10,
                 marginBottom: 16,
-
             }}>
                 <Ionicons name="search-outline" size={20} color="#888" style={{
                     marginRight: 8
@@ -116,6 +127,6 @@ const ListItem = (props: any) => {
             </ThemedView>
         </ThemedView>
     );
-};
+});
 
 export default ListItem;

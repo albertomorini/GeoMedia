@@ -383,7 +383,6 @@ const PostCreator = () => {
                                         isCategory={false}
                                         exclusivity={postData?.EXCLUSIVITY}
                                         setExclusivity={(obj) => {
-                                            console.log(obj)
                                             setPostData(prev => ({
                                                 ...prev,
                                                 EXCLUSIVITY: obj

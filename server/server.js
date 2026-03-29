@@ -75,8 +75,7 @@ async function dispatchReq(res, path, body, contentType) {
                     sendResponse(res, 401, query_results)
                 }
                 break;
-            /// POST SPECIFIC
-            case "/post_merge": //creation, update
+            case "/post_merge": // POST SPECIFIC -- creation, update
                 let files = JSON.parse(JSON.stringify(body.postdata.attachments));
 
                 delete body.postdata.attachments // avoid to pass files to SQL
@@ -94,14 +93,12 @@ async function dispatchReq(res, path, body, contentType) {
                         sendResponse(res, 500, { "post_id": post_id, "OK": false })
                     }
                 }
-
                 break;
             case "/collection_merge":
-                query_results = await geomedia_helper.collection_merge(body.categorydata)
+                dummy_res = await geomedia_helper.collection_merge(body.categorydata)
                 break;
             case "/post_get_map":
-                query_results = await geomedia_helper.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
-                sendResponse(res, 200, query_results)
+                dummy_res = await geomedia_helper.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);
                 break;
             case "/post_get_fullpost":
                 query_results = await geomedia_helper.generic_query("post_get_fullpost", body)
@@ -113,7 +110,7 @@ async function dispatchReq(res, path, body, contentType) {
                 sendResponse(res, 200, query_results)
                 break;
             case "/post_delete":
-                query_results = await dispatchReq.post_delete(body?.postid, body?.password)
+                dummy_res = await dispatchReq.post_delete(body?.postid, body?.password)
                 break;
             ////______________________________________________________________________________
             ////______________________________________________________________________________

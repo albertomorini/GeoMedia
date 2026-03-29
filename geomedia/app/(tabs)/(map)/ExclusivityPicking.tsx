@@ -18,8 +18,10 @@ const ExclusivityPicking = (props) => {
 
     const refTimeRange = useRef()
     const [listUsers, setListUsers] = useState(null);
-    const [viewers, setViewers] = useState(props?.EXCLUSIVITY?.VIEWERS == null ? [] : props?.EXCLUSIVITY?.VIEWERS)
-    const [creators, setCreators] = useState(props?.EXCLUSIVITY?.CREATORS == null ? [] : props?.EXCLUSIVITY?.CREATORS)
+
+
+    const refViewers = useRef();
+    const refCreators = useRef();
     ////////////////////////////////////////////////////////////
 
     function getUsersList() {
@@ -38,15 +40,18 @@ const ExclusivityPicking = (props) => {
     }
 
     useEffect(() => {
-        getUsersList()
-    }, [])
+        getUsersList();
+        setTimeout(() => {
+            console.log("inexcl,", props?.EXCLUSIVITY)
+            refViewers?.current?.load_item_selected(props?.EXCLUSIVITY?.VIEWERS)
+            refCreators?.current?.load_item_selected(props?.EXCLUSIVITY?.CREATORS)
+        }, 500);
+    }, [props])
 
     return (
         <>
             <TouchableOpacity style={[style.buttons?.full_screen, style.colors?.geomedia_green]}
                 onPress={() => {
-                    console.log(viewers, creators, JSON.stringify(viewers))
-
                     /// return ours value
                     let range = refTimeRange?.current?.getRanges()
                     let excl = {}
@@ -55,8 +60,10 @@ const ExclusivityPicking = (props) => {
                         DATE_END: range?.end,
                         IS_RECURRENT: range?.isrecurrent
                     }
-                    excl.VIEWERS = viewers
-                    excl.CREATORS = creators
+                    excl.VIEWERS = refViewers?.current?.get_item_selected()
+                    excl.CREATORS = refCreators?.current?.get_item_selected()
+
+                    console.log(excl)
                     props?.setExclusivity(excl)
 
                 }}>
@@ -65,25 +72,33 @@ const ExclusivityPicking = (props) => {
             <SegmentedControl
                 values={segmentsOptions}
                 selectedIndex={selectedOptions}
-                onChange={(event) => setSelectedOptions(event.nativeEvent.selectedSegmentIndex)}
+                onChange={(event) => {
+                    setSelectedOptions(event.nativeEvent.selectedSegmentIndex)
+                    // refViewers?.current?.load_item_selected(props?.EXCLUSIVITY?.VIEWERS)
+
+                }}
             />
 
             <ThemedView style={{ display: selectedOptions === 0 ? 'flex' : 'none' }}>
-                <RangeTimePicker ref={refTimeRange}
-                    start={props?.EXCLUSIVITY?.DATERANGE?.DATE_START}
-                    end={props?.EXCLUSIVITY?.DATERANGE?.DATE_END}
-                    isRecurrent={props?.EXCLUSIVITY?.DATERANGE?.IS_RECURRENT}
-                />
+                <ThemedView style={{ height: "100%" }}>
+
+                    <RangeTimePicker ref={refTimeRange}
+                        start={props?.EXCLUSIVITY?.DATERANGE?.DATE_START}
+                        end={props?.EXCLUSIVITY?.DATERANGE?.DATE_END}
+                        isRecurrent={props?.EXCLUSIVITY?.DATERANGE?.IS_RECURRENT}
+                    />
+                </ThemedView>
             </ThemedView>
 
             <ThemedView style={{ display: selectedOptions === 1 ? 'flex' : 'none' }}>
                 <ThemedText style={style.label}>Viewers users</ThemedText>
 
                 <ListItem
+                    ref={refViewers}
                     DATA={listUsers}
-                    pickedItem={(pickeditems) => setViewers([...pickeditems])}
+                    // pickedItem={(pickeditems) => setViewers([...pickeditems])}
                     isSelectable={true}
-                    itemSelected={viewers}
+                    // itemSelected={props?.EXCLUSIVITY?.VIEWERS}
                     isImage={true}
                     estimatedSize={100}
                     allowCreation={false}
@@ -95,10 +110,11 @@ const ExclusivityPicking = (props) => {
 
                 <ThemedText style={style.label}>Creators users</ThemedText>
                 <ListItem
+                    ref={refCreators}
                     DATA={listUsers}
-                    pickedItem={(pickeditems) => { setCreators([...pickeditems]) }}
+                    // pickedItem={(pickeditems) => { setCreators([...pickeditems]) }}
                     isSelectable={true}
-                    itemSelected={creators}
+                    // itemSelected={creators}
                     isImage={true}
                     estimatedSize={100}
                     allowCreation={false}

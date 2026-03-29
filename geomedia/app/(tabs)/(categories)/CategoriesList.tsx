@@ -15,7 +15,6 @@ const CategoriesList = (props) => {
             uid: ctx?.getUID(),
             mode: "R"
         }).then(resQuery => {
-            // let x = [, ...]
             setCategories(resQuery)
         })
     }
@@ -31,7 +30,7 @@ const CategoriesList = (props) => {
                 pickedItem={(pickeditem) => {
                     /// on category lists/ profile show the post as lis
                     try {
-                        props?.onSelect(pickeditem)
+                        props?.onSelect(pickeditem) //if exists is a child component, like cateogypicker for post creation
                     } catch (error) {
                         router.push({
                             pathname: '/CategoryCreator',

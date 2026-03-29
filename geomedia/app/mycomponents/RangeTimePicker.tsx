@@ -82,7 +82,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <ThemedView style={{ padding: 20 }}>
+        <ThemedView style={{ padding: 20, height: "100%" }}>
             <ThemedText style={style.label}>The post will be visible from:</ThemedText>
 
             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
