@@ -6,13 +6,14 @@ import { ThemedInput } from "@/components/themed-input";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useContext, useEffect, useState } from "react";
-import { Alert,  Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 
-import {Image} from "expo-image"
+import { Image } from "expo-image"
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
+import { router } from "expo-router";
 
 export default function ProfileEditor() {
 
@@ -27,7 +28,6 @@ export default function ProfileEditor() {
         doRequest("profile_getpfp", {
             USERNAME: user?.USERNAME
         }).then(res => {
-            // console.log(res[0].substring(0, 10))
             let pp = res[0].PROFILE_PICTURE
             if (pp != undefined) {
                 setProfilePic(pp)
@@ -37,8 +37,6 @@ export default function ProfileEditor() {
 
     async function upload_picture() {
         try {
-
-
             const result = await DocumentPicker.getDocumentAsync({
                 type: "image/*",   // only images
                 multiple: false,   // single file
@@ -73,7 +71,16 @@ export default function ProfileEditor() {
             newinfo.AUTH = 1
             await SecureStore.setItemAsync("user", JSON.stringify(newinfo));
             ctx?.User?.setUser(newinfo)
-            // getProfilePic()
+            ctx?.showToast({
+                type: "success",
+                text1: "Profile edited!"
+            })
+            router.back()
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error: " + JSON.stringify(err)
+            })
         })
     }
 

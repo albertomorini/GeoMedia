@@ -122,7 +122,7 @@ const MapViewer = forwardRef((props, ref) => {
             collection_chosen: catsChosen
         }).then(resQuery => {
             console.log("readed posts: ", resQuery)
-            setPostMarkers(resQuery)
+            setPostMarkers([...resQuery])
         }).catch(err => {
             Alert.alert("Error retrieving posts: ", err)
         })
@@ -131,6 +131,12 @@ const MapViewer = forwardRef((props, ref) => {
     /////////////////////////////////////////////////////////////
     useEffect(() => {
         getLocation();
+        //TODO: check if cords not null
+        console.log("HERE")
+        get_posts_map()
+        // setInterval(() => {
+        //     get_posts_map()
+        // }, 10000);
     }, [])
 
     return (

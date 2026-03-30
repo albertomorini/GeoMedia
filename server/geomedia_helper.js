@@ -159,6 +159,7 @@ async function post_get_map(uid, current_position, collection_chosen = []) {
     let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC POST_GET_MAP @UID='" + uid + "', @COLLECTIONS_CHOSEN='" + JSON.stringify(collection_chosen) + "'")
 
     let results = []
+    // console.log(current_position,posts)
     posts.forEach(pp => {
         // check if users' position is within the post availability
         if (checkAREA(pp.VISIBILITY_AREA_KM, pp.LATITUDE, pp.LONGITUDE, current_position.latitude, current_position.longitude)) {

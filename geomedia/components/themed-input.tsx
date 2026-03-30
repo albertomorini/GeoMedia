@@ -5,6 +5,8 @@ export type ThemedInputProps = TextInputProps & {
     lightColor?: string;
     darkColor?: string;
     type?: 'default' | 'outlined' | 'filled';
+    onBlur?: (value: string) => void;
+    borderColor?: string;
 };
 
 export function ThemedInput({
@@ -14,28 +16,45 @@ export function ThemedInput({
     type = 'default',
     multiline = false,
     numberOfLines = 3,
+    autoCapitalize = 'none',
+    borderColor, // ✅ destructured
+    onBlur,
     ...rest
 }: ThemedInputProps) {
 
     const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
     const background = useThemeColor({}, 'background');
 
-    const borderColor = color === '#ECEDEE' ? '#3a3a3a' : '#d0d0d0';
+    const defaultBorderColor = color === '#ECEDEE' ? '#3a3a3a' : '#d0d0d0';
+
+    let finalBorderColor = defaultBorderColor;
+
+    if (borderColor) {
+        if (borderColor === "error") finalBorderColor = "red";
+        else if (borderColor === "success") finalBorderColor = "green";
+        else finalBorderColor = borderColor; // allow custom colors
+    }
 
     return (
         <TextInput
             multiline={multiline}
             numberOfLines={numberOfLines}
+            onBlur={() => {
+                onBlur?.(rest.value as string);
+            }}
+            autoCapitalize={autoCapitalize}
             style={[
                 { color },
                 type === 'default' ? styles.default : undefined,
-                type === 'outlined' ? [styles.default, { borderColor }] : undefined,
+                type === 'outlined'
+                    ? [styles.default, { borderColor: finalBorderColor }]
+                    : undefined,
                 type === 'filled'
                     ? [styles.default, { backgroundColor: background }]
                     : undefined,
                 style,
             ]}
-            placeholderTextColor={borderColor}
+            placeholderTextColor={finalBorderColor}
             {...rest}
         />
     );

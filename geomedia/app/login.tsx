@@ -11,7 +11,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
 import { ThemedInput } from '@/components/themed-input';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -33,7 +33,7 @@ export default function LoginScreen(props) {
 
     ///
     const [OTP, setOTP] = useState(null);
-    const [validUsername, setValidUsername] = useState(false);
+    const [validUsername, setValidUsername] = useState(null);
 
     //////////////////////////////////////////////////////////////////
 
@@ -76,7 +76,7 @@ export default function LoginScreen(props) {
             alert(t?.signup?.weakPassword)
         } else if (password != passwordRep) {
             seterrorPassword(t?.signup?.diffPass)
-        } else if (validUsername) {
+        } else if (validUsername && validUsername != null) {
             seterrorPassword("Username already taken!")
         } else {
             doRequest("auth_signin", {
@@ -105,19 +105,23 @@ export default function LoginScreen(props) {
 
     function check_username(username: string) {
         doRequest("auth_check_username", {
-            username: username
+            USERNAME: username
         }).then(resQuery => {
-            if (resQuery[0]?.OK) {
-                //TODO: make the border green
+            console.log(resQuery)
+            if (resQuery[0]?.OK, username) {
                 setValidUsername(true)
+                ctx?.showToast({
+                    type: 'success',
+                    text1: 'Username available',
+                    text2: 'Hello ' + username
+                })
             } else {
-                //TODO: make the border red
+                ctx?.showToast({
+                    type: 'error',
+                    text1: 'Username taken',
+                })
             }
         })
-        // IF EXISTS (SELECT * FROM USERS WHERE USERNAME=@USERNAME)
-        //     SELECT 1 AS OK
-        // ELSE
-        //     SELECT 0 AS OK
     }
 
     //////////////////////////////////////////////////////////////////
@@ -164,6 +168,11 @@ export default function LoginScreen(props) {
                                     {t?.login.buttonConfirm}
                                 </ThemedText>
                             </TouchableOpacity>
+                            {errorPassword?.length > 0 ?
+                                <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center",fontSize:16 }}>{errorPassword}</ThemedText>
+                                :
+                                null
+                            }
 
                         </ThemedView>
                         :
@@ -183,6 +192,11 @@ export default function LoginScreen(props) {
                                                 Check OTP
                                             </ThemedText>
                                         </TouchableOpacity>
+                                        {errorPassword?.length > 0 ?
+                                            <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
+                                            :
+                                            null
+                                        }
                                     </>
                                     :
                                     <>
@@ -190,11 +204,16 @@ export default function LoginScreen(props) {
                                         <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
 
                                         <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
-                                        <ThemedInput type='outlined' name="email" placeholder={"Username"} onChangeText={(text) => {
-                                            setUsername(text)
-                                        }}
+                                        <ThemedInput type='outlined'
+                                            borderColor={validUsername == null ? null : validUsername ? "succes" : "error"}
+                                            name="email"
+                                            placeholder={"Username"}
+                                            onChangeText={(text) => {
+                                                setUsername(text)
+                                                setValidUsername(null) //will be checked onblur
+                                            }}
                                             onBlur={() => {
-                                                check_username(text);
+                                                check_username(username);
                                             }}
                                         />
 

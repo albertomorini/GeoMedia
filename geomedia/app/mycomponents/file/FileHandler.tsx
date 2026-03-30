@@ -4,17 +4,19 @@ import { Alert, Dimensions, StyleSheet, TouchableOpacity, View } from "react-nat
 
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useContext, useImperativeHandle, useState } from "react";
 
 import CameraCapture from "./cameraCapture";
 import { Collapsible } from "@/components/ui/collapsible";
 
 import { doRequest } from "@/app/utility";
 import CarouselFileViewer from "./CarouselFileViewer";
+import { MyContext } from "@/app/_layout";
 
 
 const FileHandler = forwardRef((props: any, ref: any) => {
     const [showCamera, setShowCamera] = useState(false);   // camera control
+    const ctx = useContext(MyContext) //mainly for toast
 
     const [filesAttached, setFilesAttached] = useState([])
 
@@ -80,7 +82,11 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                                 "postid": 1,
                                 "filename": FILENAME
                             }).then(resQuery => {
-                                //TODO: toast?
+                                ctx?.showToast({
+                                    type: "success",
+                                    text1: "File removed",
+                                    text2: "File " + FILENAME + " removed"
+                                })
                             })
                         }
                     },

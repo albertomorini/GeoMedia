@@ -1,6 +1,6 @@
 import { ThemedView } from "@/components/themed-view";
 import { Text } from "re-native-ui";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from "@/components/themed-text";
 import { ThemedInput } from "@/components/themed-input";
@@ -8,8 +8,10 @@ import { Modal, TouchableOpacity } from "react-native";
 import { style } from "@/components/globalstyle";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "@/components/LanguageProvider";
+import { MyContext } from "./_layout";
+import { en, it } from "@/components/i18n";
 
-let URL = "http://10.0.0.3:9911"
+let URL = "http://10.0.0.3:9911/"
 
 
 async function load_config() {
@@ -22,27 +24,36 @@ load_config()
 
 
 
-
 export const SettingsConfig = () => {
 
-    const [modalSettings, setModalSettings] = useState(false)
+    const [modalSettingsVisible, setModalSettingsVisible] = useState(false)
     const [protocol, setProtocol] = useState(null)
     const [servername, setServerName] = useState(null)
     const [port, setPort] = useState(null)
 
-    const { changeLang } = useLanguage();
+    const { t, changeLang } = useLanguage();
+
+
+    const ctx = useContext(MyContext)
 
 
     function confirmNewURI() {
-        SecureStore.setItemAsync("config", protocol + "://" + servername + ":" + port);
+        SecureStore.setItemAsync("config", protocol + "://" + servername + ":" + port + "/");
+        setModalSettingsVisible(false)
+        ctx?.showToast({
+            type: 'success',
+            text1: 'Configuration saved',
+        })
+        load_config()
     }
 
-    return (
+    useEffect(() => { }, [t])
 
+    return (
         <ThemedView style={style.container}>
             <ThemedView style={{
                 position: "absolute",
-                top: 160,
+                top: 120,
                 left: 0,
                 right: 0,
                 flexDirection: "row",
@@ -51,10 +62,10 @@ export const SettingsConfig = () => {
                 gap: 16,
                 transform: [{ translateY: -10 }],
             }}>
-                <TouchableOpacity onPress={() => changeLang("IT")}>
+                <TouchableOpacity onPress={() => changeLang("IT")} style={t === it && [style?.buttons?.small, style.colors.geomedia_green]}>
                     <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => changeLang("EN")}>
+                <TouchableOpacity onPress={() => changeLang("EN")} style={t === en && [style?.buttons?.small, style.colors.geomedia_green]}>
                     <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
                 </TouchableOpacity>
 
@@ -65,26 +76,26 @@ export const SettingsConfig = () => {
                 top: 150,
                 right: 20,
             }} onPress={() => {
-                setModalSettings(true)
+                setModalSettingsVisible(true)
             }}>
 
                 <Ionicons name="cog-outline" size={28} color={"#bfea7fb9"} />
             </TouchableOpacity>
 
-            <Modal visible={modalSettings}
+            <Modal visible={modalSettingsVisible}
                 transparent={true}
                 animationType="slide">
                 <ThemedView style={{
-                    top: "20%",
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    borderWidth: 3,
-
+                    // borderWidth: 3,\
+                    height: "100%",
+                    padding: 10,
                 }}>
                     <ThemedView
                         style={{
                             padding: 20,
                             borderRadius: 10,
-
+                            top: "20%",
                             justifyContent: "space-between",
                         }}
                     >
@@ -109,7 +120,7 @@ export const SettingsConfig = () => {
                             }}
                         >
                             <TouchableOpacity
-                                onPress={() => setModalSettings(false)}
+                                onPress={() => setModalSettingsVisible(false)}
                                 style={[style?.colors.geomedia_red, style.buttons.small]}
                             >
                                 <Text>Close</Text>
@@ -137,17 +148,15 @@ export const SettingsConfig = () => {
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
-    console.log(URL);
 
-    // return fetch(URL  + api, { //TODO: CHECK IT
-    return fetch("http://10.0.0.3:9911/"+ api, {
+    return fetch(URL + api, {
+        // return fetch("http://10.0.0.3:9911/"+ api, {
         method: "POST",
         mode: "cors",
         headers: { "authorization": "mysuperkey" },
         body: JSON.stringify(body)
     }).then(res => res.json())
 }
-
 
 
 //Utility stuff

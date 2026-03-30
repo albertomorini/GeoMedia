@@ -61,6 +61,7 @@ async function dispatchReq(res, path, body, contentType) {
             case "/collections_get":
             case "/collections_get_fullcollection":
             case "/users_list":
+            case "/auth_check_username":
                 dummy_res = geomedia_helper.generic_query(path, body)
                 break;
             ////___________________________________________________________________

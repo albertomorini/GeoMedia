@@ -6,10 +6,10 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { createContext, useEffect, useState } from 'react';
 import LoginScreen from './login';
-import { ThemedView } from '@/components/themed-view';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { LanguageProvider } from '@/components/LanguageProvider';
+import { ThemedView } from '@/components/themed-view';
 
 
 interface UserContextType {
@@ -26,50 +26,33 @@ export default function RootLayout() {
   const [User, setUser] = useState(null)
 
   function showToast(data: Object) {
-    // Toast.show(data);//LATER:  to fix
-    Alert.alert(JSON.stringify(data))
+    Toast.show(data);
   }
 
-  // useEffect(() => {
-  //   showToast({
-  //     type: 'success',
-  //     text1: 'Hell22!!o',
-  //     text2: 'Thi22s is some something 👋'
-  //   })
-  //     < ThemedView style = {{ flex: 1 }
-  // }>
-  // <Toast />
-  //             </ThemedView >
-  // }, [])
-
   return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "padding"}>
+      <LanguageProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <MyContext.Provider
+            value={{
+              User: { User, setUser },
+              getUID: () => { return User?.UID },
+              showToast: (data: Object) => showToast(data)
+            }}
+          >
 
-    <LanguageProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <MyContext.Provider
-          value={{
-            User: { User, setUser },
-            getUID: () => { return User?.UID },
-            showToast: (data: Object) => showToast(data)
-          }}
-        >
-
-          {User != null ?
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-
-            :
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "padding"}
-              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // adjust if you have a top header
-            >
+            {User != null ?
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+              :
               <LoginScreen setuser={(user: Object) => { setUser(user) }} />
-            </ KeyboardAvoidingView >
-          }
-        </MyContext.Provider>
-        <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
-      </ThemeProvider>
-    </LanguageProvider>
-
+            }
+          </MyContext.Provider>
+          <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
+        </ThemeProvider>
+      </LanguageProvider>
+      <Toast />
+    </KeyboardAvoidingView>
   );
 }
