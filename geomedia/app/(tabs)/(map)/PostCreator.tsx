@@ -11,7 +11,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { doRequest } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
 import MapPicking from '@/app/mycomponents/MapPicking';
@@ -102,14 +102,15 @@ const PostCreator = () => {
                     ...prev,
                     ID: res?.post_id
                 }))
-
-                /// TODO: check, not working now
                 ctx?.showToast({
-                    type: 'success',        // 'success', 'error', 'info'
+                    type: 'success',
                     text1: 'Post saved!',
-                    position: 'bottom',     // <-- Set position to bottom
-                    visibilityTime: 3000,   // duration in ms
+                    // position: 'bottom', 
+                    // visibilityTime: 3000,  
                 });
+                if (router.canGoBack()) {
+                    router.back()
+                }
             } else {
                 Alert.alert("Post not saved: " + res?.MSG)
             }
