@@ -57,7 +57,6 @@ const PostCreator = () => {
     /////////////////////////////////////////////////////////////
 
 
-
     const [postData, setPostData] = useState({
         ID: null,
         COLLECTION_ID: null,
@@ -106,9 +105,11 @@ const PostCreator = () => {
                     type: 'success',
                     text1: 'Post saved!',
                 });
-                if (router.canGoBack()) {
-                    router.back()
-                }
+                setTimeout(() => {
+                    if (router.canGoBack()) {
+                        router.back()
+                    }
+                }, 450);
             } else {
                 Alert.alert("Post not saved: " + res?.MSG)
             }

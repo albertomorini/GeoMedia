@@ -4,12 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import LoginScreen from './login';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { LanguageProvider } from '@/components/LanguageProvider';
-import { ThemedView } from '@/components/themed-view';
 
 
 interface UserContextType {

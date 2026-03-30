@@ -96,7 +96,7 @@ const MapPicking = (props, ref) => {
         // hide it after 5 sec
         setTimeout(() => {
             markerRef.current?.hideCallout();
-        }, 5500);
+        }, 4500);
     }, [])
 
     return (

@@ -80,10 +80,28 @@ const CollectionCreator = () => {
                     ...prev,
                     ID: resQuery[0]?.ID
                 }))
+                ctx?.showToast({
+                    type: "success",
+                    text1: "Collection saved"
+                })
+                setTimeout(() => {
+                    if (router.canGoBack()) { //TODO: check on post creation if allowed new cat
+                        router.back()
+                    }
+                }, 450);
+            } else {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Error",
+                    text2: resQuery[0]?.MSG
+                })
             }
-            if (router.canGoBack()) { //TODO: check on post creation if allowed new cat
-                router.back()
-            }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Network error",
+                text2: JSON.stringify(err)
+            })
         })
     }
 

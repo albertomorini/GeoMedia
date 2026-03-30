@@ -80,10 +80,6 @@ const ListItem = forwardRef((props: any, ref: any) => {
         load_item_selected: (items: Array) => {
             if (Array.isArray(items)) {
                 setSelectedItems(items);
-                // items?.forEach(s => {
-                //     console.log(s)
-                //     toggleSelect(s)
-                // })
             }
         }
 

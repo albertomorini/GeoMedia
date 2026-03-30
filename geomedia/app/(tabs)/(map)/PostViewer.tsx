@@ -49,9 +49,16 @@ const PostViewer = () => {
             postid: postData?.ID,
             uid: ctx?.getUID()
         }).then(resQuery => {
-            //TODO: show tost
+            ctx?.showToast({
+                type: "success",
+                text: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
+            })
         }).catch(err => {
-
+            ctx?.showToast({
+                type: "error",
+                text1: "Network error ",
+                text2: JSON.stringify(err)
+            })
         })
     }
 

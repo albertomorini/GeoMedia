@@ -47,6 +47,11 @@ export default function LoginScreen(props) {
                 await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
                 check_cache_login()
             } else {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Authentication failed",
+                    visibilityTime: 3000,
+                });
                 seterrorPassword(res[0]?.MSG)
             }
         }).catch(err => {
