@@ -9,7 +9,7 @@ import { useColorScheme } from 'react-native';
 export default function MapLayout() {
 
     const colorScheme = useColorScheme();
-    const { t } = useLanguage();
+    const { langselected } = useLanguage();
 
 
     return (
@@ -24,7 +24,7 @@ export default function MapLayout() {
             <Stack.Screen
                 name="MapViewer"
                 options={{
-                    title: t?.map
+                    title: langselected?.map
                 }}
             />
 

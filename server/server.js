@@ -96,7 +96,7 @@ async function dispatchReq(res, path, body, contentType) {
                 }
                 break;
             case "/collection_merge":
-                dummy_res = await geomedia_helper.collection_merge(body.categorydata)
+                dummy_res = await geomedia_helper.collection_merge(body.collectionData)
                 break;
             case "/post_get_map":
                 dummy_res = await geomedia_helper.post_get_map(body?.uid, body?.current_position, body?.collection_chosen);

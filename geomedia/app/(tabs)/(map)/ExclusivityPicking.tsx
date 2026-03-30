@@ -14,7 +14,7 @@ const ExclusivityPicking = (props) => {
 
     const ctx = useContext(MyContext);
     const [selectedOptions, setSelectedOptions] = useState(0);
-    const segmentsOptions = props?.isCategory ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
+    const segmentsOptions = props?.creatorsEnabled ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
 
     const refTimeRange = useRef()
     const [listUsers, setListUsers] = useState(null);

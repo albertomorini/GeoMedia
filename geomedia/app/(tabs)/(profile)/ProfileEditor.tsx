@@ -152,6 +152,8 @@ export default function ProfileEditor() {
                 }} />
                 {/* //TODO: password? */}
 
+                <ThemedText style={[style.label]}>Your collections:</ThemedText>
+
                 <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
                     <ThemedText>Save</ThemedText>
                 </TouchableOpacity>

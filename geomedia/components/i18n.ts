@@ -1,10 +1,7 @@
-import * as SecureStore from 'expo-secure-store';
-
-
 export const it = {
     map: "Mappa",
     account: "Profilo",
-    categories: "Categorie",
+    collections: "Collezioni",
     login: {
         placeholderEmail: "Inserisci la tua email",
         placeholderPassord: "Inserisci la password",
@@ -27,7 +24,7 @@ export const it = {
 export const en = {
     map: "Map",
     account: "Account",
-    categories: "Categories",
+    collections: "Collections",
     login: {
         placeholderEmail: "Enter you email",
         placeholderPassord: "Enter you password",

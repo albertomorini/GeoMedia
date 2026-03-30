@@ -4,14 +4,12 @@ import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-
-
 import { Ionicons } from '@expo/vector-icons';
 import { useLanguage } from '@/components/LanguageProvider';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { t } = useLanguage();
+  const { langselected } = useLanguage();
 
 
   return (
@@ -28,7 +26,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(map)"
         options={{
-          title: t.map,
+          title: langselected.map,
           tabBarIcon: ({ color }) => (
             <Ionicons name="map-outline" size={28} color={color} />
           ),
@@ -36,9 +34,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="(categories)"
+        name="(collections)"
         options={{
-          title: t.categories,
+          title: langselected.collections,
           tabBarIcon: ({ color }) => (
             <Ionicons name="layers-outline" size={28} color={color} />
           ),
@@ -48,7 +46,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(profile)"
         options={{
-          title: t.account,
+          title: langselected.account,
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="person-circle-outline" color={color} />
           ),

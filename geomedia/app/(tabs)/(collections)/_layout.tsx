@@ -6,10 +6,10 @@ import { Colors } from '@/constants/theme';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
 
-export default function CategoriesLayout() {
+export default function CollectionsLayout() {
 
     const colorScheme = useColorScheme();
-    const { t } = useLanguage();
+    const { langselected } = useLanguage();
 
 
     return (
@@ -23,15 +23,15 @@ export default function CategoriesLayout() {
         >
 
             <Stack.Screen
-                name="CategoriesList"
+                name="CollectionsList"
                 options={{
-                    title: t?.categories
+                    title: langselected?.collections
                 }}
             />
             <Stack.Screen
-                name="CategoryCreator"
+                name="CollectionCreator"
                 options={{
-                    title: t?.categories,
+                    title: langselected?.collections,
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
                     animation: 'slide_from_right',
 

@@ -17,11 +17,11 @@ import { Ionicons } from '@expo/vector-icons';
 import MapPicking from '@/app/mycomponents/MapPicking';
 
 //////////////////////////////
-// bottom sheet and exclusivity/category handling
+// bottom sheet and exclusivity/collection handling
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CategoriesList from '../(categories)/CategoriesList';
+import CollectionsList from '../(collections)/CollectionsList';
 import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 
 
@@ -52,7 +52,7 @@ const PostCreator = () => {
     /// for excluivity bottom menu
     const snapPoints = useMemo(() => ["50%", '90%'], []);
     const exclusivity_sheet_handler = useRef()
-    const category_sheet_handler = useRef()
+    const collection_sheet_handler = useRef()
 
     /////////////////////////////////////////////////////////////
 
@@ -70,10 +70,10 @@ const PostCreator = () => {
         },
         VISIBILITY_AREA_KM: 2, //default 2km
         ///////////
-        // these are not stored on post but dinamically loaded and inherited by category/collection
+        // these are not stored on post but dinamically loaded and inherited by collection
         COLOR: null,
         ICON: null,
-        CATEGORY_NAME: null,
+        COLLECTION_NAME: null,
         REMOTE_POSTING_ENABLED: false
     })
 
@@ -105,8 +105,6 @@ const PostCreator = () => {
                 ctx?.showToast({
                     type: 'success',
                     text1: 'Post saved!',
-                    // position: 'bottom', 
-                    // visibilityTime: 3000,  
                 });
                 if (router.canGoBack()) {
                     router.back()
@@ -202,22 +200,22 @@ const PostCreator = () => {
                     style={{ flex: 1 }}
                 >
                     <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
-                        <ThemedText style={style.label}>Category</ThemedText>
+                        <ThemedText style={style.label}>Collections</ThemedText>
                         {postData?.COLLECTION_ID == null ?
                             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
-                                category_sheet_handler?.current?.snapToIndex(0)
+                                collection_sheet_handler?.current?.snapToIndex(0)
                             }}>
-                                <ThemedText>Select category</ThemedText>
+                                <ThemedText>Select collection</ThemedText>
                             </TouchableOpacity>
                             :
                             <ItemIconizable
                                 onPress={() => {
-                                    category_sheet_handler?.current?.snapToIndex(0)
+                                    collection_sheet_handler?.current?.snapToIndex(0)
                                 }}
                                 item={{
                                     ICON: postData?.ICON,
                                     COLOR: postData?.COLOR,
-                                    TITLE: postData?.CATEGORY_NAME
+                                    TITLE: postData?.COLLECTION_NAME
                                 }} />
                         }
 
@@ -280,7 +278,7 @@ const PostCreator = () => {
                                     postData?.REMOTE_POSTING_ENABLED ?
                                         <ThemedText>Choose the location</ThemedText>
                                         :
-                                        <ThemedText>Disabled by category</ThemedText>
+                                        <ThemedText>Disabled by collection</ThemedText>
                                 }
                                 <Ionicons name="map-outline" size={28} color={"white"} />
                             </TouchableOpacity>
@@ -331,7 +329,7 @@ const PostCreator = () => {
                         )}
 
                         <BottomSheet
-                            ref={category_sheet_handler}
+                            ref={collection_sheet_handler}
                             index={-1} // start closed
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
@@ -350,14 +348,14 @@ const PostCreator = () => {
                                 keyboardShouldPersistTaps="handled"
                             >
                                 <ThemedView>
-                                    <CategoriesList
-                                        allowCreation={false}
+                                    <CollectionsList
+                                        allowCreation={true}
                                         onSelect={(cat: Object) => {
-                                            category_sheet_handler?.current?.close()
+                                            collection_sheet_handler?.current?.close()
                                             setPostData(prev => ({
                                                 ...prev,
                                                 COLLECTION_ID: cat?.ID,
-                                                CATEGORY_NAME: cat?.TITLE,
+                                                COLLECTION_NAME: cat?.TITLE,
                                                 COLOR: cat?.COLOR,
                                                 ICON: cat?.ICON,
                                                 REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
@@ -389,7 +387,7 @@ const PostCreator = () => {
                             >
                                 <ThemedView>
                                     <ExclusivityPicking
-                                        isCategory={false}
+                                        creatorEnabled={false}
                                         exclusivity={postData?.EXCLUSIVITY}
                                         setExclusivity={(obj) => {
                                             setPostData(prev => ({

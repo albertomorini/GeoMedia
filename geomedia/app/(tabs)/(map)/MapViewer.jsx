@@ -1,5 +1,5 @@
-import { forwardRef, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Modal, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { forwardRef, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -7,12 +7,12 @@ import { MyContext } from '../../_layout';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
 import { doRequest } from '../../utility';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CategoriesList from "../(categories)/CategoriesList"
+import CollectionsList from "../(collections)/CollectionsList";
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -27,7 +27,7 @@ const MapViewer = forwardRef((props, ref) => {
     const [UserPosition, setUserPosition] = useState({ latitude: 0, longitude: 0 });
 
     const snapPoints = useMemo(() => ['50%', '90%'], []);
-    const categoryPickerSheet = useRef()
+    const collectionPickerSheet = useRef()
 
     const [catsChosen, setCatsChosen] = useState([]);
 
@@ -129,15 +129,11 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
     /////////////////////////////////////////////////////////////
-    useEffect(() => {
-        getLocation();
-        //TODO: check if cords not null
-        console.log("HERE")
-        get_posts_map()
-        // setInterval(() => {
-        //     get_posts_map()
-        // }, 10000);
-    }, [])
+    useFocusEffect( //to handle the back on routing
+        useCallback(() => {
+            getLocation();
+        }, [])
+    )
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -216,7 +212,7 @@ const MapViewer = forwardRef((props, ref) => {
                         <TouchableOpacity
                             style={[style.buttons.fab, style.colors.geomedia_gray, { bottom: 130 }]}
                             onPress={() => {
-                                categoryPickerSheet?.current?.snapToIndex(0)
+                                collectionPickerSheet?.current?.snapToIndex(0)
                             }}
                         >
                             <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
@@ -224,12 +220,12 @@ const MapViewer = forwardRef((props, ref) => {
 
 
                         <BottomSheet
-                            ref={categoryPickerSheet}
+                            ref={collectionPickerSheet}
                             index={-1} // start closed
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
                             onClose={() => {
-                                console.log("HEYYY",catsChosen)
+                                console.log("HEYYY", catsChosen)
                                 //TODO: reload post passing what selected
                             }}
                             backgroundStyle={{
@@ -245,7 +241,7 @@ const MapViewer = forwardRef((props, ref) => {
                         >
                             <BottomSheetView style={{ flex: 1 }}>
                                 <ThemedView>
-                                    <CategoriesList isSelectable={true} allowCreation={false} onSelect={(cats) => {
+                                    <CollectionsList isSelectable={true} allowCreation={false} onSelect={(cats) => {
                                         setCatsChosen([...cats])
                                     }} />
                                 </ThemedView>

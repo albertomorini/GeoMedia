@@ -11,10 +11,10 @@ import ExclusivityPicking from "../(map)/ExclusivityPicking";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { doRequest } from "@/app/utility";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 
-const CategoryCreator = () => {
+const CollectionCreator = () => {
 
     const ctx = useContext(MyContext)
     const params = useLocalSearchParams();
@@ -28,7 +28,7 @@ const CategoryCreator = () => {
     const colorScheme = useColorScheme();
 
     ////
-    const [categoryData, setCategoryData] = useState({
+    const [collectionData, setCollectionData] = useState({
         "ID": null,
         "TITLE": null,
         "OWNERID": ctx?.getUID(),
@@ -45,12 +45,12 @@ const CategoryCreator = () => {
     });
 
 
-    function loadFullCategory() {
+    function loadFullCollection() {
         let collectionid = null;
         try {
             collectionid = params.collectionid ? JSON.parse(params.collectionid as string) : null;
         } catch (e) {
-            console.error("Failed to parse category data", e);
+            console.error("Failed to parse collection data", e);
             collectionid = null;
         }
         if (collectionid != null) {
@@ -59,34 +59,37 @@ const CategoryCreator = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0];
-                setCategoryData(prev => ({
+                setCollectionData(prev => ({
                     ...prev,
                     ...x,
                     VIEWERS: JSON.parse(x?.VIEWERS),
                     CREATORS: JSON.parse(x?.CREATORS),
                 }));
             }).catch(err => {
-                Alert.alert("Err loading category", err)
+                Alert.alert("Err loading collection", err)
             })
         }
     }
 
-    function save_category() {
+    function save_collection() {
         doRequest("collection_merge", {
-            categorydata: categoryData
+            collectionData: collectionData
         }).then(resQuery => {
             if (resQuery[0]?.OK) {
-                setCategoryData(prev => ({
+                setCollectionData(prev => ({
                     ...prev,
                     ID: resQuery[0]?.ID
                 }))
+            }
+            if (router.canGoBack()) { //TODO: check on post creation if allowed new cat
+                router.back()
             }
         })
     }
 
     useEffect(() => {
         if (params != null) {
-            loadFullCategory()
+            loadFullCollection()
         }
     }, [])
 
@@ -114,14 +117,14 @@ const CategoryCreator = () => {
                             style={[
                                 style.circleIcon, {
                                     backgroundColor:
-                                        categoryData?.COLOR == null
+                                        collectionData?.COLOR == null
                                             ? (colorScheme === "dark" ? "#fff" : "#000")
-                                            : categoryData?.COLOR
+                                            : collectionData?.COLOR
                                 },
                             ]}
                         >
                             <Ionicons
-                                name={categoryData?.ICON == null ? "add" : categoryData?.ICON}
+                                name={collectionData?.ICON == null ? "add" : collectionData?.ICON}
                                 size={24}
                                 color={"#555"}
                             />
@@ -129,14 +132,14 @@ const CategoryCreator = () => {
                     </TouchableOpacity>
 
                     <ThemedInput mode="outlined" placeholder="Titolo" style={{ width: "80%", left: -20 }}
-                        value={categoryData?.TITLE} onChangeText={(txt) => {
-                            setCategoryData(prev => ({ ...prev, TITLE: txt }))
+                        value={collectionData?.TITLE} onChangeText={(txt) => {
+                            setCollectionData(prev => ({ ...prev, TITLE: txt }))
                         }}
                     />
                 </ThemedView>
-                <ThemedInput multiline={true} mode="outline" placeholder="Description" value={categoryData?.DESCRIPTION}
+                <ThemedInput multiline={true} mode="outline" placeholder="Description" value={collectionData?.DESCRIPTION}
                     onChangeText={(txt) => {
-                        setCategoryData(prev => ({ ...prev, DESCRIPTION: txt }))
+                        setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
                     }}
                 />
 
@@ -148,9 +151,9 @@ const CategoryCreator = () => {
                 }}>
                     <ThemedText>Remote posting?</ThemedText>
                     <Switch
-                        value={categoryData?.REMOTE_POSTING}
+                        value={collectionData?.REMOTE_POSTING}
                         onValueChange={(value) => {
-                            setCategoryData(prev => ({ ...prev, REMOTE_POSTING: value }))
+                            setCollectionData(prev => ({ ...prev, REMOTE_POSTING: value }))
                         }}
                     />
                 </ThemedView>
@@ -172,7 +175,7 @@ const CategoryCreator = () => {
                     visible={showIconPicker}
                     onClose={() => setShowIcon(false)}
                     onSelect={(c) => {
-                        setCategoryData(prev => ({
+                        setCollectionData(prev => ({
                             ...prev,
                             "ICON": c?.icon,
                             "COLOR": c?.color
@@ -183,10 +186,10 @@ const CategoryCreator = () => {
 
                 <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]}
                     onPress={() => {
-                        save_category()
+                        save_collection()
                     }}
                 >
-                    <ThemedText>{categoryData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
+                    <ThemedText>{collectionData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
                 </TouchableOpacity>
                 <BottomSheet
                     ref={bottomSheetRef}
@@ -208,18 +211,18 @@ const CategoryCreator = () => {
                     >
                         <>
                             <ExclusivityPicking
-                                isCategory={true} //allowing creators
+                                creatorsEnabled={true} //allowing creators
                                 EXCLUSIVITY={{
                                     "DATERANGE": {
-                                        "DATE_START": categoryData?.EXCL_DATE_START,
-                                        "DATE_END": categoryData?.EXCL_DATE_END,
-                                        "IS_RECURRENT": categoryData?.RECURRENT
+                                        "DATE_START": collectionData?.EXCL_DATE_START,
+                                        "DATE_END": collectionData?.EXCL_DATE_END,
+                                        "IS_RECURRENT": collectionData?.RECURRENT
                                     },
-                                    "CREATORS": categoryData?.CREATORS,
-                                    "VIEWERS": categoryData?.VIEWERS,
+                                    "CREATORS": collectionData?.CREATORS,
+                                    "VIEWERS": collectionData?.VIEWERS,
                                 }}
                                 setExclusivity={(obj) => {
-                                    setCategoryData(prev => ({
+                                    setCollectionData(prev => ({
                                         ...prev,
                                         CREATORS: obj.CREATORS,
                                         VIEWERS: obj.VIEWERS,
@@ -239,4 +242,4 @@ const CategoryCreator = () => {
 }
 
 
-export default CategoryCreator;
+export default CollectionCreator;

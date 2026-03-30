@@ -21,10 +21,10 @@ export function LanguageProvider({ children }) {
         await SecureStore.setItemAsync("lang", newLang);
     };
 
-    const t = lang === "EN" ? en : it;
+    const langselected = lang === "EN" ? en : it;
 
     return (
-        <LanguageContext.Provider value={{ lang, t, changeLang }}>
+        <LanguageContext.Provider value={{ lang, langselected, changeLang }}>
             {children}
         </LanguageContext.Provider>
     );

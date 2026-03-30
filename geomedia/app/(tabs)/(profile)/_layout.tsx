@@ -9,7 +9,7 @@ import { useColorScheme } from 'react-native';
 
 export default function ProfileLayout() {
     const colorScheme = useColorScheme();
-    const { t } = useLanguage();
+    const { langselected } = useLanguage();
 
 
     return (
@@ -23,7 +23,7 @@ export default function ProfileLayout() {
         >
             <Stack.Screen name="Profile"
                 options={{
-                    title: t.profile
+                    title: langselected.profile
                 }} />
 
             <Stack.Screen

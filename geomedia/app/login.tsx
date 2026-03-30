@@ -20,7 +20,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 export default function LoginScreen(props) {
 
-    const { t } = useLanguage();
+    const { langselected } = useLanguage();
     const ctx = useContext(MyContext)
     const [isLogin, setIsLogin] = useState(true);
     //////////////////////////////////////////////////
@@ -71,11 +71,11 @@ export default function LoginScreen(props) {
 
         ///////
         if (!email.includes("@") && !email?.includes(".")) {
-            alert(t?.signup?.emailNotValid)
+            alert(langselected?.signup?.emailNotValid)
         } else if (!checkValidityPassword(password)) {
-            alert(t?.signup?.weakPassword)
+            alert(langselected?.signup?.weakPassword)
         } else if (password != passwordRep) {
-            seterrorPassword(t?.signup?.diffPass)
+            seterrorPassword(langselected?.signup?.diffPass)
         } else if (validUsername && validUsername != null) {
             seterrorPassword("Username already taken!")
         } else {
@@ -146,7 +146,7 @@ export default function LoginScreen(props) {
 
     useEffect(() => {
         check_cache_login()
-    }, [t])
+    }, [langselected])
 
     return (
         <GestureHandlerRootView >
@@ -212,7 +212,7 @@ export default function LoginScreen(props) {
                                             :
                                             <>
                                                 <ThemedText style={[style.label, { textAlign: "left" }]} >Email</ThemedText>
-                                                <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
+                                                <ThemedInput type='outlined' name="email" placeholder={langselected.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
 
                                                 <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
                                                 <ThemedInput type='outlined'
@@ -230,14 +230,14 @@ export default function LoginScreen(props) {
 
                                                 <ThemedText style={[style.label, { textAlign: "left" }]} >Password</ThemedText>
 
-                                                <ThemedPassword type='outlined' name="password" placeholder={t.signup.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
+                                                <ThemedPassword type='outlined' name="password" placeholder={langselected.signup.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
                                                 {/* <ThemedText style={[style.label, { textAlign: "left" }]} >Repeat password</ThemedText> */}
-                                                <ThemedPassword type='outlined' name="repPassword" placeholder={t.signup.placeholderPassordRepeat} onChangeText={(val) => { setPasswordRep(val) }} />
+                                                <ThemedPassword type='outlined' name="repPassword" placeholder={langselected.signup.placeholderPassordRepeat} onChangeText={(val) => { setPasswordRep(val) }} />
 
 
                                                 <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => doSignUp()}>
                                                     <ThemedText>
-                                                        {t?.signup?.buttonConfirm}
+                                                        {langselected?.signup?.buttonConfirm}
                                                     </ThemedText>
                                                 </TouchableOpacity>
 
@@ -251,9 +251,9 @@ export default function LoginScreen(props) {
 
                 <ThemedText onPress={switchMode} style={{ textAlign: 'right', marginTop: 0, bottom: "25%", fontStyle: 'italic', right: 0 }}>
                     {isLogin ?
-                        t?.login.buttonOther
+                        langselected?.login.buttonOther
                         :
-                        t?.signup.buttonOther
+                        langselected?.signup.buttonOther
 
                     }
                 </ThemedText>
