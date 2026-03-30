@@ -11,7 +11,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
 import { ThemedInput } from '@/components/themed-input';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -149,94 +149,107 @@ export default function LoginScreen(props) {
     }, [t])
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <ThemedView style={[style.center, style.container]} >
+        <GestureHandlerRootView >
 
-                <Text variant="heading" style={style.login.title}>GeoMedia</Text>
-                <></>
-                {
-                    (isLogin) ?
+            <ThemedView style={{ flex: 1, padding: 16 }}>
 
-                        <ThemedView style={[style.container]}>
-                            <ThemedText style={[style.label, { textAlign: "left" }]} >Email or username</ThemedText>
-                            <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
-                            <ThemedText style={{ fontWeight: "bold" }}>Password</ThemedText>
-                            <ThemedPassword type='outlined' name="email" placeholder={t.login.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
 
-                            <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => doLogin()} >
-                                <ThemedText>
-                                    {t?.login.buttonConfirm}
-                                </ThemedText>
-                            </TouchableOpacity>
-                            {errorPassword?.length > 0 ?
-                                <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center",fontSize:16 }}>{errorPassword}</ThemedText>
-                                :
-                                null
-                            }
+                <ThemedView style={[style.center, { flex: 1 }]}>
 
-                        </ThemedView>
-                        :
-                        <ThemedView style={[style.container]}>
-                            {
-                                (OTP != null) ?
-                                    <>
-                                        <ThemedText>Check your inbox ({email})</ThemedText>
-                                        <OTPInput
-                                            label="Check your inbox for OTP"
-                                            value={OTP}
-                                            onChangeText={setOTP}
-                                            length={6}
-                                        />
-                                        <TouchableOpacity onPress={() => check_otp()} style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
-                                            <ThemedText>
-                                                Check OTP
-                                            </ThemedText>
+
+                    <Text variant="heading" style={style.login.title}>GeoMedia</Text><></>
+                    {
+                        (isLogin) ?
+
+                            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "padding"} style={{ width: "100%" }}>
+                                <ThemedView style={style.containerContent}>
+
+                                    <ThemedView style={{ width: "100%" }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+
+                                        <ThemedText>Email or username</ThemedText>
+                                        <ThemedInput placeholder="Enter email" onChangeText={setEmail} />
+
+                                        <ThemedText>Password</ThemedText>
+                                        <ThemedPassword placeholder="Enter password" onChangeText={setPassword} />
+
+                                        <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={doLogin}>
+                                            <ThemedText style={{ color: 'white', textAlign: 'center' }}>Login</ThemedText>
                                         </TouchableOpacity>
                                         {errorPassword?.length > 0 ?
                                             <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
                                             :
                                             null
                                         }
-                                    </>
-                                    :
-                                    <>
-                                        <ThemedText style={[style.label, { textAlign: "left" }]} >Email</ThemedText>
-                                        <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
 
-                                        <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
-                                        <ThemedInput type='outlined'
-                                            borderColor={validUsername == null ? null : validUsername ? "succes" : "error"}
-                                            name="email"
-                                            placeholder={"Username"}
-                                            onChangeText={(text) => {
-                                                setUsername(text)
-                                                setValidUsername(null) //will be checked onblur
-                                            }}
-                                            onBlur={() => {
-                                                check_username(username);
-                                            }}
-                                        />
+                                    </ThemedView>
+                                </ThemedView>
 
-                                        <ThemedText style={[style.label, { textAlign: "left" }]} >Password</ThemedText>
+                            </KeyboardAvoidingView>
+                            :
+                            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "padding"} style={{ width: "100%" }}>
+                                <ThemedView style={[style.container]}>
+                                    {
+                                        (OTP != null) ?
+                                            <>
+                                                <ThemedText>Check your inbox ({email})</ThemedText>
+                                                <OTPInput
+                                                    label="Check your inbox for OTP"
+                                                    value={OTP}
+                                                    onChangeText={setOTP}
+                                                    length={6}
+                                                />
+                                                <TouchableOpacity onPress={() => check_otp()} style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
+                                                    <ThemedText>
+                                                        Check OTP
+                                                    </ThemedText>
+                                                </TouchableOpacity>
+                                                {errorPassword?.length > 0 ?
+                                                    <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
+                                                    :
+                                                    null
+                                                }
+                                            </>
+                                            :
+                                            <>
+                                                <ThemedText style={[style.label, { textAlign: "left" }]} >Email</ThemedText>
+                                                <ThemedInput type='outlined' name="email" placeholder={t.login.placeholderEmail} onChangeText={(text) => { setEmail(text) }} />
 
-                                        <ThemedPassword type='outlined' name="password" placeholder={t.signup.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
-                                        {/* <ThemedText style={[style.label, { textAlign: "left" }]} >Repeat password</ThemedText> */}
-                                        <ThemedPassword type='outlined' name="repPassword" placeholder={t.signup.placeholderPassordRepeat} onChangeText={(val) => { setPasswordRep(val) }} />
+                                                <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
+                                                <ThemedInput type='outlined'
+                                                    borderColor={validUsername == null ? null : validUsername ? "succes" : "error"}
+                                                    name="email"
+                                                    placeholder={"Username"}
+                                                    onChangeText={(text) => {
+                                                        setUsername(text)
+                                                        setValidUsername(null) //will be checked onblur
+                                                    }}
+                                                    onBlur={() => {
+                                                        check_username(username);
+                                                    }}
+                                                />
+
+                                                <ThemedText style={[style.label, { textAlign: "left" }]} >Password</ThemedText>
+
+                                                <ThemedPassword type='outlined' name="password" placeholder={t.signup.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
+                                                {/* <ThemedText style={[style.label, { textAlign: "left" }]} >Repeat password</ThemedText> */}
+                                                <ThemedPassword type='outlined' name="repPassword" placeholder={t.signup.placeholderPassordRepeat} onChangeText={(val) => { setPasswordRep(val) }} />
 
 
-                                        <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => doSignUp()}>
-                                            <ThemedText>
-                                                {t?.signup?.buttonConfirm}
-                                            </ThemedText>
-                                        </TouchableOpacity>
+                                                <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => doSignUp()}>
+                                                    <ThemedText>
+                                                        {t?.signup?.buttonConfirm}
+                                                    </ThemedText>
+                                                </TouchableOpacity>
 
-                                    </>
-                            }
+                                            </>
+                                    }
+                                </ThemedView>
+                            </KeyboardAvoidingView>
+                    }
 
-                        </ThemedView>
-                }
+                </ThemedView>
 
-                <ThemedText onPress={switchMode} style={{ textAlign: "right", marginTop: 4, fontStyle: "italic" }}>
+                <ThemedText onPress={switchMode} style={{ textAlign: 'right', marginTop: 0, bottom: "25%", fontStyle: 'italic', right: 0 }}>
                     {isLogin ?
                         t?.login.buttonOther
                         :
@@ -245,8 +258,9 @@ export default function LoginScreen(props) {
                     }
                 </ThemedText>
                 <SettingsConfig />
+
             </ThemedView>
 
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
     );
 }

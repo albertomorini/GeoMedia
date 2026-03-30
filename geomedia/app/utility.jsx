@@ -50,10 +50,11 @@ export const SettingsConfig = () => {
     useEffect(() => { }, [t])
 
     return (
-        <ThemedView style={style.container}>
+        <ThemedView style={[style.container, {
+            bottom: "20%"
+        }]}>
             <ThemedView style={{
                 position: "absolute",
-                top: 120,
                 left: 0,
                 right: 0,
                 flexDirection: "row",
@@ -73,7 +74,6 @@ export const SettingsConfig = () => {
 
             <TouchableOpacity style={{
                 position: "absolute",
-                top: 150,
                 right: 20,
             }} onPress={() => {
                 setModalSettingsVisible(true)
@@ -95,7 +95,6 @@ export const SettingsConfig = () => {
                         style={{
                             padding: 20,
                             borderRadius: 10,
-                            top: "20%",
                             justifyContent: "space-between",
                         }}
                     >
