@@ -132,9 +132,9 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
     function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
-        if (collections = []) {
-            collections = check_cache_collection_chosen()
-        }
+        // if (collections = []) {
+        //     collections = check_cache_collection_chosen()
+        // }
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
@@ -265,7 +265,7 @@ const MapViewer = forwardRef((props, ref) => {
                                         onSelect={(colls) => {
                                             setCollectionsChosen([...colls])
                                             collectionPickerSheet?.current?.close()
-                                            get_posts_map(UserPosition, colls)
+                                            // get_posts_map(UserPosition, colls)
                                             store_preferences(colls) // store the prefernces on cache
                                         }} />
                                 </ThemedView>

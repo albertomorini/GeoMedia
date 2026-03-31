@@ -42,12 +42,15 @@ const CollectionsList = (props) => {
                         try {
                             props?.onSelect(pickeditem) //if exists is a child component, like collection picker for post creation
                         } catch (error) {
+                            // console.log(pickeditem)
+                            // if (pickeditem.OWNER_ID == ctx?.getUID()) { //editable only by the owner (or cretors //TODO:)
                             router.push({
                                 pathname: '/CollectionCreator',
                                 params: {
                                     collectionid: pickeditem?.ID,
                                 }
                             })
+                            // }
                         }
                     }
                 }}
