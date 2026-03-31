@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { MyContext } from '../../_layout';
 import { Image } from "expo-image"; // really, huge improveement
 import { Text } from "re-native-ui";
@@ -51,7 +51,7 @@ export default function Profile() {
   return (
     <>
       <ThemedView style={[style.container, { height: "100%" }]}>
-        <View
+        <ThemedView
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -59,7 +59,7 @@ export default function Profile() {
             padding: 10,
           }}
         >
-          <View style={{ flex: 1, paddingRight: 10 }}>
+          <ThemedView style={{ flex: 1, paddingRight: 10 }}>
             <ThemedText className="text-lg font-bold" style={style.subtitle}>
               Hello {user?.NAME} {user?.SURNAME}
             </ThemedText>
@@ -74,7 +74,7 @@ export default function Profile() {
             >
               Mail address: {user?.EMAIL ?? 'Not provided'}
             </Text>
-          </View>
+          </ThemedView>
 
           <Image
             source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
@@ -84,7 +84,7 @@ export default function Profile() {
               borderRadius: 40,
             }}
           />
-        </View>
+        </ThemedView>
 
         <ThemedView
           style={{
@@ -113,19 +113,13 @@ export default function Profile() {
             </ThemedText>
           </TouchableOpacity>
         </ThemedView>
+        <ThemedView style={{ flex: 1, paddingRight: 10 }}>
+          <ThemedText style={style.label}>Your post</ThemedText>
+        </ThemedView>
 
-
-        {/* <ThemedText variant="heading">Your post</ThemedText>
-
-      <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
-      </ScrollView> */}
-
-        <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
 
       </ThemedView>
       <SettingsConfig />
-
-
     </>
   );
 }
