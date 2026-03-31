@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from "@/components/themed-text";
 import { ThemedInput } from "@/components/themed-input";
-import { Modal, TouchableOpacity } from "react-native";
+import { Linking, Modal, TouchableOpacity } from "react-native";
 import { style } from "@/components/globalstyle";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -31,7 +31,7 @@ export const SettingsConfig = () => {
     const [servername, setServerName] = useState(null)
     const [port, setPort] = useState(null)
 
-    const { t, changeLang } = useLanguage();
+    const { langselected, changeLang } = useLanguage();
 
 
     const ctx = useContext(MyContext)
@@ -47,7 +47,22 @@ export const SettingsConfig = () => {
         load_config()
     }
 
-    useEffect(() => { }, [t])
+    const my_email = 'albmor.dev@gmail.com'
+
+    const emailMe = () => {
+        const url = `mailto:${my_email}?subject=${encodeURIComponent("GEOMEDIA")}`;
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (!supported) {
+                    console.warn("Can't handle mailto link:", url);
+                } else {
+                    return Linking.openURL(url);
+                }
+            }).catch((err) => console.error('An error occurred', err));
+    };
+
+
+    useEffect(() => { }, [langselected])
 
     return (
         <ThemedView style={[style.container, {
@@ -63,10 +78,10 @@ export const SettingsConfig = () => {
                 gap: 16,
                 transform: [{ translateY: -10 }],
             }}>
-                <TouchableOpacity onPress={() => changeLang("IT")} style={t === it && [style?.buttons?.small, style.colors.geomedia_green]}>
+                <TouchableOpacity onPress={() => changeLang("IT")} style={langselected === it && [style?.buttons?.small, style.colors.geomedia_green]}>
                     <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => changeLang("EN")} style={t === en && [style?.buttons?.small, style.colors.geomedia_green]}>
+                <TouchableOpacity onPress={() => changeLang("EN")} style={langselected === en && [style?.buttons?.small, style.colors.geomedia_green]}>
                     <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
                 </TouchableOpacity>
 
@@ -86,7 +101,7 @@ export const SettingsConfig = () => {
                 transparent={true}
                 animationType="slide">
                 <ThemedView style={{
-                    backgroundColor: "rgba(0,0,0,0.5)",
+                    backgroundColor: "rgba(138, 138, 138, 0.2)",
                     // borderWidth: 3,\
                     height: "100%",
                     padding: 10,
@@ -96,6 +111,8 @@ export const SettingsConfig = () => {
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: "space-between",
+                            top: 150
+
                         }}
                     >
                         <ThemedText style={style.label}>Protocol</ThemedText>
@@ -136,6 +153,11 @@ export const SettingsConfig = () => {
                     </ThemedView>
                 </ThemedView>
             </Modal >
+
+
+            <TouchableOpacity style={[style.buttons.small, { top: 20, width: "100%", height: 24, borderRadius: 50 }]} onPress={() => { emailMe() }}>
+                <ThemedText style={[style.colors.geomedia_green, { textAlign: "center", fontStyle: "italic", borderRadius: 30, width: "40%" }]} onPress={() => { emailMe() }}>Contact me </ThemedText>
+            </TouchableOpacity>
 
 
         </ThemedView >

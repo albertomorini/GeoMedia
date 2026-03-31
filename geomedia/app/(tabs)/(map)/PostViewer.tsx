@@ -89,9 +89,6 @@ const PostViewer = () => {
                         }}>
                         <ScrollView contentContainerStyle={{ padding: 16 }}>
                             <ItemIconizable
-                                // onPress={() => {
-                                //     collection_sheet_handler?.current?.snapToIndex(0)
-                                // }}
                                 item={{
                                     ICON: postData?.ICON,
                                     COLOR: postData?.COLOR,

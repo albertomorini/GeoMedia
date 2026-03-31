@@ -58,8 +58,6 @@ const MapPicking = (props, ref) => {
                 const { latitude, longitude } = position.coords;
                 setUserPosition({ lat: latitude, lon: longitude });
                 setSelectedMarker({latitude:latitude,longitude:longitude})
-                console.log(latitude, longitude);
-
                 // set map with center on user location 
                 mapRef.current?.animateToRegion({
                     latitude,

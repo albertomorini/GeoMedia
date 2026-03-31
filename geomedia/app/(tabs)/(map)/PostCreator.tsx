@@ -91,7 +91,6 @@ const PostCreator = () => {
         dummy_body.attachments = files //attach files
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
-        console.log("POSTCREATION", dummy_body)
 
         doRequest("post_merge", {
             postdata: dummy_body

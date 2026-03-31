@@ -112,7 +112,6 @@ export default function LoginScreen(props) {
         doRequest("auth_check_username", {
             USERNAME: username
         }).then(resQuery => {
-            console.log(resQuery)
             if (resQuery[0]?.OK, username) {
                 setValidUsername(true)
                 ctx?.showToast({

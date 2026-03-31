@@ -119,27 +119,27 @@ const MapViewer = forwardRef((props, ref) => {
         await SecureStore.setItemAsync("collection_selected_map", JSON.stringify(colls));
     }
 
+    async function check_cache_collection_chosen() {
+        let colls = await SecureStore.getItemAsync("collection_selected_map")
+        try {
+            colls = JSON.parse(colls)
+            setCollectionsChosen(colls)
+            return colls
+        } catch (error) {
+            return []
+        }
+    }
 
     /////////////////////////////////////////////////////////////
-    async function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
+    function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
         if (collections = []) {
-
-            let colls = await SecureStore.getItemAsync("collection_selected_map")
-            try {
-                colls = JSON.parse(colls)
-                setCollectionsChosen(colls)
-                collections = colls
-            } catch (error) {
-
-            }
-
+            collections = check_cache_collection_chosen()
         }
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
             collection_chosen: collections
         }).then(resQuery => {
-            console.log("readed posts: ", resQuery)
             setPostMarkers([...resQuery])
         }).catch(err => {
             Alert.alert("Error retrieving posts: ", err)
@@ -260,7 +260,8 @@ const MapViewer = forwardRef((props, ref) => {
                                 <ThemedView >
                                     <CollectionsList isSelectable={true}
                                         allowCreation={false}
-                                        itemSelected={collectionsChosen}
+                                        itemSelected={check_cache_collection_chosen()} //TODO: TESTING
+
                                         onSelect={(colls) => {
                                             setCollectionsChosen([...colls])
                                             collectionPickerSheet?.current?.close()

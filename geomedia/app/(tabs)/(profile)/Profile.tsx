@@ -1,13 +1,13 @@
 import { useCallback, useContext, useState } from 'react';
-import { Linking, Pressable, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { MyContext } from '../../_layout';
 import { Image } from "expo-image"; // really, huge improveement
-import { Text, Box } from "re-native-ui";
+import { Text } from "re-native-ui";
 import { style } from '@/components/globalstyle';
 
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
-import { doRequest } from '../../utility';
+import { doRequest, SettingsConfig } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
@@ -15,18 +15,17 @@ import { useLanguage } from '@/components/LanguageProvider';
 
 export default function Profile() {
 
-  const my_email = 'albmor.dev@gmail.com'
-  const { changeLang } = useLanguage();
+  const { langselected } = useLanguage();
 
   const ctx = useContext(MyContext);
   const user = ctx?.User?.User
   const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
 
   function getProfilePic() {
+
     doRequest("profile_getpfp", {
       USERNAME: user?.USERNAME
     }).then(res => {
-      // console.log(res[0].substring(0, 10))
       let pp = res[0].PROFILE_PICTURE
       if (pp != undefined) {
         setProfilePic(pp)
@@ -40,20 +39,6 @@ export default function Profile() {
     ctx?.User.setUser(null);
     router.replace("/login");
   }
-
-  const emailMe = () => {
-    const url = `mailto:${my_email}?subject=${encodeURIComponent("GEOMEDIA")}`;
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (!supported) {
-          console.warn("Can't handle mailto link:", url);
-        } else {
-          return Linking.openURL(url);
-        }
-      })
-      .catch((err) => console.error('An error occurred', err));
-  };
-
 
   useFocusEffect(
     useCallback(() => {
@@ -101,25 +86,34 @@ export default function Profile() {
           />
         </View>
 
-        <Pressable
-          onPress={() => {
-            router.push('ProfileEditor')
+        <ThemedView
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 20,
           }}
-          style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]}
         >
-          <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-            Edit profile
-          </ThemedText>
-        </Pressable>
+          <TouchableOpacity
+            onPress={() => {
+              router.push('ProfileEditor')
+            }}
+            style={[style?.colors?.geomedia_blue, style.buttons.full_screen, { width: "50%", margin: 10 }]}
+          >
+            <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+              Edit profile
+            </ThemedText>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => logout()}
-          style={[style?.buttons?.full_screen, style?.colors?.geomedia_red]}
-        >
-          <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-            Log out
-          </ThemedText>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => logout()}
+            style={[style?.colors?.geomedia_red, style.buttons.full_screen, { width: "50%", margin: 0 }]}
+          >
+            <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+              Log out
+            </ThemedText>
+          </TouchableOpacity>
+        </ThemedView>
+
 
         {/* <ThemedText variant="heading">Your post</ThemedText>
 
@@ -129,28 +123,9 @@ export default function Profile() {
         <ThemedText style={{ textAlign: "right", fontStyle: "italic" }} onPress={() => { emailMe() }}>Contact me </ThemedText>
 
       </ThemedView>
-      <ThemedView style={{
-        position: "absolute",
-        bottom: 40, // distance from bottom
-        left: 5,
-        right: 0,
-        flexDirection: "row",
-        justifyContent: "start",
+      <SettingsConfig />
 
-        alignItems: "center",
-        gap: 16,
-        transform: [{ translateY: -10 }],
-      }}>
-        <ThemedText style={style?.label}>Change language:</ThemedText>
 
-        <TouchableOpacity onPress={() => changeLang("IT")}>
-          <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeLang("EN")}>
-          <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
-        </TouchableOpacity>
-
-      </ThemedView>
     </>
   );
 }
