@@ -28,16 +28,16 @@ const ItemIconizable = (props) => {
                             style={style.circleIcon}
                         />
                         :
-                        <ThemedView style={[style.circleIcon, { backgroundColor: props?.item?.COLOR }]}>
-                            <Ionicons name={props?.item.ICON} size={24} style={{ color: "#555" }} />
+                        <ThemedView style={[{ backgroundColor: props?.item?.COLOR ?? "#b9b5b5" }, style.circleIcon]}>
+                            <Ionicons name={props?.item.ICON ?? 'alert-circle'} size={24} style={{ color: "#555" }} />
                         </ThemedView>
                 }
 
                 <ThemedText style={{ marginLeft: 12, fontSize: 16 }}>
                     {props?.item.TITLE}
                 </ThemedText>
-            </TouchableOpacity>
-        </ThemedView>
+            </TouchableOpacity >
+        </ThemedView >
     )
 }
 

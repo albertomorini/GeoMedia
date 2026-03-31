@@ -13,7 +13,7 @@ const CollectionsList = (props) => {
     function getCollectionsList() {
         doRequest("collections_get", {
             uid: ctx?.getUID(),
-            mode: "R"
+            mode: props?.postCreation ?? "R"
         }).then(resQuery => {
             setCollections(resQuery)
         })
@@ -29,9 +29,9 @@ const CollectionsList = (props) => {
         <>
             <ListItem
                 DATA={collections}
-                pickedItem={(pickeditem) => {
+                onSelect={(pickeditem) => {
                     /// on collection lists/ profile show the post as lis
-                    if (pickeditem.ID = "new_item") {
+                    if (pickeditem.ID == "new_item") {
                         router.push({
                             pathname: '/CollectionCreator',
                             params: {
@@ -40,7 +40,7 @@ const CollectionsList = (props) => {
                         })
                     } else {
                         try {
-                            props?.onSelect(pickeditem) //if exists is a child component, like cateogypicker for post creation
+                            props?.onSelect(pickeditem) //if exists is a child component, like collection picker for post creation
                         } catch (error) {
                             router.push({
                                 pathname: '/CollectionCreator',

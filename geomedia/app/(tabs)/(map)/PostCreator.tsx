@@ -350,6 +350,7 @@ const PostCreator = () => {
                             >
                                 <ThemedView>
                                     <CollectionsList
+                                        postCreation={"W"}
                                         allowCreation={true}
                                         onSelect={(cat: Object) => {
                                             collection_sheet_handler?.current?.close()

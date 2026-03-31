@@ -29,7 +29,7 @@ const MapViewer = forwardRef((props, ref) => {
     const snapPoints = useMemo(() => ['50%', '90%'], []);
     const collectionPickerSheet = useRef()
 
-    const [catsChosen, setCatsChosen] = useState([]);
+    const [collectionsChosen, setCollectionsChosen] = useState([]);
 
 
     // return true if current position changed within a delta (100m)
@@ -115,11 +115,11 @@ const MapViewer = forwardRef((props, ref) => {
 
 
     /////////////////////////////////////////////////////////////
-    function get_posts_map(curPos = UserPosition) {
+    function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
-            collection_chosen: catsChosen
+            collection_chosen: collections
         }).then(resQuery => {
             console.log("readed posts: ", resQuery)
             setPostMarkers([...resQuery])
@@ -224,9 +224,8 @@ const MapViewer = forwardRef((props, ref) => {
                             index={-1} // start closed
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
-                            onClose={() => {
-                                console.log("HEYYY", catsChosen)
-                                //TODO: reload post passing what selected
+                            onClose={() => { //here since the user can close with  swipe
+                                get_posts_map()
                             }}
                             backgroundStyle={{
                                 borderTopWidth: 1,
@@ -241,8 +240,10 @@ const MapViewer = forwardRef((props, ref) => {
                         >
                             <BottomSheetScrollView style={{ flex: 1 }}>
                                 <ThemedView >
-                                    <CollectionsList isSelectable={true} allowCreation={false} onSelect={(cats) => {
-                                        setCatsChosen([...cats])
+                                    <CollectionsList isSelectable={true} allowCreation={false} onSelect={(colls) => {
+                                        setCollectionsChosen([...colls])
+                                        collectionPickerSheet?.current?.close()
+
                                     }} />
                                 </ThemedView>
                             </BottomSheetScrollView>

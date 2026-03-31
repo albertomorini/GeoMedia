@@ -5,6 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 import ItemIconizable from "./ItemIconizable";
+import { ThemedText } from "@/components/themed-text";
 
 const ListItem = forwardRef((props: any, ref: any) => {
     const [searchText, setSearchText] = useState("")
@@ -15,7 +16,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
         <ItemIconizable item={item}
             isImage={props?.isImage}
             onPress={() => {
-                props?.pickedItem(item)
+                props?.onSelect(item)
             }} />
     );
 
@@ -38,7 +39,6 @@ const ListItem = forwardRef((props: any, ref: any) => {
                 }}
                 onPress={() => toggleSelect(item.ID)}
             >
-
                 <ItemIconizable item={item}
                     isImage={props?.isImage}
                     onPress={() => {
@@ -114,6 +114,24 @@ const ListItem = forwardRef((props: any, ref: any) => {
                 )}
             </ThemedView>
             <ThemedView style={{ flex: 1 }}>
+                {
+                    props?.isSelectable ?
+                        <ThemedView style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                        }}>
+                            <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_green]} onPress={() => {
+                                props?.onSelect(selectedItems)
+                            }}>
+                                <ThemedText>Conferma</ThemedText>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
+                                onPress={() => { console.log("TODO:TUTTI ") }}>
+                                <ThemedText>TUTTI</ThemedText>
+                            </TouchableOpacity>
+                        </ThemedView>
+                        : null
+                }
                 <FlashList
                     data={filterData(props?.allowCreation)} //filtering on full data
                     renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
@@ -121,7 +139,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
                     estimatedItemSize={props?.estimatedSize}
                 />
             </ThemedView>
-        </ThemedView>
+        </ThemedView >
     );
 });
 
