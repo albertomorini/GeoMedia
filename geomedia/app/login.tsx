@@ -11,7 +11,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
 import { ThemedInput } from '@/components/themed-input';
-import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';

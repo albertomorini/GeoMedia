@@ -4,12 +4,13 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert, ScrollView, TouchableOpacity } from "react-native";
 
 
 import { Ionicons } from "@expo/vector-icons";
 import { style } from "@/components/globalstyle";
 import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
+import ItemIconizable from "@/app/mycomponents/ItemIconizable";
 
 const PostViewer = () => {
     const ctx = useContext(MyContext)
@@ -73,10 +74,35 @@ const PostViewer = () => {
                     title: postData?.TITLE,
                 }}
             />
-            <ThemedView style={{ height: "100%" }}>
-                <ThemedView style={style.container}>
-                    <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
-                    <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
+            <ThemedView style={{ height: "100%", flex: 1 }} >
+                <ThemedView style={[style.container, { flex: 1 }]} >
+                    <ThemedView
+                        style={{
+                            backgroundColor: "#777879",
+                            borderRadius: 20,
+                            padding: 16,
+                            marginBottom: 20,
+                            shadowColor: "#000",
+                            shadowOpacity: 0.3,
+                            shadowRadius: 10,
+                            elevation: 5,
+                        }}>
+                        <ScrollView contentContainerStyle={{ padding: 16 }}>
+                            <ItemIconizable
+                                // onPress={() => {
+                                //     collection_sheet_handler?.current?.snapToIndex(0)
+                                // }}
+                                item={{
+                                    ICON: postData?.ICON,
+                                    COLOR: postData?.COLOR,
+                                    TITLE: postData?.COLLECTION_NAME
+                                }} />
+                            <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
+                            <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
+                        </ScrollView>
+
+                    </ThemedView>
+
                     {postData?.attachments?.length > 0 &&
                         <CarouselFileViewer attachments={postData?.attachments} isEdit={false} />
                     }
@@ -140,6 +166,7 @@ const PostViewer = () => {
                         null
                     }
                 </ThemedView >
+
             </ThemedView >
         </>
     );

@@ -126,8 +126,16 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                 <ThemedText>Conferma</ThemedText>
                             </TouchableOpacity>
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
-                                onPress={() => { console.log("TODO:TUTTI ") }}>
-                                <ThemedText>TUTTI</ThemedText>
+                                onPress={() => {
+                                    let alls = props?.DATA.map(s => s?.ID);
+                                    if (selectedItems?.length == alls.length) {
+                                        setSelectedItems([])
+                                    } else {
+                                        setSelectedItems([...alls])
+                                    }
+                                    //TODO: design, "ALL" dinamically change?
+                                }}>
+                                <ThemedText>ALL</ThemedText>
                             </TouchableOpacity>
                         </ThemedView>
                         : null

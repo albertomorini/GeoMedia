@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/themed-text';
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CollectionsList from "../(collections)/CollectionsList";
+import * as SecureStore from 'expo-secure-store';
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -114,8 +115,25 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
 
+    async function store_preferences(colls) {
+        await SecureStore.setItemAsync("collection_selected_map", JSON.stringify(colls));
+    }
+
+
     /////////////////////////////////////////////////////////////
-    function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
+    async function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
+        if (collections = []) {
+
+            let colls = await SecureStore.getItemAsync("collection_selected_map")
+            try {
+                colls = JSON.parse(colls)
+                setCollectionsChosen(colls)
+                collections = colls
+            } catch (error) {
+
+            }
+
+        }
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
@@ -240,11 +258,15 @@ const MapViewer = forwardRef((props, ref) => {
                         >
                             <BottomSheetScrollView style={{ flex: 1 }}>
                                 <ThemedView >
-                                    <CollectionsList isSelectable={true} allowCreation={false} onSelect={(colls) => {
-                                        setCollectionsChosen([...colls])
-                                        collectionPickerSheet?.current?.close()
-
-                                    }} />
+                                    <CollectionsList isSelectable={true}
+                                        allowCreation={false}
+                                        itemSelected={collectionsChosen}
+                                        onSelect={(colls) => {
+                                            setCollectionsChosen([...colls])
+                                            collectionPickerSheet?.current?.close()
+                                            get_posts_map(UserPosition, colls)
+                                            store_preferences(colls) // store the prefernces on cache
+                                        }} />
                                 </ThemedView>
                             </BottomSheetScrollView>
                         </BottomSheet>

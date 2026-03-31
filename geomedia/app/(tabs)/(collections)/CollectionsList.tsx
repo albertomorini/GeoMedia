@@ -23,7 +23,7 @@ const CollectionsList = (props) => {
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             getCollectionsList()
-        }, [])
+        }, [props?.itemSelected])
     )
     return (
         <>
