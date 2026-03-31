@@ -65,37 +65,46 @@ export const SettingsConfig = () => {
     useEffect(() => { }, [langselected])
 
     return (
-        <ThemedView style={[style.container, {
-            bottom: "20%"
-        }]}>
-            <ThemedView style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 16,
-                transform: [{ translateY: -10 }],
-            }}>
-                <TouchableOpacity onPress={() => changeLang("IT")} style={langselected === it && [style?.buttons?.small, style.colors.geomedia_green]}>
-                    <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => changeLang("EN")} style={langselected === en && [style?.buttons?.small, style.colors.geomedia_green]}>
-                    <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
-                </TouchableOpacity>
+        <>
+            <ThemedView style={style?.bottom_bar}>
+                <ThemedView style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    width: "50%"
+                }}>
+                    <TouchableOpacity onPress={() => changeLang("IT")} style={langselected === it && [style?.buttons?.small, style.colors.geomedia_green, { marginRight: "20" }]}>
+                        <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeLang("EN")} style={langselected === en && [style?.buttons?.small, style.colors.geomedia_green, { marginLeft: "20" }]}>
+                        <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
+                    </TouchableOpacity>
 
-            </ThemedView>
+                </ThemedView>
 
-            <TouchableOpacity style={{
-                position: "absolute",
-                right: 20,
-            }} onPress={() => {
-                setModalSettingsVisible(true)
-            }}>
+                <ThemedView style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    width: "50%"
+                }}>
 
-                <Ionicons name="cog-outline" size={28} color={"#bfea7fb9"} />
-            </TouchableOpacity>
+                    <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20" }]} onPress={() => { emailMe() }}>
+                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} onPress={() => { emailMe() }}>Contact me </ThemedText>
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity style={{
+                        position: "absolute",
+                        right: 0,
+                    }} onPress={() => {
+                        setModalSettingsVisible(true)
+                    }}>
+                        <Ionicons name="cog-outline" size={28} color={"#bfea7fb9"} />
+                    </TouchableOpacity>
+                </ThemedView>
+
+            </ThemedView >
 
             <Modal visible={modalSettingsVisible}
                 transparent={true}
@@ -155,12 +164,7 @@ export const SettingsConfig = () => {
             </Modal >
 
 
-            <TouchableOpacity style={[style.buttons.small, { top: 20, width: "100%", height: 24, borderRadius: 50 }]} onPress={() => { emailMe() }}>
-                <ThemedText style={[style.colors.geomedia_green, { textAlign: "center", fontStyle: "italic", borderRadius: 30, width: "40%" }]} onPress={() => { emailMe() }}>Contact me </ThemedText>
-            </TouchableOpacity>
-
-
-        </ThemedView >
+        </ >
     )
 }
 
