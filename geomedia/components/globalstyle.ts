@@ -35,7 +35,7 @@ export const style = StyleSheet.create({
         geomedia_red: {
             backgroundColor: "#f66868"
         },
-        geomedia_gray:{
+        geomedia_gray: {
             backgroundColor: "#b0b0b0"
         }
     },
@@ -69,12 +69,12 @@ export const style = StyleSheet.create({
             justifyContent: 'center',
             marginVertical: 10,      // optional spacing
         },
-        small:{
-            width:"23%",
+        small: {
+            width: "23%",
             borderRadius: 8,         // optional rounded corners
             alignItems: 'center',    // center text horizontally
             justifyContent: 'center',
-            marginVertical: 10, 
+            marginVertical: 10,
         },
         fab: {
             position: 'absolute',
@@ -115,11 +115,45 @@ export const style = StyleSheet.create({
         thumb_color_false: "#f4f3f4",
 
     },
-    circleIcon:{
+    circleIcon: {
         width: 45,
         height: 45,
         borderRadius: 22.5,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    bottom_bar: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+
+        paddingHorizontal: 20,
+        paddingVertical: 14,
+
+
+        borderTopWidth: 1,
+        borderTopColor: "rgba(255,255,255,0.1)",
+
+        // // backgroundColor: "#1e293b",
+        // // borderTopWidth: 1,
+        // // borderTopColor: "rgba(255,255,255,0.1)",
+
+        // // // iOS shadow
+        // // shadowColor: "#000",
+        // // shadowOpacity: 0.2,
+        // // shadowRadius: 10,
+
+        // Android
+        elevation: 10,
+    },
+    bottom_bar_item:{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8, 
     }
 })

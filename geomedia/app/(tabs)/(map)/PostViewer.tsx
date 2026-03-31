@@ -50,6 +50,7 @@ const PostViewer = () => {
             postid: postData?.ID,
             uid: ctx?.getUID()
         }).then(resQuery => {
+            console.log(resQuery)
             ctx?.showToast({
                 type: "success",
                 text: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
@@ -69,64 +70,96 @@ const PostViewer = () => {
 
     return (
         <>
-            <Stack.Screen // SET THE TITLE 
+            <Stack.Screen
                 options={{
                     title: postData?.TITLE,
                 }}
             />
-            <ThemedView style={{ height: "100%", flex: 1 }} >
-                <ThemedView style={[style.container, { flex: 1 }]} >
-                    <ThemedView
-                        style={{
-                            backgroundColor: "#777879",
-                            borderRadius: 20,
+
+            <ThemedView style={{ flex: 1 }}>
+
+                {/* MAIN LAYOUT */}
+                <ThemedView style={{ flex: 1 }}>
+
+                    {/* SCROLLABLE CONTENT */}
+                    <ScrollView
+                        contentContainerStyle={{
                             padding: 16,
-                            marginBottom: 20,
-                            shadowColor: "#000",
-                            shadowOpacity: 0.3,
-                            shadowRadius: 10,
-                            elevation: 5,
-                        }}>
-                        <ScrollView contentContainerStyle={{ padding: 16 }}>
-                            <ItemIconizable
-                                item={{
-                                    ICON: postData?.ICON,
-                                    COLOR: postData?.COLOR,
-                                    TITLE: postData?.COLLECTION_NAME
-                                }} />
-                            <ThemedText style={style?.title}>{postData?.TITLE}</ThemedText>
-                            <ThemedText style={style?.subtitle}>{postData?.COMMENT}</ThemedText>
-                        </ScrollView>
+                            paddingBottom: 100, // space for bottom bar
+                        }}
+                    >
 
-                    </ThemedView>
+                        <ItemIconizable
+                            item={{
+                                ICON: postData?.ICON,
+                                COLOR: postData?.COLOR,
+                                TITLE: postData?.COLLECTION_NAME,
+                            }}
+                        />
 
-                    {postData?.attachments?.length > 0 &&
-                        <CarouselFileViewer attachments={postData?.attachments} isEdit={false} />
-                    }
+                        <ThemedText style={style.title}>
+                            {postData?.TITLE}
+                        </ThemedText>
 
-                    <ThemedView style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        paddingHorizontal: 15,
-                        paddingVertical: 10,
-                    }}>
-                        <ThemedText style={{
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}>Views: {postData?.NUM_VIEWS}</ThemedText>
+                        <ThemedText
+                            style={[
+                                style.subtitle,
+                                {
+                                    backgroundColor: "#777879",
+                                    borderRadius: 20,
+                                    padding: 16,
+                                    marginTop: 10,
+                                    marginBottom: 20,
+                                },
+                            ]}
+                        >
+                            {postData?.COMMENT}
+                        </ThemedText>
 
-                        <ThemedView style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 8
-                        }}>
+                        {postData?.attachments?.length > 0 && (
+                            <CarouselFileViewer
+                                attachments={postData?.attachments}
+                                isEdit={false}
+                            />
+                        )}
+
+                        {/* EDIT BUTTON */}
+                        {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (
+                            <TouchableOpacity
+                                style={[
+                                    style.buttons.full_screen,
+                                    style.colors.geomedia_blue,
+                                    { marginTop: 20 },
+                                ]}
+                                onPress={() => {
+                                    router.push({
+                                        pathname: "/PostCreator",
+                                        params: { postid: postData?.ID },
+                                    });
+                                }}
+                            >
+                                <ThemedText>Edit post</ThemedText>
+                            </TouchableOpacity>
+                        )}
+
+                    </ScrollView>
+
+                    <ThemedView style={style.bottom_bar}>
+
+                        <ThemedView style={style.bottom_bar_item}>
+                            <Ionicons name="eye-outline" size={20} color={"#555"} />
+                            <ThemedText style={{
+                                fontSize: 16,
+                                fontWeight: "500",
+                            }}>Views: {postData?.NUM_VIEWS}</ThemedText>
+                        </ThemedView>
+
+                        <ThemedView style={style.bottom_bar_item}>
                             <ThemedText style={{
                                 fontSize: 16,
                                 fontWeight: "500",
                             }}>Likes: {postData?.NUM_LIKES}</ThemedText>
 
-                            {/* Heart button */}
                             <TouchableOpacity
                                 onPress={() => {
                                     toggleLike()
@@ -138,7 +171,6 @@ const PostViewer = () => {
                                 }}
                             >
                                 <Ionicons
-                                    name='heart'
                                     name={postData?.LIKED_BY_CURR_USER ? 'heart' : 'heart-outline'}
                                     size={24}
                                     color={postData?.LIKED_BY_CURR_USER ? 'red' : 'white'}
@@ -146,25 +178,10 @@ const PostViewer = () => {
                             </TouchableOpacity>
                         </ThemedView>
 
-                    </ThemedView >
-                    {(parseInt(ctx?.getUID()) == parseInt(postData?.AUTHOR_ID)) ?
-                        <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]}
-                            onPress={() => {
-                                router.push({
-                                    pathname: '/PostCreator',
-                                    params: {
-                                        postid: postData?.ID,
-                                    }
-                                });
-                            }}>
-                            <ThemedText>Edit post</ThemedText>
-                        </TouchableOpacity>
-                        :
-                        null
-                    }
-                </ThemedView >
+                    </ThemedView>
 
-            </ThemedView >
+                </ThemedView>
+            </ThemedView>
         </>
     );
 }
