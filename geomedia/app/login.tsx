@@ -253,7 +253,7 @@ export default function LoginScreen(props) {
 
                 </ThemedView>
 
-                <ThemedText onPress={switchMode} style={{ textAlign: 'right', marginTop: 0, bottom: "25%", fontStyle: 'italic', right: 0 }}>
+                <ThemedText onPress={switchMode} style={{ textAlign: 'right', marginTop: 60, bottom: "25%", fontStyle: 'italic', right: 0 }}>
                     {isLogin ?
                         langselected?.login.buttonOther
                         :
