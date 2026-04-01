@@ -42,7 +42,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
 
                 files.push({
                     FILENAME: name,
-                    updated: true,
+                    UPDATED: true,
                     BASE64: base64,
                     MIME_TYPE: mimetype
                 })

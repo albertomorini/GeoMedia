@@ -26,7 +26,7 @@ function writeLog(message, scope = "ERROR") {
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
-    console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
+    // console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
@@ -43,7 +43,6 @@ function post_merge(post_content) {
 }
 function collection_merge(collection) {
     let dummy = JSON.stringify(collection).replaceAll("'", "''");
-    console.log(dummy)
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC dbo.COLLECTION_MERGE @JSON='" + dummy + "'")
 }
 
@@ -62,8 +61,8 @@ async function hpmedia_merge_folder(postid, attachments) {
         }
 
         let hypermedia_reference = []
-        attachments.filter(f => f.updated).forEach(f => { //re-save/save only file updated
-
+        attachments.filter(f => f.UPDATED).forEach(f => { //re-save/save only file updated //TODO: AVOID TO  RESAVE FROM CLIENT
+            
             var buffer = Buffer.from(f.BASE64, 'base64', f.BASE64.length) //REMOVE BASE64
             const filepath = path.join(post_folder, f.FILENAME);
             console.log("Storing file: ", filepath);
@@ -174,7 +173,6 @@ async function post_get_map(uid, current_position, collection_chosen = []) {
     let posts = await SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC POST_GET_MAP @UID='" + uid + "', @COLLECTIONS_CHOSEN='" + JSON.stringify(collection_chosen) + "'")
 
     let results = []
-    // console.log(current_position,posts)
     posts.forEach(pp => {
         // check if users' position is within the post availability
         if (checkAREA(pp.VISIBILITY_AREA_KM, pp.LATITUDE, pp.LONGITUDE, current_position.latitude, current_position.longitude)) {

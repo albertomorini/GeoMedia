@@ -85,7 +85,6 @@ async function dispatchReq(res, path, body, contentType) {
                     sendResponse(res, 500, { "OK": false, "MSG": query_results[1].MSG })
                 } else {
                     let post_id = query_results[0].ID
-
                     let x = geomedia_helper.hpmedia_merge_folder(post_id, files)
                     if (x) {
                         sendResponse(res, 200, { "post_id": post_id, "OK": true })
