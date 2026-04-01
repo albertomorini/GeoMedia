@@ -150,7 +150,6 @@ export default function ProfileEditor() {
                         SURNAME: text
                     }))
                 }} />
-                {/* //TODO: password? */}
 
                 <ThemedText style={[style.label]}>Your collections:</ThemedText>
 

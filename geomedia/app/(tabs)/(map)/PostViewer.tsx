@@ -50,7 +50,6 @@ const PostViewer = () => {
             postid: postData?.ID,
             uid: ctx?.getUID()
         }).then(resQuery => {
-            console.log(resQuery)
             ctx?.showToast({
                 type: "success",
                 text: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")

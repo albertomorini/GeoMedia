@@ -20,7 +20,7 @@ const CollectionCreator = () => {
     const params = useLocalSearchParams();
 
 
-    /// for excluivity bottom menu
+    /// for exclusivity bottom menu
     const snapPoints = useMemo(() => ['90%', '100%'], []);
     const bottomSheetRef = useRef()
 
@@ -59,6 +59,7 @@ const CollectionCreator = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0];
+                console.log(x)
                 setCollectionData(prev => ({
                     ...prev,
                     ...x,
@@ -85,7 +86,7 @@ const CollectionCreator = () => {
                     text1: "Collection saved"
                 })
                 setTimeout(() => {
-                    if (router.canGoBack()) { //TODO: check on post creation if allowed new cat
+                    if (router.canGoBack()) {
                         router.back()
                     }
                 }, 450);
@@ -246,7 +247,7 @@ const CollectionCreator = () => {
                                         VIEWERS: obj.VIEWERS,
                                         EXCL_DATE_END: obj.DATERANGE?.DATE_END,
                                         EXCL_DATE_START: obj.DATERANGE?.DATE_START,
-                                        RECURRENT: obj.DATERANGE?.IS_RECURRENT
+                                        RECURRENT: obj.DATERANGE?.RECURRENT
                                     }));
                                     bottomSheetRef?.current?.close()
                                 }} />

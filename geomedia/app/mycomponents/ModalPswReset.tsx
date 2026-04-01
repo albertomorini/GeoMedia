@@ -34,7 +34,6 @@ const ModalPswReset = () => {
             USERNAME: usr,
             OTP: OTP
         }).then(async res => {
-            console.log(res)
             if (res[0]?.AUTH) {
                 setOTPValid(true)
             } else {
@@ -54,7 +53,6 @@ const ModalPswReset = () => {
         doRequest("auth_psw_forgotten", {
             USERNAMEMAIL: usrmail
         }).then(resQuery => {
-            console.log(resQuery)
             if (resQuery.AUTH == 2) { //pending OTP
                 setOTPValid(false)
             } else {
@@ -88,7 +86,6 @@ const ModalPswReset = () => {
                 NEWPASSWORD: React_MD5(newPassword),
                 OTP: OTP
             }).then(resQuery => {
-                console.log(resQuery)
                 if (resQuery[0].OK) {
                     setModalPswReset(false);
                     ctx?.showToast({
@@ -138,6 +135,7 @@ const ModalPswReset = () => {
 
                         {OTPValid == null ?
                             <>
+                                <ThemedText style={style.label}>Do you want to proceed to change password?</ThemedText>
                                 {ctx?.getUID() ??
                                     <>
                                         <ThemedText style={style.label}>Username or email</ThemedText>
@@ -147,6 +145,7 @@ const ModalPswReset = () => {
                                             }} />
                                     </>
                                 }
+
                                 <TouchableOpacity
                                     style={[style.buttons.full_screen, { backgroundColor: "#c97f30" }]}
                                     onPress={() => {

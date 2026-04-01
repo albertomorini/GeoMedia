@@ -49,7 +49,7 @@ const PostCreator = () => {
         longitude: null,
     })
 
-    /// for excluivity bottom menu
+    /// for exclusivity bottom menu
     const snapPoints = useMemo(() => ["50%", '90%'], []);
     const exclusivity_sheet_handler = useRef()
     const collection_sheet_handler = useRef()
@@ -91,7 +91,7 @@ const PostCreator = () => {
         dummy_body.attachments = files //attach files
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
-
+        console.log(dummy_body)
         doRequest("post_merge", {
             postdata: dummy_body
         }).then(res => {
@@ -169,8 +169,12 @@ const PostCreator = () => {
                     ...x,
                     EXCLUSIVITY: {
                         ...prev.EXCLUSIVITY,
-                        VIEWERS: JSON.parse(x?.VIEWERS)
-                        //TODO: check for DATERANGE
+                        VIEWERS: JSON.parse(x?.VIEWERS),
+                        DATERANGE: {
+                            DATE_START: x?.EXCL_DATE_START,
+                            DATE_END: x?.EXCL_DATE_END,
+                            RECURRENT: x?.RECURRENT
+                        }
                     }
                 }));
                 refFileHandler?.current?.load_files(x.attachments)
@@ -389,7 +393,7 @@ const PostCreator = () => {
                                 <ThemedView>
                                     <ExclusivityPicking
                                         creatorEnabled={false}
-                                        exclusivity={postData?.EXCLUSIVITY}
+                                        EXCLUSIVITY={postData?.EXCLUSIVITY}
                                         setExclusivity={(obj) => {
                                             setPostData(prev => ({
                                                 ...prev,

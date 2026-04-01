@@ -2,12 +2,13 @@ import { MyContext } from "@/app/_layout";
 import ListItem from "@/app/mycomponents/ListItem";
 import { doRequest } from "@/app/utility";
 import { router, useFocusEffect } from "expo-router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 
 const CollectionsList = (props) => {
 
     const ctx = useContext(MyContext)
+    const refList = useRef()
     const [collections, setCollections] = useState([])
 
     function getCollectionsList() {
@@ -22,12 +23,18 @@ const CollectionsList = (props) => {
 
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
+            try {
+                refList?.current?.load_item_selected(props?.itemSelected)
+            } catch (error) {
+
+            }
             getCollectionsList()
         }, [props?.itemSelected])
     )
     return (
         <>
             <ListItem
+                ref={refList}
                 DATA={collections}
                 onSelect={(pickeditem) => {
                     /// on collection lists/ profile show the post as lis
@@ -42,20 +49,25 @@ const CollectionsList = (props) => {
                         try {
                             props?.onSelect(pickeditem) //if exists is a child component, like collection picker for post creation
                         } catch (error) {
-                            // console.log(pickeditem)
-                            // if (pickeditem.OWNER_ID == ctx?.getUID()) { //editable only by the owner (or cretors //TODO:)
-                            router.push({
-                                pathname: '/CollectionCreator',
-                                params: {
-                                    collectionid: pickeditem?.ID,
-                                }
-                            })
-                            // }
+                            if (pickeditem?.OWNERID == ctx?.getUID()) { //editable only by the owner 
+                                router.push({
+                                    pathname: '/CollectionCreator',
+                                    params: {
+                                        collectionid: pickeditem?.ID,
+                                    }
+                                })
+                            } else {
+                                ctx?.showToast({
+                                    type: "error",
+                                    text1: "Collection editable only by the owner"
+                                })
+                                //TODO: redirect to profile of owner?
+                                //TODO: PROFILE VIEWER
+                            }
                         }
                     }
                 }}
                 isSelectable={props?.isSelectable}
-                itemSelected={props?.itemSelected}
                 isImage={false} //we render icons, not expo-image
                 estimatedSize={80}
                 allowCreation={props?.allowCreation ?? true}

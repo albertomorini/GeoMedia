@@ -121,9 +121,13 @@ const ListItem = forwardRef((props: any, ref: any) => {
                             justifyContent: "space-between",
                         }}>
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_green]} onPress={() => {
-                                props?.onSelect(selectedItems)
+                                try {
+                                    props?.onSelect(selectedItems)
+                                } catch (error) {
+
+                                }
                             }}>
-                                <ThemedText>Conferma</ThemedText>
+                                <ThemedText>Confirm</ThemedText>
                             </TouchableOpacity>
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
                                 onPress={() => {
@@ -133,9 +137,12 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                     } else {
                                         setSelectedItems([...alls])
                                     }
-                                    //TODO: design, "ALL" dinamically change?
                                 }}>
-                                <ThemedText>ALL</ThemedText>
+                                <ThemedText>
+                                    {props?.DATA?.length == selectedItems?.length ?
+                                        "EMPTY" : "ALL"
+                                    }
+                                </ThemedText>
                             </TouchableOpacity>
                         </ThemedView>
                         : null

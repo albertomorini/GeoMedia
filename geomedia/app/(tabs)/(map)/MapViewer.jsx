@@ -149,6 +149,7 @@ const MapViewer = forwardRef((props, ref) => {
     /////////////////////////////////////////////////////////////
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
+            check_cache_collection_chosen()
             getLocation();
         }, [])
     )
@@ -260,8 +261,7 @@ const MapViewer = forwardRef((props, ref) => {
                                 <ThemedView >
                                     <CollectionsList isSelectable={true}
                                         allowCreation={false}
-                                        itemSelected={check_cache_collection_chosen()} //TODO: TESTING
-
+                                        itemSelected={collectionsChosen}
                                         onSelect={(colls) => {
                                             setCollectionsChosen([...colls])
                                             collectionPickerSheet?.current?.close()

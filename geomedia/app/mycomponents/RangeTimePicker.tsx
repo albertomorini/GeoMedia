@@ -7,13 +7,13 @@ import { ThemedView } from "@/components/themed-view";
 import SegmentedControl from "@react-native-community/segmented-control";
 
 const DateTimeRangePicker = forwardRef((props, ref) => {
-    const [start, setStart] = useState(props?.start); // Initially null, meaning no date selected
-    const [end, setEnd] = useState(props?.end);
-    const [isRecurrent, setIsRecurrent] = useState(props?.isRecurrent == null ? "Never" : props?.isRecurrent)
+    const [start, setStart] = useState(null); // Initially null, meaning no date selected
+    const [end, setEnd] = useState(null);
+    const [isRecurrent, setIsRecurrent] = useState(0)
 
     const recurrencyOptions = ["Never", "Monthly", "Yearly"]
-
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
+
 
     // ---- HANDLERS ----
 
@@ -67,17 +67,34 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
 
     // Format date + time to a readable string
     const formatDateTime = (date) => {
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        try {
+            let d = new Date(date)
+            return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+        } catch (error) {
+            let d = new Date()
+            return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+        }
     };
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     useImperativeHandle(ref, () => ({
-        getRanges: () => {
+        get_dates: () => {
+            console.log({
+                start: start,
+                end: end,
+                recurrent: isRecurrent
+            })
             return {
                 start: start,
-                end: end
+                end: end,
+                recurrent: isRecurrent
             }
+        },
+        load_dates: (start, end, recurrent) => {
+            setStart(start);
+            setEnd(end);
+            setIsRecurrent(recurrent)
         }
-    }), [start, end]);
+    }), [start, end,isRecurrent]);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +166,9 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
             <SegmentedControl
                 values={recurrencyOptions}
                 selectedIndex={isRecurrent}
-                onChange={(event) => setIsRecurrent(event.nativeEvent.selectedSegmentIndex)}
+                onChange={(event) => {
+                    setIsRecurrent(event.nativeEvent.selectedSegmentIndex);
+                }}
             />
 
         </ThemedView>

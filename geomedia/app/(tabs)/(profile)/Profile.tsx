@@ -12,6 +12,7 @@ import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
+import ModalPswReset from '@/app/mycomponents/ModalPswReset';
 
 export default function Profile() {
 
@@ -72,7 +73,7 @@ export default function Profile() {
               variant="caption"
               style={{ fontStyle: 'italic', marginTop: 2 }}
             >
-              Mail address: {user?.EMAIL ?? 'Not provided'}
+              {user?.EMAIL}
             </Text>
           </ThemedView>
 
@@ -86,18 +87,20 @@ export default function Profile() {
           />
         </ThemedView>
 
+        <ModalPswReset />
         <ThemedView
           style={{
             flexDirection: "row",
-            justifyContent: "center",
-            marginTop: 20,
+            justifyContent: "space-between",
+            paddingLeft:5,
+            paddingRight:5
           }}
         >
           <TouchableOpacity
             onPress={() => {
               router.push('ProfileEditor')
             }}
-            style={[style?.colors?.geomedia_blue, style.buttons.full_screen, { width: "50%", margin: 10 }]}
+            style={[style?.colors?.geomedia_blue, style.buttons.full_screen, { width: "47%" }]}
           >
             <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
               Edit profile
@@ -106,7 +109,7 @@ export default function Profile() {
 
           <TouchableOpacity
             onPress={() => logout()}
-            style={[style?.colors?.geomedia_red, style.buttons.full_screen, { width: "50%", margin: 0 }]}
+            style={[style?.colors?.geomedia_red, style.buttons.full_screen, { width: "47%" }]}
           >
             <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
               Log out
