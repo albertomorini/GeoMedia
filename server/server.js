@@ -51,8 +51,7 @@ async function dispatchReq(res, path, body, contentType) {
                 sendResponse(res, 200, { "HELLO": "From server!" })
                 break;
             case "/auth_login":
-            case "/auth_password_forgot":
-            case "/auth_password_reset":
+            case "/auth_psw_reset":
             case "/profile_editinfo":
             case "/profile_getpfp":
             case "/auth_check_otp":
@@ -65,7 +64,7 @@ async function dispatchReq(res, path, body, contentType) {
                 dummy_res = geomedia_helper.generic_query(path, body)
                 break;
             ////___________________________________________________________________
-            ////___________________________________________________________________
+            case "/auth_psw_forgotten":
             case "/auth_signin":
                 query_results = await geomedia_helper.auth_signin(path, body)
                 if (query_results.AUTH == 2) {

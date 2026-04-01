@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Text, OTPInput } from "re-native-ui";
 
 import { style } from '@/components/globalstyle';
-import { doRequest, React_MD5, SettingsConfig } from "./utility";
+import { checkValidityPassword, doRequest, React_MD5, SettingsConfig } from "./utility";
 
 
 
@@ -15,6 +15,7 @@ import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
+import ModalPswReset from './mycomponents/ModalPswReset';
 
 
 
@@ -60,28 +61,15 @@ export default function LoginScreen(props) {
         })
     }
 
-    function checkValidityPassword(password: string) {
-        const minLength = 6;
-        const hasNumber = /\d/;
-        const hasUppercase = /[A-Z]/;
-
-        return (
-            password.length >= minLength &&
-            hasNumber.test(password) &&
-            hasUppercase.test(password)
-        );
-    }
-
     function doSignUp() {
-
         ///////
         if (!email.includes("@") && !email?.includes(".")) {
-            alert(langselected?.signup?.emailNotValid)
+            seterrorPassword(langselected?.signup?.emailNotValid)
         } else if (!checkValidityPassword(password)) {
             alert(langselected?.signup?.weakPassword)
         } else if (password != passwordRep) {
             seterrorPassword(langselected?.signup?.diffPass)
-        } else if (validUsername && validUsername != null) {
+        } else if (!validUsername && validUsername != null) {
             seterrorPassword("Username already taken!")
         } else {
             doRequest("auth_signin", {
@@ -103,8 +91,12 @@ export default function LoginScreen(props) {
             USERNAME: username,
             OTP: OTP
         }).then(async res => {
-            await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
-            check_cache_login()
+            if (res[0]?.AUTH) {
+                await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
+                check_cache_login()
+            } else {
+                seterrorPassword("OTP EXPIRED, redo the signin")
+            }
         })
     }
 
@@ -195,9 +187,9 @@ export default function LoginScreen(props) {
                                     {
                                         (OTP != null) ?
                                             <>
-                                                <ThemedText>Check your inbox ({email})</ThemedText>
+                                                <ThemedText>Check your inbox ({email}) for the OTP code:</ThemedText>
                                                 <OTPInput
-                                                    label="Check your inbox for OTP"
+                                                    label="Will expire whitin an hour"
                                                     value={OTP}
                                                     onChangeText={setOTP}
                                                     length={6}
@@ -208,7 +200,14 @@ export default function LoginScreen(props) {
                                                     </ThemedText>
                                                 </TouchableOpacity>
                                                 {errorPassword?.length > 0 ?
-                                                    <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
+                                                    <>
+                                                        <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
+                                                        <TouchableOpacity onPress={() => { setOTP(null) }}>
+                                                            <ThemedText style={{ textAlign: 'right', marginTop: 60, bottom: "25%", fontStyle: 'italic', right: 0 }}>
+                                                                BACK
+                                                            </ThemedText>
+                                                        </TouchableOpacity>
+                                                    </>
                                                     :
                                                     null
                                                 }
@@ -250,6 +249,7 @@ export default function LoginScreen(props) {
                                 </ThemedView>
                             </KeyboardAvoidingView>
                     }
+                    <ModalPswReset />
 
                 </ThemedView>
 

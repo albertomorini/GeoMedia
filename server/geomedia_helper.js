@@ -7,7 +7,6 @@ const path = require("path");
 const mailer = require("./mailer")
 const PATH_UPLOADS = config.FOLDERS.UPLOADS
 
-///
 /**
  * 
  * @param {string} message error message
@@ -27,7 +26,7 @@ function writeLog(message, scope = "ERROR") {
  */
 function generic_query(path, body) {
     let dummy = JSON.stringify(body).replaceAll("'", "''")
-    // console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
+    console.log("EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
     return SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC " + path.replaceAll("/", "") + " @JSON='" + dummy + "'")
 }
 
@@ -114,13 +113,20 @@ async function hpmedia_read_folder(postid) {
  * @param {Object} body the whole body passed included ip/headers
  * @returns 2 auth pending (GOOD) otherwise 0, if positive send the OTP via email
  */
-async function auth_signin(procedure, body) {
+async function auth_signin(procedure, body, email,username) {
     try {
         query_results = await generic_query(procedure, body)
         query_results = query_results[0]
+        let email= body?.EMAIL
+        let username= body?.USERNAME
+        if(query_results?.EMAIL != undefined && query_results?.USERNAME!=undefined){
+            email = query_results?.EMAIL
+            username = query_results?.USERNAME
+        }
+        // let l_email = email==undefined??body?.EMAIL
         if (query_results.AUTH == 2) {
-            let x = mailer.send_email_otp(body?.EMAIL, { "USERNAME": body?.USERNAME, "OTP": query_results.OTP })
-            writeLog("OTP requested for: " + body?.EMAIL, "OTP")
+            let x = mailer.send_email_otp(email, { "USERNAME": username, "OTP": query_results.OTP })
+            writeLog("OTP requested for: " + email, "OTP")
             delete query_results.OTP
         }
         return query_results
@@ -130,7 +136,16 @@ async function auth_signin(procedure, body) {
     }
 }
 
-//TODO: to comment
+
+/**
+ * compute the distance, if within are defined returns true
+ * @param {int} areaKM the area which the current position must be within to get the post
+ * @param {float} post_latitude  POST position longitude
+ * @param {float} post_longitude POST position longitude
+ * @param {float} curr_latitude current position latitude
+ * @param {float} curr_longitude current position longitude
+ * @returns {boolean} true if the current position is within the area
+ */
 function checkAREA(areaKM, post_latitude, post_longitude, curr_latitude, curr_longitude) {
 
     var dLat = (post_latitude - curr_latitude) * Math.PI / 180;

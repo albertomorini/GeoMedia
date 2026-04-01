@@ -169,7 +169,17 @@ export const SettingsConfig = () => {
 }
 
 
+export const checkValidityPassword = (password) => {
+    const minLength = 6;
+    const hasNumber = /\d/;
+    const hasUppercase = /[A-Z]/;
 
+    return (
+        password.length >= minLength &&
+        hasNumber.test(password) &&
+        hasUppercase.test(password)
+    );
+}
 
 //NETWORKING
 export const doRequest = (api, body = {}) => {
