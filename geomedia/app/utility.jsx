@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from "@/components/themed-text";
 import { ThemedInput } from "@/components/themed-input";
-import { Linking, Modal, TouchableOpacity } from "react-native";
+import { Alert, Linking, Modal, TouchableOpacity } from "react-native";
 import { style } from "@/components/globalstyle";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -190,7 +190,9 @@ export const doRequest = (api, body = {}) => {
         mode: "cors",
         headers: { "authorization": "mysuperkey" },
         body: JSON.stringify(body)
-    }).then(res => res.json())
+    }).then(res => res.json()).catch(err=>{
+        Alert.alert("Network error, try later..")
+    })
 }
 
 

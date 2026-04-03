@@ -38,7 +38,7 @@ export default function Profile() {
   async function logout() {
     await SecureStore.deleteItemAsync("user");
     ctx?.User.setUser(null);
-    router.replace("/login");
+    // router.replace("/login");
   }
 
   useFocusEffect(

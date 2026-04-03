@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
@@ -151,9 +151,13 @@ const MapViewer = forwardRef((props, ref) => {
     }
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
-            init()
+            get_posts_map()
         }, [])
     )
+
+    useEffect(()=>{
+        init()
+    },[])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
