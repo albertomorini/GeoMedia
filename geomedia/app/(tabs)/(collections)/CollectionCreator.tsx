@@ -201,7 +201,7 @@ const CollectionCreator = () => {
 
                 <IconColorPickerModal
                     visible={showIconPicker}
-                    onClose={() => setShowIcon(false)}
+                    onClose={() => {setShowIconPicker(false)}}
                     onSelect={(c) => {
                         setCollectionData(prev => ({
                             ...prev,

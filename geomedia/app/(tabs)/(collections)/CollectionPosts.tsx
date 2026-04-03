@@ -109,7 +109,7 @@ const CollectionPosts = (props) => {
                                     value={isSequential}
                                     onValueChange={(value) => {
                                         setIsSequential(value)
-                                        if (!value) { //TODO: to remove the list
+                                        if (!value) { 
                                             props?.sequentialConfirmed(null)
                                         }
                                     }}
