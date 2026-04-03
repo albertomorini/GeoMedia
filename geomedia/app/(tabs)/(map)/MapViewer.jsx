@@ -124,6 +124,10 @@ const MapViewer = forwardRef((props, ref) => {
         let colls = await SecureStore.getItemAsync("collection_selected_map")
         try {
             colls = JSON.parse(colls)
+            console.log(colls)
+            if (colls == null) {
+                colls = []
+            }
             setCollectionsChosen(colls)
             return colls
         } catch (error) {
@@ -149,7 +153,7 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
     /////////////////////////////////////////////////////////////
-   
+
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             get_posts_map()

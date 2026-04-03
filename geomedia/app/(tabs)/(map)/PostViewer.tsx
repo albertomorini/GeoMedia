@@ -1,5 +1,5 @@
 import { MyContext } from "@/app/_layout";
-import { doRequest } from "@/app/utility";
+import { datetime2date, doRequest } from "@/app/utility";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -11,11 +11,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { style } from "@/components/globalstyle";
 import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 import ItemIconizable from "@/app/mycomponents/ItemIconizable";
+import ReportPost from "@/app/mycomponents/ReportPost";
 
 const PostViewer = () => {
     const ctx = useContext(MyContext)
     const params = useLocalSearchParams();
     const [postData, setPostData] = useState(null)
+
+    const [userCreator, setUserCreator] = useState({
+        username: null,
+        name: null,
+        pfp: null
+    })
+
+    function profile_getpfp(username) {
+        doRequest("profile_getpfp", { USERNAME: username }).then(res => {
+            setUserCreator(prev => ({ ...prev, pfp: res[0]?.PROFILE_PICTURE }))
+        })
+    }
+
+    function getUserCreator(userid) {
+        console.log(userid)
+        doRequest("profile_getinfo", {
+            uid: userid
+        }).then(res => {
+            profile_getpfp(res[0].USERNAME) //yes I could incapsulate all in a single request but nah, better like this, due to optimiziation and async
+            setUserCreator(prev => ({
+                ...prev,
+                username: res[0].USERNAME,
+                name: res[0].NAME,
+                surname: res[0].SURNAME,
+            }))
+        })
+    }
 
     function loadFullPost() {
         let postid = null;
@@ -31,6 +59,7 @@ const PostViewer = () => {
                 "postid": postid,
                 "uid": ctx?.getUID()
             }).then(resQuery => {
+                getUserCreator(resQuery[0]?.AUTHOR_ID)
                 setPostData(resQuery[0])
             }).catch(err => {
                 Alert.alert("Error reading post", err)
@@ -96,6 +125,7 @@ const PostViewer = () => {
                             }}
                         />
 
+
                         <ThemedText style={style.title}>
                             {postData?.TITLE}
                         </ThemedText>
@@ -109,7 +139,7 @@ const PostViewer = () => {
                                     padding: 16,
                                     marginTop: 10,
                                     marginBottom: 20,
-                                    fontStyle:"italic"
+                                    fontStyle: "italic"
                                 },
                             ]}
                         >
@@ -122,6 +152,14 @@ const PostViewer = () => {
                                 isEdit={false}
                             />
                         )}
+                        <ThemedText style={style.label}>Posted on {datetime2date(postData?.DC)} by: </ThemedText>
+                        <ItemIconizable
+                            isImage={true}
+                            item={{
+                                ICON: userCreator?.pfp,
+                                TITLE: userCreator?.username
+                            }}
+                        />
 
                         {/* EDIT BUTTON */}
                         {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (
@@ -142,6 +180,7 @@ const PostViewer = () => {
                             </TouchableOpacity>
                         )}
 
+                        <ReportPost postid={postData?.ID} />
                     </ScrollView>
 
                     <ThemedView style={style.bottom_bar}>

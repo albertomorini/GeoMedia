@@ -54,12 +54,14 @@ async function dispatchReq(res, path, body, contentType) {
             case "/auth_psw_reset":
             case "/profile_editinfo":
             case "/profile_getpfp":
+            case "/profile_getinfo":
             case "/auth_check_otp":
             case "/interactions_likepost":
             case "/hpmedia_remove":
             case "/collections_get":
             case "/collections_get_fullcollection":
             case "/users_list":
+            case "/report_new":
             case "/auth_check_username":
             case "/collection_posts_get":
                 dummy_res = geomedia_helper.generic_query(path, body)

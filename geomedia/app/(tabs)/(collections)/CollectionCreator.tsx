@@ -51,7 +51,7 @@ const CollectionCreator = () => {
         try {
             collectionid = params.collectionid ? JSON.parse(params.collectionid as string) : null;
         } catch (e) {
-            console.error("Failed to parse collection data", e);
+            // console.error("Failed to parse collection data", e);
             collectionid = null;
         }
         if (collectionid != null) {
@@ -212,13 +212,16 @@ const CollectionCreator = () => {
                     }}
                 />
 
-                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]}
+                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,style.bottom_bar]}
                     onPress={() => {
                         save_collection()
                     }}
                 >
                     <ThemedText>{collectionData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
                 </TouchableOpacity>
+
+
+
                 <BottomSheet
                     ref={bottomSheetRef}
                     index={-1} // start closed
