@@ -42,9 +42,11 @@ export default function Profile() {
 
 
   async function logout() {
+    //remove preferences
+    await SecureStore.deleteItemAsync("collection_selected_map");
+    // remove saved info
     await SecureStore.deleteItemAsync("user");
     ctx?.User.setUser(null);
-    // router.replace("/login");
   }
 
   useFocusEffect(

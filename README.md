@@ -8,7 +8,8 @@
 
 > The first version of this project was implemented with <a href="https://ionicframework.com/">IonicFramework<a/> and <a href="https://pigeon-maps.js.org/">Piegon Maps</a>, for Wireless Network for Mobile Application course.
 <br/>
-*See the Ionic branch for that version*
+
+_See the Ionic branch for that version_
 
 Presented at <a href="https://goodit2025.idlab.uantwerpen.be/">GoodIT 2025 </a> (Antwerp, Belgium)
 - Full research available on <a href="https://www.research.unipd.it/handle/11577/3575540">UNIPD site</a>

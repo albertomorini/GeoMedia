@@ -63,7 +63,7 @@ export default function LoginScreen(props) {
 
     function doSignUp() {
         ///////
-        if (!email.includes("@") && !email?.includes(".")) {
+        if (!email?.includes("@") && !email?.includes(".")) {
             seterrorPassword(langselected?.signup?.emailNotValid)
         } else if (!checkValidityPassword(password)) {
             alert(langselected?.signup?.weakPassword)

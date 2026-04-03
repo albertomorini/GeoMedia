@@ -114,6 +114,7 @@ const MapViewer = forwardRef((props, ref) => {
 
     }
 
+    /////////////////////////////////////////////////////////////
 
     async function store_preferences(colls) {
         await SecureStore.setItemAsync("collection_selected_map", JSON.stringify(colls));
@@ -148,20 +149,17 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
     /////////////////////////////////////////////////////////////
-    async function init() {
-        let pos = await getLocation();
-        let coll = await check_cache_collection_chosen()
-        get_posts_map(pos, coll)
-    }
+   
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             get_posts_map()
-        }, [])
+        }, [UserPosition, collectionsChosen]) //when position or collections change (or are loaded) refresh posts
     )
 
-    useEffect(()=>{
-        init()
-    },[])
+    useEffect(() => {
+        getLocation();
+        check_cache_collection_chosen()
+    }, [])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -252,9 +250,6 @@ const MapViewer = forwardRef((props, ref) => {
                             index={-1} // start closed
                             snapPoints={snapPoints}
                             enablePanDownToClose={true} // drag down to close
-                            onClose={() => { //here since the user can close with  swipe
-                                get_posts_map()
-                            }}
                             backgroundStyle={{
                                 borderTopWidth: 1,
                                 borderEndWidth: 1,
@@ -272,10 +267,10 @@ const MapViewer = forwardRef((props, ref) => {
                                         allowCreation={false}
                                         itemSelected={collectionsChosen}
                                         onSelect={(colls) => {
+                                            store_preferences([...colls]) // store the prefernces on cache
                                             setCollectionsChosen([...colls])
                                             collectionPickerSheet?.current?.close()
-                                            // get_posts_map(UserPosition, colls)
-                                            store_preferences(colls) // store the prefernces on cache
+                                            get_posts_map(UserPosition, colls)
                                         }} />
                                 </ThemedView>
                             </BottomSheetScrollView>
