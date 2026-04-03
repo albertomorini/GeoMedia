@@ -30,6 +30,12 @@ const CollectionPosts = (props) => {
             collectionid: collectionid
         }).then(resQuery => {
             setPostList(resQuery)
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 
@@ -109,7 +115,7 @@ const CollectionPosts = (props) => {
                                     value={isSequential}
                                     onValueChange={(value) => {
                                         setIsSequential(value)
-                                        if (!value) { 
+                                        if (!value) {
                                             props?.sequentialConfirmed(null)
                                         }
                                     }}

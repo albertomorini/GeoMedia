@@ -87,6 +87,12 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                                     text1: "File removed",
                                     text2: "File " + FILENAME + " removed"
                                 })
+                            }).catch(err => {
+                                ctx?.showToast({
+                                    type: "error",
+                                    text1: "Error",
+                                    text2: "Network error... are you offline?"
+                                })
                             })
                         }
                     },

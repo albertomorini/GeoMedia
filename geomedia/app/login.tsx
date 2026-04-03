@@ -82,6 +82,12 @@ export default function LoginScreen(props) {
                 } else {
                     seterrorPassword("Error: " + JSON.stringify(res.error))
                 }
+            }).catch(err => {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Network error... are you offline?"
+                })
             })
         }
     }
@@ -97,6 +103,12 @@ export default function LoginScreen(props) {
             } else {
                 seterrorPassword("OTP EXPIRED, redo the signin")
             }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 
@@ -117,6 +129,12 @@ export default function LoginScreen(props) {
                     text1: 'Username taken',
                 })
             }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 

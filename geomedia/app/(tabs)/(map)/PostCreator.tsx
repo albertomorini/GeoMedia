@@ -112,6 +112,12 @@ const PostCreator = () => {
             } else {
                 Alert.alert("Post not saved: " + res?.MSG)
             }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 

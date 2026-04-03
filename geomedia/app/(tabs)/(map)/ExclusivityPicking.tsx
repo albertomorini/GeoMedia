@@ -37,6 +37,12 @@ const ExclusivityPicking = (props) => {
                 }
             })
             setListUsers(x)
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 
@@ -76,7 +82,7 @@ const ExclusivityPicking = (props) => {
                     // // if (dummy_creators.length == listUsers?.length) { //IF ALL USERS ARE SELECTED, REMOVE THE EXCLUSIVITY
                     // //     dummy_creators = []
                     // // }
-                    
+
                     excl.VIEWERS = dummy_viewers
                     excl.CREATORS = dummy_creators
 

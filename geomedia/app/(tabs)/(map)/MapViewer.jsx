@@ -139,7 +139,11 @@ const MapViewer = forwardRef((props, ref) => {
         }).then(resQuery => {
             setPostMarkers([...resQuery])
         }).catch(err => {
-            Alert.alert("Error retrieving posts: ", err)
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 

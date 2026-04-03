@@ -43,6 +43,12 @@ const ModalPswReset = () => {
                     text2: "Proceed to repeat the procedure"
                 })
             }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 
@@ -62,6 +68,12 @@ const ModalPswReset = () => {
                     text2: resQuery.MSG
                 })
             }
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Network error... are you offline?"
+            })
         })
     }
 

@@ -31,6 +31,12 @@ export default function Profile() {
       if (pp != undefined) {
         setProfilePic(pp)
       }
+    }).catch(err => {
+      ctx?.showToast({
+        type: "error",
+        text1: "Error",
+        text2: "Network error... try later"
+      })
     })
   }
 
@@ -92,8 +98,8 @@ export default function Profile() {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingLeft:5,
-            paddingRight:5
+            paddingLeft: 5,
+            paddingRight: 5
           }}
         >
           <TouchableOpacity
