@@ -1,8 +1,8 @@
-import { default_attached_file } from "@/assets/images/default_pictures"
-import { ThemedText } from "@/components/themed-text"
-import { ThemedView } from "@/components/themed-view"
+import { default_attached_file } from "@/assets/images/default_pictures";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { Dimensions, TouchableOpacity } from "react-native";
-import Carousel from "react-native-reanimated-carousel"
+import Carousel from "react-native-reanimated-carousel";
 import { Image } from 'expo-image'; //BETTER PERFORMANCE COMPARED TO NATIVE ONE
 import { Ionicons } from "@expo/vector-icons";
 
@@ -34,7 +34,7 @@ const CarouselFileViewer = (props) => {
             data={props?.attachments}
             pagingEnabled
             snapEnabled
-            loop={false}
+            loop={true}
             mode="parallax"
             modeConfig={{
                 parallaxScrollingScale: 0.9,
@@ -49,7 +49,7 @@ const CarouselFileViewer = (props) => {
                                 uri: (item?.MIME_TYPE == "image/jpeg") ? `data:image/jpeg;base64,${item?.BASE64}` :
                                     default_attached_file
                             }}
-                            style={{ width: '100%', height: '100%' }}
+                            style={{ width: '100%', height: '100%', padding: 30 }}
                             contentFit="cover"
                             transition={200}
                         />

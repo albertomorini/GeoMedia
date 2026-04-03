@@ -67,13 +67,13 @@ const PostCreator = () => {
             DATERANGE: { DATE_START: null, DATE_END: null },
             VIEWERS: []
         },
-        VISIBILITY_AREA_KM: 2, //default 2km
+        VISIBILITY_AREA_KM: 2, //default 2km //TODO: sure?
         ///////////
         // these are not stored on post but dinamically loaded and inherited by collection
         COLOR: null,
         ICON: null,
         COLLECTION_NAME: null,
-        REMOTE_POSTING_ENABLED: false
+        REMOTE_POSTING_ENABLED: false //TODO: check why not working always
     })
 
 

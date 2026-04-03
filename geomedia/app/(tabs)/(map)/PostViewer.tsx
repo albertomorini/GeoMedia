@@ -31,7 +31,6 @@ const PostViewer = () => {
     }
 
     function getUserCreator(userid) {
-        console.log(userid)
         doRequest("profile_getinfo", {
             uid: userid
         }).then(res => {
@@ -117,34 +116,28 @@ const PostViewer = () => {
                         }}
                     >
 
-                        <ItemIconizable
-                            item={{
-                                ICON: postData?.ICON,
-                                COLOR: postData?.COLOR,
-                                TITLE: postData?.COLLECTION_NAME,
-                            }}
-                        />
-
-
                         <ThemedText style={style.title}>
                             {postData?.TITLE}
                         </ThemedText>
 
-                        <ThemedText
-                            style={[
-                                style.subtitle,
-                                {
-                                    backgroundColor: "#777879",
-                                    borderRadius: 20,
-                                    padding: 16,
-                                    marginTop: 10,
-                                    marginBottom: 20,
-                                    fontStyle: "italic"
-                                },
-                            ]}
-                        >
-                            {postData?.COMMENT}
-                        </ThemedText>
+                        {
+                            postData?.COMMENT?.length ==0 ??
+                            <ThemedText
+                                style={[
+                                    style.subtitle,
+                                    {
+                                        backgroundColor: "#777879",
+                                        borderRadius: 20,
+                                        padding: 16,
+                                        marginTop: 10,
+                                        marginBottom: 20,
+                                        fontStyle: "italic"
+                                    },
+                                ]}
+                            >
+                                {postData?.COMMENT}
+                            </ThemedText>
+                        }
 
                         {postData?.attachments?.length > 0 && (
                             <CarouselFileViewer
@@ -158,6 +151,13 @@ const PostViewer = () => {
                             item={{
                                 ICON: userCreator?.pfp,
                                 TITLE: userCreator?.username
+                            }}
+                        />
+                        <ItemIconizable
+                            item={{
+                                ICON: postData?.ICON,
+                                COLOR: postData?.COLOR,
+                                TITLE: postData?.COLLECTION_NAME,
                             }}
                         />
 
