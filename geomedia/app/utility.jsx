@@ -50,15 +50,15 @@ export const SettingsConfig = () => {
     const my_email = 'albmor.dev@gmail.com'
 
     const emailMe = () => {
-        const url = `mailto:${my_email}?subject=${encodeURIComponent("GEOMEDIA")}`;
-        Linking.canOpenURL(url)
-            .then((supported) => {
-                if (!supported) {
-                    console.warn("Can't handle mailto link:", url);
-                } else {
-                    return Linking.openURL(url);
-                }
-            }).catch((err) => console.error('An error occurred', err));
+        const email = my_email;
+        const subject = 'GeoMedia';
+        const body = ''
+
+        const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        Linking.openURL(url).catch(err =>
+            console.error('Error opening email client', err)
+        );
     };
 
 
@@ -90,7 +90,7 @@ export const SettingsConfig = () => {
                 }}>
 
                     <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20" }]} onPress={() => { emailMe() }}>
-                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} onPress={() => { emailMe() }}>Contact me </ThemedText>
+                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} >Contact me </ThemedText>
                     </TouchableOpacity>
 
 
@@ -190,7 +190,7 @@ export const doRequest = (api, body = {}) => {
         mode: "cors",
         headers: { "authorization": "mysuperkey" },
         body: JSON.stringify(body)
-    }).then(res => res.json()).catch(err=>{
+    }).then(res => res.json()).catch(err => {
         Alert.alert("Network error, try later..")
     })
 }
