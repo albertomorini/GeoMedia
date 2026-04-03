@@ -29,7 +29,7 @@ async function file_share(base64Data: any, fileName: string, mimeType: string) {
 const CarouselFileViewer = (props) => {
     return (
         <Carousel
-            width={props?.isEdit? width/1.5 :width}
+            width={props?.isEdit ? width / 1.5 : width}
             height={250}
             data={props?.attachments}
             pagingEnabled

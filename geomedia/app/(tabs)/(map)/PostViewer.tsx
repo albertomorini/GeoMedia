@@ -52,7 +52,7 @@ const PostViewer = () => {
         }).then(resQuery => {
             ctx?.showToast({
                 type: "success",
-                text: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
+                text1: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
             })
         }).catch(err => {
             ctx?.showToast({
@@ -109,6 +109,7 @@ const PostViewer = () => {
                                     padding: 16,
                                     marginTop: 10,
                                     marginBottom: 20,
+                                    fontStyle:"italic"
                                 },
                             ]}
                         >

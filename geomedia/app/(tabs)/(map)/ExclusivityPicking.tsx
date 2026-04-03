@@ -65,8 +65,20 @@ const ExclusivityPicking = (props) => {
                         DATE_END: range?.end,
                         RECURRENT: range?.recurrent
                     }
-                    excl.VIEWERS = refViewers?.current?.get_item_selected()
-                    excl.CREATORS = refCreators?.current?.get_item_selected()
+                    let dummy_viewers = refViewers?.current?.get_item_selected()
+                    let dummy_creators = refCreators?.current?.get_item_selected()
+
+
+                    /// TODO: dunno, maybe if I want that all users to see, i uncheck the exclusivity... is just need to be a comunication/tutorial
+                    // // if (dummy_viewers?.length == listUsers?.length) { // IF ALL USERS ARE SELECTED, REMOVE THE EXCLUSIVITY
+                    // //     dummy_viewers = []
+                    // // }
+                    // // if (dummy_creators.length == listUsers?.length) { //IF ALL USERS ARE SELECTED, REMOVE THE EXCLUSIVITY
+                    // //     dummy_creators = []
+                    // // }
+                    
+                    excl.VIEWERS = dummy_viewers
+                    excl.CREATORS = dummy_creators
 
                     props?.setExclusivity(excl)
 

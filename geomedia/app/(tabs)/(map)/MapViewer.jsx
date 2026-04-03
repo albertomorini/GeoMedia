@@ -132,9 +132,6 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
     function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
-        // if (collections = []) {
-        //     collections = check_cache_collection_chosen()
-        // }
         doRequest("post_get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
@@ -147,10 +144,14 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
     /////////////////////////////////////////////////////////////
+    async function init() {
+        let pos = await getLocation();
+        let coll = await check_cache_collection_chosen()
+        get_posts_map(pos, coll)
+    }
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
-            check_cache_collection_chosen()
-            getLocation();
+            init()
         }, [])
     )
 

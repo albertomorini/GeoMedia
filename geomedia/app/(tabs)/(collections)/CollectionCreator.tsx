@@ -12,6 +12,7 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { doRequest } from "@/app/utility";
 import { router, useLocalSearchParams } from "expo-router";
+import CollectionPosts from "./CollectionPosts";
 
 
 const CollectionCreator = () => {
@@ -178,7 +179,15 @@ const CollectionCreator = () => {
                 </ThemedView>
 
 
-                {/* //TODO: SEQUENTIABILITY OF THE POSTS */}
+                { //only for collection already created, otherwise we wouldn't even have any posts
+                    collectionData?.ID == null ? null :
+                        <CollectionPosts collection={collectionData}
+                            sequentialConfirmed={(arr: Array<Object>) => {
+                                setCollectionData(prev => ({ ...prev, SEQUENTIALS: arr }))
+                            }}
+
+                        />
+                }
 
 
                 <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {

@@ -13,7 +13,10 @@ const PATH_UPLOADS = config.FOLDERS.UPLOADS
  * @param {string} scope type of log
  */
 function writeLog(message, scope = "ERROR") {
-    fs.appendFileSync('./log.txt', scope + ' ,' + Date.now() + ',' + message + "/n")
+    message = message?.toString()?.replaceAll("'", "''") //normalize to SQL
+    SQL_MANAGER.selectQuery(SQL_MANAGER.loadConfig(), "EXEC @MESSAGE='" + message + "', @SCOPE='" + scope + "'").catch(err => { //if sql in error, write to file
+        fs.appendFileSync('./log.txt', scope + ' ,' + Date.now() + ',' + message + "/n")
+    })
 }
 
 ////////////////////////////////////////////
@@ -62,7 +65,7 @@ async function hpmedia_merge_folder(postid, attachments) {
 
         let hypermedia_reference = []
         attachments.filter(f => f.UPDATED).forEach(f => { //re-save/save only file updated //TODO: AVOID TO  RESAVE FROM CLIENT
-            
+
             var buffer = Buffer.from(f.BASE64, 'base64', f.BASE64.length) //REMOVE BASE64
             const filepath = path.join(post_folder, f.FILENAME);
             console.log("Storing file: ", filepath);
@@ -112,13 +115,13 @@ async function hpmedia_read_folder(postid) {
  * @param {Object} body the whole body passed included ip/headers
  * @returns 2 auth pending (GOOD) otherwise 0, if positive send the OTP via email
  */
-async function auth_signin(procedure, body, email,username) {
+async function auth_signin(procedure, body, email, username) {
     try {
         query_results = await generic_query(procedure, body)
         query_results = query_results[0]
-        let email= body?.EMAIL
-        let username= body?.USERNAME
-        if(query_results?.EMAIL != undefined && query_results?.USERNAME!=undefined){
+        let email = body?.EMAIL
+        let username = body?.USERNAME
+        if (query_results?.EMAIL != undefined && query_results?.USERNAME != undefined) {
             email = query_results?.EMAIL
             username = query_results?.USERNAME
         }
