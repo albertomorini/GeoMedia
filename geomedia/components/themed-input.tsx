@@ -54,7 +54,7 @@ export function ThemedInput({
                     : undefined,
                 style,
             ]}
-            placeholderTextColor={finalBorderColor}
+            placeholderTextColor={color}
             {...rest}
         />
     );

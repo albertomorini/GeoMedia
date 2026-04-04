@@ -42,7 +42,7 @@ export function ThemedPassword({
                         : undefined,
                     style,
                 ]}
-                placeholderTextColor={borderColor}
+                placeholderTextColor={color}
                 {...rest}
             />
             <TouchableOpacity
