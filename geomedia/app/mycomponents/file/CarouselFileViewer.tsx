@@ -49,7 +49,7 @@ const CarouselFileViewer = (props) => {
                                 uri: (item?.MIME_TYPE == "image/jpeg") ? `data:image/jpeg;base64,${item?.BASE64}` :
                                     default_attached_file
                             }}
-                            style={{ width: '100%', height: '100%', padding: 30 }}
+                            style={{ width: '100%', height: '100%', padding: 30, borderRadius:20 }}
                             contentFit="cover"
                             transition={200}
                         />

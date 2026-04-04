@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Alert, ScrollView, TouchableOpacity } from "react-native";
+import { Alert, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
 
 
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +17,7 @@ const PostViewer = () => {
     const ctx = useContext(MyContext)
     const params = useLocalSearchParams();
     const [postData, setPostData] = useState(null)
+
 
     const [userCreator, setUserCreator] = useState({
         username: null,
@@ -116,28 +117,15 @@ const PostViewer = () => {
                         }}
                     >
 
-                        <ThemedText style={style.title}>
-                            {postData?.TITLE}
-                        </ThemedText>
 
-                        {
-                            postData?.COMMENT?.length ==0 ??
-                            <ThemedText
-                                style={[
-                                    style.subtitle,
-                                    {
-                                        backgroundColor: "#777879",
-                                        borderRadius: 20,
-                                        padding: 16,
-                                        marginTop: 10,
-                                        marginBottom: 20,
-                                        fontStyle: "italic"
-                                    },
-                                ]}
-                            >
-                                {postData?.COMMENT}
-                            </ThemedText>
-                        }
+                        <ItemIconizable
+                            item={{
+                                ICON: postData?.ICON,
+                                COLOR: postData?.COLOR,
+                                TITLE: postData?.TITLE,
+                                SUBTITLE: postData?.COLLECTION_NAME,
+                            }}
+                        />
 
                         {postData?.attachments?.length > 0 && (
                             <CarouselFileViewer
@@ -145,21 +133,35 @@ const PostViewer = () => {
                                 isEdit={false}
                             />
                         )}
-                        <ThemedText style={style.label}>Posted on {datetime2date(postData?.DC)} by: </ThemedText>
+
+                        {
+                            postData?.COMMENT?.length == 0 ? null :
+                                <ThemedText
+                                    style={[
+                                        style.subtitle,
+                                        {
+                                            backgroundColor: useColorScheme() === 'dark' ? "#4d4d4d": '#f2f2f2',
+                                            borderRadius: 50,
+                                            padding: 16,
+                                            // marginTop: 10,
+                                            marginBottom: 5,
+                                            fontStyle: "italic"
+                                        },
+                                    ]}
+                                >
+                                    {postData?.COMMENT}
+                                </ThemedText>
+                        }
+
                         <ItemIconizable
                             isImage={true}
                             item={{
                                 ICON: userCreator?.pfp,
-                                TITLE: userCreator?.username
+                                TITLE: userCreator?.username,
+                                SUBTITLE: ("On " + datetime2date(postData?.DC))
                             }}
                         />
-                        <ItemIconizable
-                            item={{
-                                ICON: postData?.ICON,
-                                COLOR: postData?.COLOR,
-                                TITLE: postData?.COLLECTION_NAME,
-                            }}
-                        />
+
 
                         {/* EDIT BUTTON */}
                         {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (

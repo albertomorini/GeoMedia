@@ -15,7 +15,7 @@ const ItemIconizable = (props) => {
                 style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    padding: 16,
+                    padding: 10,
                     borderBottomWidth: 1,
                     borderBottomColor: "#ddd",
                 }}
@@ -32,10 +32,16 @@ const ItemIconizable = (props) => {
                             <Ionicons name={props?.item.ICON ?? 'alert-circle'} size={24} style={{ color: "#555" }} />
                         </ThemedView>
                 }
-
-                <ThemedText style={{ marginLeft: 12, fontSize: 16 }}>
-                    {props?.item.TITLE}
-                </ThemedText>
+                <ThemedView>
+                    <ThemedText style={{ marginLeft: 12, fontSize: 16 }}>
+                        {props?.item.TITLE}
+                    </ThemedText>
+                    {props?.item.SUBTITLE == null ? null :
+                        <ThemedText style={{ marginLeft: 12, fontSize: 14, fontStyle: "italic" }}>
+                            {props?.item.SUBTITLE}
+                        </ThemedText>
+                    }
+                </ThemedView>
             </TouchableOpacity >
         </ThemedView >
     )

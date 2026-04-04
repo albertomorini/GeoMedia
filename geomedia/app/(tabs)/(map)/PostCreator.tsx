@@ -73,7 +73,7 @@ const PostCreator = () => {
         COLOR: null,
         ICON: null,
         COLLECTION_NAME: null,
-        REMOTE_POSTING_ENABLED: false //TODO: check why not working always
+        REMOTE_POSTING_ENABLED: false
     })
 
 
@@ -183,6 +183,11 @@ const PostCreator = () => {
                         }
                     }
                 }));
+                setCoordinateChosen(prev => ({
+                    ...prev,
+                    latitude: x?.LATITUDE,
+                    longitude: x?.LONGITUDE
+                }))
                 refFileHandler?.current?.load_files(x.attachments)
             }).catch(err => {
                 Alert.alert("Error reading post", err)
