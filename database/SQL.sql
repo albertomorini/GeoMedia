@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [GEOMEDIA]    Script Date: 01/04/2026 17:00:02 ******/
+/****** Object:  Database [GEOMEDIA]    Script Date: 04/04/2026 15:16:07 ******/
 CREATE DATABASE [GEOMEDIA]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -86,7 +86,7 @@ ALTER DATABASE [GEOMEDIA] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_
 GO
 USE [GEOMEDIA]
 GO
-/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -113,7 +113,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -126,7 +126,7 @@ CREATE TABLE [dbo].[HYPERMEDIA](
 	[MIME_TYPE] [varchar](32) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -144,7 +144,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LOGS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[LOGS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -160,7 +160,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[POSTS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[POSTS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -186,7 +186,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[REPORTS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[REPORTS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -197,7 +197,7 @@ CREATE TABLE [dbo].[REPORTS](
 	[MOTIVE] [varchar](2480) NULL,
 	[POSTID] [int] NULL,
 	[DC] [datetime] NULL,
-	[KIND] [varchar](10) NULL,
+	[KIND] [varchar](40) NULL,
 	[PROCESSED] [bit] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -205,7 +205,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[USERS]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  Table [dbo].[USERS]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -273,7 +273,7 @@ GO
 ALTER TABLE [dbo].[REPORTS]  WITH CHECK ADD FOREIGN KEY([USERID])
 REFERENCES [dbo].[USERS] ([ID])
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -301,7 +301,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -316,7 +316,7 @@ BEGIN
         SELECT 1 AS OK, 'USERNAME AVAILABLE' AS MSG
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -357,7 +357,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -383,7 +383,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -423,7 +423,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -463,7 +463,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -490,7 +490,7 @@ BEGIN
                 EXCL_DATE_END DATETIME,
                 RECURRENT INT,
                 REMOTE_POSTING BIT,
-                SEQUENTIALS NVARCHAR(MAX),
+                SEQUENTIALS NVARCHAR(MAX) AS JSON,
                 ICON VARCHAR(50),
                 COLOR VARCHAR(20),
                 CREATORS NVARCHAR(MAX) AS JSON,
@@ -543,7 +543,35 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_POSTS_GET]    Script Date: 04/04/2026 15:16:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[COLLECTION_POSTS_GET]
+@JSON NVARCHAR(MAX)
+AS
+BEGIN
+    
+        DECLARE @COLID INT = (SELECT JSON_VALUE(@JSON,'$.collectionid'))
+        ;;
+        WITH SEQ AS (
+
+            SELECT order_id,post_id
+            FROM OPENJSON((SELECT SEQUENTIALS FROM COLLECTIONS WHERE ID = @COLID),'$') WITH(
+                order_id int,
+                post_id int
+            ) 
+        )
+        SELECT P.*, SEQ.order_id, SEQ.post_id FROM POSTS P
+        LEFT JOIN SEQ ON SEQ.post_id = P.ID
+        WHERE P.COLLECTION_ID = @COLID
+        ORDER BY SEQ.order_id
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -564,15 +592,14 @@ BEGIN
 		mode CHAR(1)
 	)
 
-	IF(@MODE='W')
+	IF(@MODE='W') --- just collection not expired, and where user is creator || is owner of the collection
 	BEGIN
 
 		SELECT * FROM COLLECTIONS
 		WHERE 
 		( --EXCLUSIVITY
 			GETDATE()> ISNULL(EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
-			AND
-			(@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS ='[]')
+			AND (@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS ='[]') -- is creator or hasn't exclusivity
 		)OR OWNERID=@UID
 	END
 	ELSE IF(@MODE='R')
@@ -593,7 +620,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -614,7 +641,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -626,7 +653,7 @@ BEGIN
     SELECT * FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -670,7 +697,7 @@ GO
 
   END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -689,7 +716,7 @@ BEGIN
     DELETE FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -729,7 +756,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -744,7 +771,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -784,7 +811,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -797,7 +824,7 @@ BEGIN
 	--WHERE COLLECTION_ID =@COLLECTION_ID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -808,18 +835,13 @@ AS
 BEGIN
 
 	--- COUNTING THE VIEW
-	INSERT INTO INTERACTIONS
-		(POST_ID,OWNERID,DC,DM,SCOPE)
+	INSERT INTO INTERACTIONS (POST_ID,OWNERID,DC,DM,SCOPE)
 	SELECT postid, uid, GETDATE(), GETDATE(), 'VIEW'
 	FROM OPENJSON(@JSON,'$')WITH(
 			postid int,
 			uid int
-		) J
-	WHERE NOT EXISTS (
-			SELECT *
-	FROM INTERACTIONS
-	WHERE POST_ID=J.postid and OWNERID=J.uid AND SCOPE='VIEW'
-		)
+	) J
+	WHERE NOT EXISTS ( SELECT * FROM INTERACTIONS WHERE POST_ID=J.postid and OWNERID=J.uid AND SCOPE='VIEW')
 
 	--- RETURING DATA WITH STATS
 
@@ -838,7 +860,8 @@ BEGIN
 		PS.NUM_VIEWS,
 		C.COLOR,
 		C.ICON,
-		C.TITLE AS COLLECTION_NAME
+		C.TITLE AS COLLECTION_NAME,
+		C.REMOTE_POSTING AS REMOTE_POSTING_ENABLED
 	FROM POSTS P
 	INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
 	LEFT JOIN INTERACTIONS I ON P.ID = I.POST_ID AND I.SCOPE='VIEW'
@@ -849,7 +872,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -859,26 +882,80 @@ CREATE PROCEDURE [dbo].[POST_GET_MAP]
 @UID INT, @COLLECTIONS_CHOSEN JSON=NULL
 AS
 BEGIN
-	
-	SELECT P.* , C.COLOR, C.ICON,C.TITLE AS CATEGORY_NAME
-	FROM POSTS P
-	INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
-	WHERE 
-	(
-		P.VIEWERS IS NULL OR  @UID IN (SELECT VALUE FROM OPENJSON(P.VIEWERS,'$')) 
-		AND GETDATE()> ISNULL(P.EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(P.EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
-		AND @UID IN ( --CHECK IF THE USER REQUESTING IS ENABLED TO THAT CATEGORY
-			SELECT VALUE FROM OPENJSON(C.VIEWERS,'$')
-		)
-	) OR p.AUTHOR_ID=@UID
-	AND C.ID IN (
-		SELECT VALUE FROM OPENJSON(@COLLECTIONS_CHOSEN,'$')
-	)
 
-	-- NB: THE VISIBILITY_AREA_KM FILTER IS MADE ON BACKEND OF THE SERVER
+
+
+
+    ---------------------------------------------------------
+    --- formatting for sequentiality (order of the posts)
+
+    -- -- DECLARE  @uid INT=1 , @COLLECTIONS_CHOSEN JSON='[35,36,37,38,39]'
+
+    DECLARE @SEQQ TABLE (order_id  int, post_id int)
+    ;;
+    WITH SEQ AS(
+        SELECT j.order_id, j.post_id
+        FROM COLLECTIONS c
+        CROSS APPLY OPENJSON(c.SEQUENTIALS, '$')
+        WITH (
+            order_id INT,
+            post_id INT
+        ) j
+        WHERE c.ID IN (SELECT VALUE FROM OPENJSON(@COLLECTIONS_CHOSEN, '$'))
+    )
+    INSERT INTO @SEQQ(order_id,post_id)
+    SELECT order_id,post_id FROM SEQ;
+
+    ---------------------------------------------------------
+
+    --- SEQUENTIALITY POSTS
+    ; WITH NEXTPOST AS( --- FIRST POST NOT VIEWED
+        SELECT TOP 1 P.*, SEQ.order_id, SEQ.post_id
+        FROM POSTS P
+        LEFT JOIN @SEQQ SEQ ON SEQ.post_id = P.ID
+        WHERE P.COLLECTION_ID IN (SELECT VALUE FROM OPENJSON(@COLLECTIONS_CHOSEN,'$'))
+        AND P.ID NOT IN (
+            SELECT POST_ID FROM INTERACTIONS WHERE OWNERID=@UID AND SCOPE='VIEW'
+        )
+        ORDER BY SEQ.order_id ASC
+    )
+    SELECT
+    P.ID,P.AUTHOR_ID,P.TITLE,P.COMMENT,P.DC,P.DM,P.LATITUDE,P.LONGITUDE,P.VISIBILITY_AREA_KM,P.EXCL_DATE_START,P.EXCL_DATE_END,P.RECURRENT,P.COLLECTION_ID,P.VIEWERS, SEQ.order_id, SEQ.post_id, C.COLOR, C.ICON,C.TITLE AS CATEGORY_NAME
+    FROM POSTS P
+    LEFT JOIN @SEQQ SEQ ON SEQ.post_id = P.ID
+    INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
+    WHERE P.COLLECTION_ID IN (SELECT VALUE FROM OPENJSON(@COLLECTIONS_CHOSEN,'$'))
+        AND P.ID IN ( SELECT POST_ID FROM INTERACTIONS WHERE OWNERID=@UID AND SCOPE='VIEW'
+    ) ---- VIEWED POST ^
+    UNION
+    SELECT
+    P.ID,P.AUTHOR_ID,P.TITLE,P.COMMENT,P.DC,P.DM,P.LATITUDE,P.LONGITUDE,P.VISIBILITY_AREA_KM,P.EXCL_DATE_START,P.EXCL_DATE_END,P.RECURRENT,P.COLLECTION_ID,P.VIEWERS, P.order_id, P.post_id, C.COLOR, C.ICON,C.TITLE AS CATEGORY_NAME
+        FROM NEXTPOST P
+        INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
+    UNION --- UNION WITH POST WITHOUT SEQUENCE
+    SELECT
+    P.ID,P.AUTHOR_ID,P.TITLE,P.COMMENT,P.DC,P.DM,P.LATITUDE,P.LONGITUDE,P.VISIBILITY_AREA_KM,P.EXCL_DATE_START,P.EXCL_DATE_END,P.RECURRENT,P.COLLECTION_ID,P.VIEWERS, NULL AS order_id, NULL AS post_id, C.COLOR, C.ICON,C.TITLE AS CATEGORY_NAME
+    FROM POSTS P
+    INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
+    WHERE
+    C.SEQUENTIALS IS NULL -- NO SEQUENTIALITY INDICATED (GENERAL  POSTS)
+    AND
+    (
+        P.VIEWERS IS NULL OR P.VIEWERS='[]' OR
+         @UID IN (SELECT VALUE FROM OPENJSON(P.VIEWERS,'$'))
+        AND GETDATE()> ISNULL(P.EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(P.EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
+        AND (
+            @UID IN ( --CHECK IF THE USER REQUESTING IS ENABLED TO THAT CATEGORY
+                SELECT VALUE FROM OPENJSON(C.VIEWERS,'$')
+            ) OR C.VIEWERS='[]'
+        )
+    )
+    AND C.ID IN (SELECT VALUE FROM OPENJSON(@COLLECTIONS_CHOSEN,'$'))
+
+    -- NB: THE VISIBILITY_AREA_KM FILTER IS MADE ON BACKEND OF THE SERVER
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -987,7 +1064,7 @@ END;
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1029,7 +1106,19 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETINFO]    Script Date: 04/04/2026 15:16:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[PROFILE_GETINFO]
+@JSON JSON
+AS
+BEGIN
+    SELECT USERNAME,NAME,SURNAME,DC FROM USERS WHERE ID= JSON_VALUE(@JSON,'$.uid')
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1045,7 +1134,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1056,19 +1145,19 @@ CREATE PROCEDURE [dbo].[REPORT_NEW]
 AS
 BEGIN
 	INSERT INTO REPORTS(USERID,MOTIVE,POSTID,DC,KIND,PROCESSED)
-	SELECT uid, motive, postid, getdate(), kind, 0FROM OPENJSON(@JSON,'$')WITH(
+	SELECT uid, motive, postid, getdate(), kind, 0 FROM OPENJSON(@JSON,'$')WITH(
 		postid int,
 		uid int, 
 		motive varchar(2400),
-		kind varchar(10)
-	)
+		kind varchar(40)
+	) J
 	WHERE NOT EXISTS( --JUST ONE REPORT FOR POST&USER :: A UNIQUE KEY WOULD DO THE SAME EFFECT BUT NAH
-		SELECT * FROM REPORTS WHERE USERID=uid AND POSTID=postid
+		SELECT * FROM REPORTS WHERE USERID=J.[uid] AND POSTID=J.postid
 	)
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 01/04/2026 17:00:03 ******/
+/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 04/04/2026 15:16:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
