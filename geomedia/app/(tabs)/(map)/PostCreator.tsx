@@ -23,6 +23,7 @@ import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CollectionsList from '../(collections)/CollectionsList';
 import ItemIconizable from '@/app/mycomponents/ItemIconizable';
+import { useLanguage } from '@/components/LanguageProvider';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +32,8 @@ import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 const PostCreator = () => {
 
 
-    const ctx = useContext(MyContext)
+    const ctx = useContext(MyContext);
+    const { langselected } = useLanguage()
     const params = useLocalSearchParams();
 
     const refFileHandler = useRef()
@@ -234,7 +236,7 @@ const PostCreator = () => {
                                 }} />
                         }
 
-                        <ThemedText style={style.label}>Title: </ThemedText>
+                        <ThemedText style={style.label}>{langselected?.postCreator.title}: </ThemedText>
                         <ThemedInput placeholder="Title"
                             value={postData?.TITLE}
                             type="outlined"
@@ -245,7 +247,7 @@ const PostCreator = () => {
                                 }));
                             }}
                         />
-                        <ThemedText style={style.label}>Comment:</ThemedText>
+                        <ThemedText style={style.label}>{langselected?.postCreator?.comment}:</ThemedText>
                         <ThemedInput
                             multiline={true}
                             type="outlined"
@@ -258,7 +260,7 @@ const PostCreator = () => {
                                 }));
                             }}
                         />
-                        <ThemedText style={style.label}>Area of visibility (in KM): </ThemedText>
+                        <ThemedText style={style.label}>{langselected?.postCreator?.area}: </ThemedText>
                         <ThemedInput type='outlined'
                             value={postData?.VISIBILITY_AREA_KM.toString()}
                             placeholder='Area of visibility in KM'
@@ -276,12 +278,12 @@ const PostCreator = () => {
                         <>
                             {
                                 isUsingCurrentLocation() ?
-                                    <ThemedText style={style.label}>Currently using current location</ThemedText>
+                                    <ThemedText style={style.label}>{langselected?.postCreator?.locationCurrent}</ThemedText>
                                     :
                                     <>
-                                        <ThemedText style={style.label}>Remote location setted:</ThemedText>
-                                        <ThemedText>Latitude: {coordinateChosen?.latitude}</ThemedText>
-                                        <ThemedText>longitude: {coordinateChosen?.longitude}</ThemedText>
+                                        <ThemedText style={style.label}>{langselected?.postCreator?.locationRemote}:</ThemedText>
+                                        <ThemedText>{langselected?.postCreator?.lat}: {coordinateChosen?.latitude}</ThemedText>
+                                        <ThemedText>{langselected?.postCreator?.lon}: {coordinateChosen?.longitude}</ThemedText>
                                     </>
                             }
 
@@ -291,9 +293,9 @@ const PostCreator = () => {
                                 onPress={() => { setModalMapVisibility(true) }}>
                                 {
                                     postData?.REMOTE_POSTING_ENABLED ?
-                                        <ThemedText>Choose the location</ThemedText>
+                                        <ThemedText>{langselected?.postCreation?.pickLocaton}</ThemedText>
                                         :
-                                        <ThemedText>Disabled by collection</ThemedText>
+                                        <ThemedText>{langselected?.postCreation?.disabledRemote}</ThemedText>
                                 }
                                 <Ionicons name="map-outline" size={28} color={"white"} />
                             </TouchableOpacity>

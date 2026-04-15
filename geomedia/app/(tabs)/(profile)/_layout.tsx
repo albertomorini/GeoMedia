@@ -23,7 +23,7 @@ export default function ProfileLayout() {
         >
             <Stack.Screen name="Profile"
                 options={{
-                    title: langselected.profile
+                    title: langselected?.account
                 }} />
 
             <Stack.Screen

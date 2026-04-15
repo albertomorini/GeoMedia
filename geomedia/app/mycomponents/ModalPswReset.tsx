@@ -120,7 +120,7 @@ const ModalPswReset = () => {
             <TouchableOpacity onPress={() => {
                 setModalPswReset(true)
             }}>
-                <ThemedText>Reset password</ThemedText>
+                <ThemedText>{langselected.login.pswForget}</ThemedText>
             </TouchableOpacity>
 
             <Modal visible={modalPswReset}

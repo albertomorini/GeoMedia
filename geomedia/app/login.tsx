@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Text, OTPInput } from "re-native-ui";
 
 import { style } from '@/components/globalstyle';
-import { checkValidityPassword, doRequest, React_MD5, SettingsConfig } from "./utility";
+import SettingsConfig, { checkValidityPassword, doRequest, React_MD5 } from "./utility";
 
 
 
@@ -180,14 +180,14 @@ export default function LoginScreen(props) {
 
                                     <ThemedView style={{ width: "100%" }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
 
-                                        <ThemedText>Email or username</ThemedText>
-                                        <ThemedInput placeholder="Enter email" onChangeText={setEmail} />
+                                        <ThemedText>{langselected.login.emailOrUsername}</ThemedText>
+                                        <ThemedInput placeholder={langselected.login.placeholderEmail} onChangeText={setEmail} />
 
                                         <ThemedText>Password</ThemedText>
-                                        <ThemedPassword placeholder="Enter password" onChangeText={setPassword} />
+                                        <ThemedPassword placeholder={langselected.login.placeholderPassord} onChangeText={setPassword} />
 
                                         <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={doLogin}>
-                                            <ThemedText style={{ color: 'white', textAlign: 'center' }}>Login</ThemedText>
+                                            <ThemedText style={{ color: 'white', textAlign: 'center' }}>{langselected.login.login}</ThemedText>
                                         </TouchableOpacity>
                                         {errorPassword?.length > 0 ?
                                             <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
@@ -222,7 +222,7 @@ export default function LoginScreen(props) {
                                                         <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
                                                         <TouchableOpacity onPress={() => { setOTP(null) }}>
                                                             <ThemedText style={{ textAlign: 'right', marginTop: 60, bottom: "25%", fontStyle: 'italic', right: 0 }}>
-                                                                BACK
+                                                                {langselected.signup.buttonOther}
                                                             </ThemedText>
                                                         </TouchableOpacity>
                                                     </>

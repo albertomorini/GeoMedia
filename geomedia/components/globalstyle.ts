@@ -70,7 +70,7 @@ export const style = StyleSheet.create({
             marginVertical: 10,      // optional spacing
         },
         small: {
-            width: "23%",
+            width: "25%",
             borderRadius: 8,         // optional rounded corners
             alignItems: 'center',    // center text horizontally
             justifyContent: 'center',

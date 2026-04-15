@@ -7,7 +7,7 @@ import { style } from '@/components/globalstyle';
 
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
-import { doRequest, SettingsConfig } from '../../utility';
+import SettingsConfig, { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
@@ -70,11 +70,11 @@ export default function Profile() {
         >
           <ThemedView style={{ flex: 1, paddingRight: 10 }}>
             <ThemedText className="text-lg font-bold" style={style.subtitle}>
-              Hello {user?.NAME} {user?.SURNAME}
+              {langselected?.profile?.hello} {user?.NAME} {user?.SURNAME}
             </ThemedText>
 
             <Text variant="caption">
-              Your logged as: {user?.USERNAME}
+              {langselected?.profile?.loggedAs}: {user?.USERNAME}
             </Text>
 
             <Text
@@ -111,7 +111,7 @@ export default function Profile() {
             style={[style?.colors?.geomedia_blue, style.buttons.full_screen, { width: "47%" }]}
           >
             <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-              Edit profile
+              {langselected?.profile?.editProfile}
             </ThemedText>
           </TouchableOpacity>
 
@@ -120,12 +120,12 @@ export default function Profile() {
             style={[style?.colors?.geomedia_red, style.buttons.full_screen, { width: "47%" }]}
           >
             <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-              Log out
+              {langselected?.profile?.logout}
             </ThemedText>
           </TouchableOpacity>
         </ThemedView>
         <ThemedView style={{ flex: 1, paddingRight: 10 }}>
-          <ThemedText style={style.label}>Your post</ThemedText>
+          <ThemedText style={style.label}>{langselected?.profile?.yourPosts}</ThemedText>
         </ThemedView>
 
 

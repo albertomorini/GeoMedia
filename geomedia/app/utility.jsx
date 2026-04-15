@@ -1,5 +1,4 @@
 import { ThemedView } from "@/components/themed-view";
-import { Text } from "re-native-ui";
 import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from "@/components/themed-text";
@@ -24,7 +23,7 @@ load_config()
 
 
 
-export const SettingsConfig = () => {
+export default function SettingsConfig (){
 
     const [modalSettingsVisible, setModalSettingsVisible] = useState(false)
     const [protocol, setProtocol] = useState(null)
@@ -124,15 +123,15 @@ export const SettingsConfig = () => {
 
                         }}
                     >
-                        <ThemedText style={style.label}>Protocol</ThemedText>
+                        <ThemedText style={style.label}>{langselected?.settings.protocol}</ThemedText>
                         <ThemedInput type="outlined" placeholder="https" onChangeText={(text) => {
                             setProtocol(text)
                         }} />
-                        <ThemedText style={style.label}>Server name</ThemedText>
+                        <ThemedText style={style.label}>{langselected?.settings.serverName}</ThemedText>
                         <ThemedInput type="outlined" placeholder="geomediasrv" onChangeText={(text) => {
                             setServerName(text)
                         }} />
-                        <ThemedText style={style.label}>Port</ThemedText>
+                        <ThemedText style={style.label}>{langselected?.settings?.port}</ThemedText>
                         <ThemedInput type="outlined" placeholder="9911" onChangeText={(text) => {
                             setPort(text)
                         }} />
@@ -148,14 +147,14 @@ export const SettingsConfig = () => {
                                 onPress={() => setModalSettingsVisible(false)}
                                 style={[style?.colors.geomedia_red, style.buttons.small]}
                             >
-                                <Text>Close</Text>
+                                <Text>{langselected?.settings?.close}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 onPress={confirmNewURI}
                                 style={[style?.colors.geomedia_green, style.buttons.small]}
                             >
-                                <Text>Confirm</Text>
+                                <Text>{langselected?.settings?.confirm}</Text>
                             </TouchableOpacity>
                         </ThemedView>
 
