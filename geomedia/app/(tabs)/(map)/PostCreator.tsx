@@ -82,6 +82,30 @@ const PostCreator = () => {
     //////////////////////////////////////////////////////////////////////
 
 
+    const requiredFields = {
+        TITLE: (v) => v != null && v.trim().length > 0,
+        VISIBILITY_AREA_KM: (v) => v != null && v > 0,
+        COLLECTION_ID: (v) => v != null,
+    };
+    /**
+     * check if the post is ok
+     * @param body JSON body of the request
+     * @returns return the missing values of required fields
+     */
+    function validatePost(body: object) {
+        const missing = [];
+        for (const key in requiredFields) {
+            const isValid = requiredFields[key](body[key]);
+            if (!isValid) {
+                missing.push(key);
+            }
+        }
+        return missing;
+    }
+
+    /**
+     * create/update the post
+     */
     async function save_post() {
 
         let files = await refFileHandler?.current?.return_files()
@@ -93,36 +117,51 @@ const PostCreator = () => {
         dummy_body.attachments = files //attach files
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
-        console.log(dummy_body)
-        doRequest("post_merge", {
-            postdata: dummy_body
-        }).then(res => {
-            if (res?.OK) {
-                setPostData(prev => ({
-                    ...prev,
-                    ID: res?.post_id
-                }))
-                ctx?.showToast({
-                    type: 'success',
-                    text1: 'Post saved!',
-                });
-                setTimeout(() => {
-                    if (router.canGoBack()) {
-                        router.back()
-                    }
-                }, 450);
-            } else {
-                Alert.alert("Post not saved: " + res?.MSG)
-            }
-        }).catch(err => {
+        let missing_fields = validatePost(dummy_body)
+        if (
+            missing_fields.length > 0
+        ) {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: "Missing info",
+                text2: JSON.stringify(missing_fields) + " not compiled"
             })
-        })
+        } else {
+            console.log(dummy_body)
+            doRequest("post_merge", {
+                postdata: dummy_body
+            }).then(res => {
+                if (res?.OK) {
+                    setPostData(prev => ({
+                        ...prev,
+                        ID: res?.post_id
+                    }))
+                    ctx?.showToast({
+                        type: 'success',
+                        text1: 'Post saved!',
+                    });
+                    setTimeout(() => {
+                        if (router.canGoBack()) {
+                            router.back()
+                        }
+                    }, 450);
+                } else {
+                    Alert.alert("Post not saved: " + res?.MSG)
+                }
+            }).catch(err => {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Network error... are you offline?"
+                })
+            })
+        }
+
     }
 
+    /**
+     * load the current position and set into the state, not into the post yet (made during the saving)
+     */
     function load_current_location() {
         Geolocation.getCurrentPosition(
             position => {
