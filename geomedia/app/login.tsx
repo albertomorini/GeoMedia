@@ -116,7 +116,7 @@ export default function LoginScreen(props) {
         doRequest("auth_check_username", {
             USERNAME: username
         }).then(resQuery => {
-            if (resQuery[0]?.OK, username) {
+            if (parseInt(resQuery[0]?.OK)) {
                 setValidUsername(true)
                 ctx?.showToast({
                     type: 'success',
