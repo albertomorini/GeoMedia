@@ -45,7 +45,9 @@ const CollectionCreator = () => {
         "COLOR": null,
     });
 
-
+    /**
+     * load the all the information of the collection
+     */
     function loadFullCollection() {
         let collectionid = null;
         try {
@@ -73,38 +75,71 @@ const CollectionCreator = () => {
         }
     }
 
-    function save_collection() {
-        doRequest("collection_merge", {
-            collectionData: collectionData
-        }).then(resQuery => {
-            if (resQuery[0]?.OK) {
-                setCollectionData(prev => ({
-                    ...prev,
-                    ID: resQuery[0]?.ID
-                }))
-                ctx?.showToast({
-                    type: "success",
-                    text1: "Collection saved"
-                })
-                setTimeout(() => {
-                    if (router.canGoBack()) {
-                        router.back()
-                    }
-                }, 450);
-            } else {
-                ctx?.showToast({
-                    type: "error",
-                    text1: "Error",
-                    text2: resQuery[0]?.MSG
-                })
+    // must have a name, and icon/color 
+    const requiredFields = {
+        TITLE: (v) => v != null && v.trim().length > 0,
+        ICON: (v) => v != null,
+        COLOR: (v) => v != null,
+    };
+    /**
+     * check if the post is ok
+     * @param body JSON body of the request
+     * @returns return the missing values of required fields
+     */
+    function validateCollection(body: object) {
+        const missing = [];
+        for (const key in requiredFields) {
+            const isValid = requiredFields[key](body[key]);
+            if (!isValid) {
+                missing.push(key);
             }
-        }).catch(err => {
+        }
+        return missing;
+    }
+    /**
+     * create/update  the collection
+     */
+    function save_collection() {
+        let missing_fields = validateCollection(collectionData)
+        if (missing_fields.length > 0) {
             ctx?.showToast({
                 type: "error",
-                text1: "Network error",
-                text2: JSON.stringify(err)
+                text1: "Missing info",
+                text2: JSON.stringify(missing_fields) + " are required"
             })
-        })
+        } else {
+            doRequest("collection_merge", {
+                collectionData: collectionData
+            }).then(resQuery => {
+                if (resQuery[0]?.OK) {
+                    setCollectionData(prev => ({
+                        ...prev,
+                        ID: resQuery[0]?.ID
+                    }))
+                    ctx?.showToast({
+                        type: "success",
+                        text1: "Collection saved"
+                    })
+                    setTimeout(() => {
+                        if (router.canGoBack()) {
+                            router.back()
+                        }
+                    }, 450);
+                } else {
+                    ctx?.showToast({
+                        type: "error",
+                        text1: "Error",
+                        text2: resQuery[0]?.MSG
+                    })
+                }
+            }).catch(err => {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Network error",
+                    text2: JSON.stringify(err)
+                })
+            })
+        }
     }
 
     useEffect(() => {
@@ -212,7 +247,7 @@ const CollectionCreator = () => {
                     }}
                 />
 
-                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,style.bottom_bar]}
+                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar]}
                     onPress={() => {
                         save_collection()
                     }}
