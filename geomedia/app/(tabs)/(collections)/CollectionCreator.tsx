@@ -13,11 +13,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { doRequest } from "@/app/utility";
 import { router, useLocalSearchParams } from "expo-router";
 import CollectionPosts from "./CollectionPosts";
+import { useLanguage } from "@/components/LanguageProvider";
 
 
 const CollectionCreator = () => {
 
     const ctx = useContext(MyContext)
+    const { lang } = useLanguage()
     const params = useLocalSearchParams();
 
 
@@ -105,7 +107,7 @@ const CollectionCreator = () => {
             ctx?.showToast({
                 type: "error",
                 text1: "Missing info",
-                text2: JSON.stringify(missing_fields) + " are required"
+                text2: lang.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
             doRequest("collection_merge", {
@@ -118,7 +120,7 @@ const CollectionCreator = () => {
                     }))
                     ctx?.showToast({
                         type: "success",
-                        text1: "Collection saved"
+                        text1: { lang.collection.colSaved }
                     })
                     setTimeout(() => {
                         if (router.canGoBack()) {

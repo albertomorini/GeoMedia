@@ -1,6 +1,7 @@
 import { MyContext } from "@/app/_layout";
 import ListItem from "@/app/mycomponents/ListItem";
 import { doRequest } from "@/app/utility";
+import { useLanguage } from "@/components/LanguageProvider";
 import { ThemedText } from "@/components/themed-text";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
@@ -10,6 +11,7 @@ const CollectionsList = (props) => {
 
     const ctx = useContext(MyContext)
     const refList = useRef()
+    const { lang } = useLanguage()
     const [collections, setCollections] = useState([])
 
     function getCollectionsList() {
@@ -40,7 +42,7 @@ const CollectionsList = (props) => {
     )
     return (
         <>
-            {collections == null ? <ThemedText>No collections found</ThemedText> :
+            {collections == null ? <ThemedText>{lang.collection.nocolfound}</ThemedText> :
 
                 <ListItem
                     ref={refList}
@@ -68,7 +70,7 @@ const CollectionsList = (props) => {
                                 } else {
                                     ctx?.showToast({
                                         type: "error",
-                                        text1: "Collection editable only by the owner"
+                                        text1: { lang.collection.colNotEditable }
                                     })
                                     //TODO: redirect to profile of owner?
                                     //TODO: PROFILE VIEWER

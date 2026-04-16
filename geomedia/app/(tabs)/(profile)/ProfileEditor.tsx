@@ -14,6 +14,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import { router } from "expo-router";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function ProfileEditor() {
 
@@ -21,7 +22,7 @@ export default function ProfileEditor() {
     const ctx = useContext(MyContext);
     const user = ctx?.User?.User;
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic);
-
+    const { lang } = useLanguage()
     const [userInfo, setUserInfo] = useState(null);
 
     function getProfilePic() {
@@ -64,8 +65,8 @@ export default function ProfileEditor() {
             setProfilePic(base64) //just to render immediately after picked
 
         } catch (error) {
-            console.error("Error picking or reading file:", error);
-            Alert.alert("Error reading files", error)
+            console.error({ lang.fileUpload.readingError }, error);
+            Alert.alert({ lang.fileUpload.readingError }, error)
         }
     }
 
@@ -79,7 +80,7 @@ export default function ProfileEditor() {
             ctx?.User?.setUser(newinfo)
             ctx?.showToast({
                 type: "success",
-                text1: "Profile edited!"
+                text1: { lang.profile.editedProfile }
             })
             router.back()
         }).catch(err => {
@@ -129,7 +130,7 @@ export default function ProfileEditor() {
                             />
 
                             <ThemedView style={styles.textBackground}>
-                                <ThemedText style={styles.overlayText}>Tap to edit picture</ThemedText>
+                                <ThemedText style={styles.overlayText}>{lang.profile.editPic}</ThemedText>
                             </ThemedView>
                         </ThemedView>
                     </Pressable>
@@ -142,25 +143,29 @@ export default function ProfileEditor() {
                         USERNAME: text
                     }))
                 }} />
-                <ThemedText>Name</ThemedText>
-                <ThemedInput type="outlined" value={userInfo?.NAME} onChangeText={(text) => {
-                    setUserInfo(prev => ({
-                        ...prev,
-                        NAME: text
-                    }))
-                }} />
-                <ThemedText>Surname</ThemedText>
-                <ThemedInput type="outlined" value={userInfo?.SURNAME} onChangeText={(text) => {
-                    setUserInfo(prev => ({
-                        ...prev,
-                        SURNAME: text
-                    }))
-                }} />
+                <ThemedText>{lang.profile.name}</ThemedText>
+                <ThemedInput type="outlined"
+                    placeholder={lang.profile.insertName}
+                    value={userInfo?.NAME} onChangeText={(text) => {
+                        setUserInfo(prev => ({
+                            ...prev,
+                            NAME: text
+                        }))
+                    }} />
+                <ThemedText>{lang.profile.surname}</ThemedText>
+                <ThemedInput type="outlined" value={userInfo?.SURNAME}
+                    placeholder={lang.profile.insertSurname}
+                    onChangeText={(text) => {
+                        setUserInfo(prev => ({
+                            ...prev,
+                            SURNAME: text
+                        }))
+                    }} />
 
                 <ThemedText style={[style.label]}>Your collections:</ThemedText>
 
                 <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
-                    <ThemedText>Save</ThemedText>
+                    <ThemedText>{lang.save}</ThemedText>
                 </TouchableOpacity>
 
             </ThemedView>
