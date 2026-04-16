@@ -165,7 +165,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                 />
             )}
 
-            <ThemedText style={style?.label}>Recurrent?</ThemedText>
+            <ThemedText style={style?.label}>{langselected.rangeTimePicker?.reccurrent}?</ThemedText>
             <SegmentedControl
                 values={recurrencyOptions}
                 selectedIndex={isRecurrent}

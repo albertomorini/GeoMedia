@@ -62,7 +62,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
 
         let new_item = {
             ID: "new_item",
-            TITLE: "new " + props?.label,
+            TITLE: langselected.newf + props?.label,
             ICON: "add",
             COLOR: "#c4aaaa"
         }
@@ -102,7 +102,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
                 }} />
                 <TextInput
                     style={{ flex: 1 }}
-                    placeholder="Search..."
+                    placeholder={langselected.search}
                     placeholderTextColor={"#000"}
                     value={searchText}
                     onChangeText={setSearchText}

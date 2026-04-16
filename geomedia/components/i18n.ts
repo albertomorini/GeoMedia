@@ -33,6 +33,9 @@ export const it = {
     empty: "Svuota",
     save: "Salva",
     all: "Tutti (attuali)",
+    search:"Ricerca",
+    newf:"Nuova ",
+    newm:"Nuovo ",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -49,6 +52,7 @@ export const it = {
     postCreator: {
         title: "Titolo",
         comment: "Commento",
+        comment_placeholder:"Aggiungi un commento",
         area: "Area di visibilità (in KM)",
         locationCurrent: "Posizione corrente",
         locationRemote: "Posizione remota",
@@ -58,7 +62,8 @@ export const it = {
         modify: "Modifica",
         lat: "Latitudine",
         lon: "Longitudine",
-        pickLocaton: "Scegli la posizione"
+        pickLocaton: "Scegli la posizione",
+        pickCollection:"Seleziona la collezione"
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
@@ -68,10 +73,16 @@ export const it = {
         checkotp: "Verifica OTP"
     },
     rangeTimePicker: {
-        startTime: "Il post sara' visibile da:",
+        startTime: "Il post sarà visibile da:",
         fromnow: "Da adesso",
-        endTime: "Il post non sara' visibile dopo", //The Post will not be visible after:
-        noexpiration: "Senza scadenza"
+        endTime: "Il post non sarà visibile dopo", //The Post will not be visible after:
+        noexpiration: "Senza scadenza",
+        reccurrent:"Ricorrente",
+        rec_values:{
+            never:"Mai",
+            monthly:"Mensile",
+            yearly:"Annaule"
+        }
     },
     reportPost: {
         title: "Segnala il post",
@@ -103,9 +114,22 @@ export const it = {
     collection:{
         nocolfound:"Nessuna collezione trovata",
         colNotEditable:"Collezione modificabile solo dal proprietario",
-        colSaved:"Collezione salvata"
+        colSaved:"Collezione salvata",
+        description:"Descrizione",
+        remote:"Posizioni remote",
+        collectionf:"collezione"
     },
-    requiredfields: "Campi obbligatori: "
+    requiredfields: "Campi obbligatori: ",
+    sequentiality:{
+        title:"Post sequenziali",
+        seq:"Sequenzialità",
+        noseq:"I post saranno tutti visibili senza sequenzialità"
+    },
+    exclusivity:{
+        creators:"Utenti creatori",
+        viewers:"Utenti visualizzatori",
+        title:"Limitazioni"
+    }
 
 }
 
@@ -145,6 +169,9 @@ export const en = {
     empty: "Clear",
     save: "Save",
     all: "All (actual)",
+    search:"Search",
+    newf: "New ",
+    newm: "New ",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -161,6 +188,7 @@ export const en = {
     postCreator: {
         title: "Title",
         comment: "Comment",
+        comment_placeholder: "Add a comment",
         area: "Visibility area (in KM)",
         locationCurrent: "Current location",
         locationRemote: "Remote location",
@@ -170,10 +198,11 @@ export const en = {
         modify: "Edit",
         lat: "Latitude",
         lon: "Longitude",
-        pickLocaton: "Pick a location"
+        pickLocaton: "Pick a location",
+        pickCollection: "Select collection"
     },
     pswReset: {
-        proceed: "Do you want to proceed with password reset?",
+        proceed: "Do you want to proceed with the password change?",
         sendotp: "Send OTP code",
         newpassword: "New password",
         otpexpiration: "Valid for 1h",
@@ -183,7 +212,13 @@ export const en = {
         startTime: "The post will be visible from:",
         fromnow: "From now",
         endTime: "The post will not be visible after:",
-        noexpiration: "No expiration"
+        noexpiration: "No expiration",
+        reccurrent: "Recurrent",
+        rec_values: {
+            never: "Never",
+            monthly: "Monthly",
+            yearly: "Yearly"
+        }
     },
     reportPost: {
         title: "Report post",
@@ -215,7 +250,20 @@ export const en = {
     collection: {
         nocolfound: "No collections found",
         colNotEditable: "Collection editable only by the owner",
-        colSaved: "Collection saved"
+        colSaved: "Collection saved",
+        description: "Description",
+        remote: "Remote positions",
+        collectionf:"collection"
     },
-    requiredfields: "Required fields: "
+    requiredfields: "Required fields: ",
+    sequentiality: {
+        title: "Sequential posts",
+        seq: "Sequentiality",
+        noseq: "All posts will be visible without sequentiality"
+    },
+    exclusivity: {
+        creators: "Creator users",
+        viewers: "Viewer users",
+        title: "Restrictions"
+    }
 }

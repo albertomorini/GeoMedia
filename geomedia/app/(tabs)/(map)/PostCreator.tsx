@@ -256,12 +256,12 @@ const PostCreator = () => {
                     style={{ flex: 1 }}
                 >
                     <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
-                        <ThemedText style={style.label}>Collections</ThemedText>
+                        <ThemedText style={style.label}>{langselected.collections}</ThemedText>
                         {postData?.COLLECTION_ID == null ?
                             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
                                 collection_sheet_handler?.current?.snapToIndex(0)
                             }}>
-                                <ThemedText>Select collection</ThemedText>
+                                <ThemedText>{langselected.postCreator.pickCollection}</ThemedText>
                             </TouchableOpacity>
                             :
                             <ItemIconizable
@@ -276,7 +276,8 @@ const PostCreator = () => {
                         }
 
                         <ThemedText style={style.label}>{langselected?.postCreator.title}: </ThemedText>
-                        <ThemedInput placeholder="Title"
+                        <ThemedInput
+                            placeholder={langselected?.postCreator.title}
                             value={postData?.TITLE}
                             type="outlined"
                             onChangeText={(text) => {
@@ -291,7 +292,7 @@ const PostCreator = () => {
                             multiline={true}
                             type="outlined"
                             value={postData?.COMMENT}
-                            placeholder="Add a comment.."
+                            placeholder={langselected.postCreator.comment_placeholder}
                             onChangeText={(text) => {
                                 setPostData(prev => ({
                                     ...prev,
@@ -302,7 +303,7 @@ const PostCreator = () => {
                         <ThemedText style={style.label}>{langselected?.postCreator?.area}: </ThemedText>
                         <ThemedInput type='outlined'
                             value={postData?.VISIBILITY_AREA_KM.toString()}
-                            placeholder='Area of visibility in KM'
+                            placeholder={langselected?.postCreator?.area}
                             onChangeText={(txt) => {
                                 if (isNaN(txt)) {
                                     Alert.alert("Must be a number")
@@ -370,7 +371,7 @@ const PostCreator = () => {
                             exclusivity_sheet_handler.current?.snapToIndex(0);
 
                         }}>
-                            <ThemedText>Exclusivity</ThemedText>
+                            <ThemedText>{langselected?.exclusivity.title}</ThemedText>
                         </TouchableOpacity>
 
 
@@ -385,10 +386,19 @@ const PostCreator = () => {
             {!fullScreenCamera && (
                 <ThemedView>
                     <TouchableOpacity
-                        style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item,{width:"90%",alignSelf:"center"}]}
+                        style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
                         onPress={save_post}
                     >
-                        <ThemedText>{postData?.ID == null ? 'Create' : 'Update'}</ThemedText>
+
+                        {postData?.ID == null ?
+                            <ThemedText>
+                                {langselected.postCreator.create}
+                            </ThemedText>
+                            :
+                            <ThemedText>
+                                {langselected.postCreator.modify}
+                            </ThemedText>
+                        }
                     </TouchableOpacity>
                 </ThemedView>
             )}

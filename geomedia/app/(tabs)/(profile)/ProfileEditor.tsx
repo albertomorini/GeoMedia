@@ -65,8 +65,8 @@ export default function ProfileEditor() {
             setProfilePic(base64) //just to render immediately after picked
 
         } catch (error) {
-            console.error(lang.fileUpload.readingError, error);
-            Alert.alert(lang.fileUpload.readingError, error)
+            console.error(langselected.fileUpload.readingError, error);
+            Alert.alert(langselected.fileUpload.readingError, error)
         }
     }
 
@@ -80,7 +80,7 @@ export default function ProfileEditor() {
             ctx?.User?.setUser(newinfo)
             ctx?.showToast({
                 type: "success",
-                text1: lang.profile.editedProfile
+                text1: langselected.profile.editedProfile
             })
             router.back()
         }).catch(err => {
@@ -130,7 +130,7 @@ export default function ProfileEditor() {
                             />
 
                             <ThemedView style={styles.textBackground}>
-                                <ThemedText style={styles.overlayText}>{lang.profile.editPic}</ThemedText>
+                                <ThemedText style={styles.overlayText}>{langselected.profile.editPic}</ThemedText>
                             </ThemedView>
                         </ThemedView>
                     </Pressable>
@@ -143,18 +143,18 @@ export default function ProfileEditor() {
                         USERNAME: text
                     }))
                 }} />
-                <ThemedText>{lang.profile.name}</ThemedText>
+                <ThemedText>{langselected.profile.name}</ThemedText>
                 <ThemedInput type="outlined"
-                    placeholder={lang.profile.insertName}
+                    placeholder={langselected.profile.insertName}
                     value={userInfo?.NAME} onChangeText={(text) => {
                         setUserInfo(prev => ({
                             ...prev,
                             NAME: text
                         }))
                     }} />
-                <ThemedText>{lang.profile.surname}</ThemedText>
+                <ThemedText>{langselected.profile.surname}</ThemedText>
                 <ThemedInput type="outlined" value={userInfo?.SURNAME}
-                    placeholder={lang.profile.insertSurname}
+                    placeholder={langselected.profile.insertSurname}
                     onChangeText={(text) => {
                         setUserInfo(prev => ({
                             ...prev,
@@ -165,7 +165,7 @@ export default function ProfileEditor() {
                 <ThemedText style={[style.label]}>Your collections:</ThemedText>
 
                 <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
-                    <ThemedText>{lang.save}</ThemedText>
+                    <ThemedText>{langselected.save}</ThemedText>
                 </TouchableOpacity>
 
             </ThemedView>

@@ -11,7 +11,7 @@ const CollectionsList = (props) => {
 
     const ctx = useContext(MyContext)
     const refList = useRef()
-    const { lang } = useLanguage()
+    const { langselected } = useLanguage()
     const [collections, setCollections] = useState([])
 
     function getCollectionsList() {
@@ -42,7 +42,7 @@ const CollectionsList = (props) => {
     )
     return (
         <>
-            {collections == null ? <ThemedText>{lang.collection.nocolfound}</ThemedText> :
+            {collections == null ? <ThemedText>{langselected.collection.nocolfound}</ThemedText> :
 
                 <ListItem
                     ref={refList}
@@ -70,7 +70,7 @@ const CollectionsList = (props) => {
                                 } else {
                                     ctx?.showToast({
                                         type: "error",
-                                        text1: lang.collection.colNotEditable
+                                        text1: langselected.collection.colNotEditable
                                     })
                                     //TODO: redirect to profile of owner?
                                     //TODO: PROFILE VIEWER
@@ -82,7 +82,7 @@ const CollectionsList = (props) => {
                     isImage={false} //we render icons, not expo-image
                     estimatedSize={80}
                     allowCreation={props?.allowCreation ?? true}
-                    label="collection"
+                    label={langselected?.collection.collectionf}
                 />
             }
         </>

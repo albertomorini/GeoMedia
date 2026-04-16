@@ -1,5 +1,6 @@
 import { doRequest } from "@/app/utility";
 import { style } from "@/components/globalstyle";
+import { useLanguage } from "@/components/LanguageProvider";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,12 +14,14 @@ import Sortable from 'react-native-sortables';
 
 const CollectionPosts = (props) => {
     const [postList, setPostList] = useState(null)
+    const { langselected } = useLanguage();
+
     const [isSequential, setIsSequential] = useState(false)
     const [modalOrderVisible, setModalOrderVisible] = useState(false)
 
     const renderItem = useCallback<SortableGridRenderItem<string>>(
         ({ item, index }) => (
-            <ThemedView style={[styles.card,style.colors.geomedia_blue]} key={item?.ID}>
+            <ThemedView style={[styles.card, style.colors.geomedia_blue]} key={item?.ID}>
                 <ThemedText key={item?.ID + "-" + item?.TITLE}>{item?.TITLE}</ThemedText>
                 <ThemedView style={styles.indexBadge}>
                     <ThemedText style={styles.indexText}>
@@ -63,7 +66,7 @@ const CollectionPosts = (props) => {
     return (
         <>
             <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]} onPress={() => { setModalOrderVisible(true) }}>
-                <ThemedText>Sequential posts</ThemedText>
+                <ThemedText>{langselected?.sequentiality?.title}</ThemedText>
             </TouchableOpacity>
 
 
@@ -98,7 +101,7 @@ const CollectionPosts = (props) => {
                             justifyContent: "space-between",
                             padding: 5
                         }, style.colors.geomedia_gray]}>
-                            <ThemedText style={[style.title, { alignItems: "center" }]}>Sequentiality</ThemedText>
+                            <ThemedText style={[style.title, { alignItems: "center" }]}>{langselected?.sequentiality?.seq}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalOrderVisible(false)
                             }}>
@@ -114,7 +117,7 @@ const CollectionPosts = (props) => {
                                 width: "100%",
                                 justifyContent: "space-between",
                             }}>
-                                <ThemedText>Sequentiality?</ThemedText>
+                                <ThemedText>{langselected?.sequentiality?.seq}?</ThemedText>
                                 <Switch
                                     value={isSequential}
                                     onValueChange={(value) => {
@@ -151,11 +154,11 @@ const CollectionPosts = (props) => {
                                         <TouchableOpacity style={[style?.colors?.geomedia_green, style?.buttons?.full_screen]} onPress={() => {
                                             confirm_order()
                                         }}>
-                                            <ThemedText>Confirm</ThemedText>
+                                            <ThemedText>{langselected?.confirm}</ThemedText>
                                         </TouchableOpacity>
                                     </>
                                     :
-                                    <ThemedText style={{ top: 15, fontStyle: "italic" }}>All post will be visible, no sequence needed</ThemedText>
+                                    <ThemedText style={{ top: 15, fontStyle: "italic" }}>{langselected?.sequentiality?.noseq}</ThemedText>
                             }
 
                         </ScrollView>

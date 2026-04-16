@@ -19,7 +19,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 const CollectionCreator = () => {
 
     const ctx = useContext(MyContext)
-    const { lang } = useLanguage()
+    const { langselected } = useLanguage()
     const params = useLocalSearchParams();
 
 
@@ -107,7 +107,7 @@ const CollectionCreator = () => {
             ctx?.showToast({
                 type: "error",
                 text1: "Missing info",
-                text2: lang.requiredFields + JSON.stringify(missing_fields)
+                text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
             doRequest("collection_merge", {
@@ -120,7 +120,7 @@ const CollectionCreator = () => {
                     }))
                     ctx?.showToast({
                         type: "success",
-                        text1: lang.collection.colSaved
+                        text1: langselected.collection.colSaved
                     })
                     setTimeout(() => {
                         if (router.canGoBack()) {
@@ -189,13 +189,13 @@ const CollectionCreator = () => {
                             </ThemedView>
                         </TouchableOpacity>
 
-                        <ThemedInput mode="outlined" placeholder="Titolo" style={{ width: "80%", left: -20 }}
+                        <ThemedInput mode="outlined" placeholder={langselected.postCreator.title} style={{ width: "80%", left: -20 }}
                             value={collectionData?.TITLE} onChangeText={(txt) => {
                                 setCollectionData(prev => ({ ...prev, TITLE: txt }))
                             }}
                         />
                     </ThemedView>
-                    <ThemedInput multiline={true} mode="outline" placeholder="Description" value={collectionData?.DESCRIPTION}
+                    <ThemedInput multiline={true} mode="outline" placeholder={langselected.collection.description} value={collectionData?.DESCRIPTION}
                         onChangeText={(txt) => {
                             setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
                         }}
@@ -207,7 +207,7 @@ const CollectionCreator = () => {
                         width: "100%",
                         justifyContent: "space-between",
                     }}>
-                        <ThemedText>Remote posting?</ThemedText>
+                        <ThemedText>{langselected?.collection.remote}?</ThemedText>
                         <Switch
                             value={collectionData?.REMOTE_POSTING}
                             onValueChange={(value) => {
@@ -231,7 +231,7 @@ const CollectionCreator = () => {
                     <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
                         bottomSheetRef.current?.snapToIndex(0); // open bottom sheett
                     }}>
-                        <ThemedText>Exclusivity</ThemedText>
+                        <ThemedText>{langselected?.exclusivity.title}</ThemedText>
                     </TouchableOpacity>
 
 

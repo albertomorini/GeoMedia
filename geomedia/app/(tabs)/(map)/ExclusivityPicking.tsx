@@ -10,10 +10,12 @@ import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
 import { ThemedView } from '@/components/themed-view';
 import { useFocusEffect } from 'expo-router';
+import { useLanguage } from '@/components/LanguageProvider';
 
 const ExclusivityPicking = (props) => {
 
     const ctx = useContext(MyContext);
+    const { langselected } = useLanguage()
     const [selectedOptions, setSelectedOptions] = useState(0);
     const segmentsOptions = props?.creatorsEnabled ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
 
@@ -89,7 +91,7 @@ const ExclusivityPicking = (props) => {
                     props?.setExclusivity(excl)
 
                 }}>
-                <ThemedText>Confirm</ThemedText>
+                <ThemedText>{langselected.confirm}</ThemedText>
             </TouchableOpacity>
 
             {/* ---------------------------------------- */}
@@ -113,7 +115,7 @@ const ExclusivityPicking = (props) => {
             </ThemedView>
 
             <ThemedView style={{ display: selectedOptions === 1 ? 'flex' : 'none' }}>
-                <ThemedText style={style.label}>Viewers users</ThemedText>
+                <ThemedText style={style.label}>{langselected.exclusivity.viewers}</ThemedText>
 
                 <ListItem
                     ref={refViewers}
@@ -128,7 +130,7 @@ const ExclusivityPicking = (props) => {
 
             <ThemedView style={{ display: selectedOptions === 2 ? 'flex' : 'none' }}>
 
-                <ThemedText style={style.label}>Creators users</ThemedText>
+                <ThemedText style={style.label}>{langselected.exclusivity.creators}</ThemedText>
                 <ListItem
                     ref={refCreators}
                     DATA={listUsers}
