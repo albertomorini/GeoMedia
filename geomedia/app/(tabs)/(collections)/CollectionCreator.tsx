@@ -64,7 +64,6 @@ const CollectionCreator = () => {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0];
-                console.log(x)
                 setCollectionData(prev => ({
                     ...prev,
                     ...x,

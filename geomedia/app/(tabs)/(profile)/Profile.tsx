@@ -150,7 +150,6 @@ export default function Profile() {
             allowCreation={false}
             label="Posts"
             onSelect={(pickedItem) => {
-              console.log(pickedItem)
               router.push({
                 pathname: '/PostViewer',
                 params: {

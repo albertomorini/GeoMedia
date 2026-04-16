@@ -124,7 +124,6 @@ const MapViewer = forwardRef((props, ref) => {
         let colls = await SecureStore.getItemAsync("collection_selected_map")
         try {
             colls = JSON.parse(colls)
-            console.log(colls)
             if (colls == null) {
                 colls = []
             }

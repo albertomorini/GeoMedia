@@ -51,7 +51,6 @@ const CollectionPosts = (props) => {
         let order = postList?.map((s, index) => {
             return { order_id: index, post_id: s.ID }
         })
-        console.log("order", order)
         props?.sequentialConfirmed(order);
         setModalOrderVisible(false)
     }
