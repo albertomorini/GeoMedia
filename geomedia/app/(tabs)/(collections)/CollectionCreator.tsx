@@ -153,158 +153,159 @@ const CollectionCreator = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemedView style={[style.container, { height: "100%" }]}>
+                <ThemedView style={{ flex: 1 }}>
 
-                <ThemedView style={{
-                    flexDirection: "row",
-                    width: "100%",
-                    justifyContent: "space-between",
+                    <ThemedView style={{
+                        flexDirection: "row",
+                        width: "100%",
+                        justifyContent: "space-between",
 
-                }}>
-                    <TouchableOpacity
-                        key={"chose"}
-                        onPress={() => setShowIconPicker(true)}
-                        style={{
-                            width: '25%',
-                            alignItems: 'center',
-                            marginTop: 7,
-                            left: -20,
-                        }}
-                    >
-                        <ThemedView
-                            style={[
-                                style.circleIcon, {
-                                    backgroundColor:
-                                        collectionData?.COLOR == null
-                                            ? (colorScheme === "dark" ? "#fff" : "#000")
-                                            : collectionData?.COLOR
-                                },
-                            ]}
+                    }}>
+                        <TouchableOpacity
+                            key={"chose"}
+                            onPress={() => setShowIconPicker(true)}
+                            style={{
+                                width: '25%',
+                                alignItems: 'center',
+                                marginTop: 7,
+                                left: -20,
+                            }}
                         >
-                            <Ionicons
-                                name={collectionData?.ICON == null ? "add" : collectionData?.ICON}
-                                size={24}
-                                color={"#555"}
+                            <ThemedView
+                                style={[
+                                    style.circleIcon, {
+                                        backgroundColor:
+                                            collectionData?.COLOR == null
+                                                ? (colorScheme === "dark" ? "#fff" : "#000")
+                                                : collectionData?.COLOR
+                                    },
+                                ]}
+                            >
+                                <Ionicons
+                                    name={collectionData?.ICON == null ? "add" : collectionData?.ICON}
+                                    size={24}
+                                    color={"#555"}
+                                />
+                            </ThemedView>
+                        </TouchableOpacity>
+
+                        <ThemedInput mode="outlined" placeholder="Titolo" style={{ width: "80%", left: -20 }}
+                            value={collectionData?.TITLE} onChangeText={(txt) => {
+                                setCollectionData(prev => ({ ...prev, TITLE: txt }))
+                            }}
+                        />
+                    </ThemedView>
+                    <ThemedInput multiline={true} mode="outline" placeholder="Description" value={collectionData?.DESCRIPTION}
+                        onChangeText={(txt) => {
+                            setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
+                        }}
+                    />
+
+
+                    <ThemedView style={{
+                        flexDirection: "row",
+                        width: "100%",
+                        justifyContent: "space-between",
+                    }}>
+                        <ThemedText>Remote posting?</ThemedText>
+                        <Switch
+                            value={collectionData?.REMOTE_POSTING}
+                            onValueChange={(value) => {
+                                setCollectionData(prev => ({ ...prev, REMOTE_POSTING: value }))
+                            }}
+                        />
+                    </ThemedView>
+
+
+                    { //only for collection already created, otherwise we wouldn't even have any posts
+                        collectionData?.ID == null ? null :
+                            <CollectionPosts collection={collectionData}
+                                sequentialConfirmed={(arr: Array<Object>) => {
+                                    setCollectionData(prev => ({ ...prev, SEQUENTIALS: arr }))
+                                }}
+
                             />
-                        </ThemedView>
+                    }
+
+
+                    <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
+                        bottomSheetRef.current?.snapToIndex(0); // open bottom sheett
+                    }}>
+                        <ThemedText>Exclusivity</ThemedText>
                     </TouchableOpacity>
 
-                    <ThemedInput mode="outlined" placeholder="Titolo" style={{ width: "80%", left: -20 }}
-                        value={collectionData?.TITLE} onChangeText={(txt) => {
-                            setCollectionData(prev => ({ ...prev, TITLE: txt }))
-                        }}
-                    />
-                </ThemedView>
-                <ThemedInput multiline={true} mode="outline" placeholder="Description" value={collectionData?.DESCRIPTION}
-                    onChangeText={(txt) => {
-                        setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
-                    }}
-                />
 
 
-                <ThemedView style={{
-                    flexDirection: "row",
-                    width: "100%",
-                    justifyContent: "space-between",
-                }}>
-                    <ThemedText>Remote posting?</ThemedText>
-                    <Switch
-                        value={collectionData?.REMOTE_POSTING}
-                        onValueChange={(value) => {
-                            setCollectionData(prev => ({ ...prev, REMOTE_POSTING: value }))
+
+                    <IconColorPickerModal
+                        visible={showIconPicker}
+                        onClose={() => { setShowIconPicker(false) }}
+                        onSelect={(c) => {
+                            setCollectionData(prev => ({
+                                ...prev,
+                                "ICON": c?.icon,
+                                "COLOR": c?.color
+                            }))
+                            setShowIconPicker(false)
                         }}
                     />
                 </ThemedView>
 
-
-                { //only for collection already created, otherwise we wouldn't even have any posts
-                    collectionData?.ID == null ? null :
-                        <CollectionPosts collection={collectionData}
-                            sequentialConfirmed={(arr: Array<Object>) => {
-                                setCollectionData(prev => ({ ...prev, SEQUENTIALS: arr }))
-                            }}
-
-                        />
-                }
-
-
-                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
-                    bottomSheetRef.current?.snapToIndex(0); // open bottom sheett
-                }}>
-                    <ThemedText>Exclusivity</ThemedText>
-                </TouchableOpacity>
-
-
-
-
-                <IconColorPickerModal
-                    visible={showIconPicker}
-                    onClose={() => { setShowIconPicker(false) }}
-                    onSelect={(c) => {
-                        setCollectionData(prev => ({
-                            ...prev,
-                            "ICON": c?.icon,
-                            "COLOR": c?.color
-                        }))
-                        setShowIconPicker(false)
-                    }}
-                />
-
-                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar]}
-                    onPress={() => {
-                        save_collection()
-                    }}
-                >
-                    <ThemedText>{collectionData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
-                </TouchableOpacity>
-
-
-
-                <BottomSheet
-                    ref={bottomSheetRef}
-                    index={-1} // start closed
-                    snapPoints={snapPoints}
-                    enablePanDownToClose={true} // drag down to close
-                    keyboardBehavior="interactive"
-                    keyboardBlurBehavior="restore"
-                    handleIndicatorStyle={{ backgroundColor: 'gray' }}
-                    backgroundStyle={{
-                        borderTopLeftRadius: 24,
-                        borderTopRightRadius: 24,
-                        backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                    }}
-                >
-                    <BottomSheetScrollView style={{ flex: 1 }}
-                        contentContainerStyle={{ paddingBottom: 20 }}
-                    // keyboardShouldPersistTaps="handled"
+                <ThemedView >
+                    <TouchableOpacity
+                        style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
+                        onPress={() => {
+                            save_collection()
+                        }}
                     >
-                        <>
-                            <ExclusivityPicking
-                                creatorsEnabled={true} //allowing creators
-                                EXCLUSIVITY={{
-                                    "DATERANGE": {
-                                        "DATE_START": collectionData?.EXCL_DATE_START,
-                                        "DATE_END": collectionData?.EXCL_DATE_END,
-                                        "IS_RECURRENT": collectionData?.RECURRENT
-                                    },
-                                    "CREATORS": collectionData?.CREATORS,
-                                    "VIEWERS": collectionData?.VIEWERS,
-                                }}
-                                setExclusivity={(obj) => {
-                                    setCollectionData(prev => ({
-                                        ...prev,
-                                        CREATORS: obj.CREATORS,
-                                        VIEWERS: obj.VIEWERS,
-                                        EXCL_DATE_END: obj.DATERANGE?.DATE_END,
-                                        EXCL_DATE_START: obj.DATERANGE?.DATE_START,
-                                        RECURRENT: obj.DATERANGE?.RECURRENT
-                                    }));
-                                    bottomSheetRef?.current?.close()
-                                }} />
-                        </>
-                    </BottomSheetScrollView>
-                </BottomSheet>
-
+                        <ThemedText>{collectionData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
+                    </TouchableOpacity>
+                </ThemedView>
             </ThemedView>
+            <BottomSheet
+                ref={bottomSheetRef}
+                index={-1} // start closed
+                snapPoints={snapPoints}
+                enablePanDownToClose={true} // drag down to close
+                keyboardBehavior="interactive"
+                keyboardBlurBehavior="restore"
+                handleIndicatorStyle={{ backgroundColor: 'gray' }}
+                backgroundStyle={{
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                }}
+            >
+                <BottomSheetScrollView style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                // keyboardShouldPersistTaps="handled"
+                >
+                    <>
+                        <ExclusivityPicking
+                            creatorsEnabled={true} //allowing creators
+                            EXCLUSIVITY={{
+                                "DATERANGE": {
+                                    "DATE_START": collectionData?.EXCL_DATE_START,
+                                    "DATE_END": collectionData?.EXCL_DATE_END,
+                                    "IS_RECURRENT": collectionData?.RECURRENT
+                                },
+                                "CREATORS": collectionData?.CREATORS,
+                                "VIEWERS": collectionData?.VIEWERS,
+                            }}
+                            setExclusivity={(obj) => {
+                                setCollectionData(prev => ({
+                                    ...prev,
+                                    CREATORS: obj.CREATORS,
+                                    VIEWERS: obj.VIEWERS,
+                                    EXCL_DATE_END: obj.DATERANGE?.DATE_END,
+                                    EXCL_DATE_START: obj.DATERANGE?.DATE_START,
+                                    RECURRENT: obj.DATERANGE?.RECURRENT
+                                }));
+                                bottomSheetRef?.current?.close()
+                            }} />
+                    </>
+                </BottomSheetScrollView>
+            </BottomSheet>
         </GestureHandlerRootView>
     )
 }

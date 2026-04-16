@@ -374,94 +374,97 @@ const PostCreator = () => {
                         </TouchableOpacity>
 
 
-                        {/* show save button only if theres no camera open */}
-                        {!fullScreenCamera && (
-                            <TouchableOpacity
-                                style={[style.buttons.full_screen, style.colors.geomedia_green]}
-                                onPress={save_post}
-                            >
-                                <ThemedText>{postData?.ID == null ? 'Create' : 'Update'}</ThemedText>
-                            </TouchableOpacity>
-                        )}
-
-                        <BottomSheet
-                            ref={collection_sheet_handler}
-                            index={-1} // start closed
-                            snapPoints={snapPoints}
-                            enablePanDownToClose={true} // drag down to close
-                            backgroundStyle={{
-                                borderTopWidth: 1,
-                                borderEndWidth: 1,
-                                borderStartWidth: 1,
-                                borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                                borderTopLeftRadius: 24,
-                                borderTopRightRadius: 24,
-                                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                            }}
-                        >
-                            <BottomSheetScrollView style={{ flex: 1 }}
-                                contentContainerStyle={{ paddingBottom: 20 }}
-                                keyboardShouldPersistTaps="handled"
-                            >
-                                <ThemedView>
-                                    <CollectionsList
-                                        postCreation={"W"}
-                                        allowCreation={true}
-                                        onSelect={(cat: Object) => {
-                                            collection_sheet_handler?.current?.close()
-                                            setPostData(prev => ({
-                                                ...prev,
-                                                COLLECTION_ID: cat?.ID,
-                                                COLLECTION_NAME: cat?.TITLE,
-                                                COLOR: cat?.COLOR,
-                                                ICON: cat?.ICON,
-                                                REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
-                                            }))
-                                        }} />
-                                </ThemedView>
-                            </BottomSheetScrollView>
-                        </BottomSheet>
-
-                        <BottomSheet
-                            ref={exclusivity_sheet_handler}
-                            index={-1} // start closed
-                            snapPoints={snapPoints}
-                            enablePanDownToClose={true} // drag down to close
-                            backgroundStyle={{
-                                borderTopWidth: 1,
-                                borderEndWidth: 1,
-                                borderStartWidth: 1,
-                                borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-
-                                borderTopLeftRadius: 24,
-                                borderTopRightRadius: 24,
-                                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                            }}
-                        >
-                            <BottomSheetScrollView style={{ flex: 1 }}
-                                contentContainerStyle={{ paddingBottom: 20 }}
-                                keyboardShouldPersistTaps="handled"
-                            >
-                                <ThemedView>
-                                    <ExclusivityPicking
-                                        creatorEnabled={false}
-                                        EXCLUSIVITY={postData?.EXCLUSIVITY}
-                                        setExclusivity={(obj) => {
-                                            setPostData(prev => ({
-                                                ...prev,
-                                                EXCLUSIVITY: obj
-                                            }));
-                                            exclusivity_sheet_handler?.current?.close()
-                                        }} />
-                                </ThemedView>
-                            </BottomSheetScrollView>
-                        </BottomSheet>
-
 
 
                     </ThemedView>
                 </KeyboardAvoidingView>
             </ScrollView >
+
+
+            {/* show save button only if theres no camera open */}
+            {!fullScreenCamera && (
+                <ThemedView>
+                    <TouchableOpacity
+                        style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item,{width:"90%",alignSelf:"center"}]}
+                        onPress={save_post}
+                    >
+                        <ThemedText>{postData?.ID == null ? 'Create' : 'Update'}</ThemedText>
+                    </TouchableOpacity>
+                </ThemedView>
+            )}
+
+            <BottomSheet
+                ref={collection_sheet_handler}
+                index={-1} // start closed
+                snapPoints={snapPoints}
+                enablePanDownToClose={true} // drag down to close
+                backgroundStyle={{
+                    borderTopWidth: 1,
+                    borderEndWidth: 1,
+                    borderStartWidth: 1,
+                    borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                }}
+            >
+                <BottomSheetScrollView style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    <ThemedView>
+                        <CollectionsList
+                            postCreation={"W"}
+                            allowCreation={true}
+                            onSelect={(cat: Object) => {
+                                collection_sheet_handler?.current?.close()
+                                setPostData(prev => ({
+                                    ...prev,
+                                    COLLECTION_ID: cat?.ID,
+                                    COLLECTION_NAME: cat?.TITLE,
+                                    COLOR: cat?.COLOR,
+                                    ICON: cat?.ICON,
+                                    REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
+                                }))
+                            }} />
+                    </ThemedView>
+                </BottomSheetScrollView>
+            </BottomSheet>
+
+            <BottomSheet
+                ref={exclusivity_sheet_handler}
+                index={-1} // start closed
+                snapPoints={snapPoints}
+                enablePanDownToClose={true} // drag down to close
+                backgroundStyle={{
+                    borderTopWidth: 1,
+                    borderEndWidth: 1,
+                    borderStartWidth: 1,
+                    borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                }}
+            >
+                <BottomSheetScrollView style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    <ThemedView>
+                        <ExclusivityPicking
+                            creatorEnabled={false}
+                            EXCLUSIVITY={postData?.EXCLUSIVITY}
+                            setExclusivity={(obj) => {
+                                setPostData(prev => ({
+                                    ...prev,
+                                    EXCLUSIVITY: obj
+                                }));
+                                exclusivity_sheet_handler?.current?.close()
+                            }} />
+                    </ThemedView>
+                </BottomSheetScrollView>
+            </BottomSheet>
         </GestureHandlerRootView >
 
     );

@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
-import React, { useState } from "react";
+import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
 const SelectableList = (props: any) => {
