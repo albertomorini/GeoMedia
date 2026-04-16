@@ -17,9 +17,14 @@ const CollectionPosts = (props) => {
     const [modalOrderVisible, setModalOrderVisible] = useState(false)
 
     const renderItem = useCallback<SortableGridRenderItem<string>>(
-        ({ item }) => (
-            <ThemedView style={styles.card} key={item?.ID}>
+        ({ item, index }) => (
+            <ThemedView style={[styles.card,style.colors.geomedia_blue]} key={item?.ID}>
                 <ThemedText key={item?.ID + "-" + item?.TITLE}>{item?.TITLE}</ThemedText>
+                <ThemedView style={styles.indexBadge}>
+                    <ThemedText style={styles.indexText}>
+                        #{index + 1} {/* or just {index} if you prefer 0-based */}
+                    </ThemedText>
+                </ThemedView>
             </ThemedView>
         ),
         []
@@ -68,7 +73,7 @@ const CollectionPosts = (props) => {
 
                 <ThemedView style={{
                     flex: 1,
-                    backgroundColor: "rgba(138, 138, 138, 0.2)",
+                    backgroundColor: "rgba(138, 138, 138, 0.5)",
                     // borderWidth: 3,\
                     height: "100%",
                     paddingTop: 10,
@@ -86,16 +91,15 @@ const CollectionPosts = (props) => {
                     >
                         {/* ---------------------------------------------------- */}
 
-                        <ThemedView style={{
+                        <ThemedView style={[{
                             flexDirection: "row",
                             width: "100%",
-                            height: 40,
+                            height: 50,
                             justifyContent: "space-between",
-                            backgroundColor: "#b4a5a5",
                             padding: 5
-                        }}>
-                            <ThemedText style={style.title}>Sequentiality</ThemedText>
-                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7 }]} onPress={() => {
+                        }, style.colors.geomedia_gray]}>
+                            <ThemedText style={[style.title, { alignItems: "center" }]}>Sequentiality</ThemedText>
+                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalOrderVisible(false)
                             }}>
                                 <Ionicons name="close-outline" size={28} color={"#70726db9"} />
@@ -168,10 +172,25 @@ export default CollectionPosts;
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#36877F',
         height: 100,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    indexBadge: {
+        position: 'absolute',
+        top: 8,
+        left: 8,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // or your theme color
+        borderRadius: 6,
+        width: 24,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    indexText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
 });
