@@ -1,3 +1,115 @@
+export const it = {
+    map: "Mappa",
+    account: "Profilo",
+    collections: "Collezioni",
+    login: {
+        emailOrUsername: "Email o username",
+        placeholderEmail: "Inserisci la tua email",
+        placeholderPassord: "Inserisci la password",
+        buttonConfirm: "Entra",
+        buttonOther: "Non hai un account?",
+        errorMessage: "Credenziali errate",
+        login: "Accedi",
+        pswForget: "Password dimenticata?"
+    },
+    signup: {
+        placeholderEmail: "Inserisci la tua email",
+        placeholderPassord: "Crea una password",
+        placeholderPassordRepeat: "Ripeti la password",
+        buttonConfirm: "Registrati",
+        buttonOther: "Indietro",
+        emailNotValid: "Email non valida",
+        weakPassword: "La password non soddisfa i requisiti di 6 caratteri minimi, almeno un simbolo e almeno cifra",
+        diffPass: "Le password non coincidono",
+    },
+    settings: {
+        protocol: "Protocollo",
+        serverName: "Nome server (oppure IP)",
+        port: "Porta",
+    },
+    close: "Chiudi",
+    confirm: "Conferma",
+    cancel: "Annulla",
+    empty: "Svuota",
+    save: "Salva"
+    all: "Tutti",
+    profile: {
+        hello: "Ciao",
+        loggedAs: "Il tuo username è",
+        yourPosts: "I tuoi post",
+        logout: "Esci",
+        editProfile: "Modifica profilo",
+        editedProfile: "Profilo modificato!",
+        name: "Nome",
+        surname: "Cognome",
+        insertName: "Inserisci il nome",
+        insertSurname: "Inserisci il cognome",
+        editPic: "Clicca per cambiare foto", // tap to edit picture
+    },
+    postCreator: {
+        title: "Titolo",
+        comment: "Commento",
+        area: "Area di visibilità (in KM)",
+        locationCurrent: "Posizione corrente",
+        locationRemote: "Posizione remota",
+        disabledRemote: "Posizione remota disabilitata",
+        esclusivity: "Esclusività",
+        create: "Crea",
+        modify: "Modifica",
+        lat: "Latitudine",
+        lon: "Longitudine",
+        pickLocaton: "Scegli la posizione"
+    },
+    pswReset: {
+        proceed: "Vuoi procedere al cambio della password?",
+        sendotp: "Invia codice OTP",
+        newpassword: "Nuova password",
+        otpexpiration: "Valido per 1h",
+        checkotp: "Verifica OTP"
+    },
+    rangeTimePicker: {
+        startTime: "Il post sara' visibile da:",
+        fromnow: "Da adesso",
+        endTime: "Il post non sara' visibile dopo", //The Post will not be visible after:
+        noexpiration: "Senza scadenza"
+    },
+    reportPost: {
+        title: "Segnala il post",
+        report: "Segnala",
+        reportMotive: " Motivazione della segnalazione",
+        values: {
+            default: "Choose the kind of report"
+            , misinformation: "Wrong places/information"
+            , illegal: "Illegal content"
+            , hate_speech: "Hate Speech"
+            , harassment: "Harassment / Bullying"
+            , adult: "Adult Content"
+            , impersonation: "Impersonation"
+            , copyright: "Copyright Violation"
+            , privacy: "Privacy Violation"
+            , other: "Other"
+        }
+    },
+    fileUpload: {
+        uploadFile: "Carica dei file",
+        pickfile: "Scegli i file", // pick a file
+        attached: "File caricati",
+        takepic: "Scatta una foto",
+        fileremoved: "Rimosso il file",
+        filedeletion: "Cancellazione del file",
+        confirm: "Vuoi procedere?",
+        readingError: "Errore nella lettura del file"
+    },
+    collection:{
+        nocolfound:"Nessuna collezione trovata",
+        colNotEditable:"Collezione modificabile solo dal proprietario",
+        colSaved:"Collezione salvata"
+    },
+    requiredfields: "Campi obbligatori: "
+
+}
+
+
 export const en = {
     map: "Map",
     account: "Account",
