@@ -26,9 +26,12 @@ export const it = {
         protocol: "Protocollo",
         serverName: "Nome server (oppure IP)",
         port: "Porta",
-        close: "Chiudi",
-        confirm: "Conferma"
     },
+    close: "Chiudi",
+    confirm: "Conferma",
+    cancel: "Annulla",
+    empty: "Svuota",
+    all: "Tutti",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -48,7 +51,46 @@ export const it = {
         modify: "Modifica",
         lat: "Latitudine",
         lon: "Longitudine",
-        pickLocaton:"Scegli la posizione"
+        pickLocaton: "Scegli la posizione"
+    },
+    pswReset:{
+        proceed:"Vuoi procedere al cambio della password?",
+        sendotp:"Invia codice OTP",
+        newpassword:"Nuova password",
+        otpexpiration:"Valido per 1h",
+        checkotp:"Verifica OTP"
+    },
+    rangeTimePicker:{
+        startTime:"Il post sara' visibile da:",
+        fromnow:"Da adesso",
+        endTime: "Il post non sara' visibile dopo", //The Post will not be visible after:
+        noexpiration:"Senza scadenza"
+    },
+    reportPost:{
+        title:"Segnala il post",
+        report:"Segnala",
+        reportMotive:" Motivazione della segnalazione",
+        values:{
+            default: "Choose the kind of report" 
+            ,misinformation: "Wrong places/information" 
+            ,illegal: "Illegal content" 
+            ,hate_speech: "Hate Speech" 
+            ,harassment: "Harassment / Bullying" 
+            ,adult: "Adult Content" 
+            ,impersonation: "Impersonation" 
+            ,copyright: "Copyright Violation" 
+            ,privacy: "Privacy Violation"
+            ,other: "Other"
+        }
+    },
+    fileUpload:{
+        uploadFile: "Carica dei file",
+        pickfile:"Scegli i file", // pick a file
+        attached:"File caricati",
+        takepic:"Scatta una foto",
+        fileremoved:"Rimosso il file",
+        filedeletion:"Cancellazione del file",
+        confirm:"Vuoi procedere?"
     }
 
 }

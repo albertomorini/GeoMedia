@@ -5,11 +5,14 @@ import { ThemedText } from "@/components/themed-text";
 import { style } from "@/components/globalstyle";
 import { ThemedView } from "@/components/themed-view";
 import SegmentedControl from "@react-native-community/segmented-control";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const DateTimeRangePicker = forwardRef((props, ref) => {
     const [start, setStart] = useState(null); // Initially null, meaning no date selected
     const [end, setEnd] = useState(null);
     const [isRecurrent, setIsRecurrent] = useState(0)
+
+    const { langselected } = useLanguage()
 
     const recurrencyOptions = ["Never", "Monthly", "Yearly"]
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
@@ -94,28 +97,28 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
             setEnd(end);
             setIsRecurrent(recurrent)
         }
-    }), [start, end,isRecurrent]);
+    }), [start, end, isRecurrent]);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <ThemedView style={{ padding: 20, height: "100%" }}>
-            <ThemedText style={style.label}>The post will be visible from:</ThemedText>
+            <ThemedText style={style.label}>{langselected.rangeTimePicker.startTime}:</ThemedText>
 
             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
                 {start != null ?
                     <ThemedText >{formatDateTime(start)}</ThemedText>
                     :
-                    <ThemedText>From now</ThemedText>
+                    <ThemedText>{langselected.rangeTimePicker.fromnow}</ThemedText>
                 }
             </TouchableOpacity>
 
 
-            <ThemedText style={style.label}>The Post will not be visible after:</ThemedText>
+            <ThemedText style={style.label}>{langselected.rangeTimePicker.endTime}:</ThemedText>
 
             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("endDate")}>
                 {end == null ?
-                    <ThemedText>No expiration</ThemedText>
+                    <ThemedText>{langselected.rangeTimePicker.noexpiration}</ThemedText>
                     :
                     <ThemedText >{formatDateTime(end)}</ThemedText>
                 }

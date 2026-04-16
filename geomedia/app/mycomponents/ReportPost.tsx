@@ -8,9 +8,11 @@ import { Picker } from '@react-native-picker/picker';
 import { ThemedInput } from "@/components/themed-input"
 import { doRequest } from "../utility"
 import { MyContext } from "../_layout"
+import { useLanguage } from "@/components/LanguageProvider"
 
 const ReportPost = (props) => {
     const ctx = useContext(MyContext)
+    const { langselected } = useLanguage()
     const [visibleModalReport, setVisibleModalReport] = useState(false)
     const [kind, setKind] = useState(null)
     const [motive, setMotive] = useState(null)
@@ -42,7 +44,7 @@ const ReportPost = (props) => {
     return (
         <>
             <ThemedText onPress={() => { setVisibleModalReport(true) }} style={{ color: "red" }}>
-                Report this post
+                {langselected.reportPost.title}
             </ThemedText>
             <Modal visible={visibleModalReport}
                 transparent={true}
@@ -69,7 +71,7 @@ const ReportPost = (props) => {
                             backgroundColor: "#b4a5a5",
                             padding: 5
                         }}>
-                            <ThemedText style={style.title}>Report</ThemedText>
+                            <ThemedText style={style.title}>{langselected.reportPost.report}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7 }]} onPress={() => {
                                 setVisibleModalReport(false)
                             }}>
@@ -83,21 +85,21 @@ const ReportPost = (props) => {
                                 onValueChange={(itemValue, itemIndex) =>
                                     setKind(itemValue)
                                 }>
-                                <Picker.Item label="Choose the kind of report" value={null} enabled={false} />
-                                <Picker.Item label="Wrong places/information" value="misinformation" />
-                                <Picker.Item label="Illegal content" value="illegal" />
-                                <Picker.Item label="Hate Speech" value="hate_speech" />
-                                <Picker.Item label="Harassment / Bullying" value="harassment" />
-                                <Picker.Item label="Adult Content" value="adult" />
-                                <Picker.Item label="Impersonation" value="impersonation" />
-                                <Picker.Item label="Copyright Violation" value="copyright" />
-                                <Picker.Item label="Privacy Violation" value="privacy" />
-                                <Picker.Item label="Other" value="other" />
+                                <Picker.Item label={langselected.reportPost.values.default} value={null} enabled={false} />
+                                <Picker.Item label={langselected.reportPost.values.misinformation} value="misinformation" />
+                                <Picker.Item label={langselected.reportPost.values.illegal} value="illegal" />
+                                <Picker.Item label={langselected.reportPost.values.hate_speech} value="hate_speech" />
+                                <Picker.Item label={langselected.reportPost.values.harassment} value="harassment" />
+                                <Picker.Item label={langselected.reportPost.values.adult} value="adult" />
+                                <Picker.Item label={langselected.reportPost.values.impersonation} value="impersonation" />
+                                <Picker.Item label={langselected.reportPost.values.copyright} value="copyright" />
+                                <Picker.Item label={langselected.reportPost.values.privacy} value="privacy" />
+                                <Picker.Item label={langselected.reportPost.values.other} value="other" />
                             </Picker>
                             <ThemedInput
                                 multiline={true}
                                 type="outlined"
-                                placeholder="Motive of the report"
+                                placeholder={langselected.reportPost.reportMotive}
                                 onChangeText={(text) => {
                                     setMotive(text)
                                 }}
@@ -105,7 +107,7 @@ const ReportPost = (props) => {
                             <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]} onPress={() => {
                                 createReport()
                             }}>
-                                <ThemedText>Confirm</ThemedText>
+                                <ThemedText>{langselected.confirm}</ThemedText>
                             </TouchableOpacity>
                         </ThemedView>
 

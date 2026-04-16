@@ -147,14 +147,14 @@ export default function SettingsConfig (){
                                 onPress={() => setModalSettingsVisible(false)}
                                 style={[style?.colors.geomedia_red, style.buttons.small]}
                             >
-                                <Text>{langselected?.settings?.close}</Text>
+                                <Text>{langselected?.close}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 onPress={confirmNewURI}
                                 style={[style?.colors.geomedia_green, style.buttons.small]}
                             >
-                                <Text>{langselected?.settings?.confirm}</Text>
+                                <Text>{langselected?.confirm}</Text>
                             </TouchableOpacity>
                         </ThemedView>
 

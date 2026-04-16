@@ -6,10 +6,12 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 import ItemIconizable from "./ItemIconizable";
 import { ThemedText } from "@/components/themed-text";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const ListItem = forwardRef((props: any, ref: any) => {
     const [searchText, setSearchText] = useState("")
     const [selectedItems, setSelectedItems] = useState([]);
+    const { langselected } = useLanguage()
 
 
     const renderItem = ({ item }) => (
@@ -127,7 +129,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
 
                                 }
                             }}>
-                                <ThemedText>Confirm</ThemedText>
+                                <ThemedText>{langselected.confirm}</ThemedText>
                             </TouchableOpacity>
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
                                 onPress={() => {
@@ -138,11 +140,15 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                         setSelectedItems([...alls])
                                     }
                                 }}>
-                                <ThemedText>
-                                    {props?.DATA?.length == selectedItems?.length ?
-                                        "EMPTY" : "ALL"
-                                    }
-                                </ThemedText>
+                                {props?.DATA?.length == selectedItems?.length ?
+                                    <ThemedText>
+                                        {langselected?.empty}
+                                    </ThemedText>
+                                    :
+                                    <ThemedText>
+                                        {langselected?.all}
+                                    </ThemedText>
+                                }
                             </TouchableOpacity>
                         </ThemedView>
                         : null

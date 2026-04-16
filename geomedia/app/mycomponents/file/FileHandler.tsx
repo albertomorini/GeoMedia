@@ -12,11 +12,13 @@ import { Collapsible } from "@/components/ui/collapsible";
 import { doRequest } from "@/app/utility";
 import CarouselFileViewer from "./CarouselFileViewer";
 import { MyContext } from "@/app/_layout";
+import { useLanguage } from "@/components/LanguageProvider";
 
 
 const FileHandler = forwardRef((props: any, ref: any) => {
     const [showCamera, setShowCamera] = useState(false);   // camera control
     const ctx = useContext(MyContext) //mainly for toast
+    const { langselected } = useLanguage()
 
     const [filesAttached, setFilesAttached] = useState([])
 
@@ -61,11 +63,11 @@ const FileHandler = forwardRef((props: any, ref: any) => {
     function remove_attachment(FILENAME) {
 
         Alert.alert(
-            "Post deletion",
-            "Are you sure you want to proceed?",
+            {langselected.fileUpload.fileDeletion},
+            {langselected.fileUpload.confirm},
             [
                 {
-                    text: "Cancel",
+                    text: {langselected.cancel},
                     style: "cancel",
                 },
                 {
@@ -84,8 +86,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             }).then(resQuery => {
                                 ctx?.showToast({
                                     type: "success",
-                                    text1: "File removed",
-                                    text2: "File " + FILENAME + " removed"
+                                    text1: {langselected.fileUpload.fileremoved} + FILENAME,
                                 })
                             }).catch(err => {
                                 ctx?.showToast({
@@ -143,10 +144,10 @@ const FileHandler = forwardRef((props: any, ref: any) => {
             {!showCamera && (
                 <ThemedView style={styles.uploadBox}>
                     {filesAttached?.length == 0 ?
-                        <ThemedText style={styles.title}>Upload a file</ThemedText>
+                        <ThemedText style={styles.title}>{langselected.fileUpload.uploadFile}</ThemedText>
                         :
                         <>
-                            <Collapsible title="Attached files">
+                            <Collapsible title={langselected.fileUpload.attached}>
                                 <CarouselFileViewer attachments={filesAttached} remove_attachment={(filename) => { remove_attachment(filename) }} isEdit={true} />
                             </Collapsible>
                         </>
@@ -158,7 +159,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             onPress={() => file_pick()}
                         >
                             <ThemedText style={styles.icon}>📄</ThemedText>
-                            <ThemedText style={styles.label}>Pick a file</ThemedText>
+                            <ThemedText style={styles.label}>{langselected.fileUpload.pickfile}</ThemedText>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -169,7 +170,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             }}
                         >
                             <ThemedText style={styles.icon}>📷</ThemedText>
-                            <ThemedText style={styles.label}>Take a picture</ThemedText>
+                            <ThemedText style={styles.label}>{langselected.fileUpload.takepic}</ThemedText>
                         </TouchableOpacity>
                     </ThemedView>
                 </ThemedView>

@@ -1,3 +1,4 @@
+import { useLanguage } from '@/components/LanguageProvider';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -27,6 +28,7 @@ export default function IconColorPickerModal({ visible, onClose, onSelect }) {
 
     const [colorSelected, setColorSelected] = useState(null);
     const [iconSelected, setIconSelected] = useState(null);
+    const { langselected } = useLanguage()
 
     return (
         <Modal transparent visible={visible} animationType="fade">
@@ -96,7 +98,7 @@ export default function IconColorPickerModal({ visible, onClose, onSelect }) {
                             setIconSelected(null);
                             onClose()
                         }}>
-                            <ThemedText>Cancel</ThemedText>
+                            <ThemedText>{langselected.cancel}</ThemedText>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             onSelect({
@@ -104,7 +106,7 @@ export default function IconColorPickerModal({ visible, onClose, onSelect }) {
                                 "icon": iconSelected
                             });
                         }}>
-                            <ThemedText>Confirm</ThemedText>
+                            <ThemedText>{langselected.confirm}</ThemedText>
                         </TouchableOpacity>
                     </ThemedView>
                 </ThemedView>

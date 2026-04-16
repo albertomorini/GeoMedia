@@ -147,12 +147,12 @@ const ModalPswReset = () => {
 
                         {OTPValid == null ?
                             <>
-                                <ThemedText style={style.label}>Do you want to proceed to change password?</ThemedText>
+                                <ThemedText style={style.label}>{langselected.pswReset}</ThemedText>
                                 {ctx?.getUID() ??
                                     <>
-                                        <ThemedText style={style.label}>Username or email</ThemedText>
+                                        <ThemedText style={style.label}>{langselected.login.emailOrUsername}</ThemedText>
                                         <ThemedInput type='outlined' name="email"
-                                            placeholder={"Username or email"} onChangeText={(text) => {
+                                            placeholder={langselected?.login.emailOrUsername} onChangeText={(text) => {
                                                 setUsernamemail(text)
                                             }} />
                                     </>
@@ -163,38 +163,38 @@ const ModalPswReset = () => {
                                     onPress={() => {
                                         auth_psw_forgotten() //send the OTP 
                                     }}>
-                                    <ThemedText>Send OTP</ThemedText>
+                                    <ThemedText>{langselected.pswReset.sendotp}</ThemedText>
                                 </TouchableOpacity>
                             </>
                             :
                             <>
                                 {OTPValid == true ?
                                     <>
-                                        <ThemedText style={style.label}>New password</ThemedText>
+                                        <ThemedText style={style.label}>{langselected.pswReset.newpassword}</ThemedText>
                                         <ThemedPassword type='outlined' name="NewPassword"
-                                            placeholder={"New passowrd"} onChangeText={(text) => {
+                                            placeholder={langselected.signup.placeholderPassord} onChangeText={(text) => {
                                                 setNewPassword(text)
                                             }} />
-                                        <ThemedText style={style.label}>Repeat password</ThemedText>
+                                        <ThemedText style={style.label}>{langselected.signup.placeholderPassordRepeat}</ThemedText>
                                         <ThemedPassword type='outlined' name="RepeatPassword"
-                                            placeholder={"Repeat password"} onChangeText={(text) => {
+                                            placeholder={langselected.signup.placeholderPassordRepeat} onChangeText={(text) => {
                                                 setRepPassword(text)
                                             }} />
                                         <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_green]} onPress={() => { auth_psw_reset() }}>
-                                            <ThemedText>Confirm</ThemedText>
+                                            <ThemedText>{langselected.confirm}</ThemedText>
                                         </TouchableOpacity>
                                     </>
                                     :
                                     <>
                                         <OTPInput
-                                            label="Will expire whitin an hour"
+                                            label={langselected.pswReset.otpexpiration}
                                             value={OTP}
                                             onChangeText={setOTP}
                                             length={6}
                                         />
                                         <TouchableOpacity onPress={() => check_otp()} style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
                                             <ThemedText>
-                                                Check OTP
+                                                {langselected.checkotp}
                                             </ThemedText>
                                         </TouchableOpacity>
                                         <></>

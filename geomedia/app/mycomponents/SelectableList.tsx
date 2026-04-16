@@ -1,3 +1,4 @@
+import { useLanguage } from "@/components/LanguageProvider";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +9,7 @@ import { TextInput, TouchableOpacity, View } from "react-native";
 const SelectableList = (props: any) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [searchText, setSearchText] = useState("")
-
+    const { langselected } = useLanguage()
 
     const toggleSelect = (id) => {
         if (selectedItems.includes(id)) {
@@ -89,7 +90,7 @@ const SelectableList = (props: any) => {
                 estimatedItemSize={props?.estimatedSize}
             />
             <TouchableOpacity onPress={() => returnItems()}>
-                <ThemedText>Confirm</ThemedText>
+                <ThemedText>{langselected.confirm}</ThemedText>
             </TouchableOpacity>
         </ThemedView>
     );
