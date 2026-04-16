@@ -65,8 +65,8 @@ export default function ProfileEditor() {
             setProfilePic(base64) //just to render immediately after picked
 
         } catch (error) {
-            console.error({ lang.fileUpload.readingError }, error);
-            Alert.alert({ lang.fileUpload.readingError }, error)
+            console.error(lang.fileUpload.readingError, error);
+            Alert.alert(lang.fileUpload.readingError, error)
         }
     }
 
@@ -80,7 +80,7 @@ export default function ProfileEditor() {
             ctx?.User?.setUser(newinfo)
             ctx?.showToast({
                 type: "success",
-                text1: { lang.profile.editedProfile }
+                text1: lang.profile.editedProfile
             })
             router.back()
         }).catch(err => {

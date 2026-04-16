@@ -13,6 +13,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from '@/app/mycomponents/ModalPswReset';
+import ListItem from '@/app/mycomponents/ListItem';
 
 export default function Profile() {
 
@@ -21,6 +22,7 @@ export default function Profile() {
   const ctx = useContext(MyContext);
   const user = ctx?.User?.User
   const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
+  const [Posts, setPosts] = useState([])
 
   function getProfilePic() {
 
@@ -49,11 +51,26 @@ export default function Profile() {
     ctx?.User.setUser(null);
   }
 
+  function post_get_authorid() {
+    doRequest("post_get_authorid", {
+      uid: ctx?.getUID(),
+      authorid: ctx?.getUID()
+    }).then(posts => {
+      setPosts([...posts])
+    }).catch(err => {
+      ctx?.showToast({
+        type: "error",
+        text1: "Network error",
+        text2: JSON.stringify(err)
+      })
+    })
+  }
+
   useFocusEffect(
     useCallback(() => {
 
       getProfilePic()
-
+      post_get_authorid()
     }, [])
   );
 
@@ -124,10 +141,28 @@ export default function Profile() {
             </ThemedText>
           </TouchableOpacity>
         </ThemedView>
-        <ThemedView style={{ flex: 1, paddingRight: 10 }}>
+        <ThemedView style={{ flex: 1, paddingRight: 10, marginBottom: 120 }}>
           <ThemedText style={style.label}>{langselected?.profile?.yourPosts}</ThemedText>
-        </ThemedView>
+          <ListItem
+            isImage={false} //we render icons, not expo-image
+            isSelectable={false}
+            estimatedSize={80}
+            allowCreation={false}
+            label="Posts"
+            onSelect={(pickedItem) => {
+              console.log(pickedItem)
+              router.push({
+                pathname: '/PostViewer',
+                params: {
+                  postid: pickedItem?.ID,
+                }
+              });
 
+            }}
+            DATA={Posts}
+
+          />
+        </ThemedView>
 
       </ThemedView>
       <SettingsConfig />

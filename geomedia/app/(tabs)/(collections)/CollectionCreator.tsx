@@ -120,7 +120,7 @@ const CollectionCreator = () => {
                     }))
                     ctx?.showToast({
                         type: "success",
-                        text1: { lang.collection.colSaved }
+                        text1: lang.collection.colSaved
                     })
                     setTimeout(() => {
                         if (router.canGoBack()) {

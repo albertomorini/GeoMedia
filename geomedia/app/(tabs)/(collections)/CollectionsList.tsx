@@ -70,7 +70,7 @@ const CollectionsList = (props) => {
                                 } else {
                                     ctx?.showToast({
                                         type: "error",
-                                        text1: { lang.collection.colNotEditable }
+                                        text1: lang.collection.colNotEditable
                                     })
                                     //TODO: redirect to profile of owner?
                                     //TODO: PROFILE VIEWER

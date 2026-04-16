@@ -31,8 +31,8 @@ export const it = {
     confirm: "Conferma",
     cancel: "Annulla",
     empty: "Svuota",
-    save: "Salva"
-    all: "Tutti",
+    save: "Salva",
+    all: "Tutti (attuali)",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -144,7 +144,7 @@ export const en = {
     cancel: "Cancel",
     empty: "Clear",
     save: "Save",
-    all: "All",
+    all: "All (actual)",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",

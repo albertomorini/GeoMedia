@@ -63,11 +63,11 @@ const FileHandler = forwardRef((props: any, ref: any) => {
     function remove_attachment(FILENAME) {
 
         Alert.alert(
-            {langselected.fileUpload.fileDeletion},
-            {langselected.fileUpload.confirm},
+            langselected.fileUpload.fileDeletion,
+            langselected.fileUpload.confirm,
             [
                 {
-                    text: {langselected.cancel},
+                    text: langselected.cancel,
                     style: "cancel",
                 },
                 {
@@ -86,7 +86,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             }).then(resQuery => {
                                 ctx?.showToast({
                                     type: "success",
-                                    text1: {langselected.fileUpload.fileremoved} + FILENAME,
+                                    text1: langselected.fileUpload.fileremoved + FILENAME,
                                 })
                             }).catch(err => {
                                 ctx?.showToast({
