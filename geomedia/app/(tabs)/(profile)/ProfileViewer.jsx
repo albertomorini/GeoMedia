@@ -10,7 +10,8 @@ import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
-
+import { PieChart } from 'react-native-gifted-charts';
+import { View } from 'react-native';
 
 const ProfileViewer = () => {
 
@@ -19,6 +20,8 @@ const ProfileViewer = () => {
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
     const params = useLocalSearchParams()
     const [user, setUser] = useState()
+    const [stats, setStats] = useState([])
+    const [selected,setSelected] = useState()
 
 
     function getProfilePic(username) {
@@ -38,12 +41,25 @@ const ProfileViewer = () => {
         })
     }
 
+    function get_stats(username) {
+        doRequest("profile_getstats_categories", {
+            username: username
+        }).then(res => {
+            setStats(
+                res.map(item => ({
+                    value: item.TOT_POSTS,
+                    color: item.COLLECTION_COLOR,
+                    text: item.COLLECTION_TITLE,
+                }))
+            )
+        })
+    }
+
     function getInfo(username) {
         doRequest("profile_getinfo", {
             username: username
         }).then(res => {
             setUser(res[0])
-            //TODO: manage the stats
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
@@ -62,6 +78,7 @@ const ProfileViewer = () => {
         useCallback(() => {
             if (params?.username != null) {
                 getInfo(params.username)
+                get_stats(params.username)
                 getProfilePic(params.username)
             }
             post_get_authorid()
@@ -110,7 +127,39 @@ const ProfileViewer = () => {
                         }}
                     />
                 </ThemedView>
+
+
+                <ThemedView style={{ height: 250, justifyContent: 'center', alignItems: 'center' }}>
+
+                    <PieChart
+                        data={stats}
+                        donut
+                        radius={90}
+                        textSize={12}
+                        innerRadius={60}
+                        onPress={(item, index) => {
+                            setSelected(item);
+                        }}
+                        focusOnPress
+                        centerLabelComponent={() => {
+                            return (
+                                <ThemedView style={{ alignItems: 'center', borderRadius: 10 }}>
+                                    <ThemedText style={{ fontSize: 18, fontWeight: 'bold' }}>
+                                        {stats?.length}
+                                    </ThemedText>
+                                    <ThemedText>categories</ThemedText >
+                                </ThemedView>
+                            );
+                        }}
+                    />
+                    {selected && (
+                        <ThemedText style={{ marginTop: 20, fontSize: 16 }}>
+                            {selected.text}: with {selected.value} posts
+                        </ThemedText>
+                    )}
+                </ThemedView>
             </ThemedView>
+
 
         </>
     )

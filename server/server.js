@@ -55,6 +55,7 @@ async function dispatchReq(res, path, body, contentType) {
             case "/profile_editinfo":
             case "/profile_getpfp":
             case "/profile_getinfo":
+            case "/profile_getstats_categories":
             case "/auth_check_otp":
             case "/interactions_likepost":
             case "/hpmedia_remove":
