@@ -10,8 +10,7 @@ import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
-import { PieChart } from 'react-native-gifted-charts';
-import { View } from 'react-native';
+import { PieChart, BarChart } from 'react-native-gifted-charts';
 
 const ProfileViewer = () => {
 
@@ -20,8 +19,10 @@ const ProfileViewer = () => {
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
     const params = useLocalSearchParams()
     const [user, setUser] = useState()
-    const [stats, setStats] = useState([])
-    const [selected,setSelected] = useState()
+    const [statsCategory, setstatsCategory] = useState([])
+    const [selected, setSelected] = useState()
+    const [statsTimeMonth, setStatTimeMonth] = useState([])
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 
     function getProfilePic(username) {
@@ -41,11 +42,11 @@ const ProfileViewer = () => {
         })
     }
 
-    function get_stats(username) {
+    function get_statsCategory(username) {
         doRequest("profile_getstats_categories", {
             username: username
         }).then(res => {
-            setStats(
+            setstatsCategory(
                 res.map(item => ({
                     value: item.TOT_POSTS,
                     color: item.COLLECTION_COLOR,
@@ -53,7 +54,19 @@ const ProfileViewer = () => {
                 }))
             )
         })
+        doRequest("profile_getstats_timemonths", {
+            username: username
+        }).then(res => {
+            console.log(res)
+            setStatTimeMonth(
+                res.map(item => ({
+                    value: item.TOT_POSTS,
+                    label: monthNames[item.M - 1],
+                }))
+            )
+        })
     }
+
 
     function getInfo(username) {
         doRequest("profile_getinfo", {
@@ -78,7 +91,7 @@ const ProfileViewer = () => {
         useCallback(() => {
             if (params?.username != null) {
                 getInfo(params.username)
-                get_stats(params.username)
+                get_statsCategory(params.username)
                 getProfilePic(params.username)
             }
             post_get_authorid()
@@ -129,10 +142,14 @@ const ProfileViewer = () => {
                 </ThemedView>
 
 
-                <ThemedView style={{ height: 250, justifyContent: 'center', alignItems: 'center' }}>
-
+                <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    {selected && (
+                        <ThemedText style={{ marginTop: 20, fontSize: 16 }}>
+                            {selected.text}: with {selected.value} posts
+                        </ThemedText>
+                    )}
                     <PieChart
-                        data={stats}
+                        data={statsCategory}
                         donut
                         radius={90}
                         textSize={12}
@@ -145,18 +162,32 @@ const ProfileViewer = () => {
                             return (
                                 <ThemedView style={{ alignItems: 'center', borderRadius: 10 }}>
                                     <ThemedText style={{ fontSize: 18, fontWeight: 'bold' }}>
-                                        {stats?.length}
+                                        {statsCategory?.length}
                                     </ThemedText>
                                     <ThemedText>categories</ThemedText >
                                 </ThemedView>
                             );
                         }}
                     />
-                    {selected && (
-                        <ThemedText style={{ marginTop: 20, fontSize: 16 }}>
-                            {selected.text}: with {selected.value} posts
-                        </ThemedText>
-                    )}
+
+
+                    <ThemedText style={style.label}>
+                        Number of posts
+                    </ThemedText>
+
+                    <BarChart
+                        data={statsTimeMonth}
+                        barWidth={28}
+                        spacing={40}
+                        roundedTop
+                        roundedBottom
+                        hideRules={false}
+                        xAxisLabelTextStyle={{ color: "#666", fontSize: 12 }}
+                        yAxisTextStyle={{ color: "#666" }}
+                        xAxisColor="#ddd"
+                        yAxisColor="#ddd"
+                        isAnimated
+                    />
                 </ThemedView>
             </ThemedView>
 
