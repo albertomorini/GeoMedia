@@ -34,6 +34,14 @@ export default function ProfileLayout() {
                     animation: 'slide_from_right', // optional
                 }}
             />
+            <Stack.Screen
+                name="ProfileViewer"
+                options={{
+                    presentation: 'fullScreenModal',       // 'fullScreenModal' or 'card' for push style
+                    // title: 'Edit profile',
+                    animation: 'slide_from_bottom', // optional
+                }}
+            />
         </Stack>
     );
 }

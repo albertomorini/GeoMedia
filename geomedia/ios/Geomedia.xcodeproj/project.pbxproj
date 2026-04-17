@@ -266,6 +266,7 @@
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = Geomedia/Geomedia.entitlements;
 			};
 			name = Debug;
 		};
@@ -293,6 +294,7 @@
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = Geomedia/Geomedia.entitlements;
 			};
 			name = Release;
 		};

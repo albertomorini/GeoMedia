@@ -140,7 +140,7 @@ const PostViewer = () => {
                                     style={[
                                         style.subtitle,
                                         {
-                                            backgroundColor: useColorScheme() === 'dark' ? "#4d4d4d": '#f2f2f2',
+                                            backgroundColor: useColorScheme() === 'dark' ? "#4d4d4d" : '#f2f2f2',
                                             borderRadius: 50,
                                             padding: 16,
                                             // marginTop: 10,
@@ -155,6 +155,12 @@ const PostViewer = () => {
 
                         <ItemIconizable
                             isImage={true}
+                            onPress={() => {
+                                router.push({
+                                    pathname: "/ProfileViewer",
+                                    params: { username: userCreator?.username },
+                                });
+                            }}
                             item={{
                                 ICON: userCreator?.pfp,
                                 TITLE: userCreator?.username,
