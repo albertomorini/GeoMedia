@@ -22,7 +22,7 @@ export default function ProfileEditor() {
     const ctx = useContext(MyContext);
     const user = ctx?.User?.User;
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic);
-    const { lang } = useLanguage()
+    const { langselected } = useLanguage()
     const [userInfo, setUserInfo] = useState(null);
 
     function getProfilePic() {
@@ -52,7 +52,7 @@ export default function ProfileEditor() {
 
             if (result.type === "cancel") return;
 
-            const { name, uri } = result.assets[0];
+            const { name, uri } = result?.assets[0];
 
             // Read file as base64
             const file = new FileSystem.File(uri); //load the file
@@ -161,8 +161,6 @@ export default function ProfileEditor() {
                             SURNAME: text
                         }))
                     }} />
-
-                <ThemedText style={[style.label]}>Your collections:</ThemedText>
 
                 <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
                     <ThemedText>{langselected.save}</ThemedText>

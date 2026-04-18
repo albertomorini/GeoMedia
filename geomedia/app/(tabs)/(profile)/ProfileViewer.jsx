@@ -1,16 +1,19 @@
-import { useCallback, useContext, useState } from 'react';
-import { MyContext } from '../../_layout';
-import { Image } from "expo-image"; // really, huge improveement
-import { Text } from "re-native-ui";
 import { style } from '@/components/globalstyle';
+import { Image } from "expo-image"; // really, huge improveement
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { MyContext } from '../../_layout';
 
-import { ThemedText } from '@/components/themed-text';
-import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/default_pictures';
-import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
-import { PieChart, BarChart } from 'react-native-gifted-charts';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
+import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useRef } from 'react';
+import { Animated, useColorScheme } from 'react-native';
+import { BarChart, PieChart } from 'react-native-gifted-charts';
+import { datetime2date, doRequest } from '../../utility';
+
+
 
 const ProfileViewer = () => {
 
@@ -20,9 +23,19 @@ const ProfileViewer = () => {
     const params = useLocalSearchParams()
     const [user, setUser] = useState()
     const [statsCategory, setstatsCategory] = useState([])
-    const [selected, setSelected] = useState()
+    const [selected, setSelected] = useState(null)
+    const scaleAnim = useRef(new Animated.Value(0)).current;
+    const opacityAnim = useRef(new Animated.Value(0)).current;
+
     const [statsTimeMonth, setStatTimeMonth] = useState([])
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthColors = ['#FFB3BA',
+        '#FFDFBA',
+        '#FFFFBA',
+        '#BAFFC9',
+        '#BAE1FF',
+        '#E3BAFF',
+    ]
 
 
     function getProfilePic(username) {
@@ -57,11 +70,11 @@ const ProfileViewer = () => {
         doRequest("profile_getstats_timemonths", {
             username: username
         }).then(res => {
-            console.log(res)
             setStatTimeMonth(
-                res.map(item => ({
+                res.map((item, index) => ({
                     value: item.TOT_POSTS,
                     label: monthNames[item.M - 1],
+                    frontColor: monthColors[index % 6]
                 }))
             )
         })
@@ -82,10 +95,6 @@ const ProfileViewer = () => {
         })
     }
 
-    function post_get_authorid() {
-        console.log("TODO")
-    }
-
 
     useFocusEffect(
         useCallback(() => {
@@ -94,9 +103,30 @@ const ProfileViewer = () => {
                 get_statsCategory(params.username)
                 getProfilePic(params.username)
             }
-            post_get_authorid()
         }, [])
     );
+
+    useEffect(() => {
+        // animation for donuts chart
+        if (selected) {
+            scaleAnim.setValue(0);
+            opacityAnim.setValue(0);
+
+            Animated.parallel([
+                Animated.spring(scaleAnim, {
+                    toValue: 1,
+                    friction: 5,
+                    tension: 120,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(opacityAnim, {
+                    toValue: 1,
+                    duration: 200,
+                    useNativeDriver: true,
+                }),
+            ]).start();
+        }
+    }, [selected]);
 
     return (
         <>
@@ -115,20 +145,17 @@ const ProfileViewer = () => {
                     }}
                 >
                     <ThemedView style={{ flex: 1, paddingRight: 10 }}>
-                        <ThemedText className="text-lg font-bold" style={style.subtitle}>
+                        <ThemedText className="ThemedText-lg font-bold" style={style.subtitle}>
                             {user?.NAME} {user?.SURNAME}
                         </ThemedText>
 
-                        <Text variant="caption">
+                        <ThemedText variant="caption">
                             {user?.USERNAME}
-                        </Text>
+                        </ThemedText>
 
-                        <Text
-                            variant="caption"
-                            style={{ fontStyle: 'italic', marginTop: 2 }}
-                        >
-                            {user?.EMAIL}
-                        </Text>
+                        <ThemedText variant="caption" style={{ fontStyle: 'italic', marginBottom: 2 }}>
+                            Active from: {datetime2date(user?.DC)}
+                        </ThemedText>
                     </ThemedView>
 
                     <Image
@@ -142,57 +169,67 @@ const ProfileViewer = () => {
                 </ThemedView>
 
 
-                <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    {selected && (
-                        <ThemedText style={{ marginTop: 20, fontSize: 16 }}>
-                            {selected.text}: with {selected.value} posts
-                        </ThemedText>
-                    )}
-                    <PieChart
-                        data={statsCategory}
-                        donut
-                        radius={90}
-                        textSize={12}
-                        innerRadius={60}
-                        onPress={(item, index) => {
-                            setSelected(item);
-                        }}
-                        focusOnPress
-                        centerLabelComponent={() => {
-                            return (
-                                <ThemedView style={{ alignItems: 'center', borderRadius: 10 }}>
-                                    <ThemedText style={{ fontSize: 18, fontWeight: 'bold' }}>
-                                        {statsCategory?.length}
-                                    </ThemedText>
-                                    <ThemedText>categories</ThemedText >
-                                </ThemedView>
-                            );
-                        }}
-                    />
-
-
+                <ThemedView style={{ flex: 1, width: "100%" }}>
                     <ThemedText style={style.label}>
-                        Number of posts
+                        Active on {statsCategory?.length} categories
                     </ThemedText>
 
-                    <BarChart
-                        data={statsTimeMonth}
-                        barWidth={28}
-                        spacing={40}
-                        roundedTop
-                        roundedBottom
-                        hideRules={false}
-                        xAxisLabelTextStyle={{ color: "#666", fontSize: 12 }}
-                        yAxisTextStyle={{ color: "#666" }}
-                        xAxisColor="#ddd"
-                        yAxisColor="#ddd"
-                        isAnimated
-                    />
+                    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <PieChart
+                            data={statsCategory}
+                            donut
+                            radius={90}
+                            textSize={12}
+                            innerCircleColor={useColorScheme() === 'dark' ? '#121212' : '#fff'}  //thus to allow dark mode
+                            innerRadius={40}
+                            onPress={(item, index) => {
+                                setSelected(item);
+                            }}
+                            focusOnPress
+                        />
+                        {selected == null ?
+                            <ThemedText>Tap on a category to see more</ThemedText>
+                            :
+                            (
+                                <Animated.View
+                                    style={{
+                                        marginTop: 20,
+                                        transform: [{ scale: opacityAnim }],
+                                        opacity: opacityAnim,
+                                    }}
+                                >
+                                    <ThemedText style={{ fontSize: 16 }}>
+                                        {selected.text}: with {selected.value} posts
+                                    </ThemedText>
+                                </Animated.View>
+                            )}
+
+                    </ThemedView>
+
+
+                    <ThemedView style={{ flex: 1, width: "100%" }}>
+                        <ThemedText style={style.label}>
+                            Number of posts
+                        </ThemedText>
+
+                        <BarChart
+                            data={statsTimeMonth}
+                            barWidth={28}
+                            spacing={40}
+                            roundedTop
+                            roundedBottom
+                            hideRules={true}
+                            xAxisLabelTextStyle={{ color: "#666", fontSize: 12 }}
+                            yAxisTextStyle={{ color: "#666" }}
+                            xAxisColor="#ddd"
+                            yAxisColor="#ddd"
+                            isAnimated={true}
+                        />
+                    </ThemedView>
+
                 </ThemedView>
-            </ThemedView>
-
-
-        </>
+            </ThemedView >
+        </ >
     )
 }
 

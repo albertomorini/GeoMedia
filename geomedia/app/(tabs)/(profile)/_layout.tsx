@@ -37,8 +37,7 @@ export default function ProfileLayout() {
             <Stack.Screen
                 name="ProfileViewer"
                 options={{
-                    presentation: 'fullScreenModal',       // 'fullScreenModal' or 'card' for push style
-                    // title: 'Edit profile',
+                    presentation: 'card',       // 'fullScreenModal' or 'card' for push style
                     animation: 'slide_from_bottom', // optional
                 }}
             />

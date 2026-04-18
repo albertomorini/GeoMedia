@@ -14,7 +14,8 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
 
     const { langselected } = useLanguage()
 
-    const recurrencyOptions = ["Never", "Monthly", "Yearly"]
+    // const recurrencyOptions = ["Never", "Monthly", "Yearly"]
+    const recurrencyOptions = langselected.rangeTimePicker.rec_values
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
 
 
@@ -170,6 +171,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                 values={recurrencyOptions}
                 selectedIndex={isRecurrent}
                 onChange={(event) => {
+                    console.log(event.nativeEvent.selectedSegmentIndex)
                     setIsRecurrent(event.nativeEvent.selectedSegmentIndex);
                 }}
             />

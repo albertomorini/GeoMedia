@@ -14,6 +14,7 @@ import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from '@/app/mycomponents/ModalPswReset';
 import ListItem from '@/app/mycomponents/ListItem';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Profile() {
 
@@ -141,7 +142,15 @@ export default function Profile() {
             </ThemedText>
           </TouchableOpacity>
         </ThemedView>
-        <ThemedView style={{ flex: 1, paddingRight: 10, marginBottom: 120 }}>
+        <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,
+        { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }
+        ]}>
+          <ThemedText>{langselected.profile.viewmode}</ThemedText>
+          <Ionicons name="eye-outline" size={28} color={"white"} style={{ marginLeft: 8 }} />
+        </TouchableOpacity>
+
+
+        <ThemedView style={{ paddingRight: 10, marginBottom: 30, height: "50%" }}>
           <ThemedText style={style.label}>{langselected?.profile?.yourPosts}</ThemedText>
           <ListItem
             isImage={false} //we render icons, not expo-image
@@ -162,6 +171,7 @@ export default function Profile() {
 
           />
         </ThemedView>
+
 
       </ThemedView>
       <SettingsConfig />

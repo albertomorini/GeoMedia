@@ -33,9 +33,10 @@ export const it = {
     empty: "Svuota",
     save: "Salva",
     all: "Tutti (attuali)",
-    search:"Ricerca",
-    newf:"Nuova ",
-    newm:"Nuovo ",
+    search: "Ricerca",
+    newf: "Nuova ",
+    newm: "Nuovo ",
+    contactme: "Contattami",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -48,11 +49,12 @@ export const it = {
         insertName: "Inserisci il nome",
         insertSurname: "Inserisci il cognome",
         editPic: "Clicca per cambiare foto", // tap to edit picture
+        viewmode: "Modalità visualizzatore"
     },
     postCreator: {
         title: "Titolo",
         comment: "Commento",
-        comment_placeholder:"Aggiungi un commento",
+        comment_placeholder: "Aggiungi un commento",
         area: "Area di visibilità (in KM)",
         locationCurrent: "Posizione corrente",
         locationRemote: "Posizione remota",
@@ -63,7 +65,7 @@ export const it = {
         lat: "Latitudine",
         lon: "Longitudine",
         pickLocaton: "Scegli la posizione",
-        pickCollection:"Seleziona la collezione"
+        pickCollection: "Seleziona la collezione"
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
@@ -77,12 +79,8 @@ export const it = {
         fromnow: "Da adesso",
         endTime: "Il post non sarà visibile dopo", //The Post will not be visible after:
         noexpiration: "Senza scadenza",
-        reccurrent:"Ricorrente",
-        rec_values:{
-            never:"Mai",
-            monthly:"Mensile",
-            yearly:"Annaule"
-        }
+        reccurrent: "Ricorrente",
+        rec_values : ["Mai","Mensile","Annuale"]
     },
     reportPost: {
         title: "Segnala il post",
@@ -111,24 +109,26 @@ export const it = {
         confirm: "Vuoi procedere?",
         readingError: "Errore nella lettura del file"
     },
-    collection:{
-        nocolfound:"Nessuna collezione trovata",
-        colNotEditable:"Collezione modificabile solo dal proprietario",
-        colSaved:"Collezione salvata",
-        description:"Descrizione",
-        remote:"Posizioni remote",
-        collectionf:"collezione"
+    collection: {
+        nocolfound: "Nessuna collezione trovata",
+        colNotEditable: "Collezione modificabile solo dal proprietario",
+        colSaved: "Collezione salvata",
+        description: "Descrizione",
+        remote: "Posizioni remote",
+        collectionf: "collezione"
     },
     requiredfields: "Campi obbligatori: ",
-    sequentiality:{
-        title:"Post sequenziali",
-        seq:"Sequenzialità",
-        noseq:"I post saranno tutti visibili senza sequenzialità"
+    sequentiality: {
+        title: "Post sequenziali",
+        seq: "Sequenzialità",
+        noseq: "I post saranno tutti visibili senza sequenzialità"
     },
-    exclusivity:{
-        creators:"Utenti creatori",
-        viewers:"Utenti visualizzatori",
-        title:"Limitazioni"
+    exclusivity: {
+        creators: "Utenti creatori",
+        viewers: "Utenti visualizzatori",
+        title: "Limitazioni",
+        menuCreator: ["Data & Ora", "Visualizzatori", "Creatori"],
+        menuViewer: ["Data & Ora", "Visualizzatori"]
     }
 
 }
@@ -169,9 +169,10 @@ export const en = {
     empty: "Clear",
     save: "Save",
     all: "All (actual)",
-    search:"Search",
+    search: "Search",
     newf: "New ",
     newm: "New ",
+    contactme: "Contact me",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -184,6 +185,7 @@ export const en = {
         insertName: "Enter first name",
         insertSurname: "Enter last name",
         editPic: "Tap to change picture",
+        viewmode: "Viewer mode"
     },
     postCreator: {
         title: "Title",
@@ -214,11 +216,7 @@ export const en = {
         endTime: "The post will not be visible after:",
         noexpiration: "No expiration",
         reccurrent: "Recurrent",
-        rec_values: {
-            never: "Never",
-            monthly: "Monthly",
-            yearly: "Yearly"
-        }
+        rec_values : ["Never","Monthly","Yearly"]
     },
     reportPost: {
         title: "Report post",
@@ -253,7 +251,7 @@ export const en = {
         colSaved: "Collection saved",
         description: "Description",
         remote: "Remote positions",
-        collectionf:"collection"
+        collectionf: "collection"
     },
     requiredfields: "Required fields: ",
     sequentiality: {
@@ -264,6 +262,8 @@ export const en = {
     exclusivity: {
         creators: "Creator users",
         viewers: "Viewer users",
-        title: "Restrictions"
+        title: "Restrictions",
+        menuCreator: ["Date & Time", "Viewers", "Creators"],
+        menuViewer: ["Date & Time", "Viewers"]
     }
 }

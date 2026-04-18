@@ -89,7 +89,7 @@ export default function SettingsConfig (){
                 }}>
 
                     <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20" }]} onPress={() => { emailMe() }}>
-                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} >Contact me </ThemedText>
+                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} >{langselected?.contactme}</ThemedText>
                     </TouchableOpacity>
 
 

@@ -17,7 +17,8 @@ const ExclusivityPicking = (props) => {
     const ctx = useContext(MyContext);
     const { langselected } = useLanguage()
     const [selectedOptions, setSelectedOptions] = useState(0);
-    const segmentsOptions = props?.creatorsEnabled ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
+    // const segmentsOptions = props?.creatorsEnabled ? ['Date & Time', 'Viewers', "Creators"] : ['Date & Time', 'Viewers']
+    const segmentsOptions = props?.creatorsEnabled ? langselected.exclusivity.menuCreator : langselected.exclusivity.menuViewer
 
     const refTimeRange = useRef()
     const [listUsers, setListUsers] = useState(null);

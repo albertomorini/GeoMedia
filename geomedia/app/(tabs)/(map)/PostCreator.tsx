@@ -333,11 +333,11 @@ const PostCreator = () => {
                                 onPress={() => { setModalMapVisibility(true) }}>
                                 {
                                     postData?.REMOTE_POSTING_ENABLED ?
-                                        <ThemedText>{langselected?.postCreation?.pickLocaton}</ThemedText>
+                                        <ThemedText>{langselected?.postCreator?.pickLocaton}</ThemedText>
                                         :
-                                        <ThemedText>{langselected?.postCreation?.disabledRemote}</ThemedText>
+                                        <ThemedText>{langselected?.postCreator?.disabledRemote}</ThemedText>
                                 }
-                                <Ionicons name="map-outline" size={28} color={"white"} />
+                                <Ionicons name="map-outline" size={28} color={"white"}  style={{marginLeft:8}}/>
                             </TouchableOpacity>
                             <ThemedView>
                                 <Modal
