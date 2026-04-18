@@ -144,7 +144,16 @@ export default function Profile() {
         </ThemedView>
         <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,
         { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }
-        ]}>
+        ]}
+          onPress={() => {
+            router.push({
+              pathname: '/ProfileViewer',
+              params: {
+                username: user?.USERNAME,
+              }
+            })
+          }}
+        >
           <ThemedText>{langselected.profile.viewmode}</ThemedText>
           <Ionicons name="eye-outline" size={28} color={"white"} style={{ marginLeft: 8 }} />
         </TouchableOpacity>
