@@ -23,7 +23,7 @@ load_config()
 
 
 
-export default function SettingsConfig (){
+export default function SettingsConfig() {
 
     const [modalSettingsVisible, setModalSettingsVisible] = useState(false)
     const [protocol, setProtocol] = useState(null)
@@ -88,8 +88,8 @@ export default function SettingsConfig (){
                     width: "50%"
                 }}>
 
-                    <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20" }]} onPress={() => { emailMe() }}>
-                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 30, }]} >{langselected?.contactme}</ThemedText>
+                    <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20", paddingStart: 5, paddingEnd: 5 }]} onPress={() => { emailMe() }}>
+                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 10, paddingStart: 5, paddingEnd: 5 }]} >{langselected?.contactme}</ThemedText>
                     </TouchableOpacity>
 
 
