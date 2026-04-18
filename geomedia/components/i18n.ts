@@ -39,7 +39,7 @@ export const it = {
     contactme: "Contattami",
     share: "Condividi",
     on: "il",
-    views:"Visioni",
+    views:"Visioni0",
     likes:"Mi piace",
     profile: {
         hello: "Ciao",
