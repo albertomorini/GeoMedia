@@ -37,6 +37,10 @@ export const it = {
     newf: "Nuova ",
     newm: "Nuovo ",
     contactme: "Contattami",
+    share: "Condividi",
+    on: "il",
+    views:"Visioni",
+    likes:"Mi piace",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -75,28 +79,28 @@ export const it = {
         checkotp: "Verifica OTP"
     },
     rangeTimePicker: {
-        startTime: "Il post sarà visibile da:",
+        startTime: "Il post sarà visibile da",
         fromnow: "Da adesso",
         endTime: "Il post non sarà visibile dopo", //The Post will not be visible after:
         noexpiration: "Senza scadenza",
         reccurrent: "Ricorrente",
-        rec_values : ["Mai","Mensile","Annuale"]
+        rec_values: ["Mai", "Mensile", "Annuale"]
     },
     reportPost: {
         title: "Segnala il post",
         report: "Segnala",
-        reportMotive: " Motivazione della segnalazione",
+        reportMotive: " Motivazione della segnalazione (almeno cinque parole)",
         values: {
-            default: "Choose the kind of report"
-            , misinformation: "Wrong places/information"
-            , illegal: "Illegal content"
-            , hate_speech: "Hate Speech"
-            , harassment: "Harassment / Bullying"
-            , adult: "Adult Content"
-            , impersonation: "Impersonation"
-            , copyright: "Copyright Violation"
-            , privacy: "Privacy Violation"
-            , other: "Other"
+            default: "Scegli il tipo di segnalazione",
+            misinformation: "Luoghi/informazioni errati",
+            illegal: "Contenuti illegali",
+            hate_speech: "Discorso d'odio",
+            harassment: "Molestie / Bullismo",
+            adult: "Contenuti per adulti",
+            impersonation: "Furto d'identità",
+            copyright: "Violazione del copyright",
+            privacy: "Violazione della privacy",
+            other: "Altro"
         }
     },
     fileUpload: {
@@ -173,6 +177,10 @@ export const en = {
     newf: "New ",
     newm: "New ",
     contactme: "Contact me",
+    share: "Share",
+    on: "on",
+    views:"Views",
+    likes:"Likes",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -211,17 +219,17 @@ export const en = {
         checkotp: "Verify OTP"
     },
     rangeTimePicker: {
-        startTime: "The post will be visible from:",
+        startTime: "The post will be visible from",
         fromnow: "From now",
-        endTime: "The post will not be visible after:",
+        endTime: "The post will not be visible after",
         noexpiration: "No expiration",
         reccurrent: "Recurrent",
-        rec_values : ["Never","Monthly","Yearly"]
+        rec_values: ["Never", "Monthly", "Yearly"]
     },
     reportPost: {
         title: "Report post",
         report: "Report",
-        reportMotive: "Report reason",
+        reportMotive: "Report reason (at least five words)",
         values: {
             default: "Choose the kind of report",
             misinformation: "Wrong places/information",

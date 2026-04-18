@@ -17,27 +17,46 @@ const ReportPost = (props) => {
     const [kind, setKind] = useState(null)
     const [motive, setMotive] = useState(null)
 
-
+    function wordCount(text) {
+        return text.trim().split(/\s+/).length;
+    }
     function createReport() {
-        doRequest("report_new", {
-            postid: props?.postid,
-            uid: ctx?.getUID(),
-            motive: motive,
-            kind: kind
-        }).then(r => {
-            ctx?.showToast({
-                type: "success",
-                text1: "Report saving",
-                text2: "We'll analyze the content and let you know soon"
-            })
-            setVisibleModalReport(false)
-        }).catch(err => {
+        if (kind != null && motive != null) {
+            if (wordCount(motive) > 4) {
+
+                doRequest("report_new", {
+                    postid: props?.postid,
+                    uid: ctx?.getUID(),
+                    motive: motive,
+                    kind: kind
+                }).then(r => {
+                    ctx?.showToast({
+                        type: "success",
+                        text1: "Report saving",
+                        text2: "We'll analyze the content and let you know soon"
+                    })
+                    setVisibleModalReport(false)
+                }).catch(err => {
+                    ctx?.showToast({
+                        type: "error",
+                        text1: "Something went wrong",
+                        text2: "Try later"
+                    })
+                })
+            } else {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Data required",
+                    text2: "At least five words"
+                })
+            }
+        } else {
             ctx?.showToast({
                 type: "error",
-                text1: "Something went wrong",
-                text2: "Try later"
+                text1: "Data required",
+                text2: "Kind and motive are required"
             })
-        })
+        }
     }
 
 

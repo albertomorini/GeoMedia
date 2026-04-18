@@ -12,11 +12,14 @@ import { style } from "@/components/globalstyle";
 import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 import ItemIconizable from "@/app/mycomponents/ItemIconizable";
 import ReportPost from "@/app/mycomponents/ReportPost";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const PostViewer = () => {
     const ctx = useContext(MyContext)
     const params = useLocalSearchParams();
     const [postData, setPostData] = useState(null)
+
+    const { langselected } = useLanguage()
 
 
     const [userCreator, setUserCreator] = useState({
@@ -135,7 +138,7 @@ const PostViewer = () => {
                         )}
 
                         {
-                            postData?.COMMENT?.length == 0 ? null :
+                            (postData?.COMMENT?.length == 0 || postData?.COMMENT == null) ? null :
                                 <ThemedText
                                     style={[
                                         style.subtitle,
@@ -164,7 +167,7 @@ const PostViewer = () => {
                             item={{
                                 ICON: userCreator?.pfp,
                                 TITLE: userCreator?.username,
-                                SUBTITLE: ("On " + datetime2date(postData?.DC))
+                                SUBTITLE: (langselected.on + " " + datetime2date(postData?.DC))
                             }}
                         />
 
@@ -184,7 +187,7 @@ const PostViewer = () => {
                                     });
                                 }}
                             >
-                                <ThemedText>Edit post</ThemedText>
+                                <ThemedText>{langselected.postCreator.modify} post</ThemedText>
                             </TouchableOpacity>
                         )}
 
@@ -198,14 +201,14 @@ const PostViewer = () => {
                             <ThemedText style={{
                                 fontSize: 16,
                                 fontWeight: "500",
-                            }}>Views: {postData?.NUM_VIEWS}</ThemedText>
+                            }}>{langselected?.views}: {postData?.NUM_VIEWS}</ThemedText>
                         </ThemedView>
 
                         <ThemedView style={style.bottom_bar_item}>
                             <ThemedText style={{
                                 fontSize: 16,
                                 fontWeight: "500",
-                            }}>Likes: {postData?.NUM_LIKES}</ThemedText>
+                            }}>{langselected.likes}: {postData?.NUM_LIKES}</ThemedText>
 
                             <TouchableOpacity
                                 onPress={() => {

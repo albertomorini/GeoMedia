@@ -5,6 +5,7 @@ import { Dimensions, TouchableOpacity } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { Image } from 'expo-image'; //BETTER PERFORMANCE COMPARED TO NATIVE ONE
 import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const width = Dimensions.get('window').width;
 
@@ -27,6 +28,7 @@ async function file_share(base64Data: any, fileName: string, mimeType: string) {
 };
 
 const CarouselFileViewer = (props) => {
+    const { langselected } = useLanguage()
     return (
         <Carousel
             width={props?.isEdit ? width / 1.5 : width}
@@ -49,7 +51,7 @@ const CarouselFileViewer = (props) => {
                                 uri: (item?.MIME_TYPE == "image/jpeg") ? `data:image/jpeg;base64,${item?.BASE64}` :
                                     default_attached_file
                             }}
-                            style={{ width: '100%', height: '100%', padding: 30, borderRadius:20 }}
+                            style={{ width: '100%', height: '100%', padding: 30, borderRadius: 20 }}
                             contentFit="cover"
                             transition={200}
                         />
@@ -84,7 +86,7 @@ const CarouselFileViewer = (props) => {
                             borderRadius: 8,
                         }}
                     >
-                        <ThemedText style={{ color: 'white' }}>Share
+                        <ThemedText style={{ color: 'white' }}>{langselected.share}
                             <Ionicons name="share-outline" size={28} color={"lightblue"} />
                         </ThemedText>
 

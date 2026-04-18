@@ -257,7 +257,11 @@ const CollectionCreator = () => {
                             save_collection()
                         }}
                     >
-                        <ThemedText>{collectionData?.ID == null ? "CREATE" : "UPDATE"}</ThemedText>
+                        {collectionData?.ID == null ?
+                            <ThemedText>{langselected.postCreator?.create}</ThemedText>
+                            :
+                            <ThemedText>{langselected.postCreator?.modify}</ThemedText>
+                        }
                     </TouchableOpacity>
                 </ThemedView>
             </ThemedView>
