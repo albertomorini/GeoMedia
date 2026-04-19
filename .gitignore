@@ -59,3 +59,7 @@ server/_UPLOADS
 server/config.json
 server/config.json
 server/DBconfigPYTHON.json
+server/__pycache__/CYPHER.cpython-313.pyc
+server/__pycache__/geomedia_helper.cpython-313.pyc
+server/__pycache__/mailer.cpython-313.pyc
+server/__pycache__/SQL_MANAGER.cpython-313.pyc
