@@ -154,7 +154,7 @@ const ProfileViewer = () => {
                         </ThemedText>
 
                         <ThemedText variant="caption" style={{ fontStyle: 'italic', marginBottom: 2 }}>
-                            Active from: {datetime2date(user?.DC)}
+                            {langselected?.profile.activefrom}: {datetime2date(user?.DC)}
                         </ThemedText>
                     </ThemedView>
 

@@ -147,7 +147,7 @@ const ModalPswReset = () => {
 
                         {OTPValid == null ?
                             <>
-                                <ThemedText style={style.label}>{langselected.pswReset}</ThemedText>
+                                <ThemedText style={style.label}>{langselected.pswReset.proceed}</ThemedText>
                                 {ctx?.getUID() ??
                                     <>
                                         <ThemedText style={style.label}>{langselected.login.emailOrUsername}</ThemedText>

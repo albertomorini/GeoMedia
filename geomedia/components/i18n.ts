@@ -41,6 +41,8 @@ export const it = {
     on: "il",
     views:"Visioni0",
     likes:"Mi piace",
+    show:"Mostra",
+    hide:"Nascondi",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -53,7 +55,8 @@ export const it = {
         insertName: "Inserisci il nome",
         insertSurname: "Inserisci il cognome",
         editPic: "Clicca per cambiare foto", // tap to edit picture
-        viewmode: "Modalità visualizzatore"
+        viewmode: "Modalità visualizzatore",
+        activefrom:"Attivo dal"
     },
     postCreator: {
         title: "Titolo",
@@ -181,6 +184,8 @@ export const en = {
     on: "on",
     views:"Views",
     likes:"Likes",
+    show:"Mostra",
+    hide:"Nascondi",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -193,7 +198,8 @@ export const en = {
         insertName: "Enter first name",
         insertSurname: "Enter last name",
         editPic: "Tap to change picture",
-        viewmode: "Viewer mode"
+        viewmode: "Viewer mode",
+        activefrom:"Active from"
     },
     postCreator: {
         title: "Title",

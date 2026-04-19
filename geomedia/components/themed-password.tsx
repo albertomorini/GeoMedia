@@ -3,6 +3,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { useState } from 'react';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
+import { useLanguage } from './LanguageProvider';
 
 export type ThemedInputProps = TextInputProps & {
     lightColor?: string;
@@ -25,6 +26,7 @@ export function ThemedPassword({
 
     const [hidePassword, setHidePassword] = useState(true)
     const borderColor = color === '#ECEDEE' ? '#3a3a3a' : '#d0d0d0';
+    const { langselected } = useLanguage()
 
     return (
         <ThemedView style={styles.container}>
@@ -49,9 +51,16 @@ export function ThemedPassword({
                 style={styles.toggleButton}
                 onPress={() => setHidePassword(!hidePassword)}
             >
-                <ThemedText style={styles.toggleText}>
-                    {hidePassword ? "Show" : "Hide"}
-                </ThemedText>
+                {
+                    hidePassword ?
+                        <ThemedText style={styles.toggleText}>
+                            {langselected?.show}
+                        </ThemedText>
+                        :
+                        <ThemedText style={styles.toggleText}>
+                            {langselected?.hide}
+                        </ThemedText>
+                }
             </TouchableOpacity>
         </ThemedView >
     );
