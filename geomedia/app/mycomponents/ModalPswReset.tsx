@@ -127,6 +127,7 @@ const ModalPswReset = () => {
                 transparent={true}
                 onRequestClose={() => {
                     setModalPswReset(false)
+                    setOTPValid(null)
                 }}
                 animationType="slide">
                 <ThemedView style={{

@@ -137,6 +137,7 @@ async def auth_signin(procedure: str, body: dict):
             username = query_results["USERNAME"]
 
         if query_results.get("AUTH") == 2:
+            print("INVIO EMAIL")
             mailer.send_email_otp(
                 email,
                 {"USERNAME": username, "OTP": query_results.get("OTP")}

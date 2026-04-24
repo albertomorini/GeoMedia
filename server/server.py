@@ -44,6 +44,7 @@ async def dispatch_req(path: str, body: dict):
     try:
         if path in ("/auth_psw_forgotten", "/auth_signin"):
             query_results = await geomedia_helper.auth_signin(path, body)
+            print("QRSR",query_results,query_results.get("AUTH"))
             if query_results.get("AUTH") == 2:
                 if "OTP" in query_results:
                     del query_results["OTP"]  # Do not send OTP over HTTP

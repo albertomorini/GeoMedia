@@ -40,7 +40,7 @@ def execute_query(query, fetch=True):
         cursor = conn.cursor(as_dict=True)
         cursor.execute(query)
 
-        if fetch:
+        if fetch: 
             return cursor.fetchall()
 
         conn.commit()
