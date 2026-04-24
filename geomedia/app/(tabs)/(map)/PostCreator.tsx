@@ -11,7 +11,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { doRequest } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
 import MapPicking from '@/app/mycomponents/MapPicking';
@@ -127,8 +127,7 @@ const PostCreator = () => {
                 text2: JSON.stringify(missing_fields) + " not compiled"
             })
         } else {
-            console.log(dummy_body)
-            doRequest("post_merge", {
+            doRequest("post", {
                 postdata: dummy_body
             }).then(res => {
                 if (res?.OK) {
@@ -206,10 +205,9 @@ const PostCreator = () => {
             postid = null;
         }
         if (postid != null) {
-            doRequest("post_get_fullpost", {
-                "postid": postid,
+            doRequest("post/" + postid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            }, "GET").then(resQuery => {
                 let x = resQuery[0]
                 setPostData(prev => ({
                     ...prev,
@@ -236,6 +234,32 @@ const PostCreator = () => {
         }
     }
 
+    function deletePost() {
+        Alert.alert(
+            "Confirm",
+            "Are you sure?",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "OK", onPress: () => {
+                        doRequest("post/" + postData?.ID, { uid: ctx?.getUID(), password: ctx?.User?.User?.PASSWORD }, "DELETE").then(resQuery => {
+                            ctx?.showToast({
+                                type: "success",
+                                text1: "Post deleted"
+                            })
+                            router.replace("/(tabs)/(map)/MapViewer")
+                        }).catch(err => {
+                            ctx?.showToast({
+                                type: "error",
+                                text1: "Cannot delete post"
+                            })
+                        })
+                    }
+                }
+            ]
+        );
+    }
+
     useEffect(() => {
         load_current_location()
         if (params != null) {
@@ -245,238 +269,255 @@ const PostCreator = () => {
 
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <>
+            <Stack.Screen
+                options={{
+                    title: postData?.TITLE?? (langselected?.newm+"post"),
+                }}
+            />
 
-            <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}
-                keyboardShouldPersistTaps="handled" // Adjusted to allow tapping to dismiss keyboard
-            >
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                    style={{ flex: 1 }}
+            <GestureHandlerRootView style={{ flex: 1 }}>
+
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps="handled" // Adjusted to allow tapping to dismiss keyboard
                 >
-                    <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
-                        <ThemedText style={style.label}>{langselected.collections}</ThemedText>
-                        {postData?.COLLECTION_ID == null ?
-                            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
-                                collection_sheet_handler?.current?.snapToIndex(0)
-                            }}>
-                                <ThemedText>{langselected.postCreator.pickCollection}</ThemedText>
-                            </TouchableOpacity>
-                            :
-                            <ItemIconizable
-                                onPress={() => {
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                        style={{ flex: 1 }}
+                    >
+                        <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
+                            <ThemedText style={style.label}>{langselected.collections}</ThemedText>
+                            {postData?.COLLECTION_ID == null ?
+                                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
                                     collection_sheet_handler?.current?.snapToIndex(0)
-                                }}
-                                item={{
-                                    ICON: postData?.ICON,
-                                    COLOR: postData?.COLOR,
-                                    TITLE: postData?.COLLECTION_NAME
-                                }} />
-                        }
-
-                        <ThemedText style={style.label}>{langselected?.postCreator.title}: </ThemedText>
-                        <ThemedInput
-                            placeholder={langselected?.postCreator.title}
-                            value={postData?.TITLE}
-                            type="outlined"
-                            onChangeText={(text) => {
-                                setPostData(prev => ({
-                                    ...prev,
-                                    TITLE: text
-                                }));
-                            }}
-                        />
-                        <ThemedText style={style.label}>{langselected?.postCreator?.comment}:</ThemedText>
-                        <ThemedInput
-                            multiline={true}
-                            type="outlined"
-                            value={postData?.COMMENT}
-                            placeholder={langselected.postCreator.comment_placeholder}
-                            onChangeText={(text) => {
-                                setPostData(prev => ({
-                                    ...prev,
-                                    COMMENT: text
-                                }));
-                            }}
-                        />
-                        <ThemedText style={style.label}>{langselected?.postCreator?.area}: </ThemedText>
-                        <ThemedInput type='outlined'
-                            value={postData?.VISIBILITY_AREA_KM.toString()}
-                            placeholder={langselected?.postCreator?.area}
-                            onChangeText={(txt) => {
-                                if (isNaN(txt)) {
-                                    Alert.alert("Must be a number")
-                                } else {
-                                    setPostData(prev => ({
-                                        ...prev,
-                                        VISIBILITY_AREA_KM: txt
-                                    }))
-                                }
-                            }} />
-
-                        <>
-                            {
-                                isUsingCurrentLocation() ?
-                                    <ThemedText style={style.label}>{langselected?.postCreator?.locationCurrent}</ThemedText>
-                                    :
-                                    <>
-                                        <ThemedText style={style.label}>{langselected?.postCreator?.locationRemote}:</ThemedText>
-                                        <ThemedText>{langselected?.postCreator?.lat}: {coordinateChosen?.latitude}</ThemedText>
-                                        <ThemedText>{langselected?.postCreator?.lon}: {coordinateChosen?.longitude}</ThemedText>
-                                    </>
+                                }}>
+                                    <ThemedText>{langselected.postCreator.pickCollection}</ThemedText>
+                                </TouchableOpacity>
+                                :
+                                <ItemIconizable
+                                    onPress={() => {
+                                        collection_sheet_handler?.current?.snapToIndex(0)
+                                    }}
+                                    item={{
+                                        ICON: postData?.ICON,
+                                        COLOR: postData?.COLOR,
+                                        TITLE: postData?.COLLECTION_NAME
+                                    }} />
                             }
 
-                            <TouchableOpacity
-                                disabled={!postData?.REMOTE_POSTING_ENABLED}
-                                style={[style.buttons.full_screen, (!postData?.REMOTE_POSTING_ENABLED ? style.colors.geomedia_gray : isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
-                                onPress={() => { setModalMapVisibility(true) }}>
+                            <ThemedText style={style.label}>{langselected?.postCreator.title}: </ThemedText>
+                            <ThemedInput
+                                placeholder={langselected?.postCreator.title}
+                                value={postData?.TITLE}
+                                type="outlined"
+                                onChangeText={(text) => {
+                                    setPostData(prev => ({
+                                        ...prev,
+                                        TITLE: text
+                                    }));
+                                }}
+                            />
+                            <ThemedText style={style.label}>{langselected?.postCreator?.comment}:</ThemedText>
+                            <ThemedInput
+                                multiline={true}
+                                type="outlined"
+                                value={postData?.COMMENT}
+                                placeholder={langselected.postCreator.comment_placeholder}
+                                onChangeText={(text) => {
+                                    setPostData(prev => ({
+                                        ...prev,
+                                        COMMENT: text
+                                    }));
+                                }}
+                            />
+                            <ThemedText style={style.label}>{langselected?.postCreator?.area}: </ThemedText>
+                            <ThemedInput type='outlined'
+                                value={postData?.VISIBILITY_AREA_KM.toString()}
+                                placeholder={langselected?.postCreator?.area}
+                                onChangeText={(txt) => {
+                                    if (isNaN(txt)) {
+                                        Alert.alert("Must be a number")
+                                    } else {
+                                        setPostData(prev => ({
+                                            ...prev,
+                                            VISIBILITY_AREA_KM: txt
+                                        }))
+                                    }
+                                }} />
+
+                            <>
                                 {
-                                    postData?.REMOTE_POSTING_ENABLED ?
-                                        <ThemedText>{langselected?.postCreator?.pickLocaton}</ThemedText>
+                                    isUsingCurrentLocation() ?
+                                        <ThemedText style={style.label}>{langselected?.postCreator?.locationCurrent}</ThemedText>
                                         :
-                                        <ThemedText>{langselected?.postCreator?.disabledRemote}</ThemedText>
+                                        <>
+                                            <ThemedText style={style.label}>{langselected?.postCreator?.locationRemote}:</ThemedText>
+                                            <ThemedText>{langselected?.postCreator?.lat}: {coordinateChosen?.latitude}</ThemedText>
+                                            <ThemedText>{langselected?.postCreator?.lon}: {coordinateChosen?.longitude}</ThemedText>
+                                        </>
                                 }
-                                <Ionicons name="map-outline" size={28} color={"white"}  style={{marginLeft:8}}/>
+
+                                <TouchableOpacity
+                                    disabled={!postData?.REMOTE_POSTING_ENABLED}
+                                    style={[style.buttons.full_screen, (!postData?.REMOTE_POSTING_ENABLED ? style.colors.geomedia_gray : isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
+                                    onPress={() => { setModalMapVisibility(true) }}>
+                                    {
+                                        postData?.REMOTE_POSTING_ENABLED ?
+                                            <ThemedText>{langselected?.postCreator?.pickLocaton}</ThemedText>
+                                            :
+                                            <ThemedText>{langselected?.postCreator?.disabledRemote}</ThemedText>
+                                    }
+                                    <Ionicons name="map-outline" size={28} color={"white"} style={{ marginLeft: 8 }} />
+                                </TouchableOpacity>
+                                <ThemedView>
+                                    <Modal
+                                        animationType="slide"
+                                        transparent={false}
+                                        visible={ModalMapVisibity}
+                                        onRequestClose={() => {
+                                            setModalMapVisibility(false)
+                                        }}
+                                    >
+                                        <>
+                                            <MapPicking
+                                                coordinateChosen={coordinateChosen}
+                                                returnLocationChoosen={(coords) => {
+                                                    setModalMapVisibility(false); // close map modal
+                                                    setCoordinateChosen(coords)
+                                                }} />
+                                        </>
+                                    </Modal>
+                                </ThemedView>
+                            </>
+
+                            {/* FILE SYSTEM TO UPLOAD AND DOWNLOAD FILES */}
+                            <FileHandler
+                                fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)}
+                                ref={refFileHandler}
+                                postid={postData?.ID}
+                            />
+
+                            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
+                                exclusivity_sheet_handler.current?.snapToIndex(0);
+
+                            }}>
+                                <ThemedText>{langselected?.exclusivity.title}</ThemedText>
                             </TouchableOpacity>
-                            <ThemedView>
-                                <Modal
-                                    animationType="slide"
-                                    transparent={false}
-                                    visible={ModalMapVisibity}
-                                    onRequestClose={() => {
-                                        setModalMapVisibility(false)
-                                    }}
-                                >
-                                    <>
-                                        <MapPicking
-                                            coordinateChosen={coordinateChosen}
-                                            returnLocationChoosen={(coords) => {
-                                                setModalMapVisibility(false); // close map modal
-                                                setCoordinateChosen(coords)
-                                            }} />
-                                    </>
-                                </Modal>
-                            </ThemedView>
-                        </>
 
-                        {/* FILE SYSTEM TO UPLOAD AND DOWNLOAD FILES */}
-                        <FileHandler
-                            fullScreenCamera={() => setFullScreenCamera(!fullScreenCamera)}
-                            ref={refFileHandler}
-                            postid={postData?.ID}
-                        />
+                            {postData?.ID == null ? null :
+                                <TouchableOpacity
+                                    style={[style.buttons.full_screen, style.colors.geomedia_red, style.bottom_bar_item, { alignSelf: "center" }]}
+                                    onPress={() => {
+                                        deletePost()
+                                    }}>
+                                    <ThemedText>{langselected?.postCreator?.deletePost}</ThemedText>
+                                </TouchableOpacity>
+                            }
 
-                        <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
-                            exclusivity_sheet_handler.current?.snapToIndex(0);
 
-                        }}>
-                            <ThemedText>{langselected?.exclusivity.title}</ThemedText>
+                        </ThemedView>
+                    </KeyboardAvoidingView>
+                </ScrollView >
+
+
+                {/* show save button only if theres no camera open */}
+                {!fullScreenCamera && (
+                    <ThemedView>
+                        <TouchableOpacity
+                            style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
+                            onPress={save_post}
+                        >
+
+                            {postData?.ID == null ?
+                                <ThemedText>
+                                    {langselected.postCreator.create}
+                                </ThemedText>
+                                :
+                                <ThemedText>
+                                    {langselected.postCreator.modify}
+                                </ThemedText>
+                            }
                         </TouchableOpacity>
 
 
-
-
                     </ThemedView>
-                </KeyboardAvoidingView>
-            </ScrollView >
+                )}
 
-
-            {/* show save button only if theres no camera open */}
-            {!fullScreenCamera && (
-                <ThemedView>
-                    <TouchableOpacity
-                        style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
-                        onPress={save_post}
+                <BottomSheet
+                    ref={collection_sheet_handler}
+                    index={-1} // start closed
+                    snapPoints={snapPoints}
+                    enablePanDownToClose={true} // drag down to close
+                    backgroundStyle={{
+                        borderTopWidth: 1,
+                        borderEndWidth: 1,
+                        borderStartWidth: 1,
+                        borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                        backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                    }}
+                >
+                    <BottomSheetScrollView style={{ flex: 1 }}
+                        contentContainerStyle={{ paddingBottom: 20 }}
+                        keyboardShouldPersistTaps="handled"
                     >
+                        <ThemedView>
+                            <CollectionsList
+                                postCreation={"W"}
+                                allowCreation={true}
+                                onSelect={(cat: Object) => {
+                                    collection_sheet_handler?.current?.close()
+                                    setPostData(prev => ({
+                                        ...prev,
+                                        COLLECTION_ID: cat?.ID,
+                                        COLLECTION_NAME: cat?.TITLE,
+                                        COLOR: cat?.COLOR,
+                                        ICON: cat?.ICON,
+                                        REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
+                                    }))
+                                }} />
+                        </ThemedView>
+                    </BottomSheetScrollView>
+                </BottomSheet>
 
-                        {postData?.ID == null ?
-                            <ThemedText>
-                                {langselected.postCreator.create}
-                            </ThemedText>
-                            :
-                            <ThemedText>
-                                {langselected.postCreator.modify}
-                            </ThemedText>
-                        }
-                    </TouchableOpacity>
-                </ThemedView>
-            )}
+                <BottomSheet
+                    ref={exclusivity_sheet_handler}
+                    index={-1} // start closed
+                    snapPoints={snapPoints}
+                    enablePanDownToClose={true} // drag down to close
+                    backgroundStyle={{
+                        borderTopWidth: 1,
+                        borderEndWidth: 1,
+                        borderStartWidth: 1,
+                        borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
 
-            <BottomSheet
-                ref={collection_sheet_handler}
-                index={-1} // start closed
-                snapPoints={snapPoints}
-                enablePanDownToClose={true} // drag down to close
-                backgroundStyle={{
-                    borderTopWidth: 1,
-                    borderEndWidth: 1,
-                    borderStartWidth: 1,
-                    borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                    borderTopLeftRadius: 24,
-                    borderTopRightRadius: 24,
-                    backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                }}
-            >
-                <BottomSheetScrollView style={{ flex: 1 }}
-                    contentContainerStyle={{ paddingBottom: 20 }}
-                    keyboardShouldPersistTaps="handled"
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                        backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                    }}
                 >
-                    <ThemedView>
-                        <CollectionsList
-                            postCreation={"W"}
-                            allowCreation={true}
-                            onSelect={(cat: Object) => {
-                                collection_sheet_handler?.current?.close()
-                                setPostData(prev => ({
-                                    ...prev,
-                                    COLLECTION_ID: cat?.ID,
-                                    COLLECTION_NAME: cat?.TITLE,
-                                    COLOR: cat?.COLOR,
-                                    ICON: cat?.ICON,
-                                    REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
-                                }))
-                            }} />
-                    </ThemedView>
-                </BottomSheetScrollView>
-            </BottomSheet>
-
-            <BottomSheet
-                ref={exclusivity_sheet_handler}
-                index={-1} // start closed
-                snapPoints={snapPoints}
-                enablePanDownToClose={true} // drag down to close
-                backgroundStyle={{
-                    borderTopWidth: 1,
-                    borderEndWidth: 1,
-                    borderStartWidth: 1,
-                    borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-
-                    borderTopLeftRadius: 24,
-                    borderTopRightRadius: 24,
-                    backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                }}
-            >
-                <BottomSheetScrollView style={{ flex: 1 }}
-                    contentContainerStyle={{ paddingBottom: 20 }}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <ThemedView>
-                        <ExclusivityPicking
-                            creatorEnabled={false}
-                            EXCLUSIVITY={postData?.EXCLUSIVITY}
-                            setExclusivity={(obj) => {
-                                setPostData(prev => ({
-                                    ...prev,
-                                    EXCLUSIVITY: obj
-                                }));
-                                exclusivity_sheet_handler?.current?.close()
-                            }} />
-                    </ThemedView>
-                </BottomSheetScrollView>
-            </BottomSheet>
-        </GestureHandlerRootView >
-
+                    <BottomSheetScrollView style={{ flex: 1 }}
+                        contentContainerStyle={{ paddingBottom: 20 }}
+                        keyboardShouldPersistTaps="handled"
+                    >
+                        <ThemedView>
+                            <ExclusivityPicking
+                                creatorEnabled={false}
+                                EXCLUSIVITY={postData?.EXCLUSIVITY}
+                                setExclusivity={(obj) => {
+                                    setPostData(prev => ({
+                                        ...prev,
+                                        EXCLUSIVITY: obj
+                                    }));
+                                    exclusivity_sheet_handler?.current?.close()
+                                }} />
+                        </ThemedView>
+                    </BottomSheetScrollView>
+                </BottomSheet>
+            </GestureHandlerRootView >
+        </>
     );
 };
 export default PostCreator;

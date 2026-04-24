@@ -181,17 +181,31 @@ export const checkValidityPassword = (password) => {
 }
 
 //NETWORKING
-export const doRequest = (api, body = {}) => {
-
-    return fetch(URL + api, {
-        // return fetch("http://10.0.0.3:9911/"+ api, {
-        method: "POST",
-        mode: "cors",
-        headers: { "authorization": "mysuperkey" },
-        body: JSON.stringify(body)
-    }).then(res => res.json()).catch(err => {
-        Alert.alert("Network error, try later..")
-    })
+export const doRequest = (api, body = {}, method = "POST") => {
+    let methods_no_body = ["GET", "DELETE"]
+    if (methods_no_body.includes(method)) {
+        if (body && Object.keys(body).length > 0) {
+            const query = new URLSearchParams(body).toString();
+            api += "?" + query;
+        }
+        console.log(api)
+        return fetch(URL + api, {
+            method: method,
+            mode: "cors",
+            headers: { "authorization": "mysuperkey" },
+        }).then(res => res.json()).catch(err => {
+            Alert.alert("Network error, try later..")
+        })
+    } else {
+        return fetch(URL + api, {
+            method: method,
+            mode: "cors",
+            headers: { "authorization": "mysuperkey" },
+            body: JSON.stringify(body)
+        }).then(res => res.json()).catch(err => {
+            Alert.alert("Network error, try later..")
+        })
+    }
 }
 
 

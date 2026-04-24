@@ -32,7 +32,6 @@ export default function MapLayout() {
                 name="PostCreator"
                 options={{
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
-                    title: 'New Post',
                     animation: 'slide_from_right',
                 }}
             />

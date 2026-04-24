@@ -24,6 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+############################################################################################################################################
+
 def check_auth(authorization: str = None):
     if not authorization or authorization != SHARED_KEY:
         raise HTTPException(
@@ -49,40 +51,6 @@ async def dispatch_req(path: str, body: dict):
             else:
                 geomedia_helper.writeLog("AUTH failed for: " + json.dumps(body), "SIGNIN")
                 return send_response(query_results, 401)
-
-        elif path == "/post_merge":
-            postdata = body.get("postdata", {})
-            files = json.loads(json.dumps(postdata.get("attachments", [])))  # deep copy
-
-            # Remove attachments before passing to DB
-            if "attachments" in postdata:
-                del postdata["attachments"]
-
-            query_results = await geomedia_helper.post_merge(postdata)
-
-            if not query_results[0].get("OK"):
-                return send_response({"OK": False, "MSG": query_results[1].get("MSG")}, 500)
-
-            post_id = query_results[0]["ID"]
-            x = geomedia_helper.hpmedia_merge_folder(post_id, files)
-
-            if x:
-                return send_response({"post_id": post_id, "OK": True}, 200)
-            else:
-                return send_response({"post_id": post_id, "OK": False}, 500)
-
-        elif path == "/post_get_fullpost":
-            query_results = await geomedia_helper.generic_query("post_get_fullpost", body)
-            ff = await geomedia_helper.hpmedia_read_folder(body.get("postid"))
-            if ff is None or len(ff) == 0:
-                ff = []
-            if query_results and len(query_results) > 0:
-                query_results[0]["attachments"] = ff
-            return send_response(query_results, 200)
-
-        elif path == "/post_delete":
-            result = await geomedia_helper.post_delete(body.get("postid"), body.get("password")) 
-            return result 
 
         # Generic query
         generic_routes = {
@@ -121,10 +89,89 @@ async def dispatch_req(path: str, body: dict):
         )
 
 
+## COLLECTIONS
+
+# CREATE / UPDATE POST
+@app.post("/collection")
+async def create_post(body: dict, request: Request, authorization: str = Header(None)):
+    check_auth(authorization)
+
+    body["IP"] = request.client.host
+    body["HEADERS"] = dict(request.headers)
+
+    postdata = body.get("postdata", {})
+    files = json.loads(json.dumps(postdata.get("attachments", [])))
+
+    postdata.pop("attachments", None)
+
+    query_results = await geomedia_helper.post_merge(postdata)
+
+    if not query_results[0].get("OK"):
+        raise HTTPException(
+            status_code=500,
+            detail={"OK": False, "MSG": query_results[1].get("MSG")},
+        )
+
+    post_id = query_results[0]["ID"]
+    ok = geomedia_helper.hpmedia_merge_folder(post_id, files)
+
+    if not ok:
+        raise HTTPException(
+            status_code=500,
+            detail={"post_id": post_id, "OK": False},
+        )
+
+    return {"post_id": post_id, "OK": True}
+
+@app.get("/collection/{post_id}")
+async def get_post(
+    post_id: int,
+    uid: int | None = None,
+    authorization: str = Header(None),
+):
+    check_auth(authorization)
+    try:
+        query_results = await geomedia_helper.generic_query(
+            "post_get_fullpost",
+            {
+                "postid": post_id,
+                "uid": uid,  
+            }
+        )
+        if not query_results:
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        print("HERE", query_results)
+
+        attachments = await geomedia_helper.hpmedia_read_folder(post_id)
+        if not attachments:
+            attachments = []
+
+        if query_results:
+            query_results[0]["attachments"] = attachments
+
+        return query_results
+    except Exception:
+        raise HTTPException(status_code=404, detail="Post not found")
 
 
-# ------------------------
-# POSTS
+# DELETE POST
+@app.delete("/collection/{post_id}")
+async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
+    try:
+        check_auth(authorization)
+        print("HERE",post_id,password)
+        result = await geomedia_helper.post_delete(post_id, password)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
+
+
+
+#---------------------------------------------------------------------------------------------------------------------------------
+
+
+## POSTS
 
 # CREATE / UPDATE POST
 @app.post("/post")
@@ -158,8 +205,6 @@ async def create_post(body: dict, request: Request, authorization: str = Header(
 
     return {"post_id": post_id, "OK": True}
 
-
-
 @app.get("/post/{post_id}")
 async def get_post(
     post_id: int,
@@ -167,35 +212,46 @@ async def get_post(
     authorization: str = Header(None),
 ):
     check_auth(authorization)
+    try:
+        query_results = await geomedia_helper.generic_query(
+            "post_get_fullpost",
+            {
+                "postid": post_id,
+                "uid": uid,  
+            }
+        )
+        if not query_results:
+            raise HTTPException(status_code=404, detail="Post not found")
 
-    query_results = await geomedia_helper.generic_query(
-        "post_get_fullpost",
-        {
-            "postid": post_id,
-            "uid": uid,  
-        },
-    )
+        print("HERE", query_results)
 
-    print("HERE", query_results)
+        attachments = await geomedia_helper.hpmedia_read_folder(post_id)
+        if not attachments:
+            attachments = []
 
-    attachments = await geomedia_helper.hpmedia_read_folder(post_id)
-    if not attachments:
-        attachments = []
+        if query_results:
+            query_results[0]["attachments"] = attachments
 
-    if query_results:
-        query_results[0]["attachments"] = attachments
+        return query_results
+    except Exception:
+        raise HTTPException(status_code=404, detail="Post not found")
 
-    return query_results
 
 # DELETE POST
 @app.delete("/post/{post_id}")
 async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
-    check_auth(authorization)
+    try:
+        check_auth(authorization)
+        print("HERE",post_id,password)
+        result = await geomedia_helper.post_delete(post_id, password)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
 
-    result = await geomedia_helper.post_delete(post_id, password)
-    return result
 
 
+############################################################################################################################################
+############################################################################################################################################
 @app.post("/{full_path:path}")
 async def handle_request(request: Request, full_path: str):
     # Reconstruct path like "/something"

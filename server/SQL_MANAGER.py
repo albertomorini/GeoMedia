@@ -48,6 +48,7 @@ def execute_query(query, fetch=True):
 
     except Exception as e:
         conn.rollback()
+        print("SQL ERROR:: ",e)
         raise e
 
     finally:

@@ -20,7 +20,7 @@ def writeLog(message, scope="ERROR"):
     try:
         message = str(message).replace("'", "''")
 
-        query = f"EXEC @MESSAGE='{message}', @SCOPE='{scope}'"
+        query = f"EXEC DBO.LOG_WRITE @MESSAGE='{message}', @SCOPE='{scope}'"
         SQL_MANAGER.select_query(query)
 
     except Exception:
@@ -213,5 +213,6 @@ async def post_delete(postid: int, password: str):
         f"@POSTID={postid}, "
         f"@PASSWORD='{password}'"
     )
+    print("EXECUTING: ",query)
 
-    return SQL_MANAGER.select_query( query)
+    return SQL_MANAGER.insert_query(query)

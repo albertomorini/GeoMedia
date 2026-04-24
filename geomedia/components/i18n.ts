@@ -39,7 +39,7 @@ export const it = {
     contactme: "Contattami",
     share: "Condividi",
     on: "il",
-    views:"Visioni0",
+    views:"Visioni",
     likes:"Mi piace",
     show:"Mostra",
     hide:"Nascondi",
@@ -72,7 +72,8 @@ export const it = {
         lat: "Latitudine",
         lon: "Longitudine",
         pickLocaton: "Scegli la posizione",
-        pickCollection: "Seleziona la collezione"
+        pickCollection: "Seleziona la collezione",
+        deletePost:"Cancella il post",
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
@@ -215,7 +216,8 @@ export const en = {
         lat: "Latitude",
         lon: "Longitude",
         pickLocaton: "Pick a location",
-        pickCollection: "Select collection"
+        pickCollection: "Select collection",
+        deletePost:"Delete the post",
     },
     pswReset: {
         proceed: "Do you want to proceed with the password change?",
