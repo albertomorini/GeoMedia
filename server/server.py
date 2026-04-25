@@ -107,14 +107,20 @@ async def collection_merge(body: dict, request: Request, authorization: str = He
 
     return query_results
 
+@app.get("/collection")
 @app.get("/collection/{collection_id}")
 async def collections_get_fullcollection(
-    collection_id: int,
+    collection_id: int | None = None,
     uid: int | None = None,
+    mode: str | None = None,
     authorization: str = Header(None),
 ):
     check_auth(authorization)
-    return await geomedia_helper.generic_query("collections_get_fullcollection", {"collectionid":collection_id,"uid":uid})
+    print(collection_id)
+    if(collection_id is None):
+        return await geomedia_helper.generic_query("collections_get",{"uid":uid, "mode": mode})
+    else:
+        return await geomedia_helper.generic_query("collections_get_fullcollection", {"collectionid":collection_id,"uid":uid})
 
 
 # DELETE POST

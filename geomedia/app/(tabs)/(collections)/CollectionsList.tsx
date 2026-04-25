@@ -15,18 +15,25 @@ const CollectionsList = (props) => {
     const [collections, setCollections] = useState([])
 
     function getCollectionsList() {
-        doRequest("collections_get", {
-            uid: ctx?.getUID(),
-            mode: props?.postCreation ?? "R"
-        }).then(resQuery => {
-            setCollections(resQuery)
-        }).catch(err => {
+        try {
+            doRequest("collection", {
+                uid: ctx?.getUID(),
+                mode: props?.postCreation ?? "R"
+            }, "GET").then(resQuery => {
+                setCollections(resQuery)
+            }).catch(err => {
+                ctx?.showToast({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Network error... are you offline?"
+                })
+            })
+        } catch (error) {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: "Something went wrong..try again"
             })
-        })
+        }
     }
 
 

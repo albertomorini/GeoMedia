@@ -59,17 +59,18 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collections_get_fullcollection", {
-                "collectionid": collectionid,
+            doRequest("collection/"+collectionid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            },"GET").then(resQuery => {
                 let x = resQuery[0];
-                setCollectionData(prev => ({
-                    ...prev,
-                    ...x,
-                    VIEWERS: JSON.parse(x?.VIEWERS),
-                    CREATORS: JSON.parse(x?.CREATORS),
-                }));
+                if(x!=undefined){
+                    setCollectionData(prev => ({
+                        ...prev,
+                        ...x,
+                        VIEWERS: JSON.parse(x?.VIEWERS),
+                        CREATORS: JSON.parse(x?.CREATORS),
+                    }));
+                }
             }).catch(err => {
                 Alert.alert("Err loading collection", err)
             })
