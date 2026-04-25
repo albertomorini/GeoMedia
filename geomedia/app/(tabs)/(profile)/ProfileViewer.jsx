@@ -95,7 +95,6 @@ const ProfileViewer = () => {
         })
     }
 
-
     useFocusEffect(
         useCallback(() => {
             if (params?.username != null) {

@@ -5,17 +5,22 @@ import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE i
 import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '../_layout';
 import { ThemedText } from '@/components/themed-text';
+import { useLanguage } from '@/components/LanguageProvider';
+import { style } from '@/components/globalstyle';
+import { ThemedView } from '@/components/themed-view';
 
 const MapPicking = (props, ref) => {
 
     const mapRef = useRef(null);
     const ctx = useContext(MyContext)
+    const { langselected } = useLanguage();
     /////////////////////////////////////////////////////////////
 
-    const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0 });
+    const [UserPosition, setUserPosition] = useState({ lat: 0, lon: 0, alt: 0 });
     const [selectedMarker, setSelectedMarker] = useState({
         latitude: props?.coordinateChosen?.latitude,
-        longitude: props?.coordinateChosen?.longitude
+        longitude: props?.coordinateChosen?.longitude,
+        altitude: props?.coordinateChosen?.altitude
     });
 
     async function requestLocationPermission() {
@@ -55,9 +60,9 @@ const MapPicking = (props, ref) => {
 
         Geolocation.getCurrentPosition(
             position => {
-                const { latitude, longitude } = position.coords;
-                setUserPosition({ lat: latitude, lon: longitude });
-                setSelectedMarker({latitude:latitude,longitude:longitude})
+                const { latitude, longitude, altitude } = position.coords;
+                setUserPosition({ lat: latitude, lon: longitude, alt: altitude });
+                setSelectedMarker({ latitude: latitude, longitude: longitude, altitude: altitude })
                 // set map with center on user location 
                 mapRef.current?.animateToRegion({
                     latitude,
@@ -98,7 +103,7 @@ const MapPicking = (props, ref) => {
     }, [])
 
     return (
-        <View style={{ flex: 1 }}>
+        <ThemedView style={{ flex: 1 }}>
             <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -133,6 +138,7 @@ const MapPicking = (props, ref) => {
                     }}
                     draggable
                     onDragEnd={async (e) => {
+                        //ALTITUDE IS NOT AVAILABLE IN DRAGGING - WARNING
                         const { latitude, longitude } = e.nativeEvent.coordinate;
                         setSelectedMarker({ latitude, longitude });
                     }}
@@ -144,29 +150,43 @@ const MapPicking = (props, ref) => {
 
             {/* Floating Action Button */}
             <TouchableOpacity
-                style={{
+                style={[{
                     position: 'absolute',
                     bottom: 60, // Position at the bottom
-                    right: 20,  // Align to the right
-                    backgroundColor: '#3b5998', // Background color
-                    width: 120,
-                    height: 60,
+                    left: 20,  // Align to the right
+                    width: 140,
+                    height: 70,
+                    padding: 10,
                     borderRadius: 20, // Circular button
                     justifyContent: 'center',
                     alignItems: 'center',
-                    elevation: 5, // Add some shadow on Android
-                    shadowColor: '#000', // Shadow on iOS
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
+                }, style.colors.geomedia_blue]}
+                onPress={() => {
+                    props?.cancel();
                 }}
+            >
+                <ThemedText>{langselected?.postCreator?.locationCurrent}</ThemedText>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={[{
+                    position: 'absolute',
+                    bottom: 60, // Position at the bottom
+                    right: 20,  // Align to the right
+                    width: 140,
+                    height: 70,
+                    padding: 10,
+                    borderRadius: 20, // Circular button
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }, style.colors.geomedia_green]}
                 onPress={() => {
                     props?.returnLocationChoosen(selectedMarker);
                 }}
             >
-                <ThemedText style={styles.fabText}>Confirm</ThemedText>
+                <ThemedText >{langselected?.confirm}</ThemedText>
             </TouchableOpacity>
-        </View>
+        </ThemedView>
     )
 };
 
@@ -174,14 +194,6 @@ export default MapPicking
 
 const styles = StyleSheet.create({
 
-    container: {
-        flex: 1,
-        ...StyleSheet.absoluteFillObject,
-        height: "100%",
-        width: "100%",
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     map: {
         ...StyleSheet.absoluteFillObject,
     },

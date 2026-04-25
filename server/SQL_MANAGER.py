@@ -40,11 +40,15 @@ def execute_query(query, fetch=True):
         cursor = conn.cursor(as_dict=True)
         cursor.execute(query)
 
-        if fetch: 
-            return cursor.fetchall()
+        result = []
+        if fetch:
+            try:
+                result = cursor.fetchall()
+            except Exception:
+                result = []
 
-        conn.commit()
-        return []
+        conn.commit() 
+        return result
 
     except Exception as e:
         conn.rollback()

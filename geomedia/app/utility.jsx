@@ -197,10 +197,11 @@ export const doRequest = (api, body = {}, method = "POST") => {
             Alert.alert("Network error, try later..")
         })
     } else {
+        console.log(URL + api,body)
         return fetch(URL + api, {
             method: method,
             mode: "cors",
-            headers: { "authorization": "mysuperkey" },
+            headers: { "authorization": "mysuperkey" , "content-type":"application/json"},
             body: JSON.stringify(body)
         }).then(res => res.json()).catch(err => {
             Alert.alert("Network error, try later..")

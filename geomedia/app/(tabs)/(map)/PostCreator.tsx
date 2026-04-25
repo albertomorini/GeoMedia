@@ -45,10 +45,12 @@ const PostCreator = () => {
     const [currentLocation, setCurrentLocation] = useState({
         latitude: null,
         longitude: null,
+        altitude: null
     })
     const [coordinateChosen, setCoordinateChosen] = useState({
         latitude: null,
         longitude: null,
+        altitude: null
     })
 
     /// for exclusivity bottom menu
@@ -114,7 +116,10 @@ const PostCreator = () => {
         /// position chosen, if not chosen automatically use the current one
         dummy_body.LATITUDE = coordinateChosen.latitude
         dummy_body.LONGITUDE = coordinateChosen.longitude
+        dummy_body.ALTITUDE = coordinateChosen.altitude
         dummy_body.attachments = files //attach files
+
+
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
@@ -129,7 +134,7 @@ const PostCreator = () => {
         } else {
             doRequest("post", {
                 postdata: dummy_body
-            }).then(res => {
+            }, "POST").then(res => {
                 if (res?.OK) {
                     setPostData(prev => ({
                         ...prev,
@@ -169,6 +174,7 @@ const PostCreator = () => {
                         ...prev,
                         "latitude": position?.coords?.latitude,
                         "longitude": position?.coords?.longitude,
+                        "altitude": position?.coords?.altitude
                     })
                 )
                 setCurrentLocation(
@@ -176,6 +182,7 @@ const PostCreator = () => {
                         ...prev,
                         "latitude": position?.coords?.latitude,
                         "longitude": position?.coords?.longitude,
+                        "altitude": position?.coords?.altitude
                     })
                 )
             },
@@ -225,7 +232,8 @@ const PostCreator = () => {
                 setCoordinateChosen(prev => ({
                     ...prev,
                     latitude: x?.LATITUDE,
-                    longitude: x?.LONGITUDE
+                    longitude: x?.LONGITUDE,
+                    altitude: x?.ALTITUDE
                 }))
                 refFileHandler?.current?.load_files(x.attachments)
             }).catch(err => {
@@ -272,7 +280,7 @@ const PostCreator = () => {
         <>
             <Stack.Screen
                 options={{
-                    title: postData?.TITLE?? (langselected?.newm+"post"),
+                    title: postData?.TITLE ?? (langselected?.newm + "post"),
                 }}
             />
 
@@ -385,7 +393,12 @@ const PostCreator = () => {
                                                 returnLocationChoosen={(coords) => {
                                                     setModalMapVisibility(false); // close map modal
                                                     setCoordinateChosen(coords)
-                                                }} />
+                                                }}
+                                                cancel={()=>{
+                                                    setModalMapVisibility(false); // close map modal
+                                                    setCoordinateChosen(currentLocation)
+                                                }}
+                                            />
                                         </>
                                     </Modal>
                                 </ThemedView>

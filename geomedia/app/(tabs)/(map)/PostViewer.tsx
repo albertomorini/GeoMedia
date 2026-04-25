@@ -2,8 +2,8 @@ import { MyContext } from "@/app/_layout";
 import { datetime2date, doRequest } from "@/app/utility";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Alert, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
 
 
@@ -94,9 +94,13 @@ const PostViewer = () => {
         })
     }
 
-    useEffect(() => {
-        loadFullPost()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            if (params?.postid != null) {
+                loadFullPost()
+            }
+        }, [])
+    );
 
     return (
         <>
