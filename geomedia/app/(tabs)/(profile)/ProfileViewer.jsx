@@ -39,9 +39,9 @@ const ProfileViewer = () => {
 
 
     function getProfilePic(username) {
-        doRequest("profile_getpfp", {
-            USERNAME: username
-        }).then(res => {
+        doRequest("profile/pfp", {
+            username: username
+        }, "GET").then(res => {
             let pp = res[0].PROFILE_PICTURE
             if (pp != undefined) {
                 setProfilePic(pp)
@@ -56,9 +56,10 @@ const ProfileViewer = () => {
     }
 
     function get_statsCategory(username) {
-        doRequest("profile_getstats_categories", {
-            username: username
-        }).then(res => {
+        doRequest("stats/profile", {
+            username: username,
+            mode: "categories"
+        }, "GET").then(res => {
             setstatsCategory(
                 res.map(item => ({
                     value: item.TOT_POSTS,
@@ -67,9 +68,10 @@ const ProfileViewer = () => {
                 }))
             )
         })
-        doRequest("profile_getstats_timemonths", {
-            username: username
-        }).then(res => {
+        doRequest("stats/profile", {
+            username: username,
+            mode: "timemonths"
+        }, "GET").then(res => {
             setStatTimeMonth(
                 res.map((item, index) => ({
                     value: item.TOT_POSTS,
@@ -82,9 +84,9 @@ const ProfileViewer = () => {
 
 
     function getInfo(username) {
-        doRequest("profile_getinfo", {
+        doRequest("profile", {
             username: username
-        }).then(res => {
+        }, "GET").then(res => {
             setUser(res[0])
         }).catch(err => {
             ctx?.showToast({

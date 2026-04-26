@@ -56,7 +56,6 @@ async def dispatch_req(path: str, body: dict):
         # Generic query
         generic_routes = {
             "/auth_login", "/auth_psw_reset",
-            "/profile_getstats_categories", "/profile_getstats_timemonths",
             "/auth_check_otp", "/interactions_likepost", "/hpmedia_remove",
             "/users_list","/report_new", "/auth_check_username", "/collection_posts_get",
             "/post_get_authorid"
@@ -91,15 +90,31 @@ async def profile_getpfp(username:str,
     print(username)
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
-
+@app.get("/profile")
 @app.get("/profile/{profile_id}")
-async def proile_getinfo(
+@app.get("/profile/{username}")
+async def profile_getinfo(
     username: str | None = None,
     uid: int | None = None,
     authorization: str = Header(None)
 ):
     check_auth(authorization)
+    print("HERE",username,uid)
     return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
+
+@app.get("/stats/profile")
+async def profile_get_stats(
+    username: str ,
+    mode: str,
+    authorization: str = Header(None)
+):
+    print("THERE",mode,username)
+    check_auth(authorization)
+    if(mode=="categories"):
+        return await geomedia_helper.generic_query("profile_getstats_categories",{"username":username})
+    elif(mode=="timemonths"):
+        return await geomedia_helper.generic_query("profile_getstats_timemonths",{"username":username})
+        
 
 @app.post("/profile")
 async def profile_editinfo(
