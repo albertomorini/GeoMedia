@@ -58,9 +58,10 @@ const PostViewer = () => {
         }
 
         if (postid != null) {
-            doRequest("post/" + postid, {
+            doRequest("post_get_fullpost", {
+                "postid": postid,
                 "uid": ctx?.getUID()
-            }, "GET").then(resQuery => {
+            }).then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
                 setPostData(resQuery[0])
             }).catch(err => {
