@@ -1,68 +1,52 @@
-import json
 import smtplib
 import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import os
+import json
 
-
-# ----------------------------------------------------
-# LOAD CONFIG
-with open("./config.json", "r", encoding="utf-8") as f:
+# Load the SMTP config (Assuming you have a config file like config.json)
+with open('./config.json') as f:
     config = json.load(f)
 
-
-SMTP_CONFIG = config["EMAIL"]["SMTP"]
-
-
-# ----------------------------------------------------
-# SEND OTP EMAIL
 def send_email_otp(recipient, data):
     try:
+        # SMTP settings from config
+        smtp_config = config["EMAIL"]["SMTP"]
+        host = smtp_config["host"]
+        port = smtp_config["port"]
+        user = smtp_config["auth"]["user"]
+        password = smtp_config["auth"]["pass"]
+        
+        # Prepare the email
         msg = MIMEMultipart("alternative")
         msg["Subject"] = "GeoMedia app - OTP"
-        msg["From"] = f"{SMTP_CONFIG.get('auth', {}).get('user', 'GeoMedia app')}"
-
+        msg["From"] = f"GeoMedia app <{user}>"
         msg["To"] = recipient
-
-        # ------------------------------------------------
-        # LOAD HTML TEMPLATE
+        
+        # Load the HTML template
         with open("./email_body.html", "r", encoding="utf-8") as f:
             html_body = f.read()
-
+        
+        # Replace placeholders
         html_body = html_body.replace("$USERNAME", str(data.get("USERNAME", "")))
         html_body = html_body.replace("$OTP", str(data.get("OTP", "")))
 
+        # Attach HTML content
         msg.attach(MIMEText(html_body, "html"))
 
-        # ------------------------------------------------
-        # SMTP CONNECTION
-        host = SMTP_CONFIG["host"]
-        port = SMTP_CONFIG.get("port", 587)
-
+        # SSL context (we use TLS, but no need to mess with cert verification)
         context = ssl.create_default_context()
 
-        server = smtplib.SMTP(host, port)
-        server.starttls(context=context)
-
-        # login if credentials exist
-        if "auth" in SMTP_CONFIG:
-            server.login(
-                SMTP_CONFIG["auth"]["user"],
-                SMTP_CONFIG["auth"]["pass"]
-            )
-
-        response = server.sendmail(
-            SMTP_CONFIG["auth"]["user"],
-            recipient,
-            msg.as_string()
-        )
-
-        server.quit()
-
-        print(response)
+        # Establish connection with the Gmail SMTP server
+        with smtplib.SMTP_SSL(host, port, context=context) as server:
+            server.login(user, password)  # Login using the provided credentials
+            response = server.sendmail(user, recipient, msg.as_string())
 
         return [True, "Email sent successfully"]
 
     except Exception as error:
+        print(f"Error: {error}")
         return [False, str(error)]
+
+# Example call
+send_email_otp("morini99@icloud.com", {"USERNAME": "hey", "OTP": "05050"})
