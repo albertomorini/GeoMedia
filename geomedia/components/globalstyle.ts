@@ -134,7 +134,7 @@ export const style = StyleSheet.create({
 
         paddingHorizontal: 20,
         paddingVertical: 14,
-
+        flex:1,
 
         borderTopWidth: 1,
         borderTopColor: "rgba(255,255,255,0.1)",

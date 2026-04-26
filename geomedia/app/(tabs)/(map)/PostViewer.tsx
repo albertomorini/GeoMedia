@@ -2,8 +2,8 @@ import { MyContext } from "@/app/_layout";
 import { datetime2date, doRequest } from "@/app/utility";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Alert, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
 
 
@@ -20,7 +20,7 @@ const PostViewer = () => {
     const [postData, setPostData] = useState(null)
 
     const { langselected } = useLanguage()
-
+    const colorScheme = useColorScheme()
 
     const [userCreator, setUserCreator] = useState({
         username: null,
@@ -58,10 +58,9 @@ const PostViewer = () => {
         }
 
         if (postid != null) {
-            doRequest("post_get_fullpost", {
-                "postid": postid,
+            doRequest("post/" + postid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            }, "GET").then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
                 setPostData(resQuery[0])
             }).catch(err => {
@@ -95,9 +94,13 @@ const PostViewer = () => {
         })
     }
 
-    useEffect(() => {
-        loadFullPost()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            if (params?.postid != null) {
+                loadFullPost()
+            }
+        }, [])
+    );
 
     return (
         <>
@@ -138,15 +141,14 @@ const PostViewer = () => {
                         )}
 
                         {
-                            (postData?.COMMENT?.length == 0 || postData?.COMMENT == null) ? null :
+                            (postData?.COMMENT == undefined || postData?.COMMENT?.length == 0) ? null :
                                 <ThemedText
                                     style={[
                                         style.subtitle,
                                         {
-                                            backgroundColor: useColorScheme() === 'dark' ? "#4d4d4d" : '#f2f2f2',
+                                            backgroundColor: colorScheme === 'dark' ? "#4d4d4d" : '#f2f2f2',
                                             borderRadius: 50,
                                             padding: 16,
-                                            // marginTop: 10,
                                             marginBottom: 5,
                                             fontStyle: "italic"
                                         },

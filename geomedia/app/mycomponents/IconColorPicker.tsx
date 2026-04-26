@@ -2,7 +2,8 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React, { useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Modal,
     ScrollView,
@@ -14,8 +15,8 @@ import {
 
 const ICONS = [
     'home', 'alarm', 'information-circle', 'cart',
-    'heart', 'paw', 'library', 'restaurant',
-    'chatbubble', 'briefcase', 'analytics', 'american-football',
+    'heart', 'paw', 'library', 'pizza',
+    'chatbubble', 'image', 'analytics', 'american-football',
 ];
 
 const COLORS = [
@@ -24,11 +25,18 @@ const COLORS = [
     '#F06292', '#A1887F', '#90A4AE', '#81C784',
 ];
 
-export default function IconColorPickerModal({ visible, onClose, onSelect }) {
+export default function IconColorPickerModal({ visible, onClose, onSelect, defaults }) {
 
     const [colorSelected, setColorSelected] = useState(null);
     const [iconSelected, setIconSelected] = useState(null);
     const { langselected } = useLanguage()
+
+    useFocusEffect(
+        useCallback(() => { //set the selected values
+            setIconSelected(defaults?.ICON)
+            setColorSelected(defaults?.COLOR)
+        }, [defaults])
+    );
 
     return (
         <Modal transparent visible={visible} animationType="fade">

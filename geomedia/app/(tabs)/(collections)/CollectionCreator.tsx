@@ -14,6 +14,7 @@ import { doRequest } from "@/app/utility";
 import { router, useLocalSearchParams } from "expo-router";
 import CollectionPosts from "./CollectionPosts";
 import { useLanguage } from "@/components/LanguageProvider";
+import TagSelector from "./TagSelector";
 
 
 const CollectionCreator = () => {
@@ -36,6 +37,7 @@ const CollectionCreator = () => {
         "TITLE": null,
         "OWNERID": ctx?.getUID(),
         "DESCRIPTION": null,
+        "HASHTAGS": [],
         "CREATORS": [],
         "VIEWERS": [],
         "EXCL_DATE_START": null,
@@ -59,17 +61,19 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collections_get_fullcollection", {
-                "collectionid": collectionid,
+            doRequest("collection/" + collectionid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            }, "GET").then(resQuery => {
                 let x = resQuery[0];
-                setCollectionData(prev => ({
-                    ...prev,
-                    ...x,
-                    VIEWERS: JSON.parse(x?.VIEWERS),
-                    CREATORS: JSON.parse(x?.CREATORS),
-                }));
+                console.log("FULL", x)
+                if (x != undefined) {
+                    setCollectionData(prev => ({
+                        ...prev,
+                        ...x,
+                        VIEWERS: JSON.parse(x?.VIEWERS),
+                        CREATORS: JSON.parse(x?.CREATORS),
+                    }));
+                }
             }).catch(err => {
                 Alert.alert("Err loading collection", err)
             })
@@ -109,7 +113,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection_merge", {
+            doRequest("collection", {
                 collectionData: collectionData
             }).then(resQuery => {
                 if (resQuery[0]?.OK) {
@@ -199,7 +203,15 @@ const CollectionCreator = () => {
                             setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
                         }}
                     />
-
+                    <TagSelector
+                        selected={collectionData?.HASHTAGS}
+                        onConfirm={(tags) => {
+                            setCollectionData(prev => ({
+                                ...prev,
+                                HASHTAGS: tags
+                            }))
+                        }}
+                    />
 
                     <ThemedView style={{
                         flexDirection: "row",
@@ -239,6 +251,10 @@ const CollectionCreator = () => {
                     <IconColorPickerModal
                         visible={showIconPicker}
                         onClose={() => { setShowIconPicker(false) }}
+                        defaults={{
+                            "COLOR": collectionData?.COLOR,
+                            "ICON": collectionData?.ICON
+                        }}
                         onSelect={(c) => {
                             setCollectionData(prev => ({
                                 ...prev,
@@ -260,7 +276,7 @@ const CollectionCreator = () => {
                         {collectionData?.ID == null ?
                             <ThemedText>{langselected.postCreator?.create}</ThemedText>
                             :
-                            <ThemedText>{langselected.postCreator?.modify}</ThemedText>
+                            <ThemedText>{langselected.save}</ThemedText>
                         }
                     </TouchableOpacity>
                 </ThemedView>
