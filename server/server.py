@@ -10,7 +10,7 @@ import geomedia_helper
 with open("./config.json") as f:
     config = json.load(f)
 
-SHARED_KEY = config["SHARED_KEY"]
+SHARED_KEYS = config["SHARED_KEYS"]
 PORT = 9911
 
 app = FastAPI(title="Geomedia API")
@@ -20,14 +20,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST","GET","DELETE"],
     allow_headers=["*"],
 )
 
 ############################################################################################################################################
 
 def check_auth(authorization: str = None):
-    if not authorization or authorization != SHARED_KEY:
+    if not authorization or authorization not in SHARED_KEYS:
         raise HTTPException(
             status_code=401,
             detail={
@@ -119,8 +119,8 @@ async def collection_merge(body: dict, request: Request, authorization: str = He
 
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)
-
     query_results = await geomedia_helper.collection_merge(body)
+    print("QR",query_results)
 
     if not query_results[0].get("OK"):
         raise HTTPException(
@@ -151,18 +151,6 @@ async def collections_get_fullcollection(
 
 
     
-# DELETE POST
-# @app.delete("/collection/{post_id}")
-# async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
-#     try:
-#         check_auth(authorization)
-#         print("HERE",post_id,password)
-#         result = await geomedia_helper.post_delete(post_id, password)
-#         return result
-#     except Exception as e:
-#         raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
-
-
 #---------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -221,8 +209,6 @@ async def get_post(
         if not query_results:
             raise HTTPException(status_code=404, detail="Post not found")
 
-        print("HERE", query_results)
-
         attachments = await geomedia_helper.hpmedia_read_folder(post_id)
         if not attachments:
             attachments = []
@@ -234,7 +220,6 @@ async def get_post(
     except Exception:
         raise HTTPException(status_code=404, detail="Post not found")
 
-
 # DELETE POST
 @app.delete("/post/{post_id}")
 async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
@@ -245,8 +230,6 @@ async def delete_post(post_id: int, password: str, authorization: str = Header(N
         return result
     except Exception as e:
         raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
-
-
 
 ############################################################################################################################################
 ############################################################################################################################################

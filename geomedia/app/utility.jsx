@@ -11,6 +11,7 @@ import { MyContext } from "./_layout";
 import { en, it } from "@/components/i18n";
 
 let URL = "http://10.0.0.3:9911/"
+const SHARED_KEY = "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="
 
 
 async function load_config() {
@@ -20,7 +21,6 @@ async function load_config() {
     }
 }
 load_config()
-
 
 
 export default function SettingsConfig() {
@@ -192,16 +192,15 @@ export const doRequest = (api, body = {}, method = "POST") => {
         return fetch(URL + api, {
             method: method,
             mode: "cors",
-            headers: { "authorization": "mysuperkey" },
+            headers: { "authorization": SHARED_KEY },
         }).then(res => res.json()).catch(err => {
             Alert.alert("Network error, try later..")
         })
     } else {
-        console.log(URL + api,body)
         return fetch(URL + api, {
             method: method,
             mode: "cors",
-            headers: { "authorization": "mysuperkey" , "content-type":"application/json"},
+            headers: { "authorization": SHARED_KEY, "content-type": "application/json" },
             body: JSON.stringify(body)
         }).then(res => res.json()).catch(err => {
             Alert.alert("Network error, try later..")

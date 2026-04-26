@@ -45,16 +45,13 @@ async def generic_query(path: str, body: dict):
 async def post_merge(post_content: dict):
     dummy = json.dumps(post_content).replace("'", "''")
     query = f"EXEC dbo.POST_MERGE @POST_CONTENT='{dummy}'"
-
     return SQL_MANAGER.select_query(query)
 
 
 async def collection_merge(collection: dict):
-    dummy = json.dumps(collection).replace("'", "''")
+    dummy = json.dumps(collection).replace("'", "''") # to escale the apix
     query = f"EXEC dbo.COLLECTION_MERGE @JSON='{dummy}'"
-    print("DAJEROMA",query)
-
-    return SQL_MANAGER.insert_query(query)
+    return SQL_MANAGER.select_query(query)
 
 async def collections_get_hashtags():
     return SQL_MANAGER.select_query("SELECT TITLE FROM DBO.HASHTAGS")

@@ -15,12 +15,11 @@ export default function CustomChips(props) {
   const { langselected } = useLanguage()
   const [visible, setVisible] = useState(false)
 
-  const [tags, setTags] = useState();
+  const [tags, setTags] = useState([]);
   const [searchText, setSearchText] = useState("")
 
   function collections_get_hashtags() {
-    doRequest("/collection/hashtags", null, "GET").then(resQuery => {
-      console.log(resQuery)
+    doRequest("collection/hashtags", {}, "GET").then(resQuery => {
       let x = resQuery.map(s => s?.TITLE)
       setTags([...x])
     })
@@ -37,7 +36,10 @@ export default function CustomChips(props) {
   useFocusEffect(
     useCallback(() => {
       collections_get_hashtags()
-    }, [])
+      if (props?.selected != undefined) {
+        setSelected(props?.selected)
+      }
+    }, [props])
   )
 
   return (
@@ -45,10 +47,14 @@ export default function CustomChips(props) {
       <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
         setVisible(true)
       }}>
-        <ThemedText>tags</ThemedText>
+        <ThemedText>{langselected?.postCreator.modify} tag</ThemedText>
       </TouchableOpacity>
 
-      <Modal transparent visible={visible} animationType="fade">
+      <Modal transparent visible={visible} animationType="fade" allowSwipeDismissal={true}
+        onRequestClose={() => {
+          setVisible(false)
+        }}
+      >
         <ThemedView style={[styles.centered, styles.overlay]}>
 
           <ThemedView style={styles.modal}>

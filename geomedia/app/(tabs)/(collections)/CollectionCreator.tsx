@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Switch, TouchableOpacity, useColorScheme } from "react-native";
+import { Alert, Pressable, Switch, TouchableOpacity, useColorScheme } from "react-native";
 import ExclusivityPicking from "../(map)/ExclusivityPicking";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -15,6 +15,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import CollectionPosts from "./CollectionPosts";
 import { useLanguage } from "@/components/LanguageProvider";
 import TagSelector from "./TagSelector";
+import { ScrollView } from "react-native";
 
 
 const CollectionCreator = () => {
@@ -57,7 +58,6 @@ const CollectionCreator = () => {
         try {
             collectionid = params.collectionid ? JSON.parse(params.collectionid as string) : null;
         } catch (e) {
-            // console.error("Failed to parse collection data", e);
             collectionid = null;
         }
         if (collectionid != null) {
@@ -65,11 +65,11 @@ const CollectionCreator = () => {
                 "uid": ctx?.getUID()
             }, "GET").then(resQuery => {
                 let x = resQuery[0];
-                console.log("FULL", x)
                 if (x != undefined) {
                     setCollectionData(prev => ({
                         ...prev,
                         ...x,
+                        HASHTAGS: JSON.parse(x?.HASHTAGS),
                         VIEWERS: JSON.parse(x?.VIEWERS),
                         CREATORS: JSON.parse(x?.CREATORS),
                     }));
@@ -113,9 +113,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection", {
-                collectionData: collectionData
-            }).then(resQuery => {
+            doRequest("collection", collectionData).then(resQuery => {
                 if (resQuery[0]?.OK) {
                     setCollectionData(prev => ({
                         ...prev,
@@ -203,15 +201,55 @@ const CollectionCreator = () => {
                             setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
                         }}
                     />
-                    <TagSelector
-                        selected={collectionData?.HASHTAGS}
-                        onConfirm={(tags) => {
-                            setCollectionData(prev => ({
-                                ...prev,
-                                HASHTAGS: tags
-                            }))
-                        }}
-                    />
+                    <ThemedView style={{ height: 100 }}>
+
+                        <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+                            <ThemedView style={{
+                                width: 150,
+                                height: 80,
+                                margin: 4,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                flexDirection: "row",
+                                flexWrap: "wrap",
+                            }}>
+                                <TagSelector
+                                    selected={collectionData?.HASHTAGS}
+                                    onConfirm={(tags) => {
+                                        setCollectionData(prev => ({
+                                            ...prev,
+                                            HASHTAGS: tags
+                                        }))
+                                    }}
+                                />
+                            </ThemedView>
+
+                            {collectionData?.HASHTAGS != null && collectionData?.HASHTAGS?.map(c => (
+                                <ThemedView style={{
+                                    flexDirection: "row",
+                                    flexWrap: "wrap",
+                                }}>
+                                    <Pressable
+                                        key={c}
+                                        style={[
+                                            {
+                                                paddingVertical: 6,
+                                                paddingHorizontal: 12,
+                                                borderRadius: 20,
+                                                backgroundColor: "#eee",
+                                                margin: 4,
+                                                marginTop: 15
+                                            }
+                                        ]}
+                                    >
+                                        <ThemedText style={{ color: "#333" }}>
+                                            #{c}
+                                        </ThemedText>
+                                    </Pressable>
+                                </ThemedView>
+                            ))}
+                        </ScrollView>
+                    </ThemedView>
 
                     <ThemedView style={{
                         flexDirection: "row",
@@ -325,7 +363,7 @@ const CollectionCreator = () => {
                     </>
                 </BottomSheetScrollView>
             </BottomSheet>
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
     )
 }
 

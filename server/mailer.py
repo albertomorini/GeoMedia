@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import json
 
-# Load the SMTP config (Assuming you have a config file like config.json)
+# Load the SMTP config 
 with open('./config.json') as f:
     config = json.load(f)
 
@@ -34,7 +34,7 @@ def send_email_otp(recipient, data):
         # Attach HTML content
         msg.attach(MIMEText(html_body, "html"))
 
-        # SSL context (we use TLS, but no need to mess with cert verification)
+        # SSL context
         context = ssl.create_default_context()
 
         # Establish connection with the Gmail SMTP server
@@ -47,6 +47,3 @@ def send_email_otp(recipient, data):
     except Exception as error:
         print(f"Error: {error}")
         return [False, str(error)]
-
-# Example call
-send_email_otp("morini99@icloud.com", {"USERNAME": "hey", "OTP": "05050"})

@@ -69,15 +69,3 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=" -e "MSSQL_PID=Evaluation" 
 
 ```
 
-
-# UTILITY FOR MY PC
-
-```bash
-export ANDROID_HOME=$HOME/Android/Sdk
-export ANDROID_SDK_ROOT=$ANDROID_HOME
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-
-```
