@@ -83,9 +83,12 @@ async def dispatch_req(path: str, body: dict):
         )
 
 # PROFILE
-@app.get("/profile/pfp/{username}")
-async def profile_getpfp(username:str):
+@app.get("/profile/pfp")
+async def profile_getpfp(username:str,
+ authorization: str = Header(None)
+):
     check_auth(authorization)
+    print(username)
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
 

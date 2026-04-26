@@ -45,7 +45,9 @@ export default function LoginScreen(props) {
             PASSWORD: React_MD5(password)
         }).then(async res => {
             if (res[0]?.AUTH) {
-                await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
+                let user_w_psw = res[0]
+                user_w_psw.PASSWORD = React_MD5(password)
+                await SecureStore.setItemAsync("user", JSON.stringify(user_w_psw));
                 check_cache_login()
             } else {
                 ctx?.showToast({

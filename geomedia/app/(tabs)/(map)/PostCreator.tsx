@@ -243,6 +243,7 @@ const PostCreator = () => {
     }
 
     function deletePost() {
+        console.log(ctx?.User?.User?.PASSWORD)
         Alert.alert(
             "Confirm",
             "Are you sure?",
@@ -394,7 +395,7 @@ const PostCreator = () => {
                                                     setModalMapVisibility(false); // close map modal
                                                     setCoordinateChosen(coords)
                                                 }}
-                                                cancel={()=>{
+                                                cancel={() => {
                                                     setModalMapVisibility(false); // close map modal
                                                     setCoordinateChosen(currentLocation)
                                                 }}
