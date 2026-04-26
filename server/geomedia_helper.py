@@ -52,8 +52,9 @@ async def post_merge(post_content: dict):
 async def collection_merge(collection: dict):
     dummy = json.dumps(collection).replace("'", "''")
     query = f"EXEC dbo.COLLECTION_MERGE @JSON='{dummy}'"
+    print(query)
 
-    return SQL_MANAGER.select_query(query)
+    return SQL_MANAGER.insert_query(query)
 
 
 # ------------------------

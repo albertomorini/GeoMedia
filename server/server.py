@@ -55,18 +55,14 @@ async def dispatch_req(path: str, body: dict):
 
         # Generic query
         generic_routes = {
-            "/checkConnection",
-            "/auth_login", "/auth_psw_reset", "/profile_editinfo", "/profile_getpfp",
-            "/profile_getinfo", "/profile_getstats_categories", "/profile_getstats_timemonths",
+            "/auth_login", "/auth_psw_reset",
+            "/profile_getstats_categories", "/profile_getstats_timemonths",
             "/auth_check_otp", "/interactions_likepost", "/hpmedia_remove",
-            "/collections_get", "/users_list",
-            "/report_new", "/auth_check_username", "/collection_posts_get",
-            "/post_get_authorid", "/collection_merge"
+            "/users_list","/report_new", "/auth_check_username", "/collection_posts_get",
+            "/post_get_authorid"
         }
 
         if path in generic_routes:
-            if path == "/checkConnection":
-                return {"HELLO": "From server!"}
             return await geomedia_helper.generic_query(path, body)
 
         elif path == "/post_get_map":
@@ -85,6 +81,30 @@ async def dispatch_req(path: str, body: dict):
             status_code=500,
             detail={"Internal_Server_Error": str(error)}
         )
+
+# PROFILE
+@app.get("/profile/pfp/{username}")
+async def profile_getpfp(username:str):
+    check_auth(authorization)
+    return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
+
+
+@app.get("/profile/{profile_id}")
+async def proile_getinfo(
+    username: str | None = None,
+    uid: int | None = None,
+    authorization: str = Header(None)
+):
+    check_auth(authorization)
+    return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
+
+@app.post("/profile")
+async def profile_editinfo(
+    body:dict,
+    authorization: str = Header(None)
+):
+    check_auth(authorization)
+    return await geomedia_helper.generic_query("profile_editinfo",body)
 
 
 ## COLLECTIONS
@@ -116,7 +136,6 @@ async def collections_get_fullcollection(
     authorization: str = Header(None),
 ):
     check_auth(authorization)
-    print(collection_id)
     if(collection_id is None):
         return await geomedia_helper.generic_query("collections_get",{"uid":uid, "mode": mode})
     else:

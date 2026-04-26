@@ -36,6 +36,7 @@ const CollectionCreator = () => {
         "TITLE": null,
         "OWNERID": ctx?.getUID(),
         "DESCRIPTION": null,
+        "HASHTAG": [],
         "CREATORS": [],
         "VIEWERS": [],
         "EXCL_DATE_START": null,
@@ -59,11 +60,12 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collection/"+collectionid, {
+            doRequest("collection/" + collectionid, {
                 "uid": ctx?.getUID()
-            },"GET").then(resQuery => {
+            }, "GET").then(resQuery => {
                 let x = resQuery[0];
-                if(x!=undefined){
+                console.log("FULL", x)
+                if (x != undefined) {
                     setCollectionData(prev => ({
                         ...prev,
                         ...x,
@@ -110,7 +112,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection_merge", {
+            doRequest("collection", {
                 collectionData: collectionData
             }).then(resQuery => {
                 if (resQuery[0]?.OK) {
@@ -240,6 +242,10 @@ const CollectionCreator = () => {
                     <IconColorPickerModal
                         visible={showIconPicker}
                         onClose={() => { setShowIconPicker(false) }}
+                        defaults={{
+                            "COLOR": collectionData?.COLOR,
+                            "ICON": collectionData?.ICON
+                        }}
                         onSelect={(c) => {
                             setCollectionData(prev => ({
                                 ...prev,
