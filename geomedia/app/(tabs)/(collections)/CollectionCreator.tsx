@@ -14,6 +14,7 @@ import { doRequest } from "@/app/utility";
 import { router, useLocalSearchParams } from "expo-router";
 import CollectionPosts from "./CollectionPosts";
 import { useLanguage } from "@/components/LanguageProvider";
+import TagSelector from "./TagSelector";
 
 
 const CollectionCreator = () => {
@@ -36,7 +37,7 @@ const CollectionCreator = () => {
         "TITLE": null,
         "OWNERID": ctx?.getUID(),
         "DESCRIPTION": null,
-        "HASHTAG": [],
+        "HASHTAGS": [],
         "CREATORS": [],
         "VIEWERS": [],
         "EXCL_DATE_START": null,
@@ -202,7 +203,15 @@ const CollectionCreator = () => {
                             setCollectionData(prev => ({ ...prev, DESCRIPTION: txt }))
                         }}
                     />
-
+                    <TagSelector
+                        selected={collectionData?.HASHTAGS}
+                        onConfirm={(tags) => {
+                            setCollectionData(prev => ({
+                                ...prev,
+                                HASHTAGS: tags
+                            }))
+                        }}
+                    />
 
                     <ThemedView style={{
                         flexDirection: "row",
@@ -267,7 +276,7 @@ const CollectionCreator = () => {
                         {collectionData?.ID == null ?
                             <ThemedText>{langselected.postCreator?.create}</ThemedText>
                             :
-                            <ThemedText>{langselected.postCreator?.modify}</ThemedText>
+                            <ThemedText>{langselected.save}</ThemedText>
                         }
                     </TouchableOpacity>
                 </ThemedView>

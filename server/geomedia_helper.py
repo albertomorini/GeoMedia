@@ -52,10 +52,12 @@ async def post_merge(post_content: dict):
 async def collection_merge(collection: dict):
     dummy = json.dumps(collection).replace("'", "''")
     query = f"EXEC dbo.COLLECTION_MERGE @JSON='{dummy}'"
-    print(query)
+    print("DAJEROMA",query)
 
     return SQL_MANAGER.insert_query(query)
 
+async def collections_get_hashtags():
+    return SQL_MANAGER.select_query("SELECT TITLE FROM DBO.HASHTAGS")
 
 # ------------------------
 # FILE HANDLING

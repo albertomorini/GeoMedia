@@ -130,6 +130,11 @@ async def collection_merge(body: dict, request: Request, authorization: str = He
 
     return query_results
 
+
+@app.get("/collection/hashtags")
+async def collections_get_hashtags():
+    return await geomedia_helper.collections_get_hashtags()
+    
 @app.get("/collection")
 @app.get("/collection/{collection_id}")
 async def collections_get_fullcollection(
@@ -145,6 +150,7 @@ async def collections_get_fullcollection(
         return await geomedia_helper.generic_query("collections_get_fullcollection", {"collectionid":collection_id,"uid":uid})
 
 
+    
 # DELETE POST
 # @app.delete("/collection/{post_id}")
 # async def delete_post(post_id: int, password: str, authorization: str = Header(None)):

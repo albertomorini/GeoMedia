@@ -34,15 +34,16 @@ export const it = {
     save: "Salva",
     all: "Tutti",
     search: "Ricerca",
+    search_create:"Cerca esistente o crea nuovo",
     newf: "Nuova ",
     newm: "Nuovo ",
     contactme: "Contattami",
     share: "Condividi",
     on: "il",
-    views:"Visioni",
-    likes:"Mi piace",
-    show:"Mostra",
-    hide:"Nascondi",
+    views: "Visioni",
+    likes: "Mi piace",
+    show: "Mostra",
+    hide: "Nascondi",
     profile: {
         hello: "Ciao",
         loggedAs: "Il tuo username è",
@@ -56,7 +57,7 @@ export const it = {
         insertSurname: "Inserisci il cognome",
         editPic: "Clicca per cambiare foto", // tap to edit picture
         viewmode: "Modalità visualizzatore",
-        activefrom:"Attivo dal"
+        activefrom: "Attivo dal"
     },
     postCreator: {
         title: "Titolo",
@@ -73,7 +74,7 @@ export const it = {
         lon: "Longitudine",
         pickLocaton: "Scegli la posizione",
         pickCollection: "Seleziona la collezione",
-        deletePost:"Cancella il post",
+        deletePost: "Cancella il post",
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
@@ -122,8 +123,14 @@ export const it = {
         colNotEditable: "Collezione modificabile solo dal proprietario",
         colSaved: "Collezione salvata",
         description: "Descrizione",
-        remote: "Posizioni remote",
+        remote: "Consenti posizioni remote",
         collectionf: "collezione"
+    },
+    collections_page: {
+        all: "Tutte",
+        trending: "Trending",
+        popular: "Popolari",
+        foryou: "Per te"
     },
     requiredfields: "Campi obbligatori: ",
     sequentiality: {
@@ -138,7 +145,6 @@ export const it = {
         menuCreator: ["Data & Ora", "Visualizzatori", "Creatori"],
         menuViewer: ["Data & Ora", "Visualizzatori"]
     }
-
 }
 
 
@@ -178,15 +184,16 @@ export const en = {
     save: "Save",
     all: "All",
     search: "Search",
+    search_create:"Search or create a new one",
     newf: "New ",
     newm: "New ",
     contactme: "Contact me",
     share: "Share",
     on: "on",
-    views:"Views",
-    likes:"Likes",
-    show:"Mostra",
-    hide:"Nascondi",
+    views: "Views",
+    likes: "Likes",
+    show: "Mostra",
+    hide: "Nascondi",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -200,7 +207,7 @@ export const en = {
         insertSurname: "Enter last name",
         editPic: "Tap to change picture",
         viewmode: "Viewer mode",
-        activefrom:"Active from"
+        activefrom: "Active from"
     },
     postCreator: {
         title: "Title",
@@ -217,7 +224,7 @@ export const en = {
         lon: "Longitude",
         pickLocaton: "Pick a location",
         pickCollection: "Select collection",
-        deletePost:"Delete the post",
+        deletePost: "Delete the post",
     },
     pswReset: {
         proceed: "Do you want to proceed with the password change?",
@@ -266,8 +273,14 @@ export const en = {
         colNotEditable: "Collection editable only by the owner",
         colSaved: "Collection saved",
         description: "Description",
-        remote: "Remote positions",
+        remote: "Allow remote positions",
         collectionf: "collection"
+    },
+    collections_page: {
+        all: "All",
+        trending: "Trending",
+        popular: "Popular",
+        foryou: "For you"
     },
     requiredfields: "Required fields: ",
     sequentiality: {
