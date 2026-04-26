@@ -31,7 +31,6 @@ const CollectionsList = (props) => {
     const refList = useRef()
     const { langselected } = useLanguage()
     const [collections, setCollections] = useState([])
-    const darkmode = useColorScheme()
     const lightTheme = {
         ...MD3LightTheme,
         colors: {
@@ -53,12 +52,15 @@ const CollectionsList = (props) => {
             surface: "#272727",
         },
     };
+    const modes = ["YOU", "R", "TOP", "HOT"]
 
-    function getCollectionsList() {
+    /////////////////////////////////////////////////////////
+
+    function getCollectionsList(mode = 0) {
         try {
             doRequest("collection", {
                 uid: ctx?.getUID(),
-                mode: props?.postCreation ?? "R"
+                mode: props?.postCreation ?? modes[mode] //IF writing, do writing, otherwise let index of section decide
             }, "GET").then(resQuery => {
                 setCollections(resQuery)
             }).catch(err => {
@@ -84,7 +86,7 @@ const CollectionsList = (props) => {
             } catch (error) {
 
             }
-            getCollectionsList()
+            getCollectionsList() //start with "For you" section
         }, [props?.itemSelected])
     )
     return (
@@ -93,7 +95,9 @@ const CollectionsList = (props) => {
             <PaperProvider theme={useColorScheme() == "dark" ? darkTheme : lightTheme}>
                 <TabsProvider
                     defaultIndex={0}
-                // onChangeIndex={handleChangeIndex} optional
+                    onChangeIndex={(indx) => {
+                        getCollectionsList(indx)
+                    }}
                 >
                     <Tabs
                         showLeadingSpace={true}
@@ -153,13 +157,102 @@ const CollectionsList = (props) => {
 
                         </TabScreen>
                         <TabScreen label={langselected?.collections_page?.popular} >
-                            <ThemedText>Top</ThemedText>
+
+                            {collections == null ? <ThemedText>{langselected.collection.nocolfound}</ThemedText> :
+                                <ListItem
+                                    ref={refList}
+                                    DATA={collections}
+                                    onSelect={(pickeditem) => {
+                                        /// on collection lists/ profile show the post as lis
+                                        if (pickeditem.ID == "new_item") {
+                                            router.push({
+                                                pathname: '/CollectionCreator',
+                                                params: {
+                                                    collectionid: pickeditem?.ID,
+                                                }
+                                            })
+                                        } else {
+                                            try {
+                                                props?.onSelect(pickeditem) //if exists is a child component, like collection picker for post creation
+                                            } catch (error) {
+                                                if (pickeditem?.OWNERID == ctx?.getUID()) { //editable only by the owner 
+                                                    router.push({
+                                                        pathname: '/CollectionCreator',
+                                                        params: {
+                                                            collectionid: pickeditem?.ID,
+                                                        }
+                                                    })
+                                                } else {
+                                                    ctx?.showToast({
+                                                        type: "error",
+                                                        text1: langselected.collection.colNotEditable
+                                                    })
+                                                    //TODO: redirect to profile of owner?
+                                                    //TODO: PROFILE VIEWER
+                                                }
+                                            }
+                                        }
+                                    }}
+                                    isSelectable={props?.isSelectable}
+                                    isImage={false} //we render icons, not expo-image
+                                    estimatedSize={80}
+                                    allowCreation={props?.allowCreation ?? true}
+                                    label={langselected?.collection.collectionf}
+                                />
+                            }
+
+
                         </TabScreen>
                         <TabScreen
                             label={langselected?.collections_page?.trending}
                             style={{ flex: 1 }}
                         >
-                            <ThemedText>Trending</ThemedText>
+
+
+                            {collections == null ? <ThemedText>{langselected.collection.nocolfound}</ThemedText> :
+                                <ListItem
+                                    ref={refList}
+                                    DATA={collections}
+                                    onSelect={(pickeditem) => {
+                                        /// on collection lists/ profile show the post as lis
+                                        if (pickeditem.ID == "new_item") {
+                                            router.push({
+                                                pathname: '/CollectionCreator',
+                                                params: {
+                                                    collectionid: pickeditem?.ID,
+                                                }
+                                            })
+                                        } else {
+                                            try {
+                                                props?.onSelect(pickeditem) //if exists is a child component, like collection picker for post creation
+                                            } catch (error) {
+                                                if (pickeditem?.OWNERID == ctx?.getUID()) { //editable only by the owner 
+                                                    router.push({
+                                                        pathname: '/CollectionCreator',
+                                                        params: {
+                                                            collectionid: pickeditem?.ID,
+                                                        }
+                                                    })
+                                                } else {
+                                                    ctx?.showToast({
+                                                        type: "error",
+                                                        text1: langselected.collection.colNotEditable
+                                                    })
+                                                    //TODO: redirect to profile of owner?
+                                                    //TODO: PROFILE VIEWER
+                                                }
+                                            }
+                                        }
+                                    }}
+                                    isSelectable={props?.isSelectable}
+                                    isImage={false} //we render icons, not expo-image
+                                    estimatedSize={80}
+                                    allowCreation={props?.allowCreation ?? true}
+                                    label={langselected?.collection.collectionf}
+                                />
+                            }
+
+
                         </TabScreen>
                     </Tabs>
                 </TabsProvider>

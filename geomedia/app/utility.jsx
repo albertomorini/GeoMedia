@@ -188,7 +188,6 @@ export const doRequest = (api, body = {}, method = "POST") => {
             const query = new URLSearchParams(body).toString();
             api += "?" + query;
         }
-        console.log(api)
         return fetch(URL + api, {
             method: method,
             mode: "cors",
