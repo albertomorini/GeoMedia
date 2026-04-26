@@ -56,10 +56,10 @@ const CollectionsList = (props) => {
 
     function getCollectionsList() {
         try {
-            doRequest("collection", {
+            doRequest("collections_get", {
                 uid: ctx?.getUID(),
                 mode: props?.postCreation ?? "R"
-            }, "GET").then(resQuery => {
+            }).then(resQuery => {
                 setCollections(resQuery)
             }).catch(err => {
                 ctx?.showToast({

@@ -61,9 +61,10 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collection/" + collectionid, {
-                "uid": ctx?.getUID()
-            }, "GET").then(resQuery => {
+            doRequest("collections_get_fullcollection", {
+                "uid": ctx?.getUID(),
+                "collectionid": collectionid
+            }).then(resQuery => {
                 let x = resQuery[0];
                 console.log("FULL", x)
                 if (x != undefined) {
@@ -113,7 +114,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection", {
+            doRequest("collection_merge", {
                 collectionData: collectionData
             }).then(resQuery => {
                 if (resQuery[0]?.OK) {

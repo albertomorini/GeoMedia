@@ -123,18 +123,16 @@ const PostCreator = () => {
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
-        if (
-            missing_fields.length > 0
-        ) {
+        if (missing_fields.length > 0) {
             ctx?.showToast({
                 type: "error",
                 text1: "Missing info",
                 text2: JSON.stringify(missing_fields) + " not compiled"
             })
         } else {
-            doRequest("post", {
+            doRequest("post_merge", {
                 postdata: dummy_body
-            }, "POST").then(res => {
+            }).then(res => {
                 if (res?.OK) {
                     setPostData(prev => ({
                         ...prev,
@@ -212,9 +210,10 @@ const PostCreator = () => {
             postid = null;
         }
         if (postid != null) {
-            doRequest("post/" + postid, {
+            doRequest("post_get_fullpost", {
+                "postid": postid,
                 "uid": ctx?.getUID()
-            }, "GET").then(resQuery => {
+            }).then(resQuery => {
                 let x = resQuery[0]
                 setPostData(prev => ({
                     ...prev,
@@ -243,7 +242,6 @@ const PostCreator = () => {
     }
 
     function deletePost() {
-        console.log(ctx?.User?.User?.PASSWORD)
         Alert.alert(
             "Confirm",
             "Are you sure?",
@@ -251,7 +249,7 @@ const PostCreator = () => {
                 { text: "Cancel", style: "cancel" },
                 {
                     text: "OK", onPress: () => {
-                        doRequest("post/" + postData?.ID, { uid: ctx?.getUID(), password: ctx?.User?.User?.PASSWORD }, "DELETE").then(resQuery => {
+                        doRequest("post_delete", { uid: ctx?.getUID(), password: ctx?.User?.User?.PASSWORD }).then(resQuery => {
                             ctx?.showToast({
                                 type: "success",
                                 text1: "Post deleted"

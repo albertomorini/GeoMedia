@@ -11,7 +11,7 @@ import { MyContext } from "./_layout";
 import { en, it } from "@/components/i18n";
 
 let URL = "http://10.0.0.3:9911/"
-
+const SHAREDKEY_ANDROID = "R2VvTWVkaWEyMDI2"
 
 async function load_config() {
     let config = await SecureStore.getItemAsync("config");
@@ -181,32 +181,39 @@ export const checkValidityPassword = (password) => {
 }
 
 //NETWORKING
-export const doRequest = (api, body = {}, method = "POST") => {
-    let methods_no_body = ["GET", "DELETE"]
-    if (methods_no_body.includes(method)) {
-        if (body && Object.keys(body).length > 0) {
-            const query = new URLSearchParams(body).toString();
-            api += "?" + query;
-        }
-        console.log(api)
-        return fetch(URL + api, {
-            method: method,
-            mode: "cors",
-            headers: { "authorization": "mysuperkey" },
-        }).then(res => res.json()).catch(err => {
-            Alert.alert("Network error, try later..")
-        })
-    } else {
-        console.log(URL + api,body)
-        return fetch(URL + api, {
-            method: method,
-            mode: "cors",
-            headers: { "authorization": "mysuperkey" , "content-type":"application/json"},
-            body: JSON.stringify(body)
-        }).then(res => res.json()).catch(err => {
-            Alert.alert("Network error, try later..")
-        })
-    }
+export const doRequest = (api, body = {}) => {
+    return fetch(URL + api, {
+        method: "POST",
+        mode: "cors",
+        headers: { "authorization": SHAREDKEY_ANDROID, "content-type": "application/json" },
+        body: JSON.stringify(body)
+    }).then(res => res.json()).catch(err => {
+        Alert.alert("Network error, try later..")
+    })
+    // let methods_no_body = ["GET", "DELETE"]
+    // if (methods_no_body.includes(method)) {
+    //     if (body && Object.keys(body).length > 0) {
+    //         const query = new URLSearchParams(body).toString();
+    //         api += "?" + query;
+    //     }
+    //     console.log(api)
+    //     return fetch(URL + api, {
+    //         method: method,
+    //         mode: "cors",
+    //         headers: { "authorization": "mysuperkey" },
+    //     }).then(res => res.json()).catch(err => {
+    //         Alert.alert("Network error, try later..")
+    //     })
+    // } else {
+    //     console.log(URL + api,body)
+    //     return fetch(URL + api, {
+    //         method: method,
+    //         mode: "cors",
+    //         headers: { "authorization": "mysuperkey" , "content-type":"application/json"},
+    //         body: JSON.stringify(body)
+    //     }).then(res => res.json()).catch(err => {
+    //         Alert.alert("Network error, try later..")
+    //     })
 }
 
 

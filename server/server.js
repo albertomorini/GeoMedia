@@ -6,7 +6,7 @@ const port = 9911
 const fs = require("fs")
 const config = JSON.parse(fs.readFileSync("./config.json"))
 
-const SHARED_KEY = config.SHARED_KEY
+const SHARED_KEYS = config.SHARED_KEYS
 
 /**
  * Invia una risposta HTTP
@@ -30,7 +30,7 @@ function sendResponse(res, status, body = null, mime = "application/json") {
 }
 
 function checkAuth(key) {
-    return key == SHARED_KEY
+    return SHARED_KEYS.includes(key)
 }
 
 /**

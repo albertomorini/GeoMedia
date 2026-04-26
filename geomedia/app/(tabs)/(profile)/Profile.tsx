@@ -27,9 +27,9 @@ export default function Profile() {
 
   function getProfilePic() {
 
-    doRequest("profile/pfp", {
+    doRequest("profile_getpfp", {
       username: user?.USERNAME
-    }, "GET").then(res => {
+    }).then(res => {
       console.log(res)
       let pp = res[0].PROFILE_PICTURE
       if (pp != undefined) {

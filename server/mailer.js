@@ -17,26 +17,23 @@ async function send_email_otp(recipient, data) {
             subject: "GeoMedia app - OTP",
             attachments: []
         };
-
-        // mailOptions.attachments.push({
-        //     filename: PDF_Name,
-        //     path: PDF_Path
-        // })
-
         let htmlBody = fs.readFileSync("./email_body.html", 'utf-8')
         htmlBody = htmlBody?.replaceAll("$USERNAME", data?.USERNAME)
-        htmlBody = htmlBody?.replaceAll("$OTP", data?.OTP)
+        htmlBody = htmlBody?.replaceAll("$OTP", data?.OTP.toString())
 
         mailOptions.html = htmlBody;
         let x = await transporter.sendMail(mailOptions);
-        console.log(x);
 
         return [true, x.response]
 
     } catch (error) {
+        console.log(error)
         return [false, error]
     }
 }
+
+
+send_email_otp("morini99@icloud.com",{"USERNAME":"hey","OTP":"05050"})
 
 module.exports = {
     send_email_otp
