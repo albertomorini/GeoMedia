@@ -260,11 +260,6 @@ const MapViewer = forwardRef((props, ref) => {
                 enableDynamicSizing={true}
                 backgroundStyle={{
 
-                    borderTopWidth: 1,
-                    borderEndWidth: 1,
-                    borderStartWidth: 1,
-                    borderColor: colorScheme === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-
                     width: "100%",
                     margin: 0,
                     borderTopLeftRadius: 24,

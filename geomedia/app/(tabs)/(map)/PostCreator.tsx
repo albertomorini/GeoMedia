@@ -473,24 +473,25 @@ const PostCreator = () => {
                         backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                     }}
                 >
-                    <BottomSheetScrollView style={{ flex: 1 }}
-                        contentContainerStyle={{ paddingBottom: 20 }}
+                    <BottomSheetScrollView contentContainerStyle={{ flex: 1 , lexGrow: 1,}}
+                       
                         keyboardShouldPersistTaps="handled"
                     >
-                            <Collections
-                                postCreation={"W"}
-                                allowCreation={true}
-                                onSelect={(cat: Object) => {
-                                    collection_sheet_handler?.current?.close()
-                                    setPostData(prev => ({
-                                        ...prev,
-                                        COLLECTION_ID: cat?.ID,
-                                        COLLECTION_NAME: cat?.TITLE,
-                                        COLOR: cat?.COLOR,
-                                        ICON: cat?.ICON,
-                                        REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
-                                    }))
-                                }} />
+                        <Collections
+                            isBottomSheet={true}//thus to render the list
+                            postCreation={"W"}
+                            allowCreation={true}
+                            onSelect={(cat: Object) => {
+                                collection_sheet_handler?.current?.close()
+                                setPostData(prev => ({
+                                    ...prev,
+                                    COLLECTION_ID: cat?.ID,
+                                    COLLECTION_NAME: cat?.TITLE,
+                                    COLOR: cat?.COLOR,
+                                    ICON: cat?.ICON,
+                                    REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
+                                }))
+                            }} />
                     </BottomSheetScrollView>
                 </BottomSheet>
 
