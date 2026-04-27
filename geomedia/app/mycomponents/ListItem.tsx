@@ -7,6 +7,7 @@ import { TextInput, TouchableOpacity } from "react-native";
 import ItemIconizable from "./ItemIconizable";
 import { ThemedText } from "@/components/themed-text";
 import { useLanguage } from "@/components/LanguageProvider";
+import { BottomSheetFlashList } from "@gorhom/bottom-sheet";
 
 const ListItem = forwardRef((props: any, ref: any) => {
     const [searchText, setSearchText] = useState("")
@@ -59,19 +60,19 @@ const ListItem = forwardRef((props: any, ref: any) => {
     function filterData(allowCreation = false) {
         let og_data = props?.DATA
         let filtered = searchText.trim().length == 0 ? og_data : og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
-
-        let new_item = {
-            ID: "new_item",
-            TITLE: langselected.newf + props?.label,
-            ICON: "add",
-            COLOR: "#c4aaaa"
-        }
-        if (searchText?.length == 0 && allowCreation) {
-            return [new_item, ...og_data]
-        } else if (filtered?.length == 0 && allowCreation) {
-            return [new_item]
-        }
         return filtered
+        // // let new_item = {
+        // //     ID: "new_item",
+        // //     TITLE: langselected.newf + props?.label,
+        // //     ICON: "add",
+        // //     COLOR: "#c4aaaa"
+        // // }
+        // // if (searchText?.length == 0 && allowCreation) {
+        // //     return [new_item, ...og_data]
+        // // } else if (filtered?.length == 0 && allowCreation) {
+        // //     return [new_item]
+        // // }
+        // // return filtered
     }
 
     useImperativeHandle(ref, () => ({
@@ -88,7 +89,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
     }))
 
     return (
-        <ThemedView style={[style?.container, { height: "100%" }]}>
+        <ThemedView style={[style?.container, { flex: 1 }]}>
             <ThemedView style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -96,6 +97,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
                 borderRadius: 10,
                 paddingHorizontal: 10,
                 marginBottom: 16,
+                position: 'fixed'
             }}>
                 <Ionicons name="search-outline" size={20} color="#888" style={{
                     marginRight: 8
@@ -153,12 +155,24 @@ const ListItem = forwardRef((props: any, ref: any) => {
                         </ThemedView>
                         : null
                 }
-                <FlashList
-                    data={filterData(props?.allowCreation)} //filtering on full data
-                    renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    estimatedItemSize={props?.estimatedSize}
-                />
+                {
+                    props?.isBottomSheet ?
+                        <BottomSheetFlashList
+                            data={filterData(props?.allowCreation)} //filtering on full data
+                            renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            estimatedItemSize={props?.estimatedSize}
+                            contentContainerStyle={{ paddingBottom: 120 }}
+                        />
+                        :
+                        <FlashList
+                            data={filterData(props?.allowCreation)} //filtering on full data
+                            renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            estimatedItemSize={props?.estimatedSize}
+                            contentContainerStyle={{ paddingBottom: 120 }}
+                        />
+                }
             </ThemedView>
         </ThemedView >
     );

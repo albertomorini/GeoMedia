@@ -23,7 +23,7 @@ export default function CollectionsLayout() {
         >
 
             <Stack.Screen
-                name="CollectionsList"
+                name="Collections"
                 options={{
                     title: langselected?.collections
                 }}

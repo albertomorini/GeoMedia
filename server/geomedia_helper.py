@@ -34,8 +34,6 @@ def writeLog(message, scope="ERROR"):
 async def generic_query(path: str, body: dict):
     dummy = json.dumps(body).replace("'", "''")
     query = f"EXEC {path.replace('/', '')} @JSON='{dummy}'"
-    print("QUERY",query)
-
     return SQL_MANAGER.select_query(query)
 
 
@@ -208,12 +206,10 @@ async def post_delete(postid: int, password: str):
     writeLog(
         f"Requested deletion for: {postid} = with pas[10]{password[:10]}"
     )
-
     query = (
         "EXEC POST_DELETE "
         f"@POSTID={postid}, "
         f"@PASSWORD='{password}'"
     )
-    print("EXECUTING: ",query)
 
     return SQL_MANAGER.insert_query(query)

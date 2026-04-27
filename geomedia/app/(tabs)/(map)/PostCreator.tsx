@@ -21,9 +21,10 @@ import MapPicking from '@/app/mycomponents/MapPicking';
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CollectionsList from '../(collections)/CollectionsList';
+import CollectionsList from '../(collections)/CollectionsListSingle';
 import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 import { useLanguage } from '@/components/LanguageProvider';
+import Collections from '../(collections)/Collections';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,7 @@ const PostCreator = () => {
 
 
     const ctx = useContext(MyContext);
+    const colorScheme = useColorScheme()
     const { langselected } = useLanguage()
     const params = useLocalSearchParams();
 
@@ -464,21 +466,18 @@ const PostCreator = () => {
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // drag down to close
                     backgroundStyle={{
-                        borderTopWidth: 1,
-                        borderEndWidth: 1,
-                        borderStartWidth: 1,
-                        borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                        width: "100%",
+                        margin: 0,
                         borderTopLeftRadius: 24,
                         borderTopRightRadius: 24,
-                        backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                        backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                     }}
                 >
                     <BottomSheetScrollView style={{ flex: 1 }}
                         contentContainerStyle={{ paddingBottom: 20 }}
                         keyboardShouldPersistTaps="handled"
                     >
-                        <ThemedView>
-                            <CollectionsList
+                            <Collections
                                 postCreation={"W"}
                                 allowCreation={true}
                                 onSelect={(cat: Object) => {
@@ -492,7 +491,6 @@ const PostCreator = () => {
                                         REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
                                     }))
                                 }} />
-                        </ThemedView>
                     </BottomSheetScrollView>
                 </BottomSheet>
 
