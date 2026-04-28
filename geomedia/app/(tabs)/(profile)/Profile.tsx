@@ -27,14 +27,9 @@ export default function Profile() {
 
   function getProfilePic() {
 
-    doRequest("profile_getpfp", {
+    doRequest("profile/pfp", {
       username: user?.USERNAME
-<<<<<<< HEAD
-    }).then(res => {
-      console.log(res)
-=======
     }, "GET").then(res => {
->>>>>>> fastapi_backend
       let pp = res[0].PROFILE_PICTURE
       if (pp != undefined) {
         setProfilePic(pp)

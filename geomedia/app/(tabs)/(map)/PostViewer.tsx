@@ -56,12 +56,7 @@ const PostViewer = () => {
         }
 
         if (postid != null) {
-<<<<<<< HEAD
-            doRequest("post_get_fullpost", {
-                "postid": postid,
-=======
             doRequest("post/id/" + postid, {
->>>>>>> fastapi_backend
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
