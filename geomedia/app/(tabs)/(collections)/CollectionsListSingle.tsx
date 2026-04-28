@@ -15,29 +15,6 @@ const CollectionListSingle = (props) => {
     const { langselected } = useLanguage()
     const [collections, setCollections] = useState([])
 
-    // function getCollectionsList() {
-    //     try {
-    //         doRequest("collection", {
-    //             uid: ctx?.getUID(),
-    //             mode: props?.postCreation ?? "R"
-    //         }, "GET").then(resQuery => {
-    //             setCollections(resQuery)
-    //         }).catch(err => {
-    //             ctx?.showToast({
-    //                 type: "error",
-    //                 text1: "Error",
-    //                 text2: "Network error... are you offline?"
-    //             })
-    //         })
-    //     } catch (error) {
-    //         ctx?.showToast({
-    //             type: "error",
-    //             text1: "Something went wrong..try again"
-    //         })
-    //     }
-    // }
-
-
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             try {

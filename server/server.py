@@ -148,10 +148,9 @@ async def profile_get_stats(
 
 @app.post("/profile", tags=["USERS"])
 async def profile_editinfo(
-    body:dict,
+    body:profile_editinfo,
     authorization: str = Header(None)
 ):
-    
     return await geomedia_helper.generic_query("profile_editinfo",body)
 
 
@@ -163,7 +162,7 @@ async def users_list(uid:int):
 
 # CREATE / UPDATE POST
 @app.post("/collection", tags=["collection"])
-async def collection_merge(body: dict, request: Request, authorization: str = Header(None)):
+async def collection_merge(body: collection_merge, request: Request, authorization: str = Header(None)):
     
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)
@@ -209,9 +208,8 @@ async def collection_posts_get(collectionid: int):
 
 # CREATE / UPDATE POST
 @app.post("/post",  tags=["post"])
-async def create_post(body: dict, request: Request, authorization: str = Header(None)):
+async def post_merge(body: post_merge, request: Request, authorization: str = Header(None)):
     
-    print("HERE",body)
 
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)

@@ -44,3 +44,43 @@ class post_get_map(BaseModel):
     uid: int
     current_position: Position
     collection_chosen: list[int]
+
+class profile_editinfo(BaseModel):
+    name: str
+    surname: str
+    username: str
+    profile_picture: str
+
+class collection_merge(BaseModel):
+    id: int                
+    title: str             
+    ownerid: int           
+    description: str       
+    hashtags: list[str]    
+    creators: list[int]     
+    viewers: list[int]      
+    excl_date_start: str   
+    excl_date_end: str     
+    recurrent: str         
+    remote_posting: bool   
+    sequentials: dict      
+    icon: str              
+    color: str             
+
+
+class post_merge(BaseModel):
+    id: int
+    collection_id: int
+    title: str
+    comment: str
+    author_id: int
+    exclusivity: dict
+    visibility_area_km: int
+    color: str
+    icon: str
+    collection_name: str
+    remote_posting_enabled: bool
+    latitude: float
+    longitude: float
+    altitude: float
+    attachments: dict

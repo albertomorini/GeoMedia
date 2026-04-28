@@ -135,7 +135,7 @@ const PostCreator = () => {
             })
         } else {
             doRequest("post", {
-                postdata: dummy_body
+                dummy_body
             }, "POST").then(res => {
                 if (res?.OK) {
                     setPostData(prev => ({

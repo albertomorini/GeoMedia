@@ -23,7 +23,12 @@ export default function ProfileEditor() {
     const user = ctx?.User?.User;
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic);
     const { langselected } = useLanguage()
-    const [userInfo, setUserInfo] = useState(null);
+    const [userInfo, setUserInfo] = useState({
+        NAME: null,
+        SURNAME: null,
+        USERNAME: null,
+        PROFILE_PICTURE: null
+    });
 
     function getProfilePic() {
         doRequest("profile/pfp", {
@@ -71,9 +76,7 @@ export default function ProfileEditor() {
     }
 
     function saveInfo() {
-        doRequest("profile_editinfo", {
-            INFO: userInfo
-        }).then(async res => {
+        doRequest("profile", userInfo).then(async res => {
             let newinfo = res[0];
             newinfo.AUTH = 1
             await SecureStore.setItemAsync("user", JSON.stringify(newinfo));
