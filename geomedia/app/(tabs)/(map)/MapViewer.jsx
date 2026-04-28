@@ -137,7 +137,7 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
     function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
-        doRequest("post_get_map", {
+        doRequest("post/get_map", {
             uid: ctx?.getUID(),
             current_position: curPos,
             collection_chosen: collections

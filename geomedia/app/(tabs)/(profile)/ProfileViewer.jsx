@@ -85,8 +85,12 @@ const ProfileViewer = () => {
 
     function getInfo(username) {
         doRequest("profile", {
-            username: username
+            username: username,
+            uid: username,
         }, "GET").then(res => {
+            console.log(res)
+            get_statsCategory(res[0].USERNAME)
+
             setUser(res[0])
         }).catch(err => {
             ctx?.showToast({
@@ -101,7 +105,6 @@ const ProfileViewer = () => {
         useCallback(() => {
             if (params?.username != null) {
                 getInfo(params.username)
-                get_statsCategory(params.username)
                 getProfilePic(params.username)
             }
         }, [])

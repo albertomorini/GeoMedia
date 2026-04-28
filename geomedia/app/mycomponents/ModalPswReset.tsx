@@ -30,7 +30,7 @@ const ModalPswReset = () => {
         if (ctx?.getUID() != undefined) {
             usr = ctx?.User.User?.USERNAME
         }
-        doRequest("auth_check_otp", {
+        doRequest("auth/check_otp", {
             USERNAME: usr,
             OTP: OTP
         }).then(async res => {
@@ -56,7 +56,7 @@ const ModalPswReset = () => {
         if (ctx?.getUID() != undefined) {
             usrmail = ctx?.User.User?.USERNAME
         }
-        doRequest("auth_psw_forgotten", {
+        doRequest("auth/psw_forgotten", {
             USERNAMEMAIL: usrmail
         }).then(resQuery => {
             if (resQuery.AUTH == 2) { //pending OTP
@@ -93,7 +93,7 @@ const ModalPswReset = () => {
                 text1: "The passwords are not matching"
             })
         } else {
-            doRequest("auth_psw_reset", {
+            doRequest("auth/psw_reset", {
                 USERNAMEMAIL: usrmail,
                 NEWPASSWORD: React_MD5(newPassword),
                 OTP: OTP

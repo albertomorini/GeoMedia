@@ -4,16 +4,32 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-import geomedia_helper  
+import geomedia_helper 
 
 # Load config
 with open("./config.json") as f:
     config = json.load(f)
 
 SHARED_KEYS = config["SHARED_KEYS"]
-PORT = 9911
+PORT = config["PORT"]
 
-app = FastAPI(title="Geomedia API")
+from body_schemas import *
+
+############################################################################################################################################
+
+
+def verify_auth(authorization: str = Header(None)):
+    if authorization is None:
+        raise HTTPException(status_code=401, detail="Missing Authorization header")
+
+    if authorization not in SHARED_KEYS:
+        raise HTTPException(status_code=403, detail="Invalid authorization key")
+
+    return authorization
+
+app = FastAPI(title="Geomedia API",
+    dependencies=[Depends(verify_auth)]
+    )
 
 # ("Access-Control-Allow-Origin": "*")
 app.add_middleware(
@@ -26,112 +42,129 @@ app.add_middleware(
 
 ############################################################################################################################################
 
-def check_auth(authorization: str = None):
-    if not authorization or authorization not in SHARED_KEYS:
-        raise HTTPException(
-            status_code=401,
-            detail={
-                "auth": 0,
-                "msg": "Invalid API key",
-            }
-        )
-    return True
 
 def send_response(content, status_code: int = 200):
     return JSONResponse(content=content, status_code=status_code)
+############################################################################################################################################
 
-async def dispatch_req(path: str, body: dict):
-    try:
-        if path in ("/auth_psw_forgotten", "/auth_signin"):
-            query_results = await geomedia_helper.auth_signin(path, body)
-            print("QRSR",query_results,query_results.get("AUTH"))
-            if query_results.get("AUTH") == 2:
-                if "OTP" in query_results:
-                    del query_results["OTP"]  # Do not send OTP over HTTP
-                return send_response(query_results, 200)
-            else:
-                geomedia_helper.writeLog("AUTH failed for: " + json.dumps(body), "SIGNIN")
-                return send_response(query_results, 401)
+# AUTH
 
-        # Generic query
-        generic_routes = {
-            "/auth_login", "/auth_psw_reset",
-            "/auth_check_otp", "/interactions_likepost", "/hpmedia_remove",
-            "/users_list","/report_new", "/auth_check_username", "/collection_posts_get",
-            "/post_get_authorid"
-        }
+@app.post("/auth/login",tags=["auth"])
+async def auth_login(body: auth_login, request:Request):
+    ip = request.client.host if request.client else None
+    headers = dict(request.headers)
 
-        if path in generic_routes:
-            return await geomedia_helper.generic_query(path, body)
+    return await geomedia_helper.generic_query("auth_login",{
+        "EMAIL" : body.email,
+        "PASSWORD" : body.password,
+        "IP" : ip,
+        "HEADERS": headers
+    })
 
-        elif path == "/post_get_map":
-            return await geomedia_helper.post_get_map(
-                body.get("uid"),
-                body.get("current_position"),
-                body.get("collection_chosen")
-            )
+@app.post("/auth/psw_reset",tags=["auth"])
+async def auth_psw_reset(body: auth_psw_reset, request:Request):
+    ip = request.client.host if request.client else None
+    headers = dict(request.headers)
 
-        else:
-            raise HTTPException(status_code=404, detail={"msg": f"Unknown path: {path}"})
+    return await geomedia_helper.generic_query("auth_psw_reset",{
+        "USERNAMEMAIL" : body.usernamemail,
+        "NEWPASSWORD" : body.newpassword,
+        "OTP" : body.otp,
+        "IP" : ip,
+        "HEADERS": headers
+    })
 
-    except Exception as error:
-        geomedia_helper.writeLog(str(error), "ERROR")
-        raise HTTPException(
-            status_code=500,
-            detail={"Internal_Server_Error": str(error)}
-        )
+@app.post("/auth/check_otp",tags=["auth"])
+async def auth_check_otp(body: auth_check_otp, request:Request):
+    ip = request.client.host if request.client else None
+    headers = dict(request.headers)
+
+    return await geomedia_helper.generic_query("auth_psw_reset",{
+        "USERNAME" : body.usernamemail,
+        "OTP" : body.otp,
+    })
+
+@app.get("/auth/check_username",tags=["auth"])
+async def auth_check_username(username:str):
+    return await geomedia_helper.generic_query("auth_check_username",{"USERNAME":username})
+
+
+@app.post("/auth/psw_forgotten")
+async def auth_psw_forgotten(body:auth_psw_forgotten):
+    query_results = await geomedia_helper.auth_signin("auth_psw_forgotten", body)
+    return await proceed_otp(query_results)
+@app.post("/auth/auth_signin")
+async def auth_signin(body:auth_signin):
+    query_results = await geomedia_helper.auth_signin("auth_signin", body)
+    return await proceed_otp(query_results)
+
+
+async def proceed_otp(query_results:dict):
+    if query_res.get("AUTH") == 2:
+        if "OTP" in query_results:
+            del query_results["OTP"]  # Do not send OTP over HTTP
+        return send_response(query_results, 200)
+    else:
+        geomedia_helper.writeLog("AUTH failed for: " + json.dumps(body), "SIGNIN")
+        return send_response(query_results, 401)
+
+
+
 
 # PROFILE
-@app.get("/profile/pfp")
-async def profile_getpfp(username:str,
- authorization: str = Header(None)
+@app.get("/profile/pfp", tags=["USERS"])
+async def profile_getpfp(
+    username:str,
+    authorization: str = Header(None)
 ):
-    check_auth(authorization)
-    print(username)
+    
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
-@app.get("/profile")
-@app.get("/profile/{profile_id}")
-@app.get("/profile/{username}")
+@app.get("/profile", tags=["USERS"])
+@app.get("/profile/{profile_id}", tags=["USERS"])
+@app.get("/profile/{username}", tags=["USERS"])
 async def profile_getinfo(
     username: str | None = None,
     uid: int | None = None,
     authorization: str = Header(None)
 ):
-    check_auth(authorization)
+    
     print("HERE",username,uid)
     return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
 
-@app.get("/stats/profile")
+@app.get("/stats/profile", tags=["USERS"])
 async def profile_get_stats(
     username: str ,
     mode: str,
     authorization: str = Header(None)
 ):
     print("THERE",mode,username)
-    check_auth(authorization)
+    
     if(mode=="categories"):
         return await geomedia_helper.generic_query("profile_getstats_categories",{"username":username})
     elif(mode=="timemonths"):
         return await geomedia_helper.generic_query("profile_getstats_timemonths",{"username":username})
         
 
-@app.post("/profile")
+@app.post("/profile", tags=["USERS"])
 async def profile_editinfo(
     body:dict,
     authorization: str = Header(None)
 ):
-    check_auth(authorization)
+    
     return await geomedia_helper.generic_query("profile_editinfo",body)
 
+
+@app.get("/users",tags=["USER"])
+async def users_list(uid:int):
+    return await geomedia_helper.generic_query("users_list",{"uid":uid})
 
 ## COLLECTIONS
 
 # CREATE / UPDATE POST
-@app.post("/collection")
+@app.post("/collection", tags=["collection"])
 async def collection_merge(body: dict, request: Request, authorization: str = Header(None)):
-    check_auth(authorization)
-
+    
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)
     query_results = await geomedia_helper.collection_merge(body)
@@ -146,25 +179,28 @@ async def collection_merge(body: dict, request: Request, authorization: str = He
     return query_results
 
 
-@app.get("/collection/hashtags")
+@app.get("/collection/hashtags",  tags=["collection"])
 async def collections_get_hashtags():
     return await geomedia_helper.collections_get_hashtags()
     
-@app.get("/collection")
-@app.get("/collection/{collection_id}")
+@app.get("/collection", tags=["collection"])
+@app.get("/collection/{collection_id}", tags=["collection"])
 async def collections_get_fullcollection(
     collection_id: int | None = None,
     uid: int | None = None,
     mode: str | None = None,
     authorization: str = Header(None),
 ):
-    check_auth(authorization)
+    
     if(collection_id is None):
         return await geomedia_helper.generic_query("collections_get",{"uid":uid, "mode": mode})
     else:
         return await geomedia_helper.generic_query("collections_get_fullcollection", {"collectionid":collection_id,"uid":uid})
 
 
+@app.get("/collection/posts", tags=["collection"])
+async def collection_posts_get(collectionid: int):
+    return await geomedia_helper.generic_query("collection_posts_get",{"collectionid":collectionid})
     
 #---------------------------------------------------------------------------------------------------------------------------------
 
@@ -172,9 +208,9 @@ async def collections_get_fullcollection(
 ## POSTS
 
 # CREATE / UPDATE POST
-@app.post("/post")
+@app.post("/post",  tags=["post"])
 async def create_post(body: dict, request: Request, authorization: str = Header(None)):
-    check_auth(authorization)
+    
     print("HERE",body)
 
     body["IP"] = request.client.host
@@ -206,13 +242,13 @@ async def create_post(body: dict, request: Request, authorization: str = Header(
 
     return {"post_id": post_id, "OK": True}
 
-@app.get("/post/{post_id}")
+@app.get("/post/{post_id}",  tags=["post"])
 async def get_post(
     post_id: int,
     uid: int | None = None,
     authorization: str = Header(None),
 ):
-    check_auth(authorization)
+    
     try:
         query_results = await geomedia_helper.generic_query(
             "post_get_fullpost",
@@ -236,45 +272,52 @@ async def get_post(
         raise HTTPException(status_code=404, detail="Post not found")
 
 # DELETE POST
-@app.delete("/post/{post_id}")
+@app.delete("/post/{post_id}",  tags=["post"])
 async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
     try:
-        check_auth(authorization)
-        print("HERE",post_id,password)
-        result = await geomedia_helper.post_delete(post_id, password)
-        return result
+        return await geomedia_helper.post_delete(post_id, password)
     except Exception as e:
         raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
 
+
+@app.get("/post/get_authorid",tags=["post"])
+async def post_get_authorid(uid: int,authorid: int):
+    return await geomedia_helper.generic_query("post_get_authorid",{
+        "uid":uid,"authorid":authorid
+    })
+
+@app.post("/post/report_new",tags=["post"])
+async def report_new(body:report_new):
+    return await geomedia_helper.generic_query("report_new",{
+        "postid": body.postid,
+        "uid": body.uid,
+        "motive": body.motive,
+        "kind": body.kind
+    })
+
+@app.delete("/post/hpmedia_remove",tags=["post"])
+async def hpmedia_remove(postid:int,filename:str):
+    return await geomedia_helper.hpmedia_remove(postid,filename)
+
+@app.get("/post/interactions_likepost",tags=["post"])
+async def interactions_likepost(postid:int,uid:int):
+    return await geomedia_helper.generic_query("interactions_likepost",{postid:postid,uid:uid})
+
 ############################################################################################################################################
 ############################################################################################################################################
-@app.post("/{full_path:path}")
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def handle_request(request: Request, full_path: str):
-    # Reconstruct path like "/something"
+
     path = f"/{full_path}" if full_path else "/"
 
-    # Authorization check
-    auth_header = request.headers.get("authorization")
-    check_auth(auth_header)
-
-    try:
-        body = await request.json()
-    except Exception:
-        body = {}
-
-    body["IP"] = request.client.host if request.client else None
-    body["HEADERS"] = dict(request.headers)
-
-    # Dispatch ROUTE
-    result = await dispatch_req(path, body)
-
-    # If dispatch already returned a Response object (e.g. special cases), return it
-    if isinstance(result, Response):
-        return result
-
-    # Otherwise return the data (200 OK)
-    return result
-
+    ip = request.client.host if request.client else None
+    headers = dict(request.headers)
+    writeLog(f"Request on path{path}, from ip {ip} and headers{headers}","404")
+    
+    raise HTTPException(
+        status_code=404,
+        detail={"msg": f"Unknown path: {path}"}
+    )
 
 if __name__ == "__main__":
     print(f"Server started on port: {PORT}")

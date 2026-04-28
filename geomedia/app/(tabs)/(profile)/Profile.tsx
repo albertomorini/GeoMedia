@@ -53,10 +53,10 @@ export default function Profile() {
   }
 
   function post_get_authorid() {
-    doRequest("post_get_authorid", {
+    doRequest("post/get_authorid", {
       uid: ctx?.getUID(),
       authorid: ctx?.getUID()
-    }).then(posts => {
+    },"GET").then(posts => {
       setPosts([...posts])
     }).catch(err => {
       ctx?.showToast({

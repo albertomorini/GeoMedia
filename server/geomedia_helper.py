@@ -34,6 +34,7 @@ def writeLog(message, scope="ERROR"):
 async def generic_query(path: str, body: dict):
     dummy = json.dumps(body).replace("'", "''")
     query = f"EXEC {path.replace('/', '')} @JSON='{dummy}'"
+    print("EXECUTING",query)
     return SQL_MANAGER.select_query(query)
 
 
@@ -118,6 +119,18 @@ async def hpmedia_read_folder(postid: int):
 
     return files
 
+
+async def hpmedia_remove(postid:int, filename:str):
+    try:
+        post_full_path = Path(PATH_UPLOADS) / str(postid) /filename
+        os.remove(post_full_path)
+        return await select_query("hpmedia_remove",{
+            "postid": postid,
+            "filename": filename
+        })
+    except Exception as e:
+        writeLog(f"Cannot delete file: {filename}, error {e.message}","ERROR")
+        return false
 
 # ------------------------
 # AUTH

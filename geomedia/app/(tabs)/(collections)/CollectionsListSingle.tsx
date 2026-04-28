@@ -69,8 +69,12 @@ const CollectionListSingle = (props) => {
                                 type: "error",
                                 text1: langselected.collection.colNotEditable
                             })
-                            //TODO: redirect to profile of owner?
-                            //TODO: PROFILE VIEWER
+                            router.push({
+                                pathname: '/ProfileViewer',
+                                params: {
+                                    username: pickeditem?.OWNERID,
+                                }
+                            })
                         }
                     }
                 }}

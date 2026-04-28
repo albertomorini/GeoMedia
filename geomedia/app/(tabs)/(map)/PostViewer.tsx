@@ -77,10 +77,10 @@ const PostViewer = () => {
             NUM_LIKES: postData?.NUM_LIKES + (!postData?.LIKED_BY_CURR_USER ? 1 : -1) //if liked remove it
         }));
 
-        doRequest("interactions_likepost", {
+        doRequest("post/interactions_likepost", {
             postid: postData?.ID,
             uid: ctx?.getUID()
-        }).then(resQuery => {
+        },"GET").then(resQuery => {
             ctx?.showToast({
                 type: "success",
                 text1: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
