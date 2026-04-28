@@ -56,7 +56,7 @@ const ProfileViewer = () => {
     }
 
     function get_statsCategory(username) {
-        doRequest("stats/profile", {
+        doRequest("profile/stats", {
             username: username,
             mode: "categories"
         }, "GET").then(res => {
@@ -68,7 +68,7 @@ const ProfileViewer = () => {
                 }))
             )
         })
-        doRequest("stats/profile", {
+        doRequest("profile/stats", {
             username: username,
             mode: "timemonths"
         }, "GET").then(res => {
@@ -84,9 +84,8 @@ const ProfileViewer = () => {
 
 
     function getInfo(username) {
-        doRequest("profile", {
+        doRequest("profile/info", {
             username: username,
-            uid: username,
         }, "GET").then(res => {
             console.log(res)
             get_statsCategory(res[0].USERNAME)

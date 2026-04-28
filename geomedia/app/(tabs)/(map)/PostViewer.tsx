@@ -35,9 +35,7 @@ const PostViewer = () => {
     }
 
     function getUserCreator(userid) {
-        doRequest("profile", {
-            uid: userid
-        },"GET").then(res => {
+        doRequest("profile/info/"+userid,{},"GET").then(res => {
             profile_getpfp(res[0].USERNAME) //yes I could incapsulate all in a single request but nah, better like this, due to optimiziation and async
             setUserCreator(prev => ({
                 ...prev,
@@ -58,7 +56,7 @@ const PostViewer = () => {
         }
 
         if (postid != null) {
-            doRequest("post/" + postid, {
+            doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
             }, "GET").then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)

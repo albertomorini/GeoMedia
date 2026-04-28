@@ -120,9 +120,9 @@ async def profile_getpfp(
     
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
-@app.get("/profile", tags=["USERS"])
-@app.get("/profile/{profile_id}", tags=["USERS"])
-@app.get("/profile/{username}", tags=["USERS"])
+@app.get("/profile/info", tags=["USERS"])
+@app.get("/profile/info/{profile_id}", tags=["USERS"])
+@app.get("/profile/info/{username}", tags=["USERS"])
 async def profile_getinfo(
     username: str | None = None,
     uid: int | None = None,
@@ -132,7 +132,7 @@ async def profile_getinfo(
     print("HERE",username,uid)
     return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
 
-@app.get("/stats/profile", tags=["USERS"])
+@app.get("/profile/stats", tags=["USERS"])
 async def profile_get_stats(
     username: str ,
     mode: str,
@@ -182,7 +182,7 @@ async def collection_merge(body: collection_merge, request: Request, authorizati
 async def collections_get_hashtags():
     return await geomedia_helper.collections_get_hashtags()
     
-@app.get("/collection", tags=["collection"])
+@app.get("/collections", tags=["collection"])
 @app.get("/collection/{collection_id}", tags=["collection"])
 async def collections_get_fullcollection(
     collection_id: int | None = None,
@@ -240,13 +240,12 @@ async def post_merge(body: post_merge, request: Request, authorization: str = He
 
     return {"post_id": post_id, "OK": True}
 
-@app.get("/post/{post_id}",  tags=["post"])
+@app.get("/post/id/{post_id}",  tags=["post"])
 async def get_post(
     post_id: int,
     uid: int | None = None,
     authorization: str = Header(None),
 ):
-    
     try:
         query_results = await geomedia_helper.generic_query(
             "post_get_fullpost",
@@ -278,11 +277,16 @@ async def delete_post(post_id: int, password: str, authorization: str = Header(N
         raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
 
 
-@app.get("/post/get_authorid",tags=["post"])
-async def post_get_authorid(uid: int,authorid: int):
-    return await geomedia_helper.generic_query("post_get_authorid",{
+@app.get("/post/by_author",tags=["post"])
+async def post_by_author(uid: str,authorid: str):
+    print("received", uid, authorid)
+    return await geomedia_helper.generic_query("post_by_author",{
         "uid":uid,"authorid":authorid
     })
+
+@app.post("/post/map",tags=["post"])
+async def post_get_map(body:post_get_map):
+    return await geomedia_helper.post_get_map(body.uid,body.current_position,body.collection_chosen)
 
 @app.post("/post/report_new",tags=["post"])
 async def report_new(body:report_new):
@@ -310,7 +314,7 @@ async def handle_request(request: Request, full_path: str):
 
     ip = request.client.host if request.client else None
     headers = dict(request.headers)
-    writeLog(f"Request on path{path}, from ip {ip} and headers{headers}","404")
+    geomedia_helper.writeLog(f"Request on path{path}, from ip {ip} and headers{headers}","404")
     
     raise HTTPException(
         status_code=404,

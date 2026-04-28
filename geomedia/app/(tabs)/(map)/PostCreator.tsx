@@ -214,7 +214,7 @@ const PostCreator = () => {
             postid = null;
         }
         if (postid != null) {
-            doRequest("post/" + postid, {
+            doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
             }, "GET").then(resQuery => {
                 let x = resQuery[0]

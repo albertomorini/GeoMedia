@@ -60,7 +60,7 @@ const Collections = (props) => {
 
     function getCollectionsList(mode = 0) {
         try {
-            doRequest("collection", {
+            doRequest("collections", {
                 uid: ctx?.getUID(),
                 // mode: props?.postCreation ?? modes[mode] //IF writing, do writing, otherwise let index of section decide
                 mode: modes[mode] //IF writing, do writing, otherwise let index of section decide

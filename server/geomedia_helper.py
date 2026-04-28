@@ -204,8 +204,8 @@ async def post_get_map(uid, current_position, collection_chosen=None):
             pp["VISIBILITY_AREA_KM"],
             pp["LATITUDE"],
             pp["LONGITUDE"],
-            current_position["latitude"],
-            current_position["longitude"],
+            current_position.latitude,
+            current_position.longitude,
         ):
             results.append(pp)
 
