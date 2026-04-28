@@ -29,15 +29,13 @@ const PostViewer = () => {
     })
 
     function profile_getpfp(username) {
-        doRequest("profile_getpfp", { USERNAME: username }).then(res => {
+        doRequest("profile/pfp", { USERNAME: username },"GET").then(res => {
             setUserCreator(prev => ({ ...prev, pfp: res[0]?.PROFILE_PICTURE }))
         })
     }
 
     function getUserCreator(userid) {
-        doRequest("profile_getinfo", {
-            uid: userid
-        }).then(res => {
+        doRequest("profile/info/"+userid,{},"GET").then(res => {
             profile_getpfp(res[0].USERNAME) //yes I could incapsulate all in a single request but nah, better like this, due to optimiziation and async
             setUserCreator(prev => ({
                 ...prev,
@@ -58,8 +56,12 @@ const PostViewer = () => {
         }
 
         if (postid != null) {
+<<<<<<< HEAD
             doRequest("post_get_fullpost", {
                 "postid": postid,
+=======
+            doRequest("post/id/" + postid, {
+>>>>>>> fastapi_backend
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
@@ -78,10 +80,10 @@ const PostViewer = () => {
             NUM_LIKES: postData?.NUM_LIKES + (!postData?.LIKED_BY_CURR_USER ? 1 : -1) //if liked remove it
         }));
 
-        doRequest("interactions_likepost", {
+        doRequest("post/interactions_likepost", {
             postid: postData?.ID,
             uid: ctx?.getUID()
-        }).then(resQuery => {
+        },"GET").then(resQuery => {
             ctx?.showToast({
                 type: "success",
                 text1: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")

@@ -24,7 +24,7 @@ const ReportPost = (props) => {
         if (kind != null && motive != null) {
             if (wordCount(motive) > 4) {
 
-                doRequest("report_new", {
+                doRequest("post/report_new", {
                     postid: props?.postid,
                     uid: ctx?.getUID(),
                     motive: motive,

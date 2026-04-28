@@ -29,9 +29,9 @@ const ExclusivityPicking = (props) => {
     ////////////////////////////////////////////////////////////
 
     function getUsersList() {
-        doRequest("users_list", {
+        doRequest("users", {
             "uid": ctx?.getUID()
-        }).then(resQuery => {
+        }, "GET").then(resQuery => {
             let x = resQuery.map(s => { //transform it to make it compatible with listitem/itemiconizable
                 return {
                     ID: s?.UID,

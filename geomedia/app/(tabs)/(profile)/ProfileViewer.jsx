@@ -39,9 +39,9 @@ const ProfileViewer = () => {
 
 
     function getProfilePic(username) {
-        doRequest("profile_getpfp", {
-            USERNAME: username
-        }).then(res => {
+        doRequest("profile/pfp", {
+            username: username
+        }, "GET").then(res => {
             let pp = res[0].PROFILE_PICTURE
             if (pp != undefined) {
                 setProfilePic(pp)
@@ -56,9 +56,10 @@ const ProfileViewer = () => {
     }
 
     function get_statsCategory(username) {
-        doRequest("profile_getstats_categories", {
-            username: username
-        }).then(res => {
+        doRequest("profile/stats", {
+            username: username,
+            mode: "categories"
+        }, "GET").then(res => {
             setstatsCategory(
                 res.map(item => ({
                     value: item.TOT_POSTS,
@@ -67,9 +68,10 @@ const ProfileViewer = () => {
                 }))
             )
         })
-        doRequest("profile_getstats_timemonths", {
-            username: username
-        }).then(res => {
+        doRequest("profile/stats", {
+            username: username,
+            mode: "timemonths"
+        }, "GET").then(res => {
             setStatTimeMonth(
                 res.map((item, index) => ({
                     value: item.TOT_POSTS,
@@ -82,9 +84,12 @@ const ProfileViewer = () => {
 
 
     function getInfo(username) {
-        doRequest("profile_getinfo", {
-            username: username
-        }).then(res => {
+        doRequest("profile/info", {
+            username: username,
+        }, "GET").then(res => {
+            console.log(res)
+            get_statsCategory(res[0].USERNAME)
+
             setUser(res[0])
         }).catch(err => {
             ctx?.showToast({
@@ -99,7 +104,6 @@ const ProfileViewer = () => {
         useCallback(() => {
             if (params?.username != null) {
                 getInfo(params.username)
-                get_statsCategory(params.username)
                 getProfilePic(params.username)
             }
         }, [])

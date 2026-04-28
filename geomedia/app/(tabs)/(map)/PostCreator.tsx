@@ -21,9 +21,10 @@ import MapPicking from '@/app/mycomponents/MapPicking';
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CollectionsList from '../(collections)/CollectionsList';
+import CollectionsList from '../(collections)/CollectionsListSingle';
 import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 import { useLanguage } from '@/components/LanguageProvider';
+import Collections from '../(collections)/Collections';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,7 @@ const PostCreator = () => {
 
 
     const ctx = useContext(MyContext);
+    const colorScheme = useColorScheme()
     const { langselected } = useLanguage()
     const params = useLocalSearchParams();
 
@@ -130,9 +132,9 @@ const PostCreator = () => {
                 text2: JSON.stringify(missing_fields) + " not compiled"
             })
         } else {
-            doRequest("post_merge", {
-                postdata: dummy_body
-            }).then(res => {
+            doRequest("post", {
+                dummy_body
+            }, "POST").then(res => {
                 if (res?.OK) {
                     setPostData(prev => ({
                         ...prev,
@@ -210,8 +212,7 @@ const PostCreator = () => {
             postid = null;
         }
         if (postid != null) {
-            doRequest("post_get_fullpost", {
-                "postid": postid,
+            doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
             }).then(resQuery => {
                 let x = resQuery[0]
@@ -462,35 +463,32 @@ const PostCreator = () => {
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // drag down to close
                     backgroundStyle={{
-                        borderTopWidth: 1,
-                        borderEndWidth: 1,
-                        borderStartWidth: 1,
-                        borderColor: useColorScheme() === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                        width: "100%",
+                        margin: 0,
                         borderTopLeftRadius: 24,
                         borderTopRightRadius: 24,
-                        backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
+                        backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                     }}
                 >
-                    <BottomSheetScrollView style={{ flex: 1 }}
-                        contentContainerStyle={{ paddingBottom: 20 }}
+                    <BottomSheetScrollView contentContainerStyle={{ flex: 1 , lexGrow: 1,}}
+                       
                         keyboardShouldPersistTaps="handled"
                     >
-                        <ThemedView>
-                            <CollectionsList
-                                postCreation={"W"}
-                                allowCreation={true}
-                                onSelect={(cat: Object) => {
-                                    collection_sheet_handler?.current?.close()
-                                    setPostData(prev => ({
-                                        ...prev,
-                                        COLLECTION_ID: cat?.ID,
-                                        COLLECTION_NAME: cat?.TITLE,
-                                        COLOR: cat?.COLOR,
-                                        ICON: cat?.ICON,
-                                        REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
-                                    }))
-                                }} />
-                        </ThemedView>
+                        <Collections
+                            isBottomSheet={true}//thus to render the list
+                            postCreation={"W"}
+                            allowCreation={true}
+                            onSelect={(cat: Object) => {
+                                collection_sheet_handler?.current?.close()
+                                setPostData(prev => ({
+                                    ...prev,
+                                    COLLECTION_ID: cat?.ID,
+                                    COLLECTION_NAME: cat?.TITLE,
+                                    COLOR: cat?.COLOR,
+                                    ICON: cat?.ICON,
+                                    REMOTE_POSTING_ENABLED: cat?.REMOTE_POSTING
+                                }))
+                            }} />
                     </BottomSheetScrollView>
                 </BottomSheet>
 

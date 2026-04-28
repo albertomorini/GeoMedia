@@ -80,10 +80,10 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             setFilesAttached([...filesAttached])
                         }
                         if (props?.postid != undefined) { //post exists, do the request to unbind the file, otherwise not existing is a local modification
-                            doRequest("hpmedia_remove", {
+                            doRequest("post/hpmedia_remove", {
                                 "postid": 1,
                                 "filename": FILENAME
-                            }).then(resQuery => {
+                            },"DELETE").then(resQuery => {
                                 ctx?.showToast({
                                     type: "success",
                                     text1: langselected.fileUpload.fileremoved + FILENAME,

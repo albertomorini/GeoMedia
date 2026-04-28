@@ -29,8 +29,12 @@ export default function Profile() {
 
     doRequest("profile_getpfp", {
       username: user?.USERNAME
+<<<<<<< HEAD
     }).then(res => {
       console.log(res)
+=======
+    }, "GET").then(res => {
+>>>>>>> fastapi_backend
       let pp = res[0].PROFILE_PICTURE
       if (pp != undefined) {
         setProfilePic(pp)
@@ -54,10 +58,10 @@ export default function Profile() {
   }
 
   function post_get_authorid() {
-    doRequest("post_get_authorid", {
+    doRequest("post/by_author", {
       uid: ctx?.getUID(),
       authorid: ctx?.getUID()
-    }).then(posts => {
+    },"GET").then(posts => {
       setPosts([...posts])
     }).catch(err => {
       ctx?.showToast({

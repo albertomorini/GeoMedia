@@ -34,9 +34,9 @@ const CollectionPosts = (props) => {
     );
 
     function collection_posts_get(collectionid) {
-        doRequest("collection_posts_get", {
+        doRequest("collection/posts", {
             collectionid: collectionid
-        }).then(resQuery => {
+        },"GET").then(resQuery => {
             setPostList(resQuery)
         }).catch(err => {
             ctx?.showToast({

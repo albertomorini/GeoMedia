@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -10,10 +10,11 @@ import { doRequest } from '../../utility';
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CollectionsList from "../(collections)/CollectionsList";
+import BottomSheet, { BottomSheetFlatList, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+import Collections from "../(collections)/Collections";
 import * as SecureStore from 'expo-secure-store';
+import { FullWindowOverlay } from 'react-native-screens';
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -136,7 +137,7 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
     function get_posts_map(curPos = UserPosition, collections = collectionsChosen) {
-        doRequest("post_get_map", {
+        doRequest("post/map", {
             uid: ctx?.getUID(),
             current_position: curPos,
             collection_chosen: collections
@@ -248,39 +249,41 @@ const MapViewer = forwardRef((props, ref) => {
                         </TouchableOpacity>
 
 
-                        <BottomSheet
-                            ref={collectionPickerSheet}
-                            index={-1} // start closed
-                            snapPoints={snapPoints}
-                            enablePanDownToClose={true} // drag down to close
-                            backgroundStyle={{
-                                borderTopWidth: 1,
-                                borderEndWidth: 1,
-                                borderStartWidth: 1,
-                                borderColor: colorScheme === 'dark' ? '#fff' : '#121212', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
 
-                                borderTopLeftRadius: 24,
-                                borderTopRightRadius: 24,
-                                backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
-                            }}
-                        >
-                            <BottomSheetScrollView style={{ flex: 1 }}>
-                                <ThemedView >
-                                    <CollectionsList isSelectable={true}
-                                        allowCreation={false}
-                                        itemSelected={collectionsChosen}
-                                        onSelect={(colls) => {
-                                            store_preferences([...colls]) // store the prefernces on cache
-                                            setCollectionsChosen([...colls])
-                                            collectionPickerSheet?.current?.close()
-                                            get_posts_map(UserPosition, colls)
-                                        }} />
-                                </ThemedView>
-                            </BottomSheetScrollView>
-                        </BottomSheet>
                     </ThemedView>
             }
-        </GestureHandlerRootView>
+            <BottomSheet
+                ref={collectionPickerSheet}
+                index={-1}
+                snapPoints={snapPoints}
+                enablePanDownToClose={true}
+                enableDynamicSizing={true}
+                backgroundStyle={{
+
+                    width: "100%",
+                    margin: 0,
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff',
+                }}
+            >
+
+                <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, flex: 1 }}>
+                    <Collections isSelectable={true}
+                        allowCreation={false}
+                        isBottomSheet={true}
+                        itemSelected={collectionsChosen}
+                        onSelect={(colls) => {
+                            store_preferences([...colls]) // store the prefernces on cache
+                            setCollectionsChosen([...colls])
+                            collectionPickerSheet?.current?.close()
+                            get_posts_map(UserPosition, colls)
+                        }} />
+
+                </BottomSheetScrollView>
+            </BottomSheet>
+
+        </GestureHandlerRootView >
     )
 })
 

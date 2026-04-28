@@ -39,7 +39,7 @@ export default function LoginScreen(props) {
     //////////////////////////////////////////////////////////////////
 
     function doLogin() {
-        doRequest("auth_login", {
+        doRequest("auth/login", {
             EMAIL: email,
             USERNAME: email, // reusing the field of email, whatever tho
             PASSWORD: React_MD5(password)
@@ -74,7 +74,7 @@ export default function LoginScreen(props) {
         } else if (!validUsername && validUsername != null) {
             seterrorPassword("Username already taken!")
         } else {
-            doRequest("auth_signin", {
+            doRequest("auth/signin", {
                 EMAIL: email,
                 USERNAME: username,
                 PASSWORD: React_MD5(password)
@@ -95,7 +95,7 @@ export default function LoginScreen(props) {
     }
 
     function check_otp() {
-        doRequest("auth_check_otp", {
+        doRequest("auth/check_otp", {
             USERNAME: username,
             OTP: OTP
         }).then(async res => {
@@ -115,9 +115,9 @@ export default function LoginScreen(props) {
     }
 
     function check_username(username: string) {
-        doRequest("auth_check_username", {
-            USERNAME: username
-        }).then(resQuery => {
+        doRequest("auth/check_username", {
+            username: username
+        },"GET").then(resQuery => {
             if (parseInt(resQuery[0]?.OK)) {
                 setValidUsername(true)
                 ctx?.showToast({
