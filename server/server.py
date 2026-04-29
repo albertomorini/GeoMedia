@@ -149,7 +149,7 @@ async def profile_editinfo(
     return await geomedia_helper.generic_query("profile_editinfo",body)
 
 
-@app.get("/users",tags=["USER"])
+@app.get("/users",tags=["USERS"])
 async def users_list(uid:int):
     return await geomedia_helper.generic_query("users_list",{"uid":uid})
 
@@ -308,7 +308,7 @@ async def interactions_likepost(postid:int,uid:int):
 
 ############################################################################################################################################
 ############################################################################################################################################
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], tags=["NotHandled"])
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], tags=["NOT HANDLED"])
 async def handle_request(request: Request, full_path: str):
 
     path = f"/{full_path}" if full_path else "/"
