@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [GEOMEDIA]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Database [GEOMEDIA]    Script Date: 29/04/2026 14:29:00 ******/
 CREATE DATABASE [GEOMEDIA]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -86,7 +86,7 @@ ALTER DATABASE [GEOMEDIA] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_
 GO
 USE [GEOMEDIA]
 GO
-/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -107,13 +107,34 @@ CREATE TABLE [dbo].[COLLECTIONS](
 	[COLOR] [varchar](20) NULL,
 	[CREATORS] [nvarchar](max) NULL,
 	[VIEWERS] [nvarchar](max) NULL,
+	[HASHTAGS] [nvarchar](max) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[HASHTAGS]    Script Date: 29/04/2026 14:29:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[HASHTAGS](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[TITLE] [varchar](50) NULL,
+	[DC] [datetime] NULL,
+	[UC] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[TITLE] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -126,7 +147,7 @@ CREATE TABLE [dbo].[HYPERMEDIA](
 	[MIME_TYPE] [varchar](32) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -144,7 +165,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LOGS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[LOGS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -160,7 +181,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[POSTS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[POSTS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -180,13 +201,14 @@ CREATE TABLE [dbo].[POSTS](
 	[RECURRENT] [int] NULL,
 	[COLLECTION_ID] [int] NULL,
 	[VIEWERS] [nvarchar](max) NULL,
+	[ALTITUDE] [float] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[REPORTS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[REPORTS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -205,7 +227,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[USERS]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  Table [dbo].[USERS]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -273,7 +295,7 @@ GO
 ALTER TABLE [dbo].[REPORTS]  WITH CHECK ADD FOREIGN KEY([USERID])
 REFERENCES [dbo].[USERS] ([ID])
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -284,8 +306,9 @@ AS
 BEGIN
     DECLARE @MSG NVARCHAR(1000) 
 
-    IF EXISTS(SELECT * FROM USERS WHERE USERNAME=JSON_VALUE(@JSON,'$.USERNAME') AND OTPCODE = JSON_VALUE(@JSON,'$.OTP')
-    AND DATEDIFF(hour,OTPDATE,GETDATE())<1 --OTP generated within an hour
+    IF EXISTS(
+        SELECT * FROM USERS WHERE USERNAME=JSON_VALUE(@JSON,'$.USERNAME') AND OTPCODE = CAST(JSON_VALUE(@JSON,'$.OTP') AS INT)
+        AND DATEDIFF(hour,OTPDATE,GETDATE())<=1 --OTP generated within an hour
     )
     BEGIN
         UPDATE USERS SET EMAIL_VERIFIED = 1, DM=GETDATE(), OTPDATE=GETDATE() WHERE USERNAME= JSON_VALUE(@JSON,'$.USERNAME')
@@ -300,8 +323,10 @@ BEGIN
 END
 
 
+
+
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -316,7 +341,7 @@ BEGIN
         SELECT 1 AS OK, 'USERNAME AVAILABLE' AS MSG
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -357,7 +382,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -366,7 +391,7 @@ CREATE PROCEDURE [dbo].[AUTH_PSW_FORGOTTEN]
 @JSON VARCHAR(MAX)
 AS
 BEGIN
-	DECLARE @OTP VARCHAR(6) = (SELECT CONVERT(varchar(255),(SELECT CAST(RAND()*1000000 AS INT))))
+	DECLARE @OTP VARCHAR(6) = (SELECT RIGHT('000000' + CAST(CAST(RAND() * 1000000 AS INT) AS VARCHAR(6)), 6))
 
 	UPDATE U SET OTPCODE =@OTP, OTPDATE=GETDATE()
 	FROM USERS U
@@ -382,8 +407,9 @@ BEGIN
 
 END
 
+
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -423,7 +449,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -463,7 +489,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -494,7 +520,8 @@ BEGIN
                 ICON VARCHAR(50),
                 COLOR VARCHAR(20),
                 CREATORS NVARCHAR(MAX) AS JSON,
-                VIEWERS NVARCHAR(MAX) AS JSON
+                VIEWERS NVARCHAR(MAX) AS JSON,
+                HASHTAGS NVARCHAR(MAX) AS JSON
             )
         ) AS source
         ON target.ID = source.ID
@@ -513,7 +540,8 @@ BEGIN
                 ICON = source.ICON,
                 COLOR = source.COLOR,
                 CREATORS=source.CREATORS,
-                VIEWERS=source.VIEWERS
+                VIEWERS=source.VIEWERS,
+                HASHTAGS = source.HASHTAGS
 
 
         WHEN NOT MATCHED THEN
@@ -521,16 +549,21 @@ BEGIN
                 TITLE, OWNERID, DESCRIPTION, DC,DM,
                 CREATORS, VIEWERS, EXCL_DATE_START, EXCL_DATE_END,
                 RECURRENT,  REMOTE_POSTING,
-                SEQUENTIALS, ICON,COLOR
+                SEQUENTIALS, ICON,COLOR,HASHTAGS
             )
             VALUES (
                 source.TITLE, source.OWNERID, source.DESCRIPTION, GETDATE(),GETDATE(),
                 source.CREATORS, source.VIEWERS, source.EXCL_DATE_START, source.EXCL_DATE_END,
                 source.RECURRENT,source.REMOTE_POSTING,
-                source.SEQUENTIALS,source.ICON,source.COLOR
+                source.SEQUENTIALS,source.ICON,source.COLOR, source.HASHTAGS
             )
         OUTPUT inserted.ID INTO @Result;
 
+
+        --- INSERT TAGS
+        INSERT INTO HASHTAGS (TITLE,DC,UC)
+        SELECT value,GETDATE(),JSON_VALUE(@JSON,'$.OWNERID') FROM OPENJSON(@JSON,'$.HASHTAGS')
+        WHERE NOT EXISTS (SELECT * FROM HASHTAGS WHERE TITLE=value)
         
         COMMIT TRANSACTION T1;
         SELECT ID AS ID, 1 AS OK FROM @Result;
@@ -543,7 +576,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTION_POSTS_GET]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_POSTS_GET]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -571,7 +604,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -584,12 +617,12 @@ AS
 BEGIN
 
 
-	DECLARE @UID INT, @MODE CHAR(1) -- R (reading/viewing post), W (writing) to check if creator
+	DECLARE @UID INT, @MODE VARCHAR(10) -- R (reading/viewing post), W (writing) to check if creator
 
 	SELECT @UID=uid, @MODE=mode FROM
 	OPENJSON(@JSON,'$')WITH(
 		uid INT,
-		mode CHAR(1)
+		mode VARCHAR(10)
 	)
 
 	IF(@MODE='W') --- just collection not expired, and where user is creator || is owner of the collection
@@ -602,7 +635,7 @@ BEGIN
 			AND (@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS ='[]') -- is creator or hasn't exclusivity
 		)OR OWNERID=@UID
 	END
-	ELSE IF(@MODE='R')
+	ELSE IF(@MODE='R') --ALL AS LIST
 	BEGIN
 
 		SELECT * FROM COLLECTIONS
@@ -617,10 +650,48 @@ BEGIN
 			)
 		)OR OWNERID=@UID
 	END
+	ELSE IF(@MODE='TOP') -- TOP 20 MOST POPULAR
+	BEGIN
+		SELECT TOP 20 C.*,
+			(SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID) AS NR_POSTS
+		FROM COLLECTIONS C
+		WHERE 
+		( --EXCLUSIVITY
+			GETDATE()> ISNULL(EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
+			AND
+			(
+				(@UID IN (SELECT VALUE FROM OPENJSON(VIEWERS,'$')) OR VIEWERS IS NULL OR VIEWERS = '[]') --VIEWER
+			OR
+				(@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS = '[]') -- CREATOR CAN BE VIEWER NO NEED TO SPECIFY
+			)
+		)OR OWNERID=@UID
+		ORDER BY (SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID) DESC
+	END
+	ELSE IF(@MODE='HOT') -- TRENDING (LAST 4H)
+	BEGIN
+		SELECT TOP 20 C.*,
+			(SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID ) AS NR_POSTS_ALLTIME,
+			(SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID AND P.DC >= DATEADD(HOUR, -4, GETDATE()) ) AS NR_POSTS_HOT
+		FROM COLLECTIONS C
+		WHERE 
+		( --EXCLUSIVITY
+			GETDATE()> ISNULL(EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
+			AND
+			(
+				(@UID IN (SELECT VALUE FROM OPENJSON(VIEWERS,'$')) OR VIEWERS IS NULL OR VIEWERS = '[]') --VIEWER
+			OR
+				(@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS = '[]') -- CREATOR CAN BE VIEWER NO NEED TO SPECIFY
+			)
+		)OR OWNERID=@UID
+		ORDER BY 
+		(SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID AND P.DC >= DATEADD(HOUR, -4, GETDATE()) )
+		,(SELECT COUNT(P.ID) FROM POSTS P WHERE COLLECTION_ID=C.ID) DESC
+	END
 
 END
+
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -637,11 +708,13 @@ BEGIN
 	INNER JOIN	OPENJSON(@JSON,'$') WITH(collectionid INT, uid INT) JJ ON JJ.collectionid = C.ID 
 	-- AND JJ.uid IN (
 	-- 	SELECT VALUE FROM OPENJSON(C.VIEWERS,'$')
-	-- )
+	-- ) OR JJ.uid IN (
+	-- 	SELECT VALUE FROM OPENJSON(C.CREATORS,'$')
+	-- ) OR JJ.uid = C.OWNERID
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -653,7 +726,7 @@ BEGIN
     SELECT * FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -697,7 +770,7 @@ GO
 
   END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -716,7 +789,7 @@ BEGIN
     DELETE FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -756,7 +829,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -771,7 +844,38 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[POST_BY_AUTHOR]    Script Date: 29/04/2026 14:29:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[POST_BY_AUTHOR]
+@JSON as NVARCHAR(MAX)
+AS
+BEGIN
+
+    DECLARE @UID INT, @AUTHOR_ID INT;
+    SELECT @UID = uid, @AUTHOR_ID= authorid
+    FROM OPENJSON(@JSON,'$')WITH(
+        uid INT,
+        authorid INT
+    )
+
+    IF(@AUTHOR_ID=@UID) --SELF POST
+    BEGIN
+        SELECT DISTINCT P.*, C.ICON,C.COLOR FROM POSTS  P 
+        INNER JOIN COLLECTIONS C ON P.COLLECTION_ID = C.ID
+        WHERE AUTHOR_ID=@AUTHOR_ID
+    END
+
+
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -783,15 +887,18 @@ CREATE PROCEDURE [dbo].[POST_DELETE]
     @PASSWORD VARCHAR(128)
 AS
 BEGIN
-
-     DELETE FROM POSTS  WHERE ID=@POSTID AND EXISTS (
-        SELECT * FROM USERS WHERE ID = AUTHOR_ID AND PASSWORD=@PASSWORD
-    )
-
     DECLARE @MSG NVARCHAR(1000)
-    
-    IF @@ROWCOUNT > 0
+
+    IF EXISTS ( 
+        SELECT * FROM USERS WHERE 
+        ID = (SELECT AUTHOR_ID FROM POSTS WHERE ID = @POSTID) 
+        AND PASSWORD = @PASSWORD
+    )
     BEGIN
+        DELETE FROM INTERACTIONS WHERE POST_ID = @POSTID;
+        DELETE FROM HYPERMEDIA WHERE POST_ID = @POSTID;
+        DELETE FROM POSTS WHERE ID = @POSTID;
+        DELETE FROM REPORTS WHERE POSTID=@POSTID
         SELECT 1 AS OK
         SET @MSG =  CONCAT('DELETED POST', CAST(@POSTID AS VARCHAR(200)))
     END
@@ -799,19 +906,18 @@ BEGIN
     BEGIN
         SELECT 0 as OK
         SET @MSG =  CONCAT('CANNOT DELETE POST, WRONG PSW OR POSTID: ', CAST(@POSTID AS VARCHAR(200)), @PASSWORD)
-    END  
-      
-    EXEC LOG_WRITE @MESSAGE = @MSG, @SCOPE='POST_DELETE'
-  
+    END
+
+    EXEC dbo.LOG_WRITE @MESSAGE = @MSG, @SCOPE='POST_DELETE'
+
 
 END
 
 
 
 
-
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -824,11 +930,12 @@ BEGIN
 	--WHERE COLLECTION_ID =@COLLECTION_ID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[POST_GET_FULLPOST]
 @JSON NVARCHAR(MAX)
 AS
@@ -854,7 +961,7 @@ BEGIN
 		WHERE POST_ID= JSON_VALUE(@JSON,'$.postid')
 		GROUP BY POST_ID
 	)
-	SELECT P.*,
+	SELECT DISTINCT P.*,
 		(SELECT COUNT(*) FROM INTERACTIONS WHERE SCOPE='LIKE' AND POST_ID=P.ID AND OWNERID=JSON_VALUE(@JSON,'$.uid')) AS LIKED_BY_CURR_USER,
 		PS.NUM_LIKES,
 		PS.NUM_VIEWS,
@@ -871,8 +978,9 @@ BEGIN
 	
 
 END
+
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -955,7 +1063,7 @@ BEGIN
     -- NB: THE VISIBILITY_AREA_KM FILTER IS MADE ON BACKEND OF THE SERVER
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -980,6 +1088,7 @@ BEGIN
                 JJ.COMMENT,
                 JJ.LATITUDE,
                 JJ.LONGITUDE,
+                JJ.ALTITUDE,
                 JJ.EXCLUSIVITY,
                 JJ.VISIBILITY_AREA_KM,
                 DATE_EXL.DATE_START,
@@ -992,11 +1101,9 @@ BEGIN
                 AUTHOR_ID INT,
                 TITLE VARCHAR(50),
                 COMMENT VARCHAR(MAX),
-                MEDIA_B64 NVARCHAR(MAX),
-                MEDIATYPE VARCHAR(100),
-                MEDIAFILENAME VARCHAR(300),
                 LATITUDE FLOAT,
                 LONGITUDE FLOAT,
+                ALTITUDE FLOAT,
                 VISIBILITY_AREA_KM INT,
                 COLLECTION_ID INT,
                 EXCLUSIVITY NVARCHAR(MAX) AS JSON,
@@ -1018,6 +1125,7 @@ BEGIN
                     T.DM = GETDATE(),
                     T.LATITUDE = ISNULL(S.LATITUDE,T.LATITUDE),
                     T.LONGITUDE = ISNULL(S.LONGITUDE,T.LONGITUDE),
+                    T.ALTITUDE = ISNULL(S.ALTITUDE,T.ALTITUDE),
                     T.VISIBILITY_AREA_KM = ISNULL(S.VISIBILITY_AREA_KM,T.VISIBILITY_AREA_KM),
                     T.EXCL_DATE_START = ISNULL(S.DATE_START,T.EXCL_DATE_START),
                     T.EXCL_DATE_END = ISNULL(S.DATE_END,T.EXCL_DATE_END),
@@ -1027,11 +1135,10 @@ BEGIN
 
 
 
-
         WHEN NOT MATCHED THEN
             INSERT (
                 AUTHOR_ID, TITLE, COMMENT, DC, DM,
-                LATITUDE, LONGITUDE, 
+                LATITUDE, LONGITUDE, ALTITUDE,
                 VISIBILITY_AREA_KM,
                 EXCL_DATE_START,
                 EXCL_DATE_END,
@@ -1041,7 +1148,7 @@ BEGIN
             )
             VALUES (
                  S.AUTHOR_ID, S.TITLE, S.COMMENT, GETDATE(), GETDATE(),
-                S.LATITUDE, S.LONGITUDE,
+                S.LATITUDE, S.LONGITUDE, S.ALTITUDE,
                 S.VISIBILITY_AREA_KM,
                 S.DATE_START,
                 S.DATE_END,
@@ -1064,7 +1171,7 @@ END;
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1106,7 +1213,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GETINFO]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETINFO]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1115,10 +1222,14 @@ CREATE PROCEDURE [dbo].[PROFILE_GETINFO]
 @JSON JSON
 AS
 BEGIN
-    SELECT USERNAME,NAME,SURNAME,DC FROM USERS WHERE ID= JSON_VALUE(@JSON,'$.uid')
+    SELECT U.USERNAME,U.NAME,U.SURNAME,U.DC
+    FROM USERS U
+    WHERE (u.ID= JSON_VALUE(@JSON,'$.uid') OR USERNAME=JSON_VALUE(@JSON,'$.username'))
+    
 END
+
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1130,11 +1241,61 @@ BEGIN
 	SELECT
 	PROFILE_PICTURE
 	FROM DBO.USERS
-	WHERE USERNAME = JSON_VALUE(@JSON, '$.USERNAME')
+	WHERE USERNAME = JSON_VALUE(@JSON, '$.USERNAME') OR ID =  TRY_CAST(JSON_VALUE(@JSON, '$.USERNAME') AS INT)
 
 END
+
 GO
-/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_CATEGORIES]    Script Date: 29/04/2026 14:29:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[PROFILE_GETSTATS_CATEGORIES]
+@JSON JSON
+AS
+BEGIN
+    SELECT
+    COUNT(P.ID) AS TOT_POSTS,
+    C.COLOR AS COLLECTION_COLOR,
+    C.ICON AS COLLECTION_ICON,
+    C.[TITLE] AS COLLECTION_TITLE
+    FROM USERS U
+    LEFT JOIN POSTS P ON P.AUTHOR_ID = U.ID
+    INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
+    WHERE (u.ID= JSON_VALUE(@JSON,'$.uid') OR USERNAME=JSON_VALUE(@JSON,'$.username'))
+
+    GROUP BY C.COLOR,C.ICON,C.[TITLE]
+        
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_TIMEMONTHS]    Script Date: 29/04/2026 14:29:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[PROFILE_GETSTATS_TIMEMONTHS]
+@JSON JSON
+AS
+BEGIN
+    SELECT
+    COUNT(P.ID) AS TOT_POSTS,
+    MONTH(P.DC) AS M
+    FROM USERS U
+    LEFT JOIN POSTS P ON P.AUTHOR_ID = U.ID
+    INNER JOIN COLLECTIONS C ON C.ID = P.COLLECTION_ID
+    WHERE (u.ID= JSON_VALUE(@JSON,'$.uid') OR USERNAME=JSON_VALUE(@JSON,'$.username'))
+
+    GROUP BY MONTH(P.DC)
+        
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1157,7 +1318,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 04/04/2026 15:16:07 ******/
+/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 29/04/2026 14:29:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
