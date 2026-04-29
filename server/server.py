@@ -49,7 +49,7 @@ def send_response(content, status_code: int = 200):
 
 # AUTH
 
-@app.post("/auth/login",tags=["auth"])
+@app.post("/auth/login",tags=["AUTH"])
 async def auth_login(body: auth_login, request:Request):
     ip = request.client.host if request.client else None
     headers = dict(request.headers)
@@ -61,7 +61,7 @@ async def auth_login(body: auth_login, request:Request):
         "HEADERS": headers
     })
 
-@app.post("/auth/psw_reset",tags=["auth"])
+@app.post("/auth/psw_reset",tags=["AUTH"])
 async def auth_psw_reset(body: auth_psw_reset, request:Request):
     ip = request.client.host if request.client else None
     headers = dict(request.headers)
@@ -74,7 +74,7 @@ async def auth_psw_reset(body: auth_psw_reset, request:Request):
         "HEADERS": headers
     })
 
-@app.post("/auth/check_otp",tags=["auth"])
+@app.post("/auth/check_otp",tags=["AUTH"])
 async def auth_check_otp(body: auth_check_otp, request:Request):
     ip = request.client.host if request.client else None
     headers = dict(request.headers)
@@ -84,16 +84,16 @@ async def auth_check_otp(body: auth_check_otp, request:Request):
         "OTP" : body.otp,
     })
 
-@app.get("/auth/check_username",tags=["auth"])
+@app.get("/auth/check_username",tags=["AUTH"])
 async def auth_check_username(username:str):
     return await geomedia_helper.generic_query("auth_check_username",{"USERNAME":username})
 
 
-@app.post("/auth/psw_forgotten")
+@app.post("/auth/psw_forgotten",tags=["AUTH"])
 async def auth_psw_forgotten(body:auth_psw_forgotten):
     query_results = await geomedia_helper.auth_signin("auth_psw_forgotten", body)
     return await proceed_otp(query_results)
-@app.post("/auth/auth_signin")
+@app.post("/auth/auth_signin",tags=["AUTH"])
 async def auth_signin(body:auth_signin):
     query_results = await geomedia_helper.auth_signin("auth_signin", body)
     return await proceed_otp(query_results)
@@ -161,7 +161,7 @@ async def users_list(uid:int):
 ## COLLECTIONS
 
 # CREATE / UPDATE POST
-@app.post("/collection", tags=["collection"])
+@app.post("/collection", tags=["COLLECTION"])
 async def collection_merge(body: collection_merge, request: Request, authorization: str = Header(None)):
     
     body["IP"] = request.client.host
@@ -178,12 +178,12 @@ async def collection_merge(body: collection_merge, request: Request, authorizati
     return query_results
 
 
-@app.get("/collection/hashtags",  tags=["collection"])
+@app.get("/collection/hashtags",  tags=["COLLECTION"])
 async def collections_get_hashtags():
     return await geomedia_helper.collections_get_hashtags()
     
-@app.get("/collections", tags=["collection"])
-@app.get("/collection/{collection_id}", tags=["collection"])
+@app.get("/collections", tags=["COLLECTION"])
+@app.get("/collection/{collection_id}", tags=["COLLECTION"])
 async def collections_get_fullcollection(
     collection_id: int | None = None,
     uid: int | None = None,
@@ -197,7 +197,7 @@ async def collections_get_fullcollection(
         return await geomedia_helper.generic_query("collections_get_fullcollection", {"collectionid":collection_id,"uid":uid})
 
 
-@app.get("/collection/posts", tags=["collection"])
+@app.get("/collection/posts", tags=["COLLECTION"])
 async def collection_posts_get(collectionid: int):
     return await geomedia_helper.generic_query("collection_posts_get",{"collectionid":collectionid})
     
@@ -207,7 +207,7 @@ async def collection_posts_get(collectionid: int):
 ## POSTS
 
 # CREATE / UPDATE POST
-@app.post("/post",  tags=["post"])
+@app.post("/post",  tags=["POST"])
 async def post_merge(body: post_merge, request: Request, authorization: str = Header(None)):
     
 
@@ -240,7 +240,7 @@ async def post_merge(body: post_merge, request: Request, authorization: str = He
 
     return {"post_id": post_id, "OK": True}
 
-@app.get("/post/id/{post_id}",  tags=["post"])
+@app.get("/post/id/{post_id}",  tags=["POST"])
 async def get_post(
     post_id: int,
     uid: int | None = None,
@@ -269,7 +269,7 @@ async def get_post(
         raise HTTPException(status_code=404, detail="Post not found")
 
 # DELETE POST
-@app.delete("/post/{post_id}",  tags=["post"])
+@app.delete("/post/{post_id}",  tags=["POST"])
 async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
     try:
         return await geomedia_helper.post_delete(post_id, password)
@@ -277,18 +277,18 @@ async def delete_post(post_id: int, password: str, authorization: str = Header(N
         raise HTTPException(status_code=501, detail="Something went wrong: "+str(e))
 
 
-@app.get("/post/by_author",tags=["post"])
+@app.get("/post/by_author",tags=["POST"])
 async def post_by_author(uid: str,authorid: str):
     print("received", uid, authorid)
     return await geomedia_helper.generic_query("post_by_author",{
         "uid":uid,"authorid":authorid
     })
 
-@app.post("/post/map",tags=["post"])
+@app.post("/post/map",tags=["POST"])
 async def post_get_map(body:post_get_map):
     return await geomedia_helper.post_get_map(body.uid,body.current_position,body.collection_chosen)
 
-@app.post("/post/report_new",tags=["post"])
+@app.post("/post/report_new",tags=["POST"])
 async def report_new(body:report_new):
     return await geomedia_helper.generic_query("report_new",{
         "postid": body.postid,
@@ -297,17 +297,17 @@ async def report_new(body:report_new):
         "kind": body.kind
     })
 
-@app.delete("/post/hpmedia_remove",tags=["post"])
+@app.delete("/post/hpmedia_remove",tags=["POST"])
 async def hpmedia_remove(postid:int,filename:str):
     return await geomedia_helper.hpmedia_remove(postid,filename)
 
-@app.get("/post/interactions_likepost",tags=["post"])
+@app.get("/post/interactions_likepost",tags=["POST"])
 async def interactions_likepost(postid:int,uid:int):
     return await geomedia_helper.generic_query("interactions_likepost",{postid:postid,uid:uid})
 
 ############################################################################################################################################
 ############################################################################################################################################
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], tags=["NotHandled"])
 async def handle_request(request: Request, full_path: str):
 
     path = f"/{full_path}" if full_path else "/"
