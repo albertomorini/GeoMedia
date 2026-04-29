@@ -82,11 +82,6 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     useImperativeHandle(ref, () => ({
         get_dates: () => {
-            console.log({
-                start: start,
-                end: end,
-                recurrent: isRecurrent
-            })
             return {
                 start: start,
                 end: end,

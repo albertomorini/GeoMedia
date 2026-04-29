@@ -196,8 +196,6 @@ export const doRequest = (api, body = {}, method = "POST") => {
             Alert.alert("Network error, try later..")
         })
     } else {
-        console.log(body);
-        
         return fetch(URL + api, {
             method: method,
             mode: "cors",
