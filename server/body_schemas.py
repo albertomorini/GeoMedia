@@ -1,13 +1,13 @@
 from pydantic import BaseModel, Field, model_validator
+from typing import Optional
 
 class CaseInsensitiveModel(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def normalize_keys(cls, data):
         if isinstance(data, dict):
-            return {k.lower(): v for k, v in data.items()}
+            return {str(k).lower(): v for k, v in data.items()}
         return data
-
 
 class auth_login(BaseModel):
     email: str  = Field(..., description="Email or username")
@@ -24,7 +24,7 @@ class auth_psw_forgotten(BaseModel):
 class auth_psw_reset(BaseModel):
     usernamemail: str = Field(..., description="Email or username")
     newpassword: str
-    otp: int
+    otp: str
 
 class auth_check_otp(BaseModel):
     username: str
@@ -69,12 +69,12 @@ class collection_merge(BaseModel):
 
 
 class post_merge(BaseModel):
-    id: int
+    id: Optional[int] = None
     collection_id: int
     title: str
-    comment: str
+    comment: Optional[str] = None
     author_id: int
-    exclusivity: dict
+    exclusivity: Optional[dict] = None
     visibility_area_km: int
     color: str
     icon: str
@@ -83,4 +83,4 @@ class post_merge(BaseModel):
     latitude: float
     longitude: float
     altitude: float
-    attachments: dict
+    attachments: list

@@ -188,10 +188,6 @@ export const doRequest = (api, body = {}, method = "POST") => {
             const query = new URLSearchParams(body).toString();
             api += "?" + query;
         }
-        console.log(
-            URL + api
-        );
-        
         return fetch(URL + api, {
             method: method,
             mode: "cors",
@@ -200,6 +196,8 @@ export const doRequest = (api, body = {}, method = "POST") => {
             Alert.alert("Network error, try later..")
         })
     } else {
+        console.log(body);
+        
         return fetch(URL + api, {
             method: method,
             mode: "cors",
@@ -239,6 +237,22 @@ export function datetime2datehour(datep = null) {
         (d.getMinutes() < 9 ? "0" + d.getMinutes() : d.getMinutes())
 }
 
+
+export function lowercaseKeys(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(lowercaseKeys);
+  }
+
+  if (obj !== null && typeof obj === "object") {
+    return Object.keys(obj).reduce((acc, key) => {
+      const lowerKey = key.toLowerCase();
+      acc[lowerKey] = lowercaseKeys(obj[key]);
+      return acc;
+    }, {});
+  }
+
+  return obj;
+}
 
 
 export const React_MD5 =

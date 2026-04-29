@@ -69,7 +69,7 @@ async def auth_psw_reset(body: auth_psw_reset, request:Request):
     return await geomedia_helper.generic_query("auth_psw_reset",{
         "USERNAMEMAIL" : body.usernamemail,
         "NEWPASSWORD" : body.newpassword,
-        "OTP" : body.otp,
+        "OTP" : int(body.otp),
         "IP" : ip,
         "HEADERS": headers
     })
@@ -78,10 +78,10 @@ async def auth_psw_reset(body: auth_psw_reset, request:Request):
 async def auth_check_otp(body: auth_check_otp, request:Request):
     ip = request.client.host if request.client else None
     headers = dict(request.headers)
-
-    return await geomedia_helper.generic_query("auth_psw_reset",{
-        "USERNAME" : body.usernamemail,
-        "OTP" : body.otp,
+    print(body)
+    return await geomedia_helper.generic_query("auth_check_otp",{
+        "USERNAME" : body.username, #.get("USERNAME"),
+        "OTP" : body.otp #.get("OTP"),
     })
 
 @app.get("/auth/check_username",tags=["AUTH"])
@@ -89,9 +89,9 @@ async def auth_check_username(username:str):
     return await geomedia_helper.generic_query("auth_check_username",{"USERNAME":username})
 
 
-@app.post("/auth/psw_forgotten",tags=["AUTH"])
-async def auth_psw_forgotten(body:auth_psw_forgotten):
-    query_results = await geomedia_helper.auth_signin("auth_psw_forgotten", body)
+@app.get("/auth/psw_forgotten",tags=["AUTH"])
+async def auth_psw_forgotten(usernamemail:str):
+    query_results = await geomedia_helper.auth_signin("auth_psw_forgotten", {"USERNAMEMAIL":usernamemail})
     return await proceed_otp(query_results)
 @app.post("/auth/auth_signin",tags=["AUTH"])
 async def auth_signin(body:auth_signin):
@@ -100,7 +100,7 @@ async def auth_signin(body:auth_signin):
 
 
 async def proceed_otp(query_results:dict):
-    if query_res.get("AUTH") == 2:
+    if query_results.get("AUTH") == 2:
         if "OTP" in query_results:
             del query_results["OTP"]  # Do not send OTP over HTTP
         return send_response(query_results, 200)
@@ -128,8 +128,6 @@ async def profile_getinfo(
     uid: int | None = None,
     authorization: str = Header(None)
 ):
-    
-    print("HERE",username,uid)
     return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
 
 @app.get("/profile/stats", tags=["USERS"])
@@ -162,8 +160,7 @@ async def users_list(uid:int):
 
 # CREATE / UPDATE POST
 @app.post("/collection", tags=["COLLECTION"])
-async def collection_merge(body: collection_merge, request: Request, authorization: str = Header(None)):
-    
+async def collection_merge(body: dict, request: Request):
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)
     query_results = await geomedia_helper.collection_merge(body)
@@ -183,7 +180,7 @@ async def collections_get_hashtags():
     return await geomedia_helper.collections_get_hashtags()
     
 @app.get("/collections", tags=["COLLECTION"])
-@app.get("/collection/{collection_id}", tags=["COLLECTION"])
+@app.get("/collection/id/{collection_id}", tags=["COLLECTION"])
 async def collections_get_fullcollection(
     collection_id: int | None = None,
     uid: int | None = None,
@@ -208,18 +205,23 @@ async def collection_posts_get(collectionid: int):
 
 # CREATE / UPDATE POST
 @app.post("/post",  tags=["POST"])
-async def post_merge(body: post_merge, request: Request, authorization: str = Header(None)):
+async def post_merge(body: post_merge, request: Request):
     
 
-    body["IP"] = request.client.host
-    body["HEADERS"] = dict(request.headers)
+    files = body.attachments or {}
 
-    postdata = body.get("postdata", {})
-    files = json.loads(json.dumps(postdata.get("attachments", [])))
-
-    postdata.pop("attachments", None)
-
-    query_results = await geomedia_helper.post_merge(postdata)
+    query_results = await geomedia_helper.post_merge({
+        "ID": body.id,
+        "AUTHOR_ID": body.author_id,
+        "TITLE": body.title,
+        "COMMENT": body.comment,
+        "LATITUDE": body.latitude,
+        "LONGITUDE": body.longitude,
+        "ALTITUDE": body.altitude,
+        "VISIBILITY_AREA_KM": body.visibility_area_km,
+        "COLLECTION_ID": body.collection_id,
+        "EXCLUSIVITY": body.exclusivity
+    })
     print(query_results)
 
     if not query_results[0].get("OK"):
@@ -229,7 +231,6 @@ async def post_merge(body: post_merge, request: Request, authorization: str = He
         )
 
     post_id = query_results[0]["ID"]
-    
     if(len(files)>0): ## only if I have file
         ok = await geomedia_helper.hpmedia_merge_folder(post_id, files)
         if not ok:
@@ -237,6 +238,9 @@ async def post_merge(body: post_merge, request: Request, authorization: str = He
                 status_code=500,
                 detail={"post_id": post_id, "OK": False},
             )
+
+    ip = request.client.host
+    geomedia_helper.writeLog(f"Saved post: {query_results[0].get("ID")} from IP {ip}","INFO")
 
     return {"post_id": post_id, "OK": True}
 
@@ -270,7 +274,7 @@ async def get_post(
 
 # DELETE POST
 @app.delete("/post/{post_id}",  tags=["POST"])
-async def delete_post(post_id: int, password: str, authorization: str = Header(None)):
+async def delete_post(post_id: int, password: str):
     try:
         return await geomedia_helper.post_delete(post_id, password)
     except Exception as e:

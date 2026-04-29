@@ -62,28 +62,28 @@ async def hpmedia_merge_folder(postid: int, attachments: list):
     try:
         post_folder = Path(PATH_UPLOADS) / str(postid)
         post_folder.mkdir(parents=True, exist_ok=True)
-
         hypermedia_reference = []
 
-        for f in filter(lambda x: x.get("UPDATED"), attachments):
-            buffer = base64.b64decode(f["BASE64"])
+        # for f in filter(lambda x: x.get("UPDATED"), attachments):
+        for f in attachments:
+            print(f.keys())
 
-            filepath = post_folder / f["FILENAME"]
-            print("Storing file:", filepath)
+            buffer = base64.b64decode(f.get("base64"))
+            filepath = post_folder / f.get("filename")
 
             with open(filepath, "wb") as file:
                 file.write(buffer)
 
             hypermedia_reference.append({
-                "filename": f["FILENAME"],
+                "filename": f.get("filename"),
                 "filepath": str(filepath),
-                "mimetype": f["MIME_TYPE"],
+                "mimetype": f.get("mime_type"),
                 "post_id": postid
             })
 
         # Remove not incldued files
         file_present = os.listdir(post_folder)
-        filenames = [f["FILENAME"] for f in attachments]
+        filenames = [f.get("filename") for f in attachments]
 
         for f in file_present:
             if f not in filenames:

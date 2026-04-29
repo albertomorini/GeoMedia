@@ -40,9 +40,9 @@ export default function LoginScreen(props) {
 
     function doLogin() {
         doRequest("auth/login", {
-            EMAIL: email,
-            USERNAME: email, // reusing the field of email, whatever tho
-            PASSWORD: React_MD5(password)
+            email: email,
+            username: email, // reusing the field of email, whatever tho
+            password: React_MD5(password)
         }).then(async res => {
             if (res[0]?.AUTH) {
                 let user_w_psw = res[0]
@@ -75,9 +75,9 @@ export default function LoginScreen(props) {
             seterrorPassword("Username already taken!")
         } else {
             doRequest("auth/signin", {
-                EMAIL: email,
-                USERNAME: username,
-                PASSWORD: React_MD5(password)
+                email: email,
+                username: username,
+                password: React_MD5(password)
             }).then(res => {
                 if (res.AUTH == 2) { //pending OTP
                     setOTP("")
@@ -96,8 +96,8 @@ export default function LoginScreen(props) {
 
     function check_otp() {
         doRequest("auth/check_otp", {
-            USERNAME: username,
-            OTP: OTP
+            username: username,
+            otp: parseInt(OTP,10)
         }).then(async res => {
             if (res[0]?.AUTH) {
                 await SecureStore.setItemAsync("user", JSON.stringify(res[0]));

@@ -12,7 +12,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { doRequest } from '@/app/utility';
+import { doRequest, lowercaseKeys } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
 import MapPicking from '@/app/mycomponents/MapPicking';
 
@@ -87,9 +87,9 @@ const PostCreator = () => {
 
 
     const requiredFields = {
-        TITLE: (v) => v != null && v.trim().length > 0,
-        VISIBILITY_AREA_KM: (v) => v != null && v > 0,
-        COLLECTION_ID: (v) => v != null,
+        title: (v) => v != null && v.trim().length > 0,
+        visibility_area_km: (v) => v != null && v > 0,
+        collection_id: (v) => v != null,
     };
     /**
      * check if the post is ok
@@ -120,8 +120,7 @@ const PostCreator = () => {
         dummy_body.LONGITUDE = coordinateChosen.longitude
         dummy_body.ALTITUDE = coordinateChosen.altitude
         dummy_body.attachments = files //attach files
-
-
+        dummy_body = lowercaseKeys(dummy_body)
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
@@ -132,9 +131,7 @@ const PostCreator = () => {
                 text2: JSON.stringify(missing_fields) + " not compiled"
             })
         } else {
-            doRequest("post", {
-                dummy_body
-            }, "POST").then(res => {
+            doRequest("post", dummy_body, "POST").then(res => {
                 if (res?.OK) {
                     setPostData(prev => ({
                         ...prev,
@@ -214,14 +211,14 @@ const PostCreator = () => {
         if (postid != null) {
             doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            },"GET").then(resQuery => {
                 let x = resQuery[0]
                 setPostData(prev => ({
                     ...prev,
                     ...x,
                     EXCLUSIVITY: {
                         ...prev.EXCLUSIVITY,
-                        VIEWERS: JSON.parse(x?.VIEWERS),
+                        VIEWERS: x?.VIEWERS ? JSON.parse(x.VIEWERS) : [],
                         DATERANGE: {
                             DATE_START: x?.EXCL_DATE_START,
                             DATE_END: x?.EXCL_DATE_END,
@@ -250,7 +247,7 @@ const PostCreator = () => {
                 { text: "Cancel", style: "cancel" },
                 {
                     text: "OK", onPress: () => {
-                        doRequest("post_delete", { uid: ctx?.getUID(), password: ctx?.User?.User?.PASSWORD }).then(resQuery => {
+                        doRequest("post/" + postData?.ID, { password: ctx?.User?.User?.PASSWORD }, "DELETE").then(resQuery => {
                             ctx?.showToast({
                                 type: "success",
                                 text1: "Post deleted"
@@ -470,8 +467,8 @@ const PostCreator = () => {
                         backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff', // must be forced not dynamic, in my opinion is quite bugged but whatever tho
                     }}
                 >
-                    <BottomSheetScrollView contentContainerStyle={{ flex: 1 , lexGrow: 1,}}
-                       
+                    <BottomSheetScrollView contentContainerStyle={{ flex: 1, lexGrow: 1, }}
+
                         keyboardShouldPersistTaps="handled"
                     >
                         <Collections

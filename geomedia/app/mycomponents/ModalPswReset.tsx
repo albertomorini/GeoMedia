@@ -31,8 +31,8 @@ const ModalPswReset = () => {
             usr = ctx?.User.User?.USERNAME
         }
         doRequest("auth/check_otp", {
-            USERNAME: usr,
-            OTP: OTP
+            username: usr,
+            otp: OTP
         }).then(async res => {
             if (res[0]?.AUTH) {
                 setOTPValid(true)
@@ -57,8 +57,8 @@ const ModalPswReset = () => {
             usrmail = ctx?.User.User?.USERNAME
         }
         doRequest("auth/psw_forgotten", {
-            USERNAMEMAIL: usrmail
-        }).then(resQuery => {
+            usernamemail: usrmail
+        },"GET").then(resQuery => {
             if (resQuery.AUTH == 2) { //pending OTP
                 setOTPValid(false)
             } else {
@@ -94,9 +94,9 @@ const ModalPswReset = () => {
             })
         } else {
             doRequest("auth/psw_reset", {
-                USERNAMEMAIL: usrmail,
-                NEWPASSWORD: React_MD5(newPassword),
-                OTP: OTP
+                usernamemail: usrmail,
+                newpassword: React_MD5(newPassword),
+                otp: OTP
             }).then(resQuery => {
                 if (resQuery[0].OK) {
                     setModalPswReset(false);

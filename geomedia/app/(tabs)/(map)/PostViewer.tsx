@@ -29,13 +29,14 @@ const PostViewer = () => {
     })
 
     function profile_getpfp(username) {
-        doRequest("profile/pfp", { USERNAME: username },"GET").then(res => {
+        doRequest("profile/pfp", { username: username }, "GET").then(res => {
             setUserCreator(prev => ({ ...prev, pfp: res[0]?.PROFILE_PICTURE }))
         })
     }
 
     function getUserCreator(userid) {
-        doRequest("profile/info/"+userid,{},"GET").then(res => {
+        doRequest("profile/info", { uid: userid }, "GET").then(res => {
+
             profile_getpfp(res[0].USERNAME) //yes I could incapsulate all in a single request but nah, better like this, due to optimiziation and async
             setUserCreator(prev => ({
                 ...prev,
@@ -58,7 +59,7 @@ const PostViewer = () => {
         if (postid != null) {
             doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
-            }).then(resQuery => {
+            }, "GET").then(resQuery => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
                 setPostData(resQuery[0])
             }).catch(err => {
@@ -78,7 +79,7 @@ const PostViewer = () => {
         doRequest("post/interactions_likepost", {
             postid: postData?.ID,
             uid: ctx?.getUID()
-        },"GET").then(resQuery => {
+        }, "GET").then(resQuery => {
             ctx?.showToast({
                 type: "success",
                 text1: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")

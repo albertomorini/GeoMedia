@@ -1,13 +1,10 @@
 import { MyContext } from "@/app/_layout";
-import ListItem from "@/app/mycomponents/ListItem";
 import { doRequest } from "@/app/utility";
 import { useLanguage } from "@/components/LanguageProvider";
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ScrollView, TouchableOpacity, useColorScheme } from "react-native";
+import { useCallback, useContext, useRef, useState } from "react";
+import { TouchableOpacity, useColorScheme } from "react-native";
 
 import {
     MD3DarkTheme,
@@ -20,7 +17,6 @@ import {
     TabScreen,
 } from 'react-native-paper-tabs';
 import CollectionListSingle from "./CollectionsListSingle";
-import { BottomSheetFlatList, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { style } from "@/components/globalstyle";
 
 

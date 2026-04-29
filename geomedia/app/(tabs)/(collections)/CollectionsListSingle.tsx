@@ -1,11 +1,9 @@
 import { MyContext } from "@/app/_layout";
 import ListItem from "@/app/mycomponents/ListItem";
-import { doRequest } from "@/app/utility";
 import { useLanguage } from "@/components/LanguageProvider";
 import { ThemedText } from "@/components/themed-text";
 import { router, useFocusEffect } from "expo-router";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ScrollView } from "react-native";
+import { useCallback, useContext, useRef, useState } from "react";
 
 
 const CollectionListSingle = (props) => {

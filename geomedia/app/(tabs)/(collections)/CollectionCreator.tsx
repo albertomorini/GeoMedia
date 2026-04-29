@@ -61,10 +61,9 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collections_get_fullcollection", {
+            doRequest("collection/id/"+collectionid, {
                 "uid": ctx?.getUID(),
-                "collectionid": collectionid
-            }).then(resQuery => {
+            },"GET").then(resQuery => {
                 let x = resQuery[0];
                 if (x != undefined) {
                     setCollectionData(prev => ({
@@ -114,7 +113,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection", collectionData).then(resQuery => {
+            doRequest("collection", collectionData,"POST").then(resQuery => {
                 if (resQuery[0]?.OK) {
                     setCollectionData(prev => ({
                         ...prev,
