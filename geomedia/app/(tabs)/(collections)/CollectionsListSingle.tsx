@@ -41,13 +41,13 @@ const CollectionListSingle = (props) => {
                             })
                         } else {
                             ctx?.showToast({
-                                type: "error",
+                                type: "info",
                                 text1: langselected.collection.colNotEditable
                             })
                             router.push({
                                 pathname: '/ProfileViewer',
                                 params: {
-                                    username: pickeditem?.OWNERID,
+                                    uid: pickeditem?.OWNERID,
                                 }
                             })
                         }

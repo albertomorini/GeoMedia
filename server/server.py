@@ -120,15 +120,12 @@ async def profile_getpfp(
     
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
-@app.get("/profile/info", tags=["USERS"])
 @app.get("/profile/info/{profile_id}", tags=["USERS"])
-@app.get("/profile/info/{username}", tags=["USERS"])
 async def profile_getinfo(
-    username: str | None = None,
-    uid: int | None = None,
+    profile_id: int,
     authorization: str = Header(None)
 ):
-    return await geomedia_helper.generic_query("profile_getinfo",{"uid":uid,"username":username})
+    return await geomedia_helper.generic_query("profile_getinfo",{"uid":profile_id})
 
 @app.get("/profile/stats", tags=["USERS"])
 async def profile_get_stats(

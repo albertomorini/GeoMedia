@@ -23,6 +23,7 @@ const PostViewer = () => {
     const colorScheme = useColorScheme()
 
     const [userCreator, setUserCreator] = useState({
+        uid: null,
         username: null,
         name: null,
         pfp: null
@@ -35,11 +36,12 @@ const PostViewer = () => {
     }
 
     function getUserCreator(userid) {
-        doRequest("profile/info", { uid: userid }, "GET").then(res => {
+        doRequest("profile/info/" + userid, {}, "GET").then(res => {
 
             profile_getpfp(res[0].USERNAME) //yes I could incapsulate all in a single request but nah, better like this, due to optimiziation and async
             setUserCreator(prev => ({
                 ...prev,
+                uid: userid,
                 username: res[0].USERNAME,
                 name: res[0].NAME,
                 surname: res[0].SURNAME,
@@ -162,7 +164,7 @@ const PostViewer = () => {
                             onPress={() => {
                                 router.push({
                                     pathname: "/ProfileViewer",
-                                    params: { username: userCreator?.username },
+                                    params: { uid: userCreator?.uid },
                                 });
                             }}
                             item={{

@@ -149,7 +149,7 @@ export default function Profile() {
             router.push({
               pathname: '/ProfileViewer',
               params: {
-                username: user?.USERNAME,
+                uid: user?.UID,
               }
             })
           }}

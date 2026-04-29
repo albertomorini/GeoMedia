@@ -83,12 +83,10 @@ const ProfileViewer = () => {
     }
 
 
-    function getInfo(username) {
-        doRequest("profile/info", {
-            username: username,
-        }, "GET").then(res => {
-            console.log(res)
+    function getInfo(uid) {
+        doRequest("profile/info/" + uid, {}, "GET").then(res => {
             get_statsCategory(res[0].USERNAME)
+            getProfilePic(res[0].USERNAME)
 
             setUser(res[0])
         }).catch(err => {
@@ -102,9 +100,8 @@ const ProfileViewer = () => {
 
     useFocusEffect(
         useCallback(() => {
-            if (params?.username != null) {
-                getInfo(params.username)
-                getProfilePic(params.username)
+            if (params?.uid != null) {
+                getInfo(params.uid)
             }
         }, [])
     );
