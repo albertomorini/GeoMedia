@@ -53,6 +53,7 @@ const CollectionListSingle = (props) => {
                         }
                     }
                 }}
+                searchable={props?.searchable}
                 isSelectable={props?.isSelectable}
                 isImage={false} //we render icons, not expo-image
                 estimatedSize={80}

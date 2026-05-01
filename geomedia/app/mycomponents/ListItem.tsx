@@ -90,36 +90,40 @@ const ListItem = forwardRef((props: any, ref: any) => {
 
     return (
         <ThemedView style={[style?.container, { flex: 1 }]}>
-            <ThemedView style={{
-                flexDirection: "row",
-                alignItems: "center",
-                backgroundColor: "#f1f1f1",
-                borderRadius: 10,
-                paddingHorizontal: 10,
-                marginBottom: 16,
-                position: 'fixed'
-            }}>
-                <Ionicons name="search-outline" size={20} color="#888" style={{
-                    marginRight: 8
-                }} />
-                <TextInput
-                    style={{ flex: 1 }}
-                    placeholder={langselected.search}
-                    placeholderTextColor={"#000"}
-                    value={searchText}
-                    onChangeText={setSearchText}
-                />
-                {searchText?.length > 0 && (
-                    <TouchableOpacity onPress={() => setSearchText("")}>
-                        <Ionicons name="close-circle" size={20} color="#888" style={{
-                            marginLeft: 8
+            {
+                props?.searchable == true ?
+                    <ThemedView style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        backgroundColor: "#f1f1f1",
+                        borderRadius: 10,
+                        paddingHorizontal: 10,
+                        marginBottom: 16,
+                        position: 'fixed'
+                    }}>
+                        <Ionicons name="search-outline" size={20} color="#888" style={{
+                            marginRight: 8
                         }} />
-                    </TouchableOpacity>
-                )}
-            </ThemedView>
+                        <TextInput
+                            style={{ flex: 1 }}
+                            placeholder={langselected.search}
+                            placeholderTextColor={"#000"}
+                            value={searchText}
+                            onChangeText={setSearchText}
+                        />
+                        {searchText?.length > 0 && (
+                            <TouchableOpacity onPress={() => setSearchText("")}>
+                                <Ionicons name="close-circle" size={20} color="#888" style={{
+                                    marginLeft: 8
+                                }} />
+                            </TouchableOpacity>
+                        )}
+                    </ThemedView>
+                    : null
+            }
             <ThemedView style={{ flex: 1 }}>
                 {
-                    props?.isSelectable ?
+                    props?.isSelectable && props?.searchable ?
                         <ThemedView style={{
                             flexDirection: "row",
                             justifyContent: "space-between",

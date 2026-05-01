@@ -55,8 +55,7 @@ const Collections = (props) => {
         try {
             doRequest("collections", {
                 uid: ctx?.getUID(),
-                // mode: props?.postCreation ?? modes[mode] //IF writing, do writing, otherwise let index of section decide
-                mode: modes[mode] //IF writing, do writing, otherwise let index of section decide
+                mode: props?.postCreation ?? modes[mode] //IF writing, do writing, otherwise let index of section decide
             }, "GET").then(resQuery => {
                 setCollections(resQuery)
             }).catch(err => {
@@ -92,7 +91,7 @@ const Collections = (props) => {
         <PaperProvider theme={useColorScheme() == "dark" ? darkTheme : lightTheme}>
 
             <TabsProvider
-                defaultIndex={0}
+                defaultIndex={props?.postCreation ? 1 : 0} //in creation select all collection
                 onChangeIndex={(indx) => {
                     getCollectionsList(indx)
                 }}
@@ -110,6 +109,7 @@ const Collections = (props) => {
                                 itemSelected={props?.itemSelected}
                                 isBottomSheet={props?.isBottomSheet}
                                 onSelect={props?.onSelect}
+                                searchable={false}
 
                             />
                         </>
@@ -121,6 +121,7 @@ const Collections = (props) => {
                                 collections={collections}
                                 allowCreation={props?.allowCreation}
                                 itemSelected={props?.itemSelected}
+                                searchable={true}
                                 isBottomSheet={props?.isBottomSheet}
                                 onSelect={props?.onSelect} />
 
@@ -149,6 +150,7 @@ const Collections = (props) => {
                             allowCreation={props?.allowCreation}
                             itemSelected={props?.itemSelected}
                             isBottomSheet={props?.isBottomSheet}
+                            searchable={true}
                             onSelect={props?.onSelect} />
 
                     </TabScreen>
@@ -160,6 +162,7 @@ const Collections = (props) => {
                             isSelectable={props?.isSelectable}
                             allowCreation={props?.allowCreation}
                             itemSelected={props?.itemSelected}
+                            searchable={true}
                             isBottomSheet={props?.isBottomSheet}
                             onSelect={props?.onSelect} />
                     </TabScreen>
