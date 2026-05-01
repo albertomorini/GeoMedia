@@ -240,3 +240,8 @@ async def profile_interest_merge(uid:int,interests:dict):
 async def profile_interest_get(uid:int):
     query = f"EXEC DBO.PROFILE_INTEREST_GET @UID={uid}"
     return SQL_MANAGER.select_query(query)
+
+
+async def collections_by_tag(uid:int):
+    query = f"EXEC DBO.COLLECTIONS_BY_TAG @UID={uid}"
+    return SQL_MANAGER.select_query(query)

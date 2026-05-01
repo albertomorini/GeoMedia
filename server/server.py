@@ -201,7 +201,11 @@ async def collections_get_fullcollection(
 @app.get("/collection/posts", tags=["COLLECTION"])
 async def collection_posts_get(collectionid: int):
     return await geomedia_helper.generic_query("collection_posts_get",{"collectionid":collectionid})
-    
+
+@app.get("/collection/groupByTag",tags=["COLLECTION"])
+async def collections_by_tag(uid:int):
+    return await geomedia_helper.collections_by_tag(uid)
+
 #---------------------------------------------------------------------------------------------------------------------------------
 
 ## POSTS

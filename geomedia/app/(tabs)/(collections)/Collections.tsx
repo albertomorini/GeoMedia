@@ -104,20 +104,19 @@ const Collections = (props) => {
                     <TabScreen label={langselected?.collections_page?.foryou} >
                         <>
                             <ForYou
-                                hashtags={["travel", "food", "startup", "design", "anodaone"]}
-                                collections={[
-                                    { id: "1", title: "UI Inspiration", postsCount: 24 },
-                                    { id: "2", title: "Street Food", postsCount: 12 },
-                                ]}
-                                onPressHashtag={(tag) => console.log(tag)}
-                                onPressCollection={(c) => console.log(c)}
+                                isSelectable={props?.isSelectable}
+                                collections={collections}
+                                allowCreation={props?.allowCreation}
+                                itemSelected={props?.itemSelected}
+                                isBottomSheet={props?.isBottomSheet}
+                                onSelect={props?.onSelect}
+
                             />
                         </>
                     </TabScreen>
                     <TabScreen label={langselected?.collections_page?.all} >
                         <>
                             <CollectionListSingle
-                                style={{ flex: 1 }}
                                 isSelectable={props?.isSelectable}
                                 collections={collections}
                                 allowCreation={props?.allowCreation}
