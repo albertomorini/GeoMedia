@@ -52,7 +52,7 @@ async def collection_merge(collection: dict):
     query = f"EXEC dbo.COLLECTION_MERGE @JSON='{dummy}'"
     return SQL_MANAGER.select_query(query)
 
-async def collections_get_hashtags():
+async def hashtag_get():
     return SQL_MANAGER.select_query("SELECT TITLE FROM DBO.HASHTAGS")
 
 # ------------------------
@@ -226,3 +226,17 @@ async def post_delete(postid: int, password: str):
     )
 
     return SQL_MANAGER.insert_query(query)
+
+
+## INTEREST 
+
+async def profile_interest_merge(uid:int,interests:dict):
+    interests_dicts = [interest.dict() for interest in interests]
+    dummy = json.dumps(interests_dicts).replace("'", "''")
+    query = f"EXEC dbo.PROFILE_INTEREST_MERGE @UID={uid},@JSON='{dummy}'"
+    print(query)
+    return SQL_MANAGER.select_query(query)
+
+async def profile_interest_get(uid:int):
+    query = f"EXEC DBO.PROFILE_INTEREST_GET @UID={uid}"
+    return SQL_MANAGER.select_query(query)

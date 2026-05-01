@@ -18,10 +18,7 @@ import {
 } from 'react-native-paper-tabs';
 import CollectionListSingle from "./CollectionsListSingle";
 import { style } from "@/components/globalstyle";
-
-
-
-
+import ForYou from "./ForYou";
 
 const Collections = (props) => {
 
@@ -105,17 +102,46 @@ const Collections = (props) => {
                     dark={true} // works the same as AppBar in react-native-paper
                 >
                     <TabScreen label={langselected?.collections_page?.foryou} >
-                        <ThemedText>For you</ThemedText>
+                        <>
+                            <ForYou
+                                hashtags={["travel", "food", "startup", "design", "anodaone"]}
+                                collections={[
+                                    { id: "1", title: "UI Inspiration", postsCount: 24 },
+                                    { id: "2", title: "Street Food", postsCount: 12 },
+                                ]}
+                                onPressHashtag={(tag) => console.log(tag)}
+                                onPressCollection={(c) => console.log(c)}
+                            />
+                        </>
                     </TabScreen>
                     <TabScreen label={langselected?.collections_page?.all} >
-                        <CollectionListSingle
-                            style={{ flex: 1 }}
-                            isSelectable={props?.isSelectable}
-                            collections={collections}
-                            allowCreation={props?.allowCreation}
-                            itemSelected={props?.itemSelected}
-                            isBottomSheet={props?.isBottomSheet}
-                            onSelect={props?.onSelect} />
+                        <>
+                            <CollectionListSingle
+                                style={{ flex: 1 }}
+                                isSelectable={props?.isSelectable}
+                                collections={collections}
+                                allowCreation={props?.allowCreation}
+                                itemSelected={props?.itemSelected}
+                                isBottomSheet={props?.isBottomSheet}
+                                onSelect={props?.onSelect} />
+
+                            {/* NEW COLLECTION ONLY ON ALL COLLECTIONS */}
+                            {props?.allowCreation ??
+                                <TouchableOpacity
+                                    style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
+                                    onPress={() => {
+                                        router.push({
+                                            pathname: '/CollectionCreator',
+                                            params: {
+                                                collectionid: null,
+                                            }
+                                        })
+                                    }}
+                                >
+                                    <ThemedText style={style.buttons.fabText}>+</ThemedText>
+                                </TouchableOpacity>
+                            }
+                        </>
                     </TabScreen>
                     <TabScreen label={langselected?.collections_page?.popular} >
                         <CollectionListSingle
@@ -141,21 +167,7 @@ const Collections = (props) => {
                 </Tabs>
 
             </TabsProvider>
-            {props?.allowCreation ??
-                <TouchableOpacity
-                    style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
-                    onPress={() => {
-                        router.push({
-                            pathname: '/CollectionCreator',
-                            params: {
-                                collectionid: null,
-                            }
-                        })
-                    }}
-                >
-                    <ThemedText style={style.buttons.fabText}>+</ThemedText>
-                </TouchableOpacity>
-            }
+
         </PaperProvider>
 
     )

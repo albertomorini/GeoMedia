@@ -84,3 +84,12 @@ class post_merge(BaseModel):
     longitude: float
     altitude: float
     attachments: list
+
+class Interest(BaseModel):
+    value: str
+    entity: str
+
+class profile_interest_merge(BaseModel):
+    uid: int
+    interests: list[Interest]
+    

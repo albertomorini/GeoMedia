@@ -10,7 +10,7 @@ import { Pressable, StyleSheet, Modal, TouchableOpacity, TextInput } from "react
 import { ScrollView } from "react-native-gesture-handler";
 
 
-export default function CustomChips(props) {
+export default function TagSelector(props) {
   const [selected, setSelected] = useState(props?.selected ?? []);
   const { langselected } = useLanguage()
   const [visible, setVisible] = useState(false)

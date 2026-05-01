@@ -109,15 +109,13 @@ async def proceed_otp(query_results:dict):
         return send_response(query_results, 401)
 
 
-
-
+#---------------------------------------------------------------------------------------------------------------------------------
 # PROFILE
 @app.get("/profile/pfp", tags=["USERS"])
 async def profile_getpfp(
     username:str,
     authorization: str = Header(None)
 ):
-    
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
 @app.get("/profile/info/{profile_id}", tags=["USERS"])
@@ -153,6 +151,15 @@ async def profile_editinfo(
 async def users_list(uid:int):
     return await geomedia_helper.generic_query("users_list",{"uid":uid})
 
+@app.post("/profile/interests",tags=["USERS"]) ## for you section merge
+async def profile_interest_merge(body:profile_interest_merge):
+    return await geomedia_helper.profile_interest_merge(body.uid, body.interests)
+
+@app.get("/profile/interests",tags=["USERS"]) ## to get for you section
+async def profile_interest_get(uid:int):
+    return await geomedia_helper.profile_interest_get(uid)
+
+#---------------------------------------------------------------------------------------------------------------------------------
 ## COLLECTIONS
 
 # CREATE / UPDATE POST
@@ -173,8 +180,8 @@ async def collection_merge(body: dict, request: Request):
 
 
 @app.get("/collection/hashtags",  tags=["COLLECTION"])
-async def collections_get_hashtags():
-    return await geomedia_helper.collections_get_hashtags()
+async def hashtag_get():
+    return await geomedia_helper.hashtag_get()
     
 @app.get("/collections", tags=["COLLECTION"])
 @app.get("/collection/id/{collection_id}", tags=["COLLECTION"])
@@ -196,7 +203,6 @@ async def collection_posts_get(collectionid: int):
     return await geomedia_helper.generic_query("collection_posts_get",{"collectionid":collectionid})
     
 #---------------------------------------------------------------------------------------------------------------------------------
-
 
 ## POSTS
 

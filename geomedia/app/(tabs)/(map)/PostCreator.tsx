@@ -14,17 +14,17 @@ import FileHandler from '@/app/mycomponents/file/FileHandler';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { doRequest, lowercaseKeys } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
-import MapPicking from '@/app/mycomponents/MapPicking';
+
 
 //////////////////////////////
 // bottom sheet and exclusivity/collection handling
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import ExclusivityPicking from './ExclusivityPicking';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import CollectionsList from '../(collections)/CollectionsListSingle';
 import ItemIconizable from '@/app/mycomponents/ItemIconizable';
 import { useLanguage } from '@/components/LanguageProvider';
 import Collections from '../(collections)/Collections';
+import MapPicking from './MapPicking';
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@ const PostCreator = () => {
         if (postid != null) {
             doRequest("post/id/" + postid, {
                 "uid": ctx?.getUID()
-            },"GET").then(resQuery => {
+            }, "GET").then(resQuery => {
                 let x = resQuery[0]
                 setPostData(prev => ({
                     ...prev,
