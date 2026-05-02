@@ -23,6 +23,8 @@ export const it = {
         diffPass: "Le password non coincidono",
     },
     settings: {
+        settings: "Impostazioni",
+        labelSrv: "Puntamenti al server backend",
         protocol: "Protocollo",
         serverName: "Nome server (oppure IP)",
         port: "Porta",
@@ -144,11 +146,11 @@ export const it = {
         menuCreator: ["Data & Ora", "Visualizzatori", "Creatori"],
         menuViewer: ["Data & Ora", "Visualizzatori"]
     },
-    settings:"Impostazioni",
-    settings_component:{
-        contact_me:"Contattami",
-        language:"Lingua",
-        mapstyle:"Stile della mappa"
+    settings_component: {
+        contact_me: "Contattami",
+        language: "Lingua",
+        mapstyle: "Stile della mappa",
+
     }
 }
 
@@ -178,6 +180,8 @@ export const en = {
         diffPass: "Passwords do not match",
     },
     settings: {
+        settings: "Settings",
+        labelSrv: "Config backend server",
         protocol: "Protocol",
         serverName: "Server name (or IP)",
         port: "Port",
@@ -298,5 +302,11 @@ export const en = {
         title: "Restrictions",
         menuCreator: ["Date & Time", "Viewers", "Creators"],
         menuViewer: ["Date & Time", "Viewers"]
+    },
+    settings_component: {
+        contact_me: "Get in touch",
+        language: "Language",
+        mapstyle: "Map style",
+
     }
 }

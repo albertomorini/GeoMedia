@@ -148,7 +148,7 @@ export default function Settings(props) {
             </>
 
             <>
-                <ThemedText style={style.label}>Server settings</ThemedText>
+                <ThemedText style={style.label}>{langselected?.settings?.labelSrv}</ThemedText>
                 <ThemedView
                     style={{
                         borderRadius: 10,
@@ -186,19 +186,19 @@ export default function Settings(props) {
             </>
 
             {
-                ctx?.getUID() != undefined ??
-                <>
-                    <ThemedText style={style.label}>Log out</ThemedText>
-                    <TouchableOpacity
-                        onPress={() => logout()}
-                        style={[style?.colors?.geomedia_red, style.buttons.full_screen]}
-                    >
-                        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-                            {langselected?.profile?.logout}
-                        </ThemedText>
-                    </TouchableOpacity>
+                ctx?.getUID() == undefined ? null : //login
+                    <>
+                        <ThemedText style={style.label}>{langselected.profile.logout}</ThemedText>
+                        <TouchableOpacity
+                            onPress={() => logout()}
+                            style={[style?.colors?.geomedia_red, style.buttons.full_screen]}
+                        >
+                            <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+                                {langselected?.profile?.logout}
+                            </ThemedText>
+                        </TouchableOpacity>
 
-                </>
+                    </>
             }
         </ThemedView >
     )

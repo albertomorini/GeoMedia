@@ -289,7 +289,7 @@ export default function LoginScreen(props) {
                 <TouchableOpacity onPress={() => {
                     setModalVisible(true)
                 }}>
-                    <ThemedText>Settings</ThemedText>
+                    <ThemedText>{langselected?.settings.settings}</ThemedText>
                 </TouchableOpacity>
                 <Modal
                     visible={modalVisible}
@@ -318,7 +318,7 @@ export default function LoginScreen(props) {
                             borderTopStartRadius: 10,
 
                         }, style.colors.geomedia_gray]}>
-                            <ThemedText style={[style.title, { alignItems: "center" }]}>{langselected?.sequentiality?.seq}</ThemedText>
+                            <ThemedText style={[style.title, { alignItems: "center", padding: 10 }]}>{langselected?.settings?.labelSrv}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalVisible(false)
                             }}>
@@ -326,16 +326,12 @@ export default function LoginScreen(props) {
                             </TouchableOpacity>
                         </ThemedView>
 
-                        <ScrollView style={{
-
-                        }}>
+                        <ScrollView>
                             <Settings />
                         </ScrollView>
                     </ThemedView>
                 </Modal>
-
             </ThemedView >
-
         </GestureHandlerRootView >
     );
 }
