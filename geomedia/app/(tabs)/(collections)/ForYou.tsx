@@ -63,7 +63,7 @@ const ForYou = (props) => {
         useCallback(() => {
             profile_interest_get();
             collectios_by_interest()
-        }, [props])
+        }, [])
     )
 
 
