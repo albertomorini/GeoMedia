@@ -1,10 +1,11 @@
 // app/(map)/_layout.tsx
 import { HapticTab } from '@/components/haptic-tab';
 import { useLanguage } from '@/components/LanguageProvider';
+import { ThemedText } from '@/components/themed-text';
 
 import { Colors } from '@/constants/theme';
-import { Stack } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { router, Stack } from 'expo-router';
+import { TouchableOpacity, useColorScheme } from 'react-native';
 
 export default function CollectionsLayout() {
 
@@ -25,7 +26,17 @@ export default function CollectionsLayout() {
             <Stack.Screen
                 name="Collections"
                 options={{
-                    title: langselected?.collections
+                    title: langselected?.collections,
+                    headerRight: () => (
+                        <TouchableOpacity
+                            onPress={() => {
+                                router.push("/Settings")
+                            }} // replace with your settings action
+                            style={{ marginRight: 15 }}
+                        >
+                            <ThemedText style={{ fontSize: 24 }}>⋮</ThemedText> {/* three-dot menu */}
+                        </TouchableOpacity>
+                    ),
                 }}
             />
             <Stack.Screen

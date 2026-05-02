@@ -101,7 +101,7 @@ const ForYou = (props) => {
                                     flexWrap: "wrap",
                                 }}>
                                     <Pressable
-                                        key={c}
+                                        // key={c}
                                         style={[
                                             {
                                                 paddingVertical: 6,
@@ -169,24 +169,56 @@ const ForYou = (props) => {
                         </ScrollView>
                     }
                 </ThemedView>
+
+                {/* ------------------------------------------------- */}
                 {/* FOR EACH TAG SHOWS THE COLLECTIONS */}
-                {collectionByTag != null && Object.keys(collectionByTag)?.map(cc => (
-                    <ThemedView
-                        style={[styles.card, { flex: 1, width: "100%" }]}
-                    >
-                        <ThemedText style={styles.title}>#{cc}</ThemedText>
-                        <ThemedView style={{ width: "100%", flex: 1 }}>
-                            <CollectionListSingle
-                                collections={collectionByTag[cc]}
-                                isSelectable={props?.isSelectable}
-                                onSelect={props?.onSelect}
-                                allowCreation={false}
-                                isBottomSheet={props?.isBottomSheet}
-                                style={{ flex: 1 }}
-                            />
-                        </ThemedView>
-                    </ThemedView>
-                ))}
+                {
+                    props?.isBottomSheet ?
+                        <BottomSheetScrollView>
+                            {collectionByTag != null && Object.keys(collectionByTag)?.map(cc => (
+                                <ThemedView
+                                    style={[styles.card, { flex: 1, width: "100%", height: "100%" }]}
+                                >
+                                    <ThemedText style={styles.title}>#{cc}</ThemedText>
+                                    <ThemedView style={{ width: "100%", flex: 1, }}>
+                                        <CollectionListSingle
+                                            collections={collectionByTag[cc]}
+                                            isSelectable={props?.isSelectable}
+                                            onSelect={props?.onSelect}
+                                            allowCreation={false}
+                                            isBottomSheet={props?.isBottomSheet}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </ThemedView>
+                                </ThemedView>
+                            ))}
+                        </BottomSheetScrollView>
+                        :
+
+                        <ScrollView
+                            showsVerticalScrollIndicator={true}
+                        >
+                            {collectionByTag != null && Object.keys(collectionByTag)?.map(cc => (
+                                <ThemedView
+                                    style={[styles.card, { flex: 1, width: "100%", height: "100%" }]}
+                                >
+                                    <ThemedText style={styles.title}>#{cc}</ThemedText>
+                                    <ThemedView style={{ width: "100%", flex: 1, }}>
+                                        <CollectionListSingle
+                                            collections={collectionByTag[cc]}
+                                            isSelectable={props?.isSelectable}
+                                            onSelect={props?.onSelect}
+                                            allowCreation={false}
+                                            isBottomSheet={props?.isBottomSheet}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </ThemedView>
+                                </ThemedView>
+                            ))}
+                        </ScrollView>
+                }
+
+
             </ThemedView>
         </GestureHandlerRootView >
     )

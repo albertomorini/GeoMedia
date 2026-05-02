@@ -1,14 +1,6 @@
-import { ThemedView } from "@/components/themed-view";
-import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
-import { ThemedText } from "@/components/themed-text";
-import { ThemedInput } from "@/components/themed-input";
-import { Alert, Linking, Modal, TouchableOpacity } from "react-native";
-import { style } from "@/components/globalstyle";
-import { Ionicons } from "@expo/vector-icons";
-import { useLanguage } from "@/components/LanguageProvider";
-import { MyContext } from "./_layout";
-import { en, it } from "@/components/i18n";
+import { Alert } from "react-native";
+
 
 let URL = "http://10.0.0.3:9911/"
 const SHARED_KEY = "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="
@@ -21,152 +13,6 @@ async function load_config() {
     }
 }
 load_config()
-
-
-export default function SettingsConfig() {
-
-    const [modalSettingsVisible, setModalSettingsVisible] = useState(false)
-    const [protocol, setProtocol] = useState(null)
-    const [servername, setServerName] = useState(null)
-    const [port, setPort] = useState(null)
-
-    const { langselected, changeLang } = useLanguage();
-
-
-    const ctx = useContext(MyContext)
-
-
-    function confirmNewURI() {
-        SecureStore.setItemAsync("config", protocol + "://" + servername + ":" + port + "/");
-        setModalSettingsVisible(false)
-        ctx?.showToast({
-            type: 'success',
-            text1: 'Configuration saved',
-        })
-        load_config()
-    }
-
-    const my_email = 'albmor.dev@gmail.com'
-
-    const emailMe = () => {
-        const email = my_email;
-        const subject = 'GeoMedia';
-        const body = ''
-
-        const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-        Linking.openURL(url).catch(err =>
-            console.error('Error opening email client', err)
-        );
-    };
-
-
-    useEffect(() => { }, [langselected])
-
-    return (
-        <>
-            <ThemedView style={style?.bottom_bar}>
-                <ThemedView style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    width: "50%"
-                }}>
-                    <TouchableOpacity onPress={() => changeLang("IT")} style={langselected === it && [style?.buttons?.small, style.colors.geomedia_green, { marginRight: "20" }]}>
-                        <ThemedText accessibilityLabel="Italian" style={{ fontSize: 20 }}>🇮🇹</ThemedText>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeLang("EN")} style={langselected === en && [style?.buttons?.small, style.colors.geomedia_green, { marginLeft: "20" }]}>
-                        <ThemedText accessibilityLabel="English" style={{ fontSize: 20 }}>🇬🇧</ThemedText>
-                    </TouchableOpacity>
-
-                </ThemedView>
-
-                <ThemedView style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    width: "50%"
-                }}>
-
-                    <TouchableOpacity style={[style.buttons.small, { width: "100%", height: 24, borderRadius: 50, marginRight: "20", paddingStart: 5, paddingEnd: 5 }]} onPress={() => { emailMe() }}>
-                        <ThemedText style={[style.colors.geomedia_green, { textAlign: "start", fontStyle: "italic", borderRadius: 10, paddingStart: 5, paddingEnd: 5 }]} >{langselected?.contactme}</ThemedText>
-                    </TouchableOpacity>
-
-
-                    <TouchableOpacity style={{
-                        position: "absolute",
-                        right: 0,
-                    }} onPress={() => {
-                        setModalSettingsVisible(true)
-                    }}>
-                        <Ionicons name="cog-outline" size={28} color={"#bfea7fb9"} />
-                    </TouchableOpacity>
-                </ThemedView>
-
-            </ThemedView >
-
-            <Modal visible={modalSettingsVisible}
-                transparent={true}
-                animationType="slide">
-                <ThemedView style={{
-                    backgroundColor: "rgba(138, 138, 138, 0.2)",
-                    // borderWidth: 3,\
-                    height: "100%",
-                    padding: 10,
-                }}>
-                    <ThemedView
-                        style={{
-                            padding: 20,
-                            borderRadius: 10,
-                            justifyContent: "space-between",
-                            top: 150
-
-                        }}
-                    >
-                        <ThemedText style={style.label}>{langselected?.settings.protocol}</ThemedText>
-                        <ThemedInput type="outlined" placeholder="https" onChangeText={(text) => {
-                            setProtocol(text)
-                        }} />
-                        <ThemedText style={style.label}>{langselected?.settings.serverName}</ThemedText>
-                        <ThemedInput type="outlined" placeholder="geomediasrv" onChangeText={(text) => {
-                            setServerName(text)
-                        }} />
-                        <ThemedText style={style.label}>{langselected?.settings?.port}</ThemedText>
-                        <ThemedInput type="outlined" placeholder="9911" onChangeText={(text) => {
-                            setPort(text)
-                        }} />
-
-                        <ThemedView
-                            style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                marginTop: 20,
-                            }}
-                        >
-                            <TouchableOpacity
-                                onPress={() => setModalSettingsVisible(false)}
-                                style={[style?.colors.geomedia_red, style.buttons.small]}
-                            >
-                                <ThemedText>{langselected?.close}</ThemedText>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                onPress={confirmNewURI}
-                                style={[style?.colors.geomedia_green, style.buttons.small]}
-                            >
-                                <ThemedText>{langselected?.confirm}</ThemedText>
-                            </TouchableOpacity>
-                        </ThemedView>
-
-                    </ThemedView>
-                </ThemedView>
-            </Modal >
-
-
-        </ >
-    )
-}
-
 
 export const checkValidityPassword = (password) => {
     const minLength = 6;
@@ -237,19 +83,19 @@ export function datetime2datehour(datep = null) {
 
 
 export function lowercaseKeys(obj) {
-  if (Array.isArray(obj)) {
-    return obj.map(lowercaseKeys);
-  }
+    if (Array.isArray(obj)) {
+        return obj.map(lowercaseKeys);
+    }
 
-  if (obj !== null && typeof obj === "object") {
-    return Object.keys(obj).reduce((acc, key) => {
-      const lowerKey = key.toLowerCase();
-      acc[lowerKey] = lowercaseKeys(obj[key]);
-      return acc;
-    }, {});
-  }
+    if (obj !== null && typeof obj === "object") {
+        return Object.keys(obj).reduce((acc, key) => {
+            const lowerKey = key.toLowerCase();
+            acc[lowerKey] = lowercaseKeys(obj[key]);
+            return acc;
+        }, {});
+    }
 
-  return obj;
+    return obj;
 }
 
 

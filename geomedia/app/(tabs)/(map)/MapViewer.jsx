@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -10,11 +10,10 @@ import { doRequest } from '../../utility';
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
-import BottomSheet, { BottomSheetFlatList, BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Collections from "../(collections)/Collections";
 import * as SecureStore from 'expo-secure-store';
-import { FullWindowOverlay } from 'react-native-screens';
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -276,8 +275,8 @@ const MapViewer = forwardRef((props, ref) => {
                         onSelect={(colls) => {
                             store_preferences([...colls]) // store the prefernces on cache
                             setCollectionsChosen([...colls])
-                            collectionPickerSheet?.current?.close()
                             get_posts_map(UserPosition, colls)
+                            collectionPickerSheet?.current?.close()
                         }} />
 
                 </BottomSheetScrollView>

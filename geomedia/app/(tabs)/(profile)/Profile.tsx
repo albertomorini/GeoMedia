@@ -44,19 +44,12 @@ export default function Profile() {
   }
 
 
-  async function logout() {
-    //remove preferences
-    await SecureStore.deleteItemAsync("collection_selected_map");
-    // remove saved info
-    await SecureStore.deleteItemAsync("user");
-    ctx?.User.setUser(null);
-  }
 
   function post_get_authorid() {
     doRequest("post/by_author", {
       uid: ctx?.getUID(),
       authorid: ctx?.getUID()
-    },"GET").then(posts => {
+    }, "GET").then(posts => {
       setPosts([...posts])
     }).catch(err => {
       ctx?.showToast({
@@ -83,7 +76,7 @@ export default function Profile() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: 10,
+            padding: 15,
           }}
         >
           <ThemedView style={{ flex: 1, paddingRight: 10 }}>
@@ -133,30 +126,24 @@ export default function Profile() {
             </ThemedText>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => logout()}
-            style={[style?.colors?.geomedia_red, style.buttons.full_screen, { width: "47%" }]}
+          <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,
+          { width: "47%" }
+          ]}
+            onPress={() => {
+              router.push({
+                pathname: '/ProfileViewer',
+                params: {
+                  uid: user?.UID,
+                }
+              })
+            }}
           >
             <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-              {langselected?.profile?.logout}
+              {langselected?.profile?.viewmode}
             </ThemedText>
+            {/* <Ionicons name="eye-outline" size={28} color={"white"} style={{ marginLeft: 8 }} /> */}
           </TouchableOpacity>
         </ThemedView>
-        <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,
-        { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }
-        ]}
-          onPress={() => {
-            router.push({
-              pathname: '/ProfileViewer',
-              params: {
-                uid: user?.UID,
-              }
-            })
-          }}
-        >
-          <ThemedText>{langselected.profile.viewmode}</ThemedText>
-          <Ionicons name="eye-outline" size={28} color={"white"} style={{ marginLeft: 8 }} />
-        </TouchableOpacity>
 
 
         <ThemedView style={{ paddingRight: 10, marginBottom: 30, height: "50%" }}>
@@ -183,7 +170,6 @@ export default function Profile() {
 
 
       </ThemedView>
-      <SettingsConfig />
     </>
   );
 }

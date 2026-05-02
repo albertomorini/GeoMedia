@@ -148,7 +148,7 @@ async def auth_signin(procedure: str, body: dict):
             username = query_results["USERNAME"]
 
         if query_results.get("AUTH") == 2:
-            print("INVIO EMAIL")
+            # print("SENDING EMAIL")
             mailer.send_email_otp(
                 email,
                 {"USERNAME": username, "OTP": query_results.get("OTP")}
@@ -234,7 +234,6 @@ async def profile_interest_merge(uid:int,interests:dict):
     interests_dicts = [interest.dict() for interest in interests]
     dummy = json.dumps(interests_dicts).replace("'", "''")
     query = f"EXEC dbo.PROFILE_INTEREST_MERGE @UID={uid},@JSON='{dummy}'"
-    print(query)
     return SQL_MANAGER.select_query(query)
 
 async def profile_interest_get(uid:int):

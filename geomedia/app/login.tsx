@@ -11,11 +11,12 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { MyContext } from './_layout';
 import { ThemedInput } from '@/components/themed-input';
-import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from './mycomponents/ModalPswReset';
+import { router } from 'expo-router';
 
 
 
@@ -97,7 +98,7 @@ export default function LoginScreen(props) {
     function check_otp() {
         doRequest("auth/check_otp", {
             username: username,
-            otp: parseInt(OTP,10)
+            otp: parseInt(OTP, 10)
         }).then(async res => {
             if (res[0]?.AUTH) {
                 await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
@@ -117,7 +118,7 @@ export default function LoginScreen(props) {
     function check_username(username: string) {
         doRequest("auth/check_username", {
             username: username
-        },"GET").then(resQuery => {
+        }, "GET").then(resQuery => {
             if (parseInt(resQuery[0]?.OK)) {
                 setValidUsername(true)
                 ctx?.showToast({
@@ -281,8 +282,13 @@ export default function LoginScreen(props) {
 
                     }
                 </ThemedText>
-                <SettingsConfig />
 
+                <TouchableOpacity onPress={() => {
+                    router.push("/Settings")
+                }}>
+                    <ThemedText>Settings</ThemedText>
+                </TouchableOpacity>
+               
             </ThemedView>
 
         </GestureHandlerRootView >
