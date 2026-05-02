@@ -108,7 +108,9 @@ const Collections = (props) => {
                                 allowCreation={props?.allowCreation}
                                 itemSelected={props?.itemSelected}
                                 isBottomSheet={props?.isBottomSheet}
-                                onSelect={props?.onSelect}
+                                onSelect={(...args) => {
+                                    props?.onSelect?.(...args, false);
+                                }}
                                 searchable={false}
 
                             />

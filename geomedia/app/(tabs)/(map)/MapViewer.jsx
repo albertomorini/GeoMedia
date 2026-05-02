@@ -188,6 +188,29 @@ const MapViewer = forwardRef((props, ref) => {
                                 latitudeDelta: 0.1,
                                 longitudeDelta: 0.1,
                             }}
+                            customMapStyle={[
+                                {
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#9b9d9f' }], // background color
+                                },
+                                {
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#746855' }],
+                                },
+                                {
+                                    elementType: 'labels.text.stroke',
+                                    stylers: [{ color: '#242f3e' }],
+                                },
+                                {
+                                    featureType: 'road',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#38414e' }],
+                                },
+                                {
+                                    featureType: 'water',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#17263c' }],
+                                }]}
                             onUserLocationChange={(event) => {
                                 const { latitude, longitude } = event.nativeEvent.coordinate;
 
@@ -258,7 +281,6 @@ const MapViewer = forwardRef((props, ref) => {
                 enablePanDownToClose={true}
                 enableDynamicSizing={true}
                 backgroundStyle={{
-
                     width: "100%",
                     margin: 0,
                     borderTopLeftRadius: 24,
@@ -272,11 +294,13 @@ const MapViewer = forwardRef((props, ref) => {
                         allowCreation={false}
                         isBottomSheet={true}
                         itemSelected={collectionsChosen}
-                        onSelect={(colls) => {
+                        onSelect={(colls, closeBottom = true) => {
                             store_preferences([...colls]) // store the prefernces on cache
                             setCollectionsChosen([...colls])
                             get_posts_map(UserPosition, colls)
-                            collectionPickerSheet?.current?.close()
+                            if (closeBottom) {
+                                collectionPickerSheet?.current?.close()
+                            }
                         }} />
 
                 </BottomSheetScrollView>

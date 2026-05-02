@@ -26,8 +26,14 @@ const ListItem = forwardRef((props: any, ref: any) => {
     const toggleSelect = (id) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter((item) => item !== id));
+            if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
+                props?.onSelect(selectedItems.filter((item) => item !== id))
+            }
         } else {
             setSelectedItems([...selectedItems, id]);
+            if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
+                props?.onSelect([...selectedItems, id])
+            }
         }
     };
 
@@ -40,7 +46,10 @@ const ListItem = forwardRef((props: any, ref: any) => {
                     alignItems: "center",
                     padding: 2,
                 }}
-                onPress={() => toggleSelect(item.ID)}
+                onPress={() => {
+                    toggleSelect(item.ID)
+
+                }}
             >
                 <ItemIconizable item={item}
                     isImage={props?.isImage}
@@ -57,22 +66,10 @@ const ListItem = forwardRef((props: any, ref: any) => {
         );
     };
 
-    function filterData(allowCreation = false) {
+    function filterData() {
         let og_data = props?.DATA
         let filtered = searchText.trim().length == 0 ? og_data : og_data.filter(i => i?.TITLE?.toLowerCase().includes(searchText?.toLowerCase()))
         return filtered
-        // // let new_item = {
-        // //     ID: "new_item",
-        // //     TITLE: langselected.newf + props?.label,
-        // //     ICON: "add",
-        // //     COLOR: "#c4aaaa"
-        // // }
-        // // if (searchText?.length == 0 && allowCreation) {
-        // //     return [new_item, ...og_data]
-        // // } else if (filtered?.length == 0 && allowCreation) {
-        // //     return [new_item]
-        // // }
-        // // return filtered
     }
 
     useImperativeHandle(ref, () => ({
@@ -91,7 +88,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
     return (
         <ThemedView style={[style?.container, { flex: 1 }]}>
             {
-                props?.searchable == true ?
+                props?.searchable ?
                     <ThemedView style={{
                         flexDirection: "row",
                         alignItems: "center",
@@ -162,7 +159,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
                 {
                     props?.isBottomSheet ?
                         <BottomSheetFlashList
-                            data={filterData(props?.allowCreation)} //filtering on full data
+                            data={filterData()} //filtering on full data
                             renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
                             keyExtractor={(item, index) => index.toString()}
                             estimatedItemSize={props?.estimatedSize}
@@ -170,7 +167,7 @@ const ListItem = forwardRef((props: any, ref: any) => {
                         />
                         :
                         <FlashList
-                            data={filterData(props?.allowCreation)} //filtering on full data
+                            data={filterData()} //filtering on full data
                             renderItem={props?.isSelectable ? renderItemSelectable : renderItem}
                             keyExtractor={(item, index) => index.toString()}
                             estimatedItemSize={props?.estimatedSize}

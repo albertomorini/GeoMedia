@@ -109,15 +109,15 @@ export default function Settings(props) {
                         justifyContent: "space-between",
                     }}
                 >
-                    <ThemedText style={{ fontWeight: 300 }}>{langselected?.settings.protocol}</ThemedText>
+                    <ThemedText style={{ fontWeight: "bold" }}>{langselected?.settings.protocol}</ThemedText>
                     <ThemedInput type="outlined" placeholder="https" onChangeText={(text) => {
                         setProtocol(text)
                     }} />
-                    <ThemedText style={{ fontWeight: 300 }}>{langselected?.settings.serverName}</ThemedText>
+                    <ThemedText style={{ fontWeight: "bold" }}>{langselected?.settings.serverName}</ThemedText>
                     <ThemedInput type="outlined" placeholder="geomediasrv" onChangeText={(text) => {
                         setServerName(text)
                     }} />
-                    <ThemedText style={{ fontWeight: 300 }}>{langselected?.settings?.port}</ThemedText>
+                    <ThemedText style={{ fontWeight: "bold" }}>{langselected?.settings?.port}</ThemedText>
                     <ThemedInput type="outlined" placeholder="9911" onChangeText={(text) => {
                         setPort(text)
                     }} />
