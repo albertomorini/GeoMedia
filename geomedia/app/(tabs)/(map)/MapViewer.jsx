@@ -15,15 +15,18 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Collections from "../(collections)/Collections";
 import * as SecureStore from 'expo-secure-store';
 
+import { MapDarkMode, MapLightMode } from "@asset/MapStyler"
+
 
 const MapViewer = forwardRef((props, ref) => {
 
     const ctx = useContext(MyContext)
     const mapRef = useRef(null);
     const colorScheme = useColorScheme()
+    const [mapPreferenceStyle, setMapPreferenceStyle] = useState("system")
 
-    const [postMarkers, setPostMarkers] = useState(null)
     /////////////////////////////////////////////////////////////
+    const [postMarkers, setPostMarkers] = useState(null)
 
     const [UserPosition, setUserPosition] = useState({ latitude: 0, longitude: 0 });
 
@@ -32,6 +35,7 @@ const MapViewer = forwardRef((props, ref) => {
 
     const [collectionsChosen, setCollectionsChosen] = useState([]);
 
+    /////////////////////////////////////////////////////////////
 
     // return true if current position changed within a delta (100m)
     function positionChanged(latitude, longitude, currentPosition = UserPosition) {
@@ -110,10 +114,7 @@ const MapViewer = forwardRef((props, ref) => {
                 maximumAge: 0,
             }
         );
-
-
     }
-
     /////////////////////////////////////////////////////////////
 
     async function store_preferences(colls) {
@@ -153,15 +154,33 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
 
+    async function load_map_preference_style() {
+        let style = await SecureStore.getItemAsync("map_style")
+        try {
+            if (style == null) {
+                setMapPreferenceStyle("system")
+            } else {
+                setMapPreferenceStyle(style)
+            }
+            return colls
+        } catch (error) {
+            return []
+        }
+    }
+
+    function render_map_style(){
+        
+    }
+
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             get_posts_map()
         }, [UserPosition, collectionsChosen]) //when position or collections change (or are loaded) refresh posts
     )
-
     useEffect(() => {
         getLocation();
         check_cache_collection_chosen()
+        load_map_preference_style()
     }, [])
 
     return (
@@ -188,29 +207,7 @@ const MapViewer = forwardRef((props, ref) => {
                                 latitudeDelta: 0.1,
                                 longitudeDelta: 0.1,
                             }}
-                            customMapStyle={[
-                                {
-                                    elementType: 'geometry',
-                                    stylers: [{ color: '#9b9d9f' }], // background color
-                                },
-                                {
-                                    elementType: 'labels.text.fill',
-                                    stylers: [{ color: '#746855' }],
-                                },
-                                {
-                                    elementType: 'labels.text.stroke',
-                                    stylers: [{ color: '#242f3e' }],
-                                },
-                                {
-                                    featureType: 'road',
-                                    elementType: 'geometry',
-                                    stylers: [{ color: '#38414e' }],
-                                },
-                                {
-                                    featureType: 'water',
-                                    elementType: 'geometry',
-                                    stylers: [{ color: '#17263c' }],
-                                }]}
+                            customMapStyle={colorScheme == "dark" ? MapDarkMode : MapLightMode}
                             onUserLocationChange={(event) => {
                                 const { latitude, longitude } = event.nativeEvent.coordinate;
 
@@ -311,6 +308,10 @@ const MapViewer = forwardRef((props, ref) => {
 })
 
 export default MapViewer
+
+
+
+
 
 const styles = StyleSheet.create({
 

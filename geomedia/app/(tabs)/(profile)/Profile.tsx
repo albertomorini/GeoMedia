@@ -5,16 +5,14 @@ import { Image } from "expo-image"; // really, huge improveement
 import { Text } from "re-native-ui";
 import { style } from '@/components/globalstyle';
 
-import * as SecureStore from 'expo-secure-store';
 import { ThemedText } from '@/components/themed-text';
-import SettingsConfig, { doRequest } from '../../utility';
+import { doRequest } from '../../utility';
 import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { router, useFocusEffect } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from '@/app/mycomponents/ModalPswReset';
 import ListItem from '@/app/mycomponents/ListItem';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function Profile() {
 
