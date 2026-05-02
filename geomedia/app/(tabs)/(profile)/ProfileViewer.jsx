@@ -132,7 +132,7 @@ const ProfileViewer = () => {
         <>
             <Stack.Screen
                 options={{
-                    title: params?.username,
+                    title: user?.USERNAME,
                 }}
             />
             <ThemedView style={[style.container, { height: "100%" }]}>

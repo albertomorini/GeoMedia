@@ -98,9 +98,11 @@ const CollectionPosts = (props) => {
                             width: "100%",
                             height: 50,
                             justifyContent: "space-between",
-                            padding: 5
+                            padding: 5,
+                             borderTopEndRadius: 10,
+                            borderTopStartRadius: 10,
                         }, style.colors.geomedia_gray]}>
-                            <ThemedText style={[style.title, { alignItems: "center" }]}>{langselected?.sequentiality?.seq}</ThemedText>
+                            <ThemedText style={[style.title, { alignItems: "center", padding:10 }]}>{langselected?.sequentiality?.seq}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalOrderVisible(false)
                             }}>

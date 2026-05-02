@@ -57,7 +57,7 @@ export const it = {
         insertName: "Inserisci il nome",
         insertSurname: "Inserisci il cognome",
         editPic: "Clicca per cambiare foto", // tap to edit picture
-        viewmode: "Modalità visualizzatore",
+        viewmode: "Visualizzatore",
         activefrom: "Attivo dal"
     },
     postCreator: {
