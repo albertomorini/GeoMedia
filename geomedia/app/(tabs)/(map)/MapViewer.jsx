@@ -15,7 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Collections from "../(collections)/Collections";
 import * as SecureStore from 'expo-secure-store';
 
-import { MapDarkMode, MapLightMode } from "@asset/MapStyler"
+import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } from "@/assets/MapStyler";
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -157,24 +157,28 @@ const MapViewer = forwardRef((props, ref) => {
     async function load_map_preference_style() {
         let style = await SecureStore.getItemAsync("map_style")
         try {
-            if (style == null) {
+            if (style == null || style == "system") {
                 setMapPreferenceStyle("system")
-            } else {
-                setMapPreferenceStyle(style)
+                // setMapPreferenceStyle(colorScheme == "dark" ? MapDarkMode : MapLightMode)
+            } else if (style == "dark") {
+                setMapPreferenceStyle(MapDarkMode)
+            } else if (style == "light") {
+                setMapPreferenceStyle(MapLightMode)
+            } else if (style == "blue") {
+                setMapPreferenceStyle(MapNightMode)
+            } else if (style == "retro") {
+                setMapPreferenceStyle(MapRetro)
+            } else if (style == "google") {
+                setMapPreferenceStyle(MapDefaultMode)
             }
-            return colls
         } catch (error) {
-            return []
         }
-    }
-
-    function render_map_style(){
-        
     }
 
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
             get_posts_map()
+            check_cache_collection_chosen()
         }, [UserPosition, collectionsChosen]) //when position or collections change (or are loaded) refresh posts
     )
     useEffect(() => {
@@ -196,7 +200,6 @@ const MapViewer = forwardRef((props, ref) => {
 
                         <MapView
                             ref={mapRef}
-                            // provider={PROVIDER_GOOGLE} // LATER: to check with google for design
                             style={styles.map}
                             showsUserLocation={true}
                             toolbarEnabled={true}
@@ -207,7 +210,12 @@ const MapViewer = forwardRef((props, ref) => {
                                 latitudeDelta: 0.1,
                                 longitudeDelta: 0.1,
                             }}
-                            customMapStyle={colorScheme == "dark" ? MapDarkMode : MapLightMode}
+                            customMapStyle={
+                                mapPreferenceStyle == "system" ?
+                                    colorScheme == "dark" ? MapDarkMode : MapLightMode
+                                    :
+                                    mapPreferenceStyle
+                            }
                             onUserLocationChange={(event) => {
                                 const { latitude, longitude } = event.nativeEvent.coordinate;
 
