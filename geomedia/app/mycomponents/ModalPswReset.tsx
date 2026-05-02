@@ -58,7 +58,7 @@ const ModalPswReset = () => {
         }
         doRequest("auth/psw_forgotten", {
             usernamemail: usrmail
-        },"GET").then(resQuery => {
+        }, "GET").then(resQuery => {
             if (resQuery.AUTH == 2) { //pending OTP
                 setOTPValid(false)
             } else {
@@ -186,16 +186,14 @@ const ModalPswReset = () => {
                                     </>
                                     :
                                     <>
+                                        <ThemedText>{langselected.pswReset.otpexpiration}</ThemedText>
                                         <OTPInput
-                                            label={langselected.pswReset.otpexpiration}
                                             value={OTP}
                                             onChangeText={setOTP}
                                             length={6}
                                         />
                                         <TouchableOpacity onPress={() => check_otp()} style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
-                                            <ThemedText>
-                                                {langselected.checkotp}
-                                            </ThemedText>
+                                            <ThemedText>{langselected.pswReset.checkotp}</ThemedText>
                                         </TouchableOpacity>
                                         <></>
                                     </>
