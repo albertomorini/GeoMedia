@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [GEOMEDIA]    Script Date: 29/04/2026 14:29:00 ******/
+/****** Object:  Database [GEOMEDIA]    Script Date: 02/05/2026 18:34:55 ******/
 CREATE DATABASE [GEOMEDIA]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -86,7 +86,7 @@ ALTER DATABASE [GEOMEDIA] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_
 GO
 USE [GEOMEDIA]
 GO
-/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[COLLECTIONS]    Script Date: 02/05/2026 18:34:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -114,7 +114,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HASHTAGS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[HASHTAGS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +134,7 @@ UNIQUE NONCLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[HYPERMEDIA]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -147,7 +147,7 @@ CREATE TABLE [dbo].[HYPERMEDIA](
 	[MIME_TYPE] [varchar](32) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[INTERACTIONS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -165,7 +165,23 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LOGS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[INTERESTS]    Script Date: 02/05/2026 18:34:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[INTERESTS](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[USER_ID] [int] NULL,
+	[EXTERNAL_REF] [int] NULL,
+	[ENTITY] [varchar](200) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LOGS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -181,7 +197,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[POSTS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[POSTS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -208,7 +224,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[REPORTS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[REPORTS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -227,7 +243,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[USERS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  Table [dbo].[USERS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -283,6 +299,9 @@ GO
 ALTER TABLE [dbo].[INTERACTIONS]  WITH CHECK ADD FOREIGN KEY([POST_ID])
 REFERENCES [dbo].[POSTS] ([ID])
 GO
+ALTER TABLE [dbo].[INTERESTS]  WITH CHECK ADD FOREIGN KEY([USER_ID])
+REFERENCES [dbo].[USERS] ([ID])
+GO
 ALTER TABLE [dbo].[POSTS]  WITH CHECK ADD FOREIGN KEY([AUTHOR_ID])
 REFERENCES [dbo].[USERS] ([ID])
 GO
@@ -295,7 +314,7 @@ GO
 ALTER TABLE [dbo].[REPORTS]  WITH CHECK ADD FOREIGN KEY([USERID])
 REFERENCES [dbo].[USERS] ([ID])
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_OTP]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -326,7 +345,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_CHECK_USERNAME]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -341,7 +360,7 @@ BEGIN
         SELECT 1 AS OK, 'USERNAME AVAILABLE' AS MSG
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_LOGIN]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -382,7 +401,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_FORGOTTEN]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -409,7 +428,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_PSW_RESET]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -449,7 +468,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[AUTH_SIGNIN]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -489,7 +508,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_MERGE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -576,7 +595,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTION_POSTS_GET]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTION_POSTS_GET]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -604,7 +623,44 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_BY_TAG]    Script Date: 02/05/2026 18:34:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[COLLECTIONS_BY_TAG]
+@UID INT
+AS
+BEGIN
+
+    WITH HASHTAG_INTEREST AS (
+        SELECT HT.TITLE FROM INTERESTS I
+        INNER JOIN HASHTAGS HT ON I.EXTERNAL_REF = HT.ID AND I.ENTITY='HASHTAG'
+        WHERE I.[USER_ID]=@UID
+    )
+    SELECT HI.TITLE AS TAG,C.* FROM COLLECTIONS C
+    INNER JOIN HASHTAG_INTEREST HI ON HI.TITLE IN 
+    (
+        SELECT VALUE FROM OPENJSON(C.HASHTAGS,'$')
+    )
+    WHERE 
+    ( --EXCLUSIVITY
+        GETDATE()> ISNULL(EXCL_DATE_START,DATEADD(DAY,-1,GETDATE())) AND GETDATE() < ISNULL(EXCL_DATE_END,DATEADD(DAY,1,GETDATE())) --IF NULL, MAKE IT FROM YESTERDAY TILL TOMORROW
+        AND
+        (
+            (@UID IN (SELECT VALUE FROM OPENJSON(VIEWERS,'$')) OR VIEWERS IS NULL OR VIEWERS = '[]') --VIEWER
+        OR
+            (@UID IN (SELECT VALUE FROM OPENJSON(CREATORS,'$')) OR CREATORS IS NULL OR CREATORS = '[]') -- CREATOR CAN BE VIEWER NO NEED TO SPECIFY
+        )
+    )OR OWNERID=@UID
+
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -691,7 +747,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[COLLECTIONS_GET_FULLCOLLECTION]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -714,7 +770,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_GETFILES]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -726,7 +782,7 @@ BEGIN
     SELECT * FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_MERGEFILE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -770,7 +826,7 @@ GO
 
   END
 GO
-/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[HPMEDIA_REMOVE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -789,7 +845,7 @@ BEGIN
     DELETE FROM HYPERMEDIA WHERE POST_ID=@POSTID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[INTERACTIONS_LIKEPOST]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -829,7 +885,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[LOG_WRITE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -844,7 +900,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_BY_AUTHOR]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_BY_AUTHOR]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -875,7 +931,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_DELETE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -917,7 +973,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_COLLECTION]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -930,7 +986,7 @@ BEGIN
 	--WHERE COLLECTION_ID =@COLLECTION_ID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_FULLPOST]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -980,7 +1036,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_GET_MAP]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1063,7 +1119,7 @@ BEGIN
     -- NB: THE VISIBILITY_AREA_KM FILTER IS MADE ON BACKEND OF THE SERVER
 END
 GO
-/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[POST_MERGE]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1171,7 +1227,7 @@ END;
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_EditInfo]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1213,7 +1269,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GETINFO]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETINFO]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1229,7 +1285,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GetPFP]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1246,7 +1302,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_CATEGORIES]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_CATEGORIES]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1271,7 +1327,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_TIMEMONTHS]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_GETSTATS_TIMEMONTHS]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1295,7 +1351,75 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[PROFILE_INTEREST_GET]    Script Date: 02/05/2026 18:34:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[PROFILE_INTEREST_GET]
+@UID INT
+AS
+BEGIN
+    
+    SELECT * FROM INTERESTS I
+    INNER JOIN HASHTAGS HT ON HT.ID=I.EXTERNAL_REF AND I.ENTITY='HASHTAG' 
+    WHERE USER_ID =@UID
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PROFILE_INTEREST_MERGE]    Script Date: 02/05/2026 18:34:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[PROFILE_INTEREST_MERGE]
+@UID INT, @JSON NVARCHAR(MAX)
+AS
+BEGIN
+    
+    DECLARE @TABLE TABLE (
+        VAL VARCHAR(200),
+        ENTITY VARCHAR(200)
+    );
+    INSERT INTO @TABLE(VAL,ENTITY)
+    SELECT value,entity FROM OPENJSON(@JSON,'$')WITH(
+        value VARCHAR(200),
+        entity VARCHAR(200)
+    );
+
+    
+
+    DELETE FROM INTERESTS WHERE [USER_ID]=@UID
+    AND NOT EXISTS (
+        SELECT * FROM @TABLE T
+        INNER JOIN HASHTAGS HT ON HT.TITLE = T.VAL AND T.ENTITY='HASHTAG'
+        WHERE HT.ID=EXTERNAL_REF AND ENTITY = T.ENTITY
+    )
+
+    --- CREATE HASHTAG IF NOT EXISTS
+    INSERT INTO HASHTAGS (TITLE,DC,UC)
+    SELECT T.VAL, GETDATE(),@UID 
+    FROM @TABLE T WHERE T.ENTITY='HASHTAG'
+    AND NOT EXISTS(SELECT * FROM HASHTAGS WHERE TITLE = T.VAL )
+
+    -- INSERT HASHTAG ON INTERESTS
+    INSERT INTO INTERESTS ([USER_ID],EXTERNAL_REF,ENTITY)
+    -- SELECT @UID, ISNULL(HT.ID,COLLETION.ID--> TO DO WITH CASE WHEN), T.ENTITY
+    SELECT @UID, HT.ID, T.ENTITY
+    FROM @TABLE T 
+    INNER JOIN HASHTAGS HT ON HT.TITLE = T.VAL
+    WHERE NOT EXISTS (
+        SELECT * FROM INTERESTS WHERE ENTITY=T.ENTITY AND EXTERNAL_REF=HT.ID AND [USER_ID] = @UID
+    )
+
+
+    EXEC PROFILE_INTEREST_GET @UID=@UID
+
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[REPORT_NEW]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1318,7 +1442,7 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 29/04/2026 14:29:01 ******/
+/****** Object:  StoredProcedure [dbo].[USERS_LIST]    Script Date: 02/05/2026 18:34:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
