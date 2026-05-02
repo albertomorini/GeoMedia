@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { en, it } from "./i18n";
 
@@ -22,6 +22,7 @@ export function LanguageProvider({ children }) {
     };
 
     const langselected = lang === "EN" ? en : it;
+    
 
     return (
         <LanguageContext.Provider value={{ lang, langselected, changeLang }}>

@@ -6,7 +6,7 @@ let URL = "http://10.0.0.3:9911/"
 const SHARED_KEY = "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="
 
 
-async function load_config() {
+export async function load_config() {
     let config = await SecureStore.getItemAsync("config");
     if (config != null) {
         URL = config

@@ -6,8 +6,9 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Picker } from "@react-native-picker/picker";
 import { useContext, useEffect, useState } from "react";
-import { Linking, StyleSheet, TouchableOpacity } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import * as SecureStore from 'expo-secure-store';
+import { load_config } from "./utility";
 
 
 export default function Settings(props) {
@@ -16,7 +17,7 @@ export default function Settings(props) {
     const [port, setPort] = useState(null)
     const my_email = 'albmor.dev@gmail.com'
 
-    const { langselected, changeLang } = useLanguage();
+    const { lang, langselected, changeLang } = useLanguage();
     const [mapPreferenceStyle, setMapPreferenceStyle] = useState("system")
 
 
@@ -26,12 +27,11 @@ export default function Settings(props) {
 
     function confirmNewURI() {
         SecureStore.setItemAsync("config", protocol + "://" + servername + ":" + port + "/");
-        setModalSettingsVisible(false)
         ctx?.showToast({
             type: 'success',
             text1: 'Configuration saved',
         })
-        load_config()
+        load_config() //utility
     }
 
 
@@ -85,37 +85,38 @@ export default function Settings(props) {
 
     useEffect(() => {
         load_map_preference_style()
+
     }, [langselected])
 
     return (
         <ThemedView style={[{ flex: 1, }, style.container]}>
 
             <>
-                <ThemedText style={style.style}>Get in touch</ThemedText>
+                <ThemedText style={style.style}>{langselected.settings_component.contact_me}</ThemedText>
 
                 <ThemedView style={{
                     flexDirection: "row",
                     alignItems: 'center',
                 }}>
 
-                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("email")}>
-                        <ThemedText >📧 Email Me</ThemedText>
+                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", paddingStart: 5, paddingEnd: 5, height: 50, paddingTop: 10, alignItems: "center", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("email")}>
+                        <ThemedText >Email Me</ThemedText>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("telegram")}>
-                        <ThemedText >📞 Telegram</ThemedText>
+                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", paddingStart: 5, paddingEnd: 5, height: 50, paddingTop: 10, alignItems: "center", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("telegram")}>
+                        <ThemedText >Telegram</ThemedText>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("github")}>
-                        <ThemedText>🌐 Github</ThemedText>
+                    <TouchableOpacity style={[style.colors.geomedia_blue, { width: "30%", paddingStart: 5, paddingEnd: 5, height: 50, paddingTop: 10, alignItems: "center", marginStart: 5, borderRadius: 20 }]} onPress={() => linking_handler("github")}>
+                        <ThemedText>Github</ThemedText>
                     </TouchableOpacity>
-                </ThemedView>
+                </ThemedView >
             </>
 
             <>
-                <ThemedText style={style.label}>Language</ThemedText>
+                <ThemedText style={style.label}>{langselected.settings_component.language}</ThemedText>
                 <Picker
-                    selectedValue={langselected}
+                    selectedValue={lang}
                     onValueChange={(itemValue, itemIndex) => changeLang(itemValue)}
                     style={{ height: 70, width: 200 }}
                 >
@@ -125,7 +126,7 @@ export default function Settings(props) {
             </>
 
             <>
-                <ThemedText style={style.label}>Map style</ThemedText>
+                <ThemedText style={style.label}>{langselected.settings_component.language}</ThemedText>
                 <Picker
                     selectedValue={mapPreferenceStyle}
                     onValueChange={(itemValue, itemIndex) => {
@@ -184,38 +185,21 @@ export default function Settings(props) {
                 </ThemedView>
             </>
 
-            <>
-                <ThemedText style={style.label}>Log out</ThemedText>
-                <TouchableOpacity
-                    onPress={() => logout()}
-                    style={[style?.colors?.geomedia_red, style.buttons.full_screen]}
-                >
-                    <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-                        {langselected?.profile?.logout}
-                    </ThemedText>
-                </TouchableOpacity>
+            {
+                ctx?.getUID() != undefined ??
+                <>
+                    <ThemedText style={style.label}>Log out</ThemedText>
+                    <TouchableOpacity
+                        onPress={() => logout()}
+                        style={[style?.colors?.geomedia_red, style.buttons.full_screen]}
+                    >
+                        <ThemedText style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+                            {langselected?.profile?.logout}
+                        </ThemedText>
+                    </TouchableOpacity>
 
-            </>
-        </ThemedView>
+                </>
+            }
+        </ThemedView >
     )
 }
-
-
-const styles = StyleSheet.create({
-    heading: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 15,
-    },
-    button: {
-        paddingHorizontal: 20,
-        borderRadius: 8,
-        marginVertical: 6,
-        width: '80%',
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-    },
-});

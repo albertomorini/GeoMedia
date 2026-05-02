@@ -43,9 +43,7 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
             :
-            // <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "padding"}>
-              <LoginScreen setuser={(user: Object) => { setUser(user) }} />
-            // </KeyboardAvoidingView>
+            <LoginScreen setuser={(user: Object) => { setUser(user) }} />
           }
         </MyContext.Provider>
         <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />

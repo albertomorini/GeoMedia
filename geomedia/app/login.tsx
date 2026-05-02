@@ -13,10 +13,12 @@ import { MyContext } from './_layout';
 import { ThemedInput } from '@/components/themed-input';
 import { KeyboardAvoidingView, Modal, Platform, TouchableOpacity } from 'react-native';
 import { ThemedPassword } from '@/components/themed-password';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from './mycomponents/ModalPswReset';
 import { router } from 'expo-router';
+import Settings from './Settings';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -25,6 +27,7 @@ export default function LoginScreen(props) {
     const { langselected } = useLanguage();
     const ctx = useContext(MyContext)
     const [isLogin, setIsLogin] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false)
     //////////////////////////////////////////////////
 
     const [email, setEmail] = useState(null)
@@ -284,12 +287,54 @@ export default function LoginScreen(props) {
                 </ThemedText>
 
                 <TouchableOpacity onPress={() => {
-                    router.push("/Settings")
+                    setModalVisible(true)
                 }}>
                     <ThemedText>Settings</ThemedText>
                 </TouchableOpacity>
-               
-            </ThemedView>
+                <Modal
+                    visible={modalVisible}
+                    transparent={true}
+                    animationType="slide"
+                    style={{
+                        borderRadius: 10,
+                    }}
+                >
+                    <ThemedView
+                        style={{
+                            backgroundColor: "rgba(138, 138, 138, 0.8)",
+                            borderRadius: 10,
+                            height: "100%",
+                            padding: 10,
+                            borderBottomStartRadius: 10,
+                            borderBottomEndRadius: 10,
+                        }}
+                    >
+                        <ThemedView style={[{
+                            flexDirection: "row",
+                            height: 50,
+                            justifyContent: "space-between",
+                            marginTop: 50,
+                            borderTopEndRadius: 10,
+                            borderTopStartRadius: 10,
+
+                        }, style.colors.geomedia_gray]}>
+                            <ThemedText style={[style.title, { alignItems: "center" }]}>{langselected?.sequentiality?.seq}</ThemedText>
+                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
+                                setModalVisible(false)
+                            }}>
+                                <Ionicons name="close-outline" size={28} color={"#70726db9"} />
+                            </TouchableOpacity>
+                        </ThemedView>
+
+                        <ScrollView style={{
+
+                        }}>
+                            <Settings />
+                        </ScrollView>
+                    </ThemedView>
+                </Modal>
+
+            </ThemedView >
 
         </GestureHandlerRootView >
     );

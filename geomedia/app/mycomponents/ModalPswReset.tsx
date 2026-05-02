@@ -142,7 +142,6 @@ const ModalPswReset = () => {
                             borderRadius: 10,
                             justifyContent: "space-between",
                             top: 150
-
                         }}
                     >
 

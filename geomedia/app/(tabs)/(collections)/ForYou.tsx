@@ -10,8 +10,6 @@ import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { doRequest } from "@/app/utility";
 import { ThemedText } from "@/components/themed-text";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { BottomSheetInternalContext } from "@gorhom/bottom-sheet/lib/typescript/contexts";
-import ListItem from "@/app/mycomponents/ListItem";
 import CollectionListSingle from "./CollectionsListSingle";
 
 
@@ -96,12 +94,16 @@ const ForYou = (props) => {
                             </ThemedView>
 
                             {interests?.length > 0 && interests.filter(s => s?.ENTITY == "HASHTAG").map(s => s.TITLE).map(c => (
-                                <ThemedView style={{
-                                    flexDirection: "row",
-                                    flexWrap: "wrap",
-                                }}>
+                                <ThemedView
+                                    key={"view" + c}
+                                    style={{
+                                        flexDirection: "row",
+                                        flexWrap: "wrap",
+
+                                    }}>
                                     <Pressable
-                                        // key={c}
+                                        key={"press" + c}
+
                                         style={[
                                             {
                                                 paddingVertical: 6,

@@ -37,7 +37,6 @@ export const it = {
     search_create: "Cerca esistente o crea nuovo",
     newf: "Nuova ",
     newm: "Nuovo ",
-    contactme: "Contattami",
     share: "Condividi",
     on: "il",
     views: "Visioni",
@@ -144,6 +143,12 @@ export const it = {
         title: "Limitazioni",
         menuCreator: ["Data & Ora", "Visualizzatori", "Creatori"],
         menuViewer: ["Data & Ora", "Visualizzatori"]
+    },
+    settings:"Impostazioni",
+    settings_component:{
+        contact_me:"Contattami",
+        language:"Lingua",
+        mapstyle:"Stile della mappa"
     }
 }
 
@@ -187,7 +192,6 @@ export const en = {
     search_create: "Search or create a new one",
     newf: "New ",
     newm: "New ",
-    contactme: "Contact me",
     share: "Share",
     on: "on",
     views: "Views",
