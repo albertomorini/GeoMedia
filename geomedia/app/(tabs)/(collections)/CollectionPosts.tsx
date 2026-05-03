@@ -36,13 +36,13 @@ const CollectionPosts = (props) => {
     function collection_posts_get(collectionid) {
         doRequest("collection/posts", {
             collectionid: collectionid
-        },"GET").then(resQuery => {
+        }, "GET").then(resQuery => {
             setPostList(resQuery)
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -98,11 +98,12 @@ const CollectionPosts = (props) => {
                             width: "100%",
                             height: 50,
                             justifyContent: "space-between",
-                            padding: 5,
-                             borderTopEndRadius: 10,
+                            borderTopEndRadius: 10,
                             borderTopStartRadius: 10,
-                        }, style.colors.geomedia_gray]}>
-                            <ThemedText style={[style.title, { alignItems: "center", padding:10 }]}>{langselected?.sequentiality?.seq}</ThemedText>
+                            backgroundColor: "#838383",
+                            padding: 5
+                        }]}>
+                            <ThemedText style={[style.title, { alignItems: "center", padding: 10 }]}>{langselected?.sequentiality?.seq}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalOrderVisible(false)
                             }}>

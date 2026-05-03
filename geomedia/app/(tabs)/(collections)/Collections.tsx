@@ -61,14 +61,14 @@ const Collections = (props) => {
             }).catch(err => {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Error",
-                    text2: "Network error... are you offline?"
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
                 })
             })
         } catch (error) {
             ctx?.showToast({
                 type: "error",
-                text1: "Something went wrong..try again"
+                text1: langselected.network.error,
             })
         }
     }

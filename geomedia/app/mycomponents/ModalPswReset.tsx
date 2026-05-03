@@ -46,8 +46,8 @@ const ModalPswReset = () => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -71,8 +71,8 @@ const ModalPswReset = () => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -102,14 +102,14 @@ const ModalPswReset = () => {
                     setModalPswReset(false);
                     ctx?.showToast({
                         type: "success",
-                        text1: "Password changed"
+                        text1: langselected.pswReset.psw_changed
                     })
                 }
             }).catch(err => {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Error",
-                    text2: JSON.stringify(err)
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
                 })
             })
         }

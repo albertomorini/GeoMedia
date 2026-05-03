@@ -41,8 +41,8 @@ export default function ProfileEditor() {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -89,7 +89,8 @@ export default function ProfileEditor() {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error: " + JSON.stringify(err)
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }

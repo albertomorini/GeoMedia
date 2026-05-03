@@ -1,13 +1,16 @@
 import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
-import { Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
-import { MyContext } from '../_layout';
 import { ThemedText } from '@/components/themed-text';
 import { useLanguage } from '@/components/LanguageProvider';
 import { style } from '@/components/globalstyle';
 import { ThemedView } from '@/components/themed-view';
+import { MyContext } from '@/app/_layout';
+import * as SecureStore from 'expo-secure-store';
+import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } from "@/assets/MapStyler";
+
 
 const MapPicking = (props, ref) => {
 
@@ -22,6 +25,10 @@ const MapPicking = (props, ref) => {
         longitude: props?.coordinateChosen?.longitude,
         altitude: props?.coordinateChosen?.altitude
     });
+
+    const [mapPreferenceStyle, setMapPreferenceStyle] = useState("system")
+    const colorScheme = useColorScheme()
+
 
     async function requestLocationPermission() {
         if (Platform.OS === 'android') {
@@ -86,6 +93,28 @@ const MapPicking = (props, ref) => {
 
     /////////////////////////////////////////////////////////////
 
+
+    async function load_map_preference_style() {
+        let style = await SecureStore.getItemAsync("map_style")
+        try {
+            if (style == null || style == "system") {
+                setMapPreferenceStyle("system")
+            } else if (style == "dark") {
+                setMapPreferenceStyle(MapDarkMode)
+            } else if (style == "light") {
+                setMapPreferenceStyle(MapLightMode)
+            } else if (style == "blue") {
+                setMapPreferenceStyle(MapNightMode)
+            } else if (style == "retro") {
+                setMapPreferenceStyle(MapRetro)
+            } else if (style == "google") {
+                setMapPreferenceStyle(MapDefaultMode)
+            }
+        } catch (error) {
+        }
+    }
+
+
     const markerRef = useRef()
 
     useEffect(() => {
@@ -116,6 +145,12 @@ const MapPicking = (props, ref) => {
                     longitudeDelta: 0.1,
                 }}
                 zoomEnabled={true}
+                customMapStyle={
+                    mapPreferenceStyle == "system" ?
+                        colorScheme == "dark" ? MapDarkMode : MapLightMode
+                        :
+                        mapPreferenceStyle
+                }
                 camera={{
                     center: {
                         latitude: UserPosition.lat,
@@ -179,6 +214,7 @@ const MapPicking = (props, ref) => {
                     borderRadius: 20, // Circular button
                     justifyContent: 'center',
                     alignItems: 'center',
+                    color: "black"
                 }, style.colors.geomedia_green]}
                 onPress={() => {
                     props?.returnLocationChoosen(selectedMarker);

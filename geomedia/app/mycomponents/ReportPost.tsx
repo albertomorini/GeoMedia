@@ -32,29 +32,29 @@ const ReportPost = (props) => {
                 }).then(r => {
                     ctx?.showToast({
                         type: "success",
-                        text1: "Report saving",
-                        text2: "We'll analyze the content and let you know soon"
+                        text1: langselected.reportPost.report_saved,
+                        text2: langselected.reportPost.analyze,
                     })
                     setVisibleModalReport(false)
                 }).catch(err => {
                     ctx?.showToast({
                         type: "error",
-                        text1: "Something went wrong",
-                        text2: "Try later"
+                        text1: langselected.network.offline1,
+                        text2: langselected.network.offline2,
                     })
                 })
             } else {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Data required",
-                    text2: "At least five words"
+                    text1: langselected.reportPost.missing_data,
+                    text2: langselected.reportPost.missing_data_text,
                 })
             }
         } else {
             ctx?.showToast({
                 type: "error",
-                text1: "Data required",
-                text2: "Kind and motive are required"
+                text1: langselected.reportPost.missing_data,
+                text2: langselected.reportPost.missing_data_empty,
             })
         }
     }

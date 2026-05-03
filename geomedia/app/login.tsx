@@ -56,7 +56,7 @@ export default function LoginScreen(props) {
             } else {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Authentication failed",
+                    text1: langselected.login.errorMessage,
                     visibilityTime: 3000,
                 });
                 seterrorPassword(res[0]?.MSG)
@@ -91,8 +91,8 @@ export default function LoginScreen(props) {
             }).catch(err => {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Error",
-                    text2: "Network error... are you offline?"
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2
                 })
             })
         }
@@ -112,8 +112,8 @@ export default function LoginScreen(props) {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2
             })
         })
     }
@@ -126,20 +126,20 @@ export default function LoginScreen(props) {
                 setValidUsername(true)
                 ctx?.showToast({
                     type: 'success',
-                    text1: 'Username available',
-                    text2: 'Hello ' + username
+                    text1: langselected.signup.usernamefree,
+                    text2: langselected.profile.hello + " " + username
                 })
             } else {
                 ctx?.showToast({
                     type: 'error',
-                    text1: 'Username taken',
+                    text1: langselected.signup.usernametaken,
                 })
             }
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2
             })
         })
     }
@@ -301,7 +301,7 @@ export default function LoginScreen(props) {
                 >
                     <ThemedView
                         style={{
-                            backgroundColor: "rgba(138, 138, 138, 0.8)",
+                            backgroundColor: "rgba(114, 114, 114, 0.8)",
                             borderRadius: 10,
                             height: "100%",
                             padding: 10,
@@ -316,8 +316,9 @@ export default function LoginScreen(props) {
                             marginTop: 50,
                             borderTopEndRadius: 10,
                             borderTopStartRadius: 10,
-
-                        }, style.colors.geomedia_gray]}>
+                            backgroundColor: "#838383",
+                            padding: 5
+                        }]}>
                             <ThemedText style={[style.title, { alignItems: "center", padding: 10 }]}>{langselected?.settings?.labelSrv}</ThemedText>
                             <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
                                 setModalVisible(false)

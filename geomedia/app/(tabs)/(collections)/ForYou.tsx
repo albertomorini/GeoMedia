@@ -30,7 +30,13 @@ const ForYou = (props) => {
             setInterests(res)
             ctx?.showToast({
                 type: "success",
-                text1: "Preferences saved!"
+                text1: langselected.collections_page.preferences_saved
+            })
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -38,6 +44,12 @@ const ForYou = (props) => {
     function profile_interest_get() {
         doRequest("profile/interests", { uid: ctx?.getUID() }, "GET").then(resQuery => {
             setInterests(resQuery)
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
     }
 
@@ -55,7 +67,11 @@ const ForYou = (props) => {
             setCollectionByTag(dummy)
 
         }).catch(err => {
-
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
     }
 

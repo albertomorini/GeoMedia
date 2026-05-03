@@ -61,9 +61,9 @@ const CollectionCreator = () => {
             collectionid = null;
         }
         if (collectionid != null) {
-            doRequest("collection/id/"+collectionid, {
+            doRequest("collection/id/" + collectionid, {
                 "uid": ctx?.getUID(),
-            },"GET").then(resQuery => {
+            }, "GET").then(resQuery => {
                 let x = resQuery[0];
                 if (x != undefined) {
                     setCollectionData(prev => ({
@@ -75,7 +75,11 @@ const CollectionCreator = () => {
                     }));
                 }
             }).catch(err => {
-                Alert.alert("Err loading collection", err)
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
+                })
             })
         }
     }
@@ -113,7 +117,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection", collectionData,"POST").then(resQuery => {
+            doRequest("collection", collectionData, "POST").then(resQuery => {
                 if (resQuery[0]?.OK) {
                     setCollectionData(prev => ({
                         ...prev,
@@ -131,15 +135,15 @@ const CollectionCreator = () => {
                 } else {
                     ctx?.showToast({
                         type: "error",
-                        text1: "Error",
+                        text1: langselected.network.error,
                         text2: resQuery[0]?.MSG
                     })
                 }
             }).catch(err => {
                 ctx?.showToast({
                     type: "error",
-                    text1: "Network error",
-                    text2: JSON.stringify(err)
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
                 })
             })
         }

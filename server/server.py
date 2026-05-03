@@ -92,14 +92,20 @@ async def auth_check_username(username:str):
 @app.get("/auth/psw_forgotten",tags=["AUTH"])
 async def auth_psw_forgotten(usernamemail:str):
     query_results = await geomedia_helper.auth_signin("auth_psw_forgotten", {"USERNAMEMAIL":usernamemail})
-    return await proceed_otp(query_results)
-@app.post("/auth/auth_signin",tags=["AUTH"])
+    return await proceed_otp(query_results,{usernamemail:usernamemail})
+
+@app.post("/auth/signin",tags=["AUTH"])
 async def auth_signin(body:auth_signin):
-    query_results = await geomedia_helper.auth_signin("auth_signin", body)
-    return await proceed_otp(query_results)
+    print(body)
+    query_results = await geomedia_helper.auth_signin("auth_signin", {
+        "EMAIL":body.email,
+        "PASSWORD":body.password,
+        "USERNAME": body.username
+    })
+    return await proceed_otp(query_results,{"body":body})
 
 
-async def proceed_otp(query_results:dict):
+async def proceed_otp(query_results:dict,body:dict):
     if query_results.get("AUTH") == 2:
         if "OTP" in query_results:
             del query_results["OTP"]  # Do not send OTP over HTTP

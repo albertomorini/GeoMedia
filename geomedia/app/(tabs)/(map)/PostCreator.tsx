@@ -40,6 +40,7 @@ const PostCreator = () => {
 
     const refFileHandler = useRef()
     const [fullScreenCamera, setFullScreenCamera] = useState(false)
+    const [btnCreateDisabled, setBtnCreateDisabled] = useState(false)
     ////////////////////////////////////////////////////////////////////
 
     const [ModalMapVisibity, setModalMapVisibility] = useState(false)
@@ -112,6 +113,11 @@ const PostCreator = () => {
      */
     async function save_post() {
 
+        setBtnCreateDisabled(true) //thus to avoid double click
+        ctx?.showToast({
+            type: "warning",
+            text1: "Saving..",
+        })
         let files = await refFileHandler?.current?.return_files()
 
         let dummy_body = postData
@@ -130,9 +136,12 @@ const PostCreator = () => {
                 text1: "Missing info",
                 text2: JSON.stringify(missing_fields) + " not compiled"
             })
+            setBtnCreateDisabled(false)
+
         } else {
             doRequest("post", dummy_body, "POST").then(res => {
                 if (res?.OK) {
+                    setBtnCreateDisabled(false)
                     setPostData(prev => ({
                         ...prev,
                         ID: res?.post_id
@@ -150,10 +159,12 @@ const PostCreator = () => {
                     Alert.alert("Post not saved: " + res?.MSG)
                 }
             }).catch(err => {
+                setBtnCreateDisabled(false)
+
                 ctx?.showToast({
                     type: "error",
-                    text1: "Error",
-                    text2: "Network error... are you offline?"
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
                 })
             })
         }
@@ -234,7 +245,11 @@ const PostCreator = () => {
                 }))
                 refFileHandler?.current?.load_files(x.attachments)
             }).catch(err => {
-                Alert.alert("Error reading post", err)
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
+                })
             })
         }
     }
@@ -250,13 +265,14 @@ const PostCreator = () => {
                         doRequest("post/" + postData?.ID, { password: ctx?.User?.User?.PASSWORD }, "DELETE").then(resQuery => {
                             ctx?.showToast({
                                 type: "success",
-                                text1: "Post deleted"
+                                text1: langselected.postCreator.postdeleted
                             })
                             router.replace("/(tabs)/(map)/MapViewer")
                         }).catch(err => {
                             ctx?.showToast({
                                 type: "error",
-                                text1: "Cannot delete post"
+                                text1: langselected.network.offline1,
+                                text2: langselected.network.offline2,
                             })
                         })
                     }
@@ -435,6 +451,7 @@ const PostCreator = () => {
                 {!fullScreenCamera && (
                     <ThemedView>
                         <TouchableOpacity
+                            disabled={btnCreateDisabled}
                             style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
                             onPress={save_post}
                         >

@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
         title: {
             marginBottom: 20,
             textAlign: "center",
-            color: "#bfea7fb9"
+            color: "#bfea7f"
         }
     },
     success: {
@@ -27,7 +27,7 @@ export const style = StyleSheet.create({
     },
     colors: {
         geomedia_green: {
-            backgroundColor: "#bfea7fb9",
+            backgroundColor: "#9ace4e",
         },
         geomedia_blue: {
             backgroundColor: "#7bbcf0"

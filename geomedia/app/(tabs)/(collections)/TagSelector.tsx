@@ -22,6 +22,12 @@ export default function TagSelector(props) {
     doRequest("collection/hashtags", {}, "GET").then(resQuery => {
       let x = resQuery.map(s => s?.TITLE)
       setTags([...x])
+    }).catch(err => {
+      ctx?.showToast({
+        type: "error",
+        text1: langselected.network.offline1,
+        text2: langselected.network.offline2,
+      })
     })
   }
 

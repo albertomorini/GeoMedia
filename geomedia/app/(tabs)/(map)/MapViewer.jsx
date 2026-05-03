@@ -146,8 +146,8 @@ const MapViewer = forwardRef((props, ref) => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... are you offline?"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -159,7 +159,6 @@ const MapViewer = forwardRef((props, ref) => {
         try {
             if (style == null || style == "system") {
                 setMapPreferenceStyle("system")
-                // setMapPreferenceStyle(colorScheme == "dark" ? MapDarkMode : MapLightMode)
             } else if (style == "dark") {
                 setMapPreferenceStyle(MapDarkMode)
             } else if (style == "light") {
@@ -179,7 +178,8 @@ const MapViewer = forwardRef((props, ref) => {
         useCallback(() => {
             get_posts_map()
             check_cache_collection_chosen()
-        }, [UserPosition, collectionsChosen]) //when position or collections change (or are loaded) refresh posts
+            load_map_preference_style() //thus to get the change of style
+        }, [UserPosition]) //when position or collections change (or are loaded) refresh posts
     )
     useEffect(() => {
         getLocation();

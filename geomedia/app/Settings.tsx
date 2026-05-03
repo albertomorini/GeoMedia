@@ -133,7 +133,7 @@ export default function Settings(props) {
                         save_map_preference_style(itemValue)
                         ctx?.showToast({
                             type: "success",
-                            text1: "Will be effective restarting the app"
+                            text1: langselected.settings.map_changed
                         })
                     }}
                     style={{ height: 70, width: 200 }}

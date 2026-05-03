@@ -32,6 +32,12 @@ const PostViewer = () => {
     function profile_getpfp(username) {
         doRequest("profile/pfp", { username: username }, "GET").then(res => {
             setUserCreator(prev => ({ ...prev, pfp: res[0]?.PROFILE_PICTURE }))
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
     }
 
@@ -46,6 +52,12 @@ const PostViewer = () => {
                 name: res[0].NAME,
                 surname: res[0].SURNAME,
             }))
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
     }
 
@@ -65,7 +77,11 @@ const PostViewer = () => {
                 getUserCreator(resQuery[0]?.AUTHOR_ID)
                 setPostData(resQuery[0])
             }).catch(err => {
-                Alert.alert("Error reading post", err)
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
+                })
             })
         }
     }
@@ -89,8 +105,8 @@ const PostViewer = () => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Network error ",
-                text2: JSON.stringify(err)
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }

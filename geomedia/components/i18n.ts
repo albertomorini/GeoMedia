@@ -21,6 +21,8 @@ export const it = {
         emailNotValid: "Email non valida",
         weakPassword: "La password non soddisfa i requisiti di 6 caratteri minimi, almeno un simbolo e almeno cifra",
         diffPass: "Le password non coincidono",
+        usernametaken: "Username già in uso",
+        usernamefree: "Username disponibile"
     },
     settings: {
         settings: "Impostazioni",
@@ -28,6 +30,7 @@ export const it = {
         protocol: "Protocollo",
         serverName: "Nome server (oppure IP)",
         port: "Porta",
+        map_changed: "Style cambiato!"
     },
     close: "Chiudi",
     confirm: "Conferma",
@@ -76,13 +79,15 @@ export const it = {
         pickLocaton: "Scegli la posizione",
         pickCollection: "Seleziona la collezione",
         deletePost: "Cancella il post",
+        postdeleted: "Post cancellato"
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
         sendotp: "Invia codice OTP",
         newpassword: "Nuova password",
         otpexpiration: "Valido per 1h",
-        checkotp: "Verifica OTP"
+        checkotp: "Verifica OTP",
+        psw_changed:"Password cambiata"
     },
     rangeTimePicker: {
         startTime: "Il post sarà visibile da",
@@ -107,7 +112,12 @@ export const it = {
             copyright: "Violazione del copyright",
             privacy: "Violazione della privacy",
             other: "Altro"
-        }
+        },
+        report_saved: "Segnalazione salvata",
+        analyze: "Analizzeremo il contenuto il prima possibile",
+        missing_data: "Dati mancanti",
+        missing_data_text: "E' richiesta una motivazione più lunga",
+        missing_data_empty: "Motivo e tipologia obbligatorie"
     },
     fileUpload: {
         uploadFile: "Carica dei file",
@@ -131,7 +141,8 @@ export const it = {
         all: "Tutte",
         trending: "Trending",
         popular: "Popolari",
-        foryou: "Per te"
+        foryou: "Per te",
+        preferences_saved: "Preference saved!"
     },
     requiredfields: "Campi obbligatori: ",
     sequentiality: {
@@ -151,6 +162,11 @@ export const it = {
         language: "Lingua",
         mapstyle: "Stile della mappa",
 
+    },
+    network: {
+        error: "Errore",
+        offline1: "Errore di rete",
+        offline2: "Controllare la connessione e riprovare"
     }
 }
 
@@ -178,6 +194,8 @@ export const en = {
         emailNotValid: "Invalid email",
         weakPassword: "Password must be at least 6 characters, include at least one number and one symbol",
         diffPass: "Passwords do not match",
+        usernametaken: "Username already taken",
+        usernamefree: "Username available",
     },
     settings: {
         settings: "Settings",
@@ -185,6 +203,7 @@ export const en = {
         protocol: "Protocol",
         serverName: "Server name (or IP)",
         port: "Port",
+        map_changed: "Style changed!"
     },
     close: "Close",
     confirm: "Confirm",
@@ -233,13 +252,15 @@ export const en = {
         pickLocaton: "Pick a location",
         pickCollection: "Select collection",
         deletePost: "Delete the post",
+        postdeleted: "Post deleted"
     },
     pswReset: {
         proceed: "Do you want to proceed with the password change?",
         sendotp: "Send OTP code",
         newpassword: "New password",
         otpexpiration: "Valid for 1h",
-        checkotp: "Verify OTP"
+        checkotp: "Verify OTP",
+        psw_changed:"Password changed"
     },
     rangeTimePicker: {
         startTime: "The post will be visible from",
@@ -264,7 +285,12 @@ export const en = {
             copyright: "Copyright violation",
             privacy: "Privacy violation",
             other: "Other"
-        }
+        },
+        report_saved: "Report saved",
+        analyze: "We will analyze the content and let you know soon",
+        missing_data: "Missing data",
+        missing_data_text: "At least five words",
+        missing_data_empty: "Kind and motive are required"
     },
     fileUpload: {
         uploadFile: "Upload files",
@@ -288,7 +314,8 @@ export const en = {
         all: "All",
         trending: "Trending",
         popular: "Popular",
-        foryou: "For you"
+        foryou: "For you",
+        preferences_saved: "Preference saved!"
     },
     requiredfields: "Required fields: ",
     sequentiality: {
@@ -308,5 +335,11 @@ export const en = {
         language: "Language",
         mapstyle: "Map style",
 
-    }
+    },
+    network: {
+        error: "Error",
+        offline1: "Network error",
+        offline2: "Check the connection and retry"
+    },
+
 }

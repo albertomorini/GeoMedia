@@ -49,8 +49,8 @@ const ProfileViewer = () => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Error",
-                text2: "Network error... try later"
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }
@@ -67,6 +67,12 @@ const ProfileViewer = () => {
                     text: item.COLLECTION_TITLE,
                 }))
             )
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
         doRequest("profile/stats", {
             username: username,
@@ -79,6 +85,12 @@ const ProfileViewer = () => {
                     frontColor: monthColors[index % 6]
                 }))
             )
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
         })
     }
 
@@ -92,8 +104,8 @@ const ProfileViewer = () => {
         }).catch(err => {
             ctx?.showToast({
                 type: "error",
-                text1: "Network error",
-                text2: err
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
             })
         })
     }

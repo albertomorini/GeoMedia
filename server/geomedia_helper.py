@@ -139,6 +139,7 @@ async def auth_signin(procedure: str, body: dict):
     try:
         query_results = await generic_query(procedure, body)
         query_results = query_results[0]
+        print(query_results)
 
         email = body.get("EMAIL")
         username = body.get("USERNAME")

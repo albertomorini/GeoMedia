@@ -83,7 +83,7 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             doRequest("post/hpmedia_remove", {
                                 "postid": 1,
                                 "filename": FILENAME
-                            },"DELETE").then(resQuery => {
+                            }, "DELETE").then(resQuery => {
                                 ctx?.showToast({
                                     type: "success",
                                     text1: langselected.fileUpload.fileremoved + FILENAME,
@@ -91,8 +91,8 @@ const FileHandler = forwardRef((props: any, ref: any) => {
                             }).catch(err => {
                                 ctx?.showToast({
                                     type: "error",
-                                    text1: "Error",
-                                    text2: "Network error... are you offline?"
+                                    text1: langselected.network.offline1,
+                                    text2: langselected.network.offline2,
                                 })
                             })
                         }

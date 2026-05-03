@@ -35,8 +35,8 @@ export default function Profile() {
     }).catch(err => {
       ctx?.showToast({
         type: "error",
-        text1: "Error",
-        text2: "Network error... try later"
+        text1: langselected.network.offline1,
+        text2: langselected.network.offline2,
       })
     })
   }
@@ -52,8 +52,8 @@ export default function Profile() {
     }).catch(err => {
       ctx?.showToast({
         type: "error",
-        text1: "Network error",
-        text2: JSON.stringify(err)
+        text1: langselected.network.offline1,
+        text2: langselected.network.offline2,
       })
     })
   }
