@@ -24,3 +24,12 @@ source venv/bin/activate
 pip install pydantic fastapi uvicorn pymssql
 
 ```
+
+
+
+-----------
+
+
+root@GeoMedia-4GBUbuntu:~# sudo certbot certonly --standalone -d srvgeomedia.com
+
+--> duckdns https://www.duckdns.org/

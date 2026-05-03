@@ -16,13 +16,17 @@ import Collections from "../(collections)/Collections";
 import * as SecureStore from 'expo-secure-store';
 
 import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } from "@/assets/MapStyler";
+import { useLanguage } from "@/components/LanguageProvider";
 
 
 const MapViewer = forwardRef((props, ref) => {
 
+
     const ctx = useContext(MyContext)
     const mapRef = useRef(null);
     const colorScheme = useColorScheme()
+    const { langselected } = useLanguage()
+
     const [mapPreferenceStyle, setMapPreferenceStyle] = useState("system")
 
     /////////////////////////////////////////////////////////////

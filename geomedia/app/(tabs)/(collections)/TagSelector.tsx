@@ -1,3 +1,4 @@
+import { MyContext } from "@/app/_layout";
 import { doRequest } from "@/app/utility";
 import { style } from "@/components/globalstyle";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -5,13 +6,14 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { Pressable, StyleSheet, Modal, TouchableOpacity, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 
 export default function TagSelector(props) {
   const [selected, setSelected] = useState(props?.selected ?? []);
+  const ctx = useContext(MyContext)
   const { langselected } = useLanguage()
   const [visible, setVisible] = useState(false)
 

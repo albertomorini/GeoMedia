@@ -67,3 +67,6 @@ server/__pycache__/mailer.cpython-313.pyc
 server/__pycache__/SQL_MANAGER.cpython-313.pyc
 server/log.txt
 >>>>>>> fastapi_backend
+ssl/geomedia.crt
+ssl/geomedia.csr
+ssl/geomedia2.crt

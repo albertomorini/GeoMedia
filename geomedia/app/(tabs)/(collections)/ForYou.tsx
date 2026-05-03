@@ -100,7 +100,7 @@ const ForYou = (props) => {
                                 flexWrap: "wrap",
                             }}>
                                 <TagSelector
-                                    selected={interests.filter(s => s?.ENTITY == "HASHTAG").map(s => s?.TITLE)} //just the array of valuesF
+                                    selected={interests?.filter(s => s?.ENTITY == "HASHTAG")?.map(s => s?.TITLE)} //just the array of valuesF
                                     onConfirm={(tags) => {
                                         let final = tags.map(t => { return { value: t, entity: "HASHTAG" } })
                                         // setInterests([...final])
