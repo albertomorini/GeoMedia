@@ -18,10 +18,11 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$$$$' \
    -d mcr.microsoft.com/mssql/server:2022-latest
 
 ```sh
-cd ~/geomedia_server
+cd ~/GeoMedia/server
 python3 -m venv venv
 source venv/bin/activate
 pip install pydantic fastapi uvicorn pymssql cryptography
+python3 server
 
 ```
 
