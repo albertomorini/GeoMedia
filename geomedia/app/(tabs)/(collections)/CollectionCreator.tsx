@@ -10,7 +10,7 @@ import { Alert, Pressable, Switch, TouchableOpacity, useColorScheme } from "reac
 import ExclusivityPicking from "../(map)/ExclusivityPicking";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { doRequest } from "@/app/utility";
+import { doRequest, lowercaseKeys } from "@/app/utility";
 import { router, useLocalSearchParams } from "expo-router";
 import CollectionPosts from "./CollectionPosts";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -117,7 +117,7 @@ const CollectionCreator = () => {
                 text2: langselected.requiredFields + JSON.stringify(missing_fields)
             })
         } else {
-            doRequest("collection", collectionData, "POST").then(resQuery => {
+            doRequest("collection", lowercaseKeys(collectionData), "POST").then(resQuery => {
                 if (resQuery[0]?.OK) {
                     setCollectionData(prev => ({
                         ...prev,

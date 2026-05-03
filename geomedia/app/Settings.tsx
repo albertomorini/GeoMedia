@@ -126,7 +126,7 @@ export default function Settings(props) {
             </>
 
             <>
-                <ThemedText style={style.label}>{langselected.settings_component.language}</ThemedText>
+                <ThemedText style={style.label}>{langselected.settings.map_style}</ThemedText>
                 <Picker
                     selectedValue={mapPreferenceStyle}
                     onValueChange={(itemValue, itemIndex) => {

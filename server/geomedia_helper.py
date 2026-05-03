@@ -157,7 +157,6 @@ async def auth_signin(procedure: str, body: dict):
 
             writeLog(f"OTP requested for: {email}", "OTP")
             query_results.pop("OTP", None)
-
         return query_results
 
     except Exception as e:

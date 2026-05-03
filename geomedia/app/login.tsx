@@ -76,19 +76,26 @@ export default function LoginScreen(props) {
         } else if (password != passwordRep) {
             seterrorPassword(langselected?.signup?.diffPass)
         } else if (!validUsername && validUsername != null) {
-            seterrorPassword("Username already taken!")
+            seterrorPassword(langselected.signup.usernametaken)
         } else {
             doRequest("auth/signin", {
                 email: email,
                 username: username,
                 password: React_MD5(password)
             }).then(res => {
+                console.log(res);
+
                 if (res.AUTH == 2) { //pending OTP
                     setOTP("")
                 } else {
-                    seterrorPassword("Error: " + JSON.stringify(res.error))
+                    seterrorPassword("Error: " + res?.MSG)
+                    setTimeout(() => {
+                        seterrorPassword(null)
+                    }, 3000);
                 }
             }).catch(err => {
+                console.log(err);
+
                 ctx?.showToast({
                     type: "error",
                     text1: langselected.network.offline1,
@@ -107,7 +114,7 @@ export default function LoginScreen(props) {
                 await SecureStore.setItemAsync("user", JSON.stringify(res[0]));
                 check_cache_login()
             } else {
-                seterrorPassword("OTP EXPIRED, redo the signin")
+                seterrorPassword(langselected.pswReset.otp_expired)
             }
         }).catch(err => {
             ctx?.showToast({
@@ -267,6 +274,12 @@ export default function LoginScreen(props) {
                                                         {langselected?.signup?.buttonConfirm}
                                                     </ThemedText>
                                                 </TouchableOpacity>
+
+                                                {errorPassword?.length > 0 ?
+                                                    <ThemedText style={{ color: '#f66868', fontWeight: "bold", textAlign: "center", fontSize: 16 }}>{errorPassword}</ThemedText>
+                                                    :
+                                                    null
+                                                }
 
                                             </>
                                     }

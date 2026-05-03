@@ -1,5 +1,5 @@
 import { MyContext } from "@/app/_layout";
-import { doRequest } from "@/app/utility";
+import { doRequest, lowercaseKeys } from "@/app/utility";
 import { default_account_profilepic } from "@/assets/images/default_pictures";
 import { style } from "@/components/globalstyle";
 import { ThemedInput } from "@/components/themed-input";
@@ -24,6 +24,7 @@ export default function ProfileEditor() {
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic);
     const { langselected } = useLanguage()
     const [userInfo, setUserInfo] = useState({
+        UID: ctx?.getUID(),
         NAME: null,
         SURNAME: null,
         USERNAME: null,
@@ -76,7 +77,9 @@ export default function ProfileEditor() {
     }
 
     function saveInfo() {
-        doRequest("profile", userInfo).then(async res => {
+        doRequest("profile", lowercaseKeys(userInfo)).then(async res => {
+            console.log(res);
+            
             let newinfo = res[0];
             newinfo.AUTH = 1
             await SecureStore.setItemAsync("user", JSON.stringify(newinfo));
@@ -87,6 +90,8 @@ export default function ProfileEditor() {
             })
             router.back()
         }).catch(err => {
+            console.log(err);
+            
             ctx?.showToast({
                 type: "error",
                 text1: langselected.network.offline1,

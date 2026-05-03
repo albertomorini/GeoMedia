@@ -30,7 +30,8 @@ export const it = {
         protocol: "Protocollo",
         serverName: "Nome server (oppure IP)",
         port: "Porta",
-        map_changed: "Style cambiato!"
+        map_changed: "Stile cambiato!",
+        map_style: "Stile della mappa"
     },
     close: "Chiudi",
     confirm: "Conferma",
@@ -87,7 +88,8 @@ export const it = {
         newpassword: "Nuova password",
         otpexpiration: "Valido per 1h",
         checkotp: "Verifica OTP",
-        psw_changed:"Password cambiata"
+        psw_changed: "Password cambiata",
+        otp_expired: "OTP scaduto, rifai la procedura"
     },
     rangeTimePicker: {
         startTime: "Il post sarà visibile da",
@@ -203,7 +205,8 @@ export const en = {
         protocol: "Protocol",
         serverName: "Server name (or IP)",
         port: "Port",
-        map_changed: "Style changed!"
+        map_changed: "Style changed!",
+        map_style: "Map style"
     },
     close: "Close",
     confirm: "Confirm",
@@ -260,7 +263,8 @@ export const en = {
         newpassword: "New password",
         otpexpiration: "Valid for 1h",
         checkotp: "Verify OTP",
-        psw_changed:"Password changed"
+        psw_changed: "Password changed",
+        otp_expired: "OTP expired, restart"
     },
     rangeTimePicker: {
         startTime: "The post will be visible from",

@@ -96,13 +96,16 @@ async def auth_psw_forgotten(usernamemail:str):
 
 @app.post("/auth/signin",tags=["AUTH"])
 async def auth_signin(body:auth_signin):
-    print(body)
     query_results = await geomedia_helper.auth_signin("auth_signin", {
         "EMAIL":body.email,
         "PASSWORD":body.password,
         "USERNAME": body.username
     })
-    return await proceed_otp(query_results,{"body":body})
+    return await proceed_otp(query_results,{"body":{
+        "EMAIL":body.email,
+        "PASSWORD":body.password,
+        "USERNAME": body.username
+    }})
 
 
 async def proceed_otp(query_results:dict,body:dict):
@@ -119,23 +122,20 @@ async def proceed_otp(query_results:dict,body:dict):
 # PROFILE
 @app.get("/profile/pfp", tags=["USERS"])
 async def profile_getpfp(
-    username:str,
-    authorization: str = Header(None)
+    username:str
 ):
     return await geomedia_helper.generic_query("profile_getpfp",{"USERNAME":username})
 
 @app.get("/profile/info/{profile_id}", tags=["USERS"])
 async def profile_getinfo(
-    profile_id: int,
-    authorization: str = Header(None)
+    profile_id: int
 ):
     return await geomedia_helper.generic_query("profile_getinfo",{"uid":profile_id})
 
 @app.get("/profile/stats", tags=["USERS"])
 async def profile_get_stats(
     username: str ,
-    mode: str,
-    authorization: str = Header(None)
+    mode: str
 ):
     print("THERE",mode,username)
     
@@ -147,11 +147,17 @@ async def profile_get_stats(
 
 @app.post("/profile", tags=["USERS"])
 async def profile_editinfo(
-    body:profile_editinfo,
-    authorization: str = Header(None)
+    body:profile_editinfo
 ):
-    return await geomedia_helper.generic_query("profile_editinfo",body)
-
+    return await geomedia_helper.generic_query(
+        "profile_editinfo",
+        {
+            "UID": body.uid,
+            "NAME": body.name,
+            "SURNAME": body.surname,
+            "USERNAME": body.username,
+        },
+    )
 
 @app.get("/users",tags=["USERS"])
 async def users_list(uid:int):
@@ -194,8 +200,7 @@ async def hashtag_get():
 async def collections_get_fullcollection(
     collection_id: int | None = None,
     uid: int | None = None,
-    mode: str | None = None,
-    authorization: str = Header(None),
+    mode: str | None = None
 ):
     
     if(collection_id is None):
@@ -260,8 +265,7 @@ async def post_merge(body: post_merge, request: Request):
 @app.get("/post/id/{post_id}",  tags=["POST"])
 async def get_post(
     post_id: int,
-    uid: int | None = None,
-    authorization: str = Header(None),
+    uid: int | None = None
 ):
     try:
         query_results = await geomedia_helper.generic_query(
@@ -340,7 +344,12 @@ async def handle_request(request: Request, full_path: str):
 
 if __name__ == "__main__":
     print(f"Server started on port: {PORT}")
-    uvicorn.run(app, host="0.0.0.0", port=PORT,
-        ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
-        ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+    uvicorn.run(app, host="0.0.0.0", port=PORT
+       
     )
+# if __name__ == "__main__":
+#     print(f"Server started on port: {PORT}")
+#     uvicorn.run(app, host="0.0.0.0", port=PORT,
+#         ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
+#         ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+#     )

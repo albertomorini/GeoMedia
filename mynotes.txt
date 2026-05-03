@@ -33,3 +33,21 @@ pip install pydantic fastapi uvicorn pymssql cryptography
 root@GeoMedia-4GBUbuntu:~# sudo certbot certonly --standalone -d srvgeomedia.com
 
 --> duckdns https://www.duckdns.org/
+
+
+
+(venv) root@GeoMedia-4GBUbuntu:~/GeoMedia/server# cat /etc/systemd/system/geomedia.service
+[Unit]
+Description=GeoMedia Server backend on https port 9911
+After=network.target
+
+[Service]
+ExecStart=/root/GeoMedia/server/venv/bin/python /root/GeoMedia/server/server.py
+WorkingDirectory=/root/GeoMedia/server
+Restart=always
+User=root
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+(venv) root@GeoMedia-4GBUbuntu:~/GeoMedia/server# 

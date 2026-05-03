@@ -46,10 +46,12 @@ class post_get_map(BaseModel):
     collection_chosen: list[int]
 
 class profile_editinfo(BaseModel):
+    auth: int
+    uid: int
+    email: str
     name: str
     surname: str
     username: str
-    profile_picture: str
 
 class collection_merge(BaseModel):
     id: int                
