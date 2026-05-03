@@ -34,7 +34,9 @@ export default function CollectionsLayout() {
                             }} // replace with your settings action
                             style={{ marginRight: 15, width: 60, alignItems: "flex-end" }}
                         >
-                            <ThemedText style={{ fontSize: 24 }}>⋮</ThemedText> {/* three-dot menu */}
+                            <ThemedText style={{ fontSize: 24 }}>
+                                ⋮
+                                </ThemedText> {/* three-dot menu */}
                         </TouchableOpacity>
                     ),
                 }}

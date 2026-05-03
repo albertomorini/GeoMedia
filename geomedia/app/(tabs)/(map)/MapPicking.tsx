@@ -36,11 +36,11 @@ const MapPicking = (props, ref) => {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     {
-                        title: 'Location Permission',
-                        message: 'App needs access to your location',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
+                        title: langselected.permission.location.title,
+                        message: langselected.permission.location.message,
+                        buttonNeutral: langselected.permission.location.buttonNeutral,
+                        buttonNegative: langselected.permission.location.buttonNegative,
+                        buttonPositive: langselected.permission.location.buttonPositive,
                     }
                 );
                 return granted === PermissionsAndroid.RESULTS.GRANTED;
@@ -179,7 +179,7 @@ const MapPicking = (props, ref) => {
                     }}
 
                     pinColor="#da5353"
-                    title="Post location (drag me)"
+                    title={langselected.postCreator.remote_marker_label}
                 />
             </MapView>
 

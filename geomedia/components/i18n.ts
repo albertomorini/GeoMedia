@@ -47,6 +47,8 @@ export const it = {
     on: "il",
     views: "Visioni",
     likes: "Mi piace",
+    liked: "Mi piace inserito :)",
+    unliked: "Mi piace rimosso :(",
     show: "Mostra",
     hide: "Nascondi",
     profile: {
@@ -80,7 +82,10 @@ export const it = {
         pickLocaton: "Scegli la posizione",
         pickCollection: "Seleziona la collezione",
         deletePost: "Cancella il post",
-        postdeleted: "Post cancellato"
+        postdeleted: "Post cancellato",
+        remote_marker_label: "Posizione del post (premi e sposta)",
+        saving: "Salvataggio in corso",
+        saved: "Post salvato",
     },
     pswReset: {
         proceed: "Vuoi procedere al cambio della password?",
@@ -144,6 +149,7 @@ export const it = {
         trending: "Trending",
         popular: "Popolari",
         foryou: "Per te",
+        your_interests: "Tematiche seguite",
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Campi obbligatori: ",
@@ -169,6 +175,22 @@ export const it = {
         error: "Errore",
         offline1: "Errore di rete",
         offline2: "Controllare la connessione e riprovare"
+    },
+    permission: {
+        location: {
+            title: "Autorizzazione alla posizione",
+            message: "L'app ha bisogno di accedere alla tua posizione",
+            buttonNeutral: "Chiedimi più tardi",
+            buttonNegative: "Annulla",
+            buttonPositive: "OK"
+        },
+        camera: {
+            error: "Impossibile catturare la foto",
+            denied: "Autorizzazione alla fotocamera negata. Abilitala nelle impostazioni.",
+            asking: "Richiesta di autorizzazione alla fotocamera in corso...",
+            again: "Richiedi di nuovo",
+            notfound: "Nessun dispositivo fotocamera trovato"
+        }
     }
 }
 
@@ -222,8 +244,10 @@ export const en = {
     on: "on",
     views: "Views",
     likes: "Likes",
-    show: "Mostra",
-    hide: "Nascondi",
+    liked: "Liked! :)",
+    unliked: "Unliked! :(",
+    show: "Show",
+    hide: "Hide",
     profile: {
         hello: "Hello",
         loggedAs: "Your username is",
@@ -255,7 +279,10 @@ export const en = {
         pickLocaton: "Pick a location",
         pickCollection: "Select collection",
         deletePost: "Delete the post",
-        postdeleted: "Post deleted"
+        postdeleted: "Post deleted",
+        remote_marker_label: "Post location (drag and drop)",
+        saving: "Saving, wait...",
+        saved: "Post saved"
     },
     pswReset: {
         proceed: "Do you want to proceed with the password change?",
@@ -319,6 +346,7 @@ export const en = {
         trending: "Trending",
         popular: "Popular",
         foryou: "For you",
+        your_interests: "Topics followed",
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Required fields: ",
@@ -345,5 +373,21 @@ export const en = {
         offline1: "Network error",
         offline2: "Check the connection and retry"
     },
+    permission: {
+        location: {
+            title: 'Location Permission',
+            message: 'App needs access to your location',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+        },
+        camera: {
+            error: "Could not capture photo",
+            denied: "Camera permission denied. Please enable in settings.",
+            asking: "Requesting camera permission...",
+            again: "Request again",
+            notfound: "No camera device found"
+        }
+    }
 
 }

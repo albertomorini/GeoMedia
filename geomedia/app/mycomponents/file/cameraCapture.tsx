@@ -4,6 +4,7 @@ import { Camera, useCameraDevice, useCameraPermission, CameraPermissionStatus, T
 
 import RNFS from "react-native-fs";
 import { ThemedText } from '@/components/themed-text';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function OpenCamera(
     { onClose, storePhoto }: { onClose: () => void; storePhoto: (b64: string) => void }
@@ -16,6 +17,7 @@ export default function OpenCamera(
 
     const device = useCameraDevice(cameraPosition);
     const camera = useRef<Camera>(null);
+    const langselected = useLanguage()
 
     React.useEffect(() => {
         if (hasPermission) {
@@ -51,7 +53,7 @@ export default function OpenCamera(
             return base64String
         } catch (e) {
             console.error('Failed to take photo', e);
-            Alert.alert('Error', 'Could not capture photo');
+            Alert.alert('Error', langselected.permission.camera.error + ": " + e);
         }
     };
 
@@ -60,16 +62,16 @@ export default function OpenCamera(
             <View style={styles.permissionContainer}>
                 <Text style={styles.permissionText}>
                     {cameraPermission === 'denied'
-                        ? 'Camera permission denied. Please enable in settings.'
-                        : 'Requesting camera permission...'}
+                        ? langselected.permission?.camera.denied
+                        : langselected.permission?.camera.asking}
                 </Text>
                 {cameraPermission === 'denied' && (
                     <TouchableOpacity onPress={requestPermission}>
-                        <Text style={{ color: 'blue', marginTop: 20 }}>Request again</Text>
+                        <Text style={{ color: 'blue', marginTop: 20 }}>{langselected.permission.camera.again}</Text>
                     </TouchableOpacity>
                 )}
                 <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                    <Text style={styles.buttonText}>Close</Text>
+                    <Text style={styles.buttonText}>{langselected.close}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -78,7 +80,7 @@ export default function OpenCamera(
     if (device == null) {
         return (
             <View style={styles.center}>
-                <Text>No {cameraPosition} camera device found</Text>
+                <Text>{cameraPosition} {langselected.permission.camera.notfound}</Text>
             </View>
         );
     }

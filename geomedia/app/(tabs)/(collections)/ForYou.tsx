@@ -87,7 +87,7 @@ const ForYou = (props) => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemedView style={[style.container, { height: "100%" }]}>
                 <ThemedView style={{ height: 100 }}>
-                    <ThemedText style={style.title}>I tuoi interessi</ThemedText>
+                    <ThemedText style={style.title}>{langselected.collections_page.your_interests}</ThemedText>
                     {props?.isBottomSheet ?
                         <BottomSheetScrollView horizontal showsHorizontalScrollIndicator={true}>
                             <ThemedView style={{

@@ -100,7 +100,7 @@ const PostViewer = () => {
         }, "GET").then(resQuery => {
             ctx?.showToast({
                 type: "success",
-                text1: "Post " + (resQuery[0].OPERATION == "I" ? "liked" : "unliked")
+                text1: "Post " + (resQuery[0].OPERATION == "I" ? langselected.liked : langselected.unliked)
             })
         }).catch(err => {
             ctx?.showToast({

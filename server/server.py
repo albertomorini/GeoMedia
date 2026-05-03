@@ -228,7 +228,20 @@ async def post_merge(body: post_merge, request: Request):
     
 
     files = body.attachments or {}
-
+    print(
+        {
+        "ID": body.id,
+        "AUTHOR_ID": body.author_id,
+        "TITLE": body.title,
+        "COMMENT": body.comment,
+        "LATITUDE": body.latitude,
+        "LONGITUDE": body.longitude,
+        "ALTITUDE": body.altitude,
+        "VISIBILITY_AREA_KM": body.visibility_area_km,
+        "COLLECTION_ID": body.collection_id,
+        "EXCLUSIVITY": body.exclusivity
+        }
+    )
     query_results = await geomedia_helper.post_merge({
         "ID": body.id,
         "AUTHOR_ID": body.author_id,
@@ -345,16 +358,16 @@ async def handle_request(request: Request, full_path: str):
 
 # ------------------------------------------------
 # HTTP
-# if __name__ == "__main__":
-#     print(f"Server started on port: {PORT}")
-#     uvicorn.run(app, host="0.0.0.0", port=PORT
-       
-#     )
-# ------------------------------------------------
-# HTTPS
 if __name__ == "__main__":
     print(f"Server started on port: {PORT}")
-    uvicorn.run(app, host="0.0.0.0", port=PORT,
-        ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
-        ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+    uvicorn.run(app, host="0.0.0.0", port=PORT
+       
     )
+# ------------------------------------------------
+# HTTPS
+# if __name__ == "__main__":
+#     print(f"Server started on port: {PORT}")
+#     uvicorn.run(app, host="0.0.0.0", port=PORT,
+#         ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
+#         ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+#     )

@@ -44,6 +44,7 @@ async def generic_query(path: str, body: dict):
 async def post_merge(post_content: dict):
     dummy = json.dumps(post_content).replace("'", "''")
     query = f"EXEC dbo.POST_MERGE @POST_CONTENT='{dummy}'"
+    print(query)
     return SQL_MANAGER.select_query(query)
 
 

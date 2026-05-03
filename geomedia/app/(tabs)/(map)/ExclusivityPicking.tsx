@@ -125,7 +125,8 @@ const ExclusivityPicking = (props) => {
                     isImage={true}
                     estimatedSize={100}
                     allowCreation={false}
-                    label={"Viewers"}
+                    label={langselected.exclusivity.viewers}
+                    searchable={true}
                 />
             </ThemedView>
 
@@ -139,7 +140,8 @@ const ExclusivityPicking = (props) => {
                     isImage={true}
                     estimatedSize={100}
                     allowCreation={false}
-                    label={"Creators"}
+                    label={langselected.exclusivity.creators}
+                    searchable={true}
                 />
 
             </ThemedView>

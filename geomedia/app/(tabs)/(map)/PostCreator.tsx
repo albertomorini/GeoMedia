@@ -115,8 +115,8 @@ const PostCreator = () => {
 
         setBtnCreateDisabled(true) //thus to avoid double click
         ctx?.showToast({
-            type: "warning",
-            text1: "Saving..",
+            type: "info",
+            text1: langselected.postCreator.saving,
         })
         let files = await refFileHandler?.current?.return_files()
 
@@ -125,6 +125,9 @@ const PostCreator = () => {
         dummy_body.LATITUDE = coordinateChosen.latitude
         dummy_body.LONGITUDE = coordinateChosen.longitude
         dummy_body.ALTITUDE = coordinateChosen.altitude
+        if (coordinateChosen.longitude != currentLocation.longitude) { //remove altitude if location chosen
+            dummy_body.ALTITUDE = null
+        }
         dummy_body.attachments = files //attach files
         dummy_body = lowercaseKeys(dummy_body)
 
@@ -133,8 +136,8 @@ const PostCreator = () => {
         if (missing_fields.length > 0) {
             ctx?.showToast({
                 type: "error",
-                text1: "Missing info",
-                text2: JSON.stringify(missing_fields) + " not compiled"
+                text1: langselected.reportPost.missing_data,
+                text2: langselected.requiredfields + JSON.stringify(missing_fields)
             })
             setBtnCreateDisabled(false)
 
@@ -148,15 +151,21 @@ const PostCreator = () => {
                     }))
                     ctx?.showToast({
                         type: 'success',
-                        text1: 'Post saved!',
+                        text1: langselected.postCreator.saved,
                     });
                     setTimeout(() => {
                         if (router.canGoBack()) {
                             router.back()
                         }
-                    }, 450);
+                    }, 1000);
                 } else {
-                    Alert.alert("Post not saved: " + res?.MSG)
+                    setBtnCreateDisabled(false)
+
+                    ctx?.showToast({
+                        type: "error",
+                        text1: langselected.network.offline1,
+                        text2: langselected.network.offline2,
+                    })
                 }
             }).catch(err => {
                 setBtnCreateDisabled(false)

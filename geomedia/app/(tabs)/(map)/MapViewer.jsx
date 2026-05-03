@@ -60,11 +60,11 @@ const MapViewer = forwardRef((props, ref) => {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     {
-                        title: 'Location Permission',
-                        message: 'App needs access to your location',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
+                        title: langselected.permission.location.title,
+                        message: langselected.permission.location.message,
+                        buttonNeutral: langselected.permission.location.buttonNeutral,
+                        buttonNegative: langselected.permission.location.buttonNegative,
+                        buttonPositive: langselected.permission.location.buttonPositive,
                     }
                 );
 

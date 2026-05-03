@@ -85,7 +85,7 @@ class post_merge(BaseModel):
     remote_posting_enabled: bool
     latitude: float
     longitude: float
-    altitude: float
+    altitude: Optional[float]= None
     attachments: list
 
 class Interest(BaseModel):
