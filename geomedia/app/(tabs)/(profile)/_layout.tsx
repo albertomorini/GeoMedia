@@ -30,7 +30,7 @@ export default function ProfileLayout() {
                             onPress={() => {
                                 router.push("/Settings")
                             }} // replace with your settings action
-                            style={{ marginRight: 15 }}
+                            style={{ marginRight: 15, width: 60, alignItems: "flex-end" }}
                         >
                             <ThemedText style={{ fontSize: 24 }}>⋮</ThemedText> {/* three-dot menu */}
                         </TouchableOpacity>
