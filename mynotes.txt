@@ -21,7 +21,7 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$$$$' \
 cd ~/geomedia_server
 python3 -m venv venv
 source venv/bin/activate
-pip install pydantic fastapi uvicorn pymssql
+pip install pydantic fastapi uvicorn pymssql cryptography
 
 ```
 

@@ -36,21 +36,23 @@ export const doRequest = (api, body = {}, method = "POST") => {
         }
         return fetch(URL + api, {
             method: method,
-            mode: "cors",
+            // mode: "cors",
             headers: { "authorization": SHARED_KEY },
         }).then(res => res.json()).catch(err => {
-            console.log(err)
-            Alert.alert("Network error, try later.."+err)
+            console.log(URL,err);
+            
+            Alert.alert("Network error, try later..")
         })
     } else {
         return fetch(URL + api, {
             method: method,
-            mode: "cors",
+            // mode: "cors",
             headers: { "authorization": SHARED_KEY, "content-type": "application/json" },
             body: JSON.stringify(body)
         }).then(res => res.json()).catch(err => {
-            console.log(err)
-            Alert.alert("Network error, try later.."+err)
+            console.log(URL,err);
+            
+            Alert.alert("Network error, try later..")
         })
     }
 }
