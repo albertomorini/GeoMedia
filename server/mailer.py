@@ -34,13 +34,12 @@ def send_email_otp(recipient, data):
         # Attach HTML content
         msg.attach(MIMEText(html_body, "html"))
 
-        # SSL context
-        context = ssl.create_default_context()
-
-        # Establish connection with the Gmail SMTP server
-        with smtplib.SMTP_SSL(host, port, context=context) as server:
+        # Establish connection with the Gmail SMTP server using STARTTLS
+        with smtplib.SMTP(host, port) as server:
+            # Upgrade connection to secure using STARTTLS
+            server.starttls(context=ssl.create_default_context())
             server.login(user, password)  # Login using the provided credentials
-            response = server.sendmail(user, recipient, msg.as_string())
+            server.sendmail(user, recipient, msg.as_string())  # Send the email
 
         return [True, "Email sent successfully"]
 
