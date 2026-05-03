@@ -344,16 +344,16 @@ async def handle_request(request: Request, full_path: str):
 
 # ------------------------------------------------
 # HTTP
-if __name__ == "__main__":
-    print(f"Server started on port: {PORT}")
-    uvicorn.run(app, host="0.0.0.0", port=PORT
-       
-    )
-# ------------------------------------------------
-# HTTPS
 # if __name__ == "__main__":
 #     print(f"Server started on port: {PORT}")
-#     uvicorn.run(app, host="0.0.0.0", port=PORT,
-#         ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
-#         ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+#     uvicorn.run(app, host="0.0.0.0", port=PORT
+       
 #     )
+# # ------------------------------------------------
+# HTTPS
+if __name__ == "__main__":
+    print(f"Server started on port: {PORT}")
+    uvicorn.run(app, host="0.0.0.0", port=PORT,
+        ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
+        ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+    )
