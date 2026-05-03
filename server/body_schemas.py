@@ -52,6 +52,7 @@ class profile_editinfo(BaseModel):
     name: str
     surname: str
     username: str
+    profile_picture: str
 
 class collection_merge(BaseModel):
     id: int                

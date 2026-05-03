@@ -78,8 +78,6 @@ export default function ProfileEditor() {
 
     function saveInfo() {
         doRequest("profile", lowercaseKeys(userInfo)).then(async res => {
-            console.log(res);
-            
             let newinfo = res[0];
             newinfo.AUTH = 1
             await SecureStore.setItemAsync("user", JSON.stringify(newinfo));

@@ -156,6 +156,7 @@ async def profile_editinfo(
             "NAME": body.name,
             "SURNAME": body.surname,
             "USERNAME": body.username,
+            "PROFILE_PICTURE": body.profile_picture
         },
     )
 
