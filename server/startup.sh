@@ -1,14 +1,18 @@
 #!/bin/bash
 ##
 # root@GeoMedia-4GBUbuntu:~# sudo nano /etc/systemd/system/geomedia.service 
+# sudo systemctl daemon-reload
+# sudo systemctl start geomedia.service
+# sudo systemctl status geomedia.service
+#--------------
 # # [Unit]
 # # Description=GeoMedia Server backend on https port 9911
 # # After=network.target
 
 # # [Service]
 # # Type=simple
-# # ExecStart=/root/geomedia/server/startup.sh
-# # WorkingDirectory=/root/geomedia/server
+# # ExecStart=/root/GeoMedia/server/startup.sh
+# # WorkingDirectory=/root/GeoMedia/server
 # # Restart=always
 # # User=root
 # # Environment=PYTHONUNBUFFERED=1
