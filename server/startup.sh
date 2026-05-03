@@ -21,11 +21,13 @@
 # start docker container (mssql)
 docker start mssql
 
-sleep 5 # 5sec
+sleep 5 # wait
 
-cd ~/GeoMedia/server
+
+cd /root/GeoMedia/server
 python3 -m venv venv
-source venv/bin/activate
-pip install pydantic fastapi uvicorn pymssql cryptography
-python3 server
+. venv/bin/activate  # Use `.` instead of `source`
 
+pip install pydantic fastapi uvicorn pymssql cryptography
+
+python3 server.py
