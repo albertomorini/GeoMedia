@@ -1,4 +1,4 @@
-
+#!/bin/bash
 ##
 # root@GeoMedia-4GBUbuntu:~# sudo nano /etc/systemd/system/geomedia.service 
 # # [Unit]
