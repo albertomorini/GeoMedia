@@ -11,7 +11,6 @@ const CollectionListSingle = (props) => {
     const ctx = useContext(MyContext)
     const refList = useRef()
     const { langselected } = useLanguage()
-    const [collections, setCollections] = useState([])
 
     useFocusEffect( //to handle the back on routing
         useCallback(() => {
@@ -20,7 +19,6 @@ const CollectionListSingle = (props) => {
             } catch (error) {
 
             }
-            // getCollectionsList()
         }, [props?.itemSelected])
     )
     return (
@@ -45,9 +43,9 @@ const CollectionListSingle = (props) => {
                                 text1: langselected.collection.colNotEditable
                             })
                             router.push({
-                                pathname: '/ProfileViewer',
+                                pathname: '/CollectionViewer',
                                 params: {
-                                    uid: pickeditem?.OWNERID,
+                                    collectionid: pickeditem?.ID
                                 }
                             })
                         }

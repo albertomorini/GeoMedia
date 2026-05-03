@@ -50,6 +50,13 @@ export default function CollectionsLayout() {
 
                 }}
             />
+            <Stack.Screen
+                name="CollectionViewer"
+                options={{
+                    presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
+                    animation: 'slide_from_right',
+                }}
+            />
 
         </Stack>
     );

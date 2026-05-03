@@ -228,20 +228,6 @@ async def post_merge(body: post_merge, request: Request):
     
 
     files = body.attachments or {}
-    print(
-        {
-        "ID": body.id,
-        "AUTHOR_ID": body.author_id,
-        "TITLE": body.title,
-        "COMMENT": body.comment,
-        "LATITUDE": body.latitude,
-        "LONGITUDE": body.longitude,
-        "ALTITUDE": body.altitude,
-        "VISIBILITY_AREA_KM": body.visibility_area_km,
-        "COLLECTION_ID": body.collection_id,
-        "EXCLUSIVITY": body.exclusivity
-        }
-    )
     query_results = await geomedia_helper.post_merge({
         "ID": body.id,
         "AUTHOR_ID": body.author_id,

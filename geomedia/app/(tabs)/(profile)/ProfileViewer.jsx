@@ -145,6 +145,7 @@ const ProfileViewer = () => {
             <Stack.Screen
                 options={{
                     title: user?.USERNAME,
+                    gestureEnabled: true, 
                 }}
             />
             <ThemedView style={[style.container, { height: "100%" }]}>

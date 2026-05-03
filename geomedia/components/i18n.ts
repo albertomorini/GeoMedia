@@ -139,6 +139,7 @@ export const it = {
     collection: {
         nocolfound: "Nessuna collezione trovata",
         colNotEditable: "Collezione modificabile solo dal proprietario",
+        collectionowner: "Il proprietario della collezione è",
         colSaved: "Collezione salvata",
         description: "Descrizione",
         remote: "Consenti posizioni remote",
@@ -336,6 +337,7 @@ export const en = {
     collection: {
         nocolfound: "No collections found",
         colNotEditable: "Collection editable only by the owner",
+        collectionowner: "The owner is:",
         colSaved: "Collection saved",
         description: "Description",
         remote: "Allow remote positions",
