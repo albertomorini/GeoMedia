@@ -26,14 +26,14 @@ const ListItem = forwardRef((props: any, ref: any) => {
     const toggleSelect = (id) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter((item) => item !== id));
-            if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
-                props?.onSelect(selectedItems.filter((item) => item !== id))
-            }
+            // if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
+            props?.onSelect(selectedItems.filter((item) => item !== id))
+            // }
         } else {
             setSelectedItems([...selectedItems, id]);
-            if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
-                props?.onSelect([...selectedItems, id])
-            }
+            // if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
+            props?.onSelect([...selectedItems, id])
+            // }
         }
     };
 
@@ -123,9 +123,9 @@ const ListItem = forwardRef((props: any, ref: any) => {
                     props?.isSelectable && props?.searchable ?
                         <ThemedView style={{
                             flexDirection: "row",
-                            justifyContent: "space-between",
+                            justifyContent: "flex-end",
                         }}>
-                            <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_green]} onPress={() => {
+                            {/* <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_green]} onPress={() => {
                                 try {
                                     props?.onSelect(selectedItems)
                                 } catch (error) {
@@ -133,14 +133,16 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                 }
                             }}>
                                 <ThemedText>{langselected.confirm}</ThemedText>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
                                 onPress={() => {
                                     let alls = props?.DATA.map(s => s?.ID);
                                     if (selectedItems?.length == alls.length) {
                                         setSelectedItems([])
+                                        props?.onSelect([])
                                     } else {
                                         setSelectedItems([...alls])
+                                        props?.onSelect([...alls])
                                     }
                                 }}>
                                 {props?.DATA?.length == selectedItems?.length ?

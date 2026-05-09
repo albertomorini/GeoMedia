@@ -321,9 +321,9 @@ const MapViewer = forwardRef((props, ref) => {
                             store_preferences([...colls]) // store the prefernces on cache
                             setCollectionsChosen([...colls])
                             get_posts_map(UserPosition, colls)
-                            if (closeBottom) {
-                                collectionPickerSheet?.current?.close()
-                            }
+                            // if (closeBottom) {
+                            //     collectionPickerSheet?.current?.close()
+                            // }
                         }} />
 
                 </BottomSheetScrollView>
