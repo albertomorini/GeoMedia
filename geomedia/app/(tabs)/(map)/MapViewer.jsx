@@ -86,7 +86,7 @@ const MapViewer = forwardRef((props, ref) => {
         const hasPermission = await requestLocationPermission();
 
         if (!hasPermission) {
-            Alert.alert('Permission denied');
+            Alert.alert(langselected?.permission.location.denied);
             return;
         }
         if (Platform.OS === 'ios') {
@@ -111,6 +111,12 @@ const MapViewer = forwardRef((props, ref) => {
                 return { latitude: latitude, longitude: longitude }
             },
             error => {
+                console.error(error);
+
+                setTimeout(() => {
+                    getLocation()
+                }, 5000); //retry within 5 seconds
+
                 if (error.code == 2) { //no GPS
                     ctx?.showToast({
                         type: "info",
@@ -124,9 +130,9 @@ const MapViewer = forwardRef((props, ref) => {
                 }
             },
             {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
                 timeout: 15000, //15 sec
-                maximumAge: 10000,// allow 10s cached location
+                maximumAge: 15000,// allow 10s cached location
             }
         );
     }

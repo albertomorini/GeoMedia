@@ -145,7 +145,7 @@ export const it = {
         description: "Descrizione",
         remote: "Consenti posizioni remote",
         collectionf: "collezione",
-        iconColor:"Icona e colore"
+        iconColor: "Icona e colore"
     },
     collections_page: {
         all: "Tutte",
@@ -187,7 +187,8 @@ export const it = {
             buttonNegative: "Annulla",
             buttonPositive: "OK",
             nogps: "Segnale GPS debole, prova a spostarti",
-            nointernet: "Segnale internet debole, riprova più tardi"
+            nointernet: "Segnale internet debole, riprova più tardi",
+            denied: "Autorizzazione negata, abilitarla nelle impostazioni"
         },
         camera: {
             error: "Impossibile scattare la foto",
@@ -347,7 +348,7 @@ export const en = {
         description: "Description",
         remote: "Allow remote positions",
         collectionf: "collection",
-        iconColor:"Icon and color"
+        iconColor: "Icon and color"
     },
     collections_page: {
         all: "All",
@@ -389,7 +390,8 @@ export const en = {
             buttonNegative: 'Cancel',
             buttonPositive: 'OK',
             nogps: "Weak GPS signal, try to move a bit",
-            nointernet: "Weak internet, try later..."
+            nointernet: "Weak internet, try later...",
+            denied: "Permission denied, enable it in settings"
         },
         camera: {
             error: "Could not capture photo",
