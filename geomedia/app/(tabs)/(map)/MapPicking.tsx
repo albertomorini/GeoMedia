@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
@@ -10,6 +10,8 @@ import { ThemedView } from '@/components/themed-view';
 import { MyContext } from '@/app/_layout';
 import * as SecureStore from 'expo-secure-store';
 import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } from "@/assets/MapStyler";
+import { useFocusEffect } from 'expo-router';
+
 
 
 const MapPicking = (props, ref) => {
@@ -80,19 +82,27 @@ const MapPicking = (props, ref) => {
 
             },
             error => {
-                console.log('Location error:', error);
-                Alert.alert('Error getting location', error.message);
+                if (error.code == 2) { //no GPS
+                    ctx?.showToast({
+                        type: "info",
+                        text1: langselected.permission.location.nogps
+                    })
+                } else if (error.code == 3) { //no internet
+                    ctx?.showToast({
+                        type: "info",
+                        text1: langselected.permission.location.nointernet
+                    })
+                }
             },
             {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 10000,
+                enableHighAccuracy: false,
+                timeout: 15000, //15 sec
+                maximumAge: 10000,// allow 10s cached location
             }
         );
     }
 
     /////////////////////////////////////////////////////////////
-
 
     async function load_map_preference_style() {
         let style = await SecureStore.getItemAsync("map_style")
@@ -117,19 +127,23 @@ const MapPicking = (props, ref) => {
 
     const markerRef = useRef()
 
-    useEffect(() => {
-        getLocation();
 
-        // show title when mounted
-        setTimeout(() => {
-            markerRef.current?.showCallout();
-        }, 500);
+    useFocusEffect( //to handle the back on routing
+        useCallback(async () => {
+            getLocation();
 
-        // hide it after 5 sec
-        setTimeout(() => {
-            markerRef.current?.hideCallout();
-        }, 4500);
-    }, [])
+            // show title when mounted
+            setTimeout(() => {
+                markerRef.current?.showCallout();
+            }, 500);
+
+            // hide it after 5 sec
+            setTimeout(() => {
+                markerRef.current?.hideCallout();
+            }, 4500);
+            load_map_preference_style() //thus to get the change of style
+        }, []) //when position or collections change (or are loaded) refresh posts
+    )
 
     return (
         <ThemedView style={{ flex: 1 }}>
@@ -137,7 +151,7 @@ const MapPicking = (props, ref) => {
                 ref={mapRef}
                 style={styles.map}
                 showsUserLocation={true}
-                followsUserLocation={true}
+                followsUserLocati   on={false} //we in picking, not needed
                 initialRegion={{
                     latitude: UserPosition.lat,
                     longitude: UserPosition.lon,
@@ -146,7 +160,7 @@ const MapPicking = (props, ref) => {
                 }}
                 zoomEnabled={true}
                 customMapStyle={
-                    mapPreferenceStyle == "system" ?
+                    mapPreferenceStyle == "system" ? //here thus to render automatically when toggled by user via status-bar
                         colorScheme == "dark" ? MapDarkMode : MapLightMode
                         :
                         mapPreferenceStyle

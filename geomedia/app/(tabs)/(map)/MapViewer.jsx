@@ -126,7 +126,7 @@ const MapViewer = forwardRef((props, ref) => {
             {
                 enableHighAccuracy: false,
                 timeout: 15000, //15 sec
-                maximumAge: 10000,         // allow 10s cached location
+                maximumAge: 10000,// allow 10s cached location
             }
         );
     }
