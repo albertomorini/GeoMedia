@@ -49,6 +49,7 @@ export const it = {
     likes: "Mi piace",
     liked: "Mi piace inserito :)",
     unliked: "Mi piace rimosso :(",
+    loadingPost: "Caricamento post in corso",
     show: "Mostra",
     hide: "Nascondi",
     profile: {
@@ -249,6 +250,7 @@ export const en = {
     likes: "Likes",
     liked: "Liked! :)",
     unliked: "Unliked! :(",
+    loadingPost: "Loading post...",
     show: "Show",
     hide: "Hide",
     profile: {

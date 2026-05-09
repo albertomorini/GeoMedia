@@ -233,6 +233,10 @@ const PostCreator = () => {
 
 
     function loadFullPost() {
+        ctx?.showToast({
+            type: "info",
+            text1: langselected.loadingPost,
+        })
         let postid = null;
         try {
             postid = params.postid ? JSON.parse(params.postid as string) : null;
