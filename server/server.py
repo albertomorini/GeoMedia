@@ -20,7 +20,7 @@ from body_schemas import *
 
 
 def verify_auth(request: Request ,authorization: str = Header(None)):
-    if request.url.path == "/privacy":
+    if request.url.path == "/privacy" or request.url.path=="/personalData":
         return None
 
     if authorization is None:
@@ -38,6 +38,11 @@ app = FastAPI(title="Geomedia API",
 
 # PUBLIC endpoint (no auth)
 @app.get("/privacy", response_class=HTMLResponse, dependencies=[])
+def privacy_policy():
+    with open("../docs/Policy/Policy.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+    return html_content
+@app.get("/personalData", response_class=HTMLResponse, dependencies=[])
 def privacy_policy():
     with open("../docs/Policy/Policy.html", "r", encoding="utf-8") as file:
         html_content = file.read()
