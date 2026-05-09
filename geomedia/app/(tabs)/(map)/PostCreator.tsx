@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Modal, useColorScheme, ScrollView } from 'react-native';
 import { ThemedView } from "@/components/themed-view";
 import { style } from "@/components/globalstyle";
@@ -13,7 +13,7 @@ import Slider from '@react-native-community/slider';
 
 import { MyContext } from '@/app/_layout';
 import FileHandler from '@/app/mycomponents/file/FileHandler';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { doRequest, lowercaseKeys } from '@/app/utility';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -65,7 +65,7 @@ const PostCreator = () => {
 
     /////////////////////////////////////////////////////////////
 
-
+    const [PositionOverrided, setPositionOverrided] = useState(false)
     const [postData, setPostData] = useState({
         ID: null,
         COLLECTION_ID: null,
@@ -123,17 +123,25 @@ const PostCreator = () => {
         let files = await refFileHandler?.current?.return_files()
 
         let dummy_body = postData
-        /// position chosen, if not chosen automatically use the current one
-        dummy_body.LATITUDE = coordinateChosen.latitude
-        dummy_body.LONGITUDE = coordinateChosen.longitude
-        dummy_body.ALTITUDE = coordinateChosen.altitude
-        if (coordinateChosen.longitude != currentLocation.longitude) { //remove altitude if location chosen
-            dummy_body.ALTITUDE = null
+
+        //SET THE POSITION ONLY ON NEW POSTS OR IN EDIT WHEN POSITION OVVERRIDED (it has changed, otherwise will override always even on different changes (like title/comments/etc))
+        if (
+            (PositionOverrided && (dummy_body.ID != undefined || dummy_body.ID != -1))
+            ||
+            dummy_body.ID == undefined
+        ) {
+            /// position chosen, if not chosen automatically use the current one
+            dummy_body.LATITUDE = coordinateChosen.latitude
+            dummy_body.LONGITUDE = coordinateChosen.longitude
+            dummy_body.ALTITUDE = coordinateChosen.altitude
+            if (coordinateChosen.longitude != currentLocation.longitude) { //remove altitude if location chosen
+                dummy_body.ALTITUDE = null
+            }
         }
         dummy_body.attachments = files //attach files
         dummy_body = lowercaseKeys(dummy_body)
         console.log(dummy_body);
-        
+
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
@@ -294,12 +302,14 @@ const PostCreator = () => {
         );
     }
 
-    useEffect(() => {
-        load_current_location()
-        if (params != null) {
-            loadFullPost()
-        }
-    }, [])
+    useFocusEffect( //to handle the back on routing
+        useCallback(async () => {
+            load_current_location()
+            if (params != null) {
+                loadFullPost()
+            }
+        }, []) //when position or collections change (or are loaded) refresh posts
+    )
 
 
     return (
@@ -388,15 +398,21 @@ const PostCreator = () => {
                                         :
                                         <>
                                             <ThemedText style={style.label}>{langselected?.postCreator?.locationRemote}:</ThemedText>
-                                            <ThemedText>{langselected?.postCreator?.lat}: {coordinateChosen?.latitude}</ThemedText>
-                                            <ThemedText>{langselected?.postCreator?.lon}: {coordinateChosen?.longitude}</ThemedText>
+                                            <ThemedText>
+                                                {langselected?.postCreator?.lat}: {coordinateChosen?.latitude?.toFixed(2)}
+                                                {"   "}
+                                                {langselected?.postCreator?.lon}: {coordinateChosen?.longitude?.toFixed(2)}
+                                            </ThemedText>
                                         </>
                                 }
 
                                 <TouchableOpacity
                                     disabled={!postData?.REMOTE_POSTING_ENABLED}
                                     style={[style.buttons.full_screen, (!postData?.REMOTE_POSTING_ENABLED ? style.colors.geomedia_gray : isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
-                                    onPress={() => { setModalMapVisibility(true) }}>
+                                    onPress={() => {
+                                        setModalMapVisibility(true)
+                                        setPositionOverrided(true)
+                                    }}>
                                     {
                                         postData?.REMOTE_POSTING_ENABLED ?
                                             <ThemedText>{langselected?.postCreator?.pickLocaton}</ThemedText>
