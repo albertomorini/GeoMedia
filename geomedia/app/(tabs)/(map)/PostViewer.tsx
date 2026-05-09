@@ -194,6 +194,8 @@ const PostViewer = () => {
                         {/* EDIT BUTTON */}
                         {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (
                             <TouchableOpacity
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected.postCreator.modify + " post"}
                                 style={[
                                     style.buttons.full_screen,
                                     style.colors.geomedia_blue,
@@ -230,6 +232,8 @@ const PostViewer = () => {
                             }}>{langselected.likes}: {postData?.NUM_LIKES}</ThemedText>
 
                             <TouchableOpacity
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected.likes}
                                 onPress={() => {
                                     toggleLike()
                                 }}

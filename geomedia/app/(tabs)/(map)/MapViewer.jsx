@@ -276,12 +276,16 @@ const MapViewer = forwardRef((props, ref) => {
                             }
                         </MapView>
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.newm}
                             style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
                             onPress={() => router.push('PostCreator')}
                         >
                             <ThemedText style={style.buttons.fabText}>+</ThemedText>
                         </TouchableOpacity>
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.close}
                             style={[style.buttons.fab, style.colors.geomedia_gray, { bottom: 130 }]}
                             onPress={() => {
                                 collectionPickerSheet?.current?.snapToIndex(0)
@@ -304,12 +308,12 @@ const MapViewer = forwardRef((props, ref) => {
                     borderTopRightRadius: 24,
                     backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff',
                 }}
-                // onClose={async () => {
-                //     let cols = await check_cache_collection_chosen()
-                //     console.log(cols);
-                    
-                //     get_posts_map(UserPosition, cols)
-                // }}
+            // onClose={async () => {
+            //     let cols = await check_cache_collection_chosen()
+            //     console.log(cols);
+
+            //     get_posts_map(UserPosition, cols)
+            // }}
             >
 
                 <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, flex: 1 }}>

@@ -117,9 +117,12 @@ const ModalPswReset = () => {
 
     return (
         <>
-            <TouchableOpacity onPress={() => {
-                setModalPswReset(true)
-            }}>
+            <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel={langselected.login.pswForget}
+                onPress={() => {
+                    setModalPswReset(true)
+                }}>
                 <ThemedText>{langselected.login.pswForget}</ThemedText>
             </TouchableOpacity>
 
@@ -159,6 +162,8 @@ const ModalPswReset = () => {
                                 }
 
                                 <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected.pswReset.sendotp}
                                     style={[style.buttons.full_screen, { backgroundColor: "#c97f30" }]}
                                     onPress={() => {
                                         auth_psw_forgotten() //send the OTP 
@@ -180,7 +185,10 @@ const ModalPswReset = () => {
                                             placeholder={langselected.signup.placeholderPassordRepeat} onChangeText={(text) => {
                                                 setRepPassword(text)
                                             }} />
-                                        <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_green]} onPress={() => { auth_psw_reset() }}>
+                                        <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_green]}
+                                            accessibilityRole="button"
+                                            accessibilityLabel={langselected?.confirm}
+                                            onPress={() => { auth_psw_reset() }}>
                                             <ThemedText>{langselected.confirm}</ThemedText>
                                         </TouchableOpacity>
                                     </>
@@ -192,7 +200,10 @@ const ModalPswReset = () => {
                                             onChangeText={setOTP}
                                             length={6}
                                         />
-                                        <TouchableOpacity onPress={() => check_otp()} style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
+                                        <TouchableOpacity onPress={() => check_otp()}
+                                            accessibilityRole="button"
+                                            accessibilityLabel={langselected.pswReset.checkotp}
+                                            style={[style?.buttons?.full_screen, style.colors.geomedia_green]}>
                                             <ThemedText>{langselected.pswReset.checkotp}</ThemedText>
                                         </TouchableOpacity>
                                         <></>

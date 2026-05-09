@@ -139,6 +139,8 @@ const Collections = (props) => {
                                             }
                                         })
                                     }}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected?.newm}
                                 >
                                     <ThemedText style={style.buttons.fabText}>+</ThemedText>
                                 </TouchableOpacity>

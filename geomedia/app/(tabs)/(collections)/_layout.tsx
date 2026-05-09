@@ -29,6 +29,8 @@ export default function CollectionsLayout() {
                     title: langselected?.collections,
                     headerRight: () => (
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.settings.settings}
                             onPress={() => {
                                 router.push("/Settings")
                             }} // replace with your settings action
@@ -36,7 +38,7 @@ export default function CollectionsLayout() {
                         >
                             <ThemedText style={{ fontSize: 24 }}>
                                 ⋮
-                                </ThemedText> {/* three-dot menu */}
+                            </ThemedText> {/* three-dot menu */}
                         </TouchableOpacity>
                     ),
                 }}

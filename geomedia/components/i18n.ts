@@ -45,7 +45,7 @@ export const it = {
     newm: "Nuovo ",
     share: "Condividi",
     on: "il",
-    views: "Visioni",
+    views: "Visualizzazioni",
     likes: "Mi piace",
     liked: "Mi piace inserito :)",
     unliked: "Mi piace rimosso :(",
@@ -144,7 +144,8 @@ export const it = {
         colSaved: "Collezione salvata",
         description: "Descrizione",
         remote: "Consenti posizioni remote",
-        collectionf: "collezione"
+        collectionf: "collezione",
+        iconColor:"Icona e colore"
     },
     collections_page: {
         all: "Tutte",
@@ -185,7 +186,7 @@ export const it = {
             buttonNeutral: "Chiedimi più tardi",
             buttonNegative: "Annulla",
             buttonPositive: "OK",
-            nopgs: "Segnale GPS debole, prova a spostarti",
+            nogps: "Segnale GPS debole, prova a spostarti",
             nointernet: "Segnale internet debole, riprova più tardi"
         },
         camera: {
@@ -345,7 +346,8 @@ export const en = {
         colSaved: "Collection saved",
         description: "Description",
         remote: "Allow remote positions",
-        collectionf: "collection"
+        collectionf: "collection",
+        iconColor:"Icon and color"
     },
     collections_page: {
         all: "All",
@@ -386,7 +388,7 @@ export const en = {
             buttonNeutral: 'Ask Me Later',
             buttonNegative: 'Cancel',
             buttonPositive: 'OK',
-            nopgs: "Weak GPS signal, try to move a bit",
+            nogps: "Weak GPS signal, try to move a bit",
             nointernet: "Weak internet, try later..."
         },
         camera: {

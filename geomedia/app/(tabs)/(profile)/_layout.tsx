@@ -27,6 +27,8 @@ export default function ProfileLayout() {
                     title: langselected?.account,
                     headerRight: () => (
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected.settings.settings}
                             onPress={() => {
                                 router.push("/Settings")
                             }} // replace with your settings action

@@ -3,17 +3,13 @@ import { datetime2date, doRequest } from "@/app/utility";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { Alert, Pressable, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
+import { useCallback, useContext, useState } from "react";
+import { Pressable, ScrollView, useColorScheme } from "react-native";
 
 
-import { Ionicons } from "@expo/vector-icons";
 import { style } from "@/components/globalstyle";
-import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 import ItemIconizable from "@/app/mycomponents/ItemIconizable";
-import ReportPost from "@/app/mycomponents/ReportPost";
 import { useLanguage } from "@/components/LanguageProvider";
-import TagSelector from "./TagSelector";
 
 const CollectionViewer = () => {
     const ctx = useContext(MyContext)

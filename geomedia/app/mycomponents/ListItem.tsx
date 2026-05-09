@@ -142,6 +142,11 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                 <ThemedText>{langselected.confirm}</ThemedText>
                             </TouchableOpacity> */}
                             <TouchableOpacity style={[style.buttons.small, style.colors.geomedia_blue]}
+                                accessibilityRole="button"
+                                accessibilityLabel={
+                                    props?.DATA?.length == selectedItems?.length ?
+                                        langselected?.empty : langselected?.all
+                                }
                                 onPress={() => {
                                     let alls = props?.DATA.map(s => s?.ID);
                                     if (selectedItems?.length == alls.length) {

@@ -100,7 +100,9 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
         <ThemedView style={{ padding: 20, height: "100%" }}>
             <ThemedText style={style.label}>{langselected.rangeTimePicker.startTime}:</ThemedText>
 
-            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => setMode("startDate")}>
+            <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]}
+            
+            onPress={() => setMode("startDate")}>
                 {start != null ?
                     <ThemedText >{formatDateTime(start)}</ThemedText>
                     :

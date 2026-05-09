@@ -64,7 +64,10 @@ const CollectionPosts = (props) => {
 
     return (
         <>
-            <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]} onPress={() => { setModalOrderVisible(true) }}>
+            <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]} onPress={() => { setModalOrderVisible(true) }}
+                accessibilityRole="button"
+                accessibilityLabel={langselected?.sequentiality?.title}
+            >
                 <ThemedText>{langselected?.sequentiality?.title}</ThemedText>
             </TouchableOpacity>
 
@@ -104,9 +107,12 @@ const CollectionPosts = (props) => {
                             padding: 5
                         }]}>
                             <ThemedText style={[style.title, { alignItems: "center", padding: 10 }]}>{langselected?.sequentiality?.seq}</ThemedText>
-                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]} onPress={() => {
-                                setModalOrderVisible(false)
-                            }}>
+                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7, height: "100%", padding: 0, margin: 0, width: "15%", justifyContent: "center", alignContent: "center", alignItems: "center" }]}
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected?.close}
+                                onPress={() => {
+                                    setModalOrderVisible(false)
+                                }}>
                                 <Ionicons name="close-outline" size={28} color={"#70726db9"} />
                             </TouchableOpacity>
                         </ThemedView>
@@ -153,9 +159,12 @@ const CollectionPosts = (props) => {
                                                     </GestureHandlerRootView>
                                                 </ThemedView>
                                         }
-                                        <TouchableOpacity style={[style?.colors?.geomedia_green, style?.buttons?.full_screen]} onPress={() => {
-                                            confirm_order()
-                                        }}>
+                                        <TouchableOpacity style={[style?.colors?.geomedia_green, style?.buttons?.full_screen]}
+                                            accessibilityRole="button"
+                                            accessibilityLabel={langselected?.confirm}
+                                            onPress={() => {
+                                                confirm_order()
+                                            }}>
                                             <ThemedText>{langselected?.confirm}</ThemedText>
                                         </TouchableOpacity>
                                     </>

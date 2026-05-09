@@ -3,14 +3,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     Modal,
     ScrollView,
     StyleSheet,
     TouchableOpacity,
-    useColorScheme,
-    View
+    useColorScheme
 } from 'react-native';
 
 const ICONS = [
@@ -49,6 +48,8 @@ export default function IconColorPickerModal({ visible, onClose, onSelect, defau
 
                             return (
                                 <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected?.collection?.iconColor}
                                     key={icon}
                                     onPress={() => setIconSelected(icon)}
                                     style={styles.item}
@@ -82,6 +83,8 @@ export default function IconColorPickerModal({ visible, onClose, onSelect, defau
 
                             return (
                                 <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected?.collection?.iconColor}
                                     key={color}
                                     onPress={() => setColorSelected(color)}
                                     style={[
@@ -101,19 +104,25 @@ export default function IconColorPickerModal({ visible, onClose, onSelect, defau
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            setColorSelected(null);
-                            setIconSelected(null);
-                            onClose()
-                        }}>
+                        <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.cancel}
+                            onPress={() => {
+                                setColorSelected(null);
+                                setIconSelected(null);
+                                onClose()
+                            }}>
                             <ThemedText>{langselected.cancel}</ThemedText>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            onSelect({
-                                "color": colorSelected,
-                                "icon": iconSelected
-                            });
-                        }}>
+                        <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.confirm}
+                            onPress={() => {
+                                onSelect({
+                                    "color": colorSelected,
+                                    "icon": iconSelected
+                                });
+                            }}>
                             <ThemedText>{langselected.confirm}</ThemedText>
                         </TouchableOpacity>
                     </ThemedView>

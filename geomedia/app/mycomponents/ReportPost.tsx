@@ -91,9 +91,12 @@ const ReportPost = (props) => {
                             padding: 5
                         }}>
                             <ThemedText style={style.title}>{langselected.reportPost.report}</ThemedText>
-                            <TouchableOpacity style={[style?.colors?.geomedia_red, { borderRadius: 7 }]} onPress={() => {
-                                setVisibleModalReport(false)
-                            }}>
+                            <TouchableOpacity
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected?.close}
+                                style={[style?.colors?.geomedia_red, { borderRadius: 7 }]} onPress={() => {
+                                    setVisibleModalReport(false)
+                                }}>
                                 <Ionicons name="close-outline" size={28} color={"#70726db9"} />
                             </TouchableOpacity>
                         </ThemedView>
@@ -118,14 +121,18 @@ const ReportPost = (props) => {
                             <ThemedInput
                                 multiline={true}
                                 type="outlined"
+                                accessibilityLabel={langselected.reportPost.reportMotive}
                                 placeholder={langselected.reportPost.reportMotive}
                                 onChangeText={(text) => {
                                     setMotive(text)
                                 }}
                             />
-                            <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]} onPress={() => {
-                                createReport()
-                            }}>
+                            <TouchableOpacity style={[style?.buttons?.full_screen, style?.colors?.geomedia_blue]}
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected?.confirm}
+                                onPress={() => {
+                                    createReport()
+                                }}>
                                 <ThemedText>{langselected.confirm}</ThemedText>
                             </TouchableOpacity>
                         </ThemedView>

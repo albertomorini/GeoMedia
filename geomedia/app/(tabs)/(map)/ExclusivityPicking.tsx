@@ -1,12 +1,12 @@
 import { ThemedText } from '@/components/themed-text';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import SegmentedControl from '@react-native-community/segmented-control';
 import { style } from '@/components/globalstyle';
 import RangeTimePicker from '../../mycomponents/RangeTimePicker';
 import ListItem from '@/app/mycomponents/ListItem';
-import { date2ISODatetime, datetime2datehour, doRequest } from '@/app/utility';
+import { doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
 import { ThemedView } from '@/components/themed-view';
 import { useFocusEffect } from 'expo-router';
@@ -65,6 +65,8 @@ const ExclusivityPicking = (props) => {
     return (
         <>
             <TouchableOpacity style={[style.buttons?.full_screen, style.colors?.geomedia_green]}
+                accessibilityRole="button"
+                accessibilityLabel={langselected?.confirm}
                 onPress={() => {
                     /// return ours value
                     let range = refTimeRange?.current?.get_dates()

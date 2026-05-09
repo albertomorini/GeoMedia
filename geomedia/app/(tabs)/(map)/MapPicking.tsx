@@ -151,7 +151,7 @@ const MapPicking = (props, ref) => {
                 ref={mapRef}
                 style={styles.map}
                 showsUserLocation={true}
-                followsUserLocati   on={false} //we in picking, not needed
+                followsUserLocati on={false} //we in picking, not needed
                 initialRegion={{
                     latitude: UserPosition.lat,
                     longitude: UserPosition.lon,
@@ -199,6 +199,8 @@ const MapPicking = (props, ref) => {
 
             {/* Floating Action Button */}
             <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel={langselected?.postCreator?.locationCurrent}
                 style={[{
                     position: 'absolute',
                     bottom: 60, // Position at the bottom
@@ -218,6 +220,8 @@ const MapPicking = (props, ref) => {
             </TouchableOpacity>
 
             <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel={langselected?.confirm}
                 style={[{
                     position: 'absolute',
                     bottom: 60, // Position at the bottom

@@ -52,9 +52,12 @@ export default function TagSelector(props) {
 
   return (
     <>
-      <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
-        setVisible(true)
-      }}>
+      <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]}
+        accessibilityRole="button"
+        accessibilityLabel={langselected?.postCreator.modify}
+        onPress={() => {
+          setVisible(true)
+        }}>
         <ThemedText>{langselected?.postCreator.modify} tag</ThemedText>
       </TouchableOpacity>
 
@@ -87,7 +90,10 @@ export default function TagSelector(props) {
                 onChangeText={setSearchText}
               />
               {searchText?.length > 0 && (
-                <TouchableOpacity onPress={() => setSearchText("")}>
+                <TouchableOpacity onPress={() => setSearchText("")}
+                  accessibilityRole="button"
+                  accessibilityLabel={langselected?.close}
+                >
                   <Ionicons name="close-circle" size={20} color="#888" style={{
                     marginLeft: 8
                   }} />
@@ -137,10 +143,13 @@ export default function TagSelector(props) {
                 );
               })}
             </ScrollView>
-            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => {
-              props?.onConfirm(selected);
-              setVisible(false)
-            }}>
+            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]}
+              accessibilityRole="button"
+              accessibilityLabel={langselected?.save}
+              onPress={() => {
+                props?.onConfirm(selected);
+                setVisible(false)
+              }}>
               <ThemedText>{langselected.save}</ThemedText>
             </TouchableOpacity>
           </ThemedView>

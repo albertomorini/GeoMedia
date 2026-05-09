@@ -124,7 +124,7 @@ const PostCreator = () => {
 
         let dummy_body = postData
 
-        
+
         //SET THE POSITION ONLY ON NEW POSTS OR IN EDIT WHEN POSITION OVVERRIDED (it has changed, otherwise will override always even on different changes (like title/comments/etc))
         if (
             (PositionOverrided && (dummy_body.ID != undefined || dummy_body.ID != -1))
@@ -153,8 +153,8 @@ const PostCreator = () => {
             setBtnCreateDisabled(false)
 
         } else {
-            console.log("going",dummy_body);
-            
+            console.log("going", dummy_body);
+
             doRequest("post", dummy_body, "POST").then(res => {
                 if (res?.OK) {
                     setBtnCreateDisabled(false)
@@ -338,9 +338,12 @@ const PostCreator = () => {
                         <ThemedView style={[{ flex: 1, padding: 20, overflow: 'visible' }]}>
                             <ThemedText style={style.label}>{langselected.collections}</ThemedText>
                             {postData?.COLLECTION_ID == null ?
-                                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
-                                    collection_sheet_handler?.current?.snapToIndex(0)
-                                }}>
+                                <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected.postCreator.pickCollection}
+                                    onPress={() => {
+                                        collection_sheet_handler?.current?.snapToIndex(0)
+                                    }}>
                                     <ThemedText>{langselected.postCreator.pickCollection}</ThemedText>
                                 </TouchableOpacity>
                                 :
@@ -414,6 +417,8 @@ const PostCreator = () => {
                                 <TouchableOpacity
                                     disabled={!postData?.REMOTE_POSTING_ENABLED}
                                     style={[style.buttons.full_screen, (!postData?.REMOTE_POSTING_ENABLED ? style.colors.geomedia_gray : isUsingCurrentLocation() ? style.colors.geomedia_blue : style.colors.geomedia_green), { flexDirection: "row" }]}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={postData?.REMOTE_POSTING_ENABLED ? langselected?.postCreator?.pickLocaton : langselected?.postCreator?.disabledRemote}
                                     onPress={() => {
                                         setModalMapVisibility(true)
                                         setPositionOverrided(true)
@@ -459,15 +464,20 @@ const PostCreator = () => {
                                 postid={postData?.ID}
                             />
 
-                            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]} onPress={() => {
-                                exclusivity_sheet_handler.current?.snapToIndex(0);
+                            <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]}
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected?.exclusivity.title}
+                                onPress={() => {
+                                    exclusivity_sheet_handler.current?.snapToIndex(0);
 
-                            }}>
+                                }}>
                                 <ThemedText>{langselected?.exclusivity.title}</ThemedText>
                             </TouchableOpacity>
 
                             {postData?.ID == null ? null :
                                 <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected?.postCreator?.deletePost}
                                     style={[style.buttons.full_screen, style.colors.geomedia_red, style.bottom_bar_item, { alignSelf: "center" }]}
                                     onPress={() => {
                                         deletePost()
@@ -489,6 +499,10 @@ const PostCreator = () => {
                             disabled={btnCreateDisabled}
                             style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
                             onPress={save_post}
+                            accessibilityRole="button"
+                            accessibilityLabel={postData?.ID == null ?
+                                langselected.postCreator.create : langselected.postCreator.modify
+                            }
                         >
 
                             {postData?.ID == null ?

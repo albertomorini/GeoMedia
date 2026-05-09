@@ -89,7 +89,7 @@ export default function ProfileEditor() {
             router.back()
         }).catch(err => {
             console.log(err);
-            
+
             ctx?.showToast({
                 type: "error",
                 text1: langselected.network.offline1,
@@ -169,7 +169,10 @@ export default function ProfileEditor() {
                         }))
                     }} />
 
-                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}>
+                <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green]} onPress={() => { saveInfo() }}
+                    accessibilityRole="button"
+                    accessibilityLabel={langselected?.save}
+                >
                     <ThemedText>{langselected.save}</ThemedText>
                 </TouchableOpacity>
 

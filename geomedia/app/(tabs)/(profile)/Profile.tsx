@@ -114,6 +114,8 @@ export default function Profile() {
           }}
         >
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel={langselected?.profile?.editProfile}
             onPress={() => {
               router.push('ProfileEditor')
             }}
@@ -127,6 +129,8 @@ export default function Profile() {
           <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_green,
           { width: "47%" }
           ]}
+            accessibilityRole="button"
+            accessibilityLabel={langselected?.profile?.viewmode}
             onPress={() => {
               router.push({
                 pathname: '/ProfileViewer',

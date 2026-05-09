@@ -28,6 +28,8 @@ export default function MapLayout() {
                     title: langselected?.map,
                     headerRight: () => (
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected?.settings.settings}
                             onPress={() => {
                                 router.push("/Settings")
                             }} // replace with your settings action

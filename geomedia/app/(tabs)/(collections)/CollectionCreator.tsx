@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Pressable, Switch, TouchableOpacity, useColorScheme } from "react-native";
+import { Pressable, Switch, TouchableOpacity, useColorScheme } from "react-native";
 import ExclusivityPicking from "../(map)/ExclusivityPicking";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -167,6 +167,8 @@ const CollectionCreator = () => {
 
                     }}>
                         <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={langselected.collection.iconColor}
                             key={"chose"}
                             onPress={() => setShowIconPicker(true)}
                             style={{
@@ -187,6 +189,8 @@ const CollectionCreator = () => {
                                 ]}
                             >
                                 <Ionicons
+                                    accessibilityRole="imagebutton"
+                                    accessibilityLabel={langselected.collection.iconColor}
                                     name={collectionData?.ICON == null ? "add" : collectionData?.ICON}
                                     size={24}
                                     color={"#555"}
@@ -281,9 +285,12 @@ const CollectionCreator = () => {
                     }
 
 
-                    <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]} onPress={() => {
-                        bottomSheetRef.current?.snapToIndex(0); // open bottom sheett
-                    }}>
+                    <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]}
+                        accessibilityRole="button"
+                        accessibilityLabel={langselected?.exclusivity.title}
+                        onPress={() => {
+                            bottomSheetRef.current?.snapToIndex(0); // open bottom sheett
+                        }}>
                         <ThemedText>{langselected?.exclusivity.title}</ThemedText>
                     </TouchableOpacity>
 
@@ -311,6 +318,8 @@ const CollectionCreator = () => {
                 <ThemedView >
                     <TouchableOpacity
                         style={[style.buttons.full_screen, style.colors.geomedia_green, style.bottom_bar_item, { width: "90%", alignSelf: "center" }]}
+                        accessibilityRole="button"
+                        accessibilityLabel={collectionData?.ID == null ? langselected.postCreator?.create : langselected.save}
                         onPress={() => {
                             save_collection()
                         }}
