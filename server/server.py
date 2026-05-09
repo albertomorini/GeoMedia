@@ -1,6 +1,6 @@
 import json
 from fastapi import FastAPI, Request, Response, HTTPException, Depends, Header
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -18,7 +18,11 @@ from body_schemas import *
 ############################################################################################################################################
 
 
-def verify_auth(authorization: str = Header(None)):
+
+def verify_auth(request: Request ,authorization: str = Header(None)):
+    if request.url.path == "/privacy":
+        return None
+
     if authorization is None:
         raise HTTPException(status_code=401, detail="Missing Authorization header")
 
@@ -30,6 +34,16 @@ def verify_auth(authorization: str = Header(None)):
 app = FastAPI(title="Geomedia API",
     dependencies=[Depends(verify_auth)]
     )
+
+
+# PUBLIC endpoint (no auth)
+@app.get("/privacy", response_class=HTMLResponse, dependencies=[])
+def privacy_policy():
+    with open("../docs/Policy/Policy.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+    return html_content
+
+
 
 # ("Access-Control-Allow-Origin": "*")
 app.add_middleware(
@@ -342,15 +356,15 @@ async def handle_request(request: Request, full_path: str):
         detail={"msg": f"Unknown path: {path}"}
     )
 
-# ------------------------------------------------
-# HTTP
-if __name__ == "__main__":
-    print(f"Server started on port: {PORT-1}")
-    uvicorn.run(app, host="0.0.0.0", port=PORT-1
+# # ------------------------------------------------
+# # HTTP
+# if __name__ == "__main__":
+#     print(f"Server started on port: {PORT-1}")
+#     uvicorn.run(app, host="0.0.0.0", port=PORT-1
        
-    )
-------------------------------------------------
-# HTTPS
+#     )
+# # # ------------------------------------------------
+# # HTTPS
 if __name__ == "__main__":
     print(f"Server started on port: {PORT}")
     uvicorn.run(app, host="0.0.0.0", port=PORT,
