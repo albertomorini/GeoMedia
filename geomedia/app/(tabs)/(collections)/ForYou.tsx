@@ -203,6 +203,7 @@ const ForYou = (props) => {
                                             collections={collectionByTag[cc]}
                                             isSelectable={props?.isSelectable}
                                             onSelect={props?.onSelect}
+                                            itemSelected={props?.itemSelected}
                                             allowCreation={false}
                                             isBottomSheet={props?.isBottomSheet}
                                             style={{ flex: 1 }}
@@ -226,6 +227,7 @@ const ForYou = (props) => {
                                             collections={collectionByTag[cc]}
                                             isSelectable={props?.isSelectable}
                                             onSelect={props?.onSelect}
+                                            itemSelected={props?.itemSelected}
                                             allowCreation={false}
                                             isBottomSheet={props?.isBottomSheet}
                                             style={{ flex: 1 }}
