@@ -44,7 +44,7 @@ def privacy_policy():
     return html_content
 @app.get("/personalData", response_class=HTMLResponse, dependencies=[])
 def privacy_policy():
-    with open("../docs/Policy/Policy.html", "r", encoding="utf-8") as file:
+    with open("../docs/Policy/PersonalData.html", "r", encoding="utf-8") as file:
         html_content = file.read()
     return html_content
 
