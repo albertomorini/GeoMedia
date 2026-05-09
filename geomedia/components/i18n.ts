@@ -70,7 +70,7 @@ export const it = {
         title: "Titolo",
         comment: "Commento",
         comment_placeholder: "Aggiungi un commento",
-        area: "Area di visibilità (in KM)",
+        area: "Area di visibilità",
         locationCurrent: "Posizione corrente",
         locationRemote: "Posizione remota",
         disabledRemote: "Posizione remota disabilitata",
@@ -183,10 +183,12 @@ export const it = {
             message: "L'app ha bisogno di accedere alla tua posizione",
             buttonNeutral: "Chiedimi più tardi",
             buttonNegative: "Annulla",
-            buttonPositive: "OK"
+            buttonPositive: "OK",
+            nopgs: "Segnale GPS debole, prova a spostarti",
+            nointernet: "Segnale internet debole, riprova più tardi"
         },
         camera: {
-            error: "Impossibile catturare la foto",
+            error: "Impossibile scattare la foto",
             denied: "Autorizzazione alla fotocamera negata. Abilitala nelle impostazioni.",
             asking: "Richiesta di autorizzazione alla fotocamera in corso...",
             again: "Richiedi di nuovo",
@@ -382,6 +384,8 @@ export const en = {
             buttonNeutral: 'Ask Me Later',
             buttonNegative: 'Cancel',
             buttonPositive: 'OK',
+            nopgs: "Weak GPS signal, try to move a bit",
+            nointernet: "Weak internet, try later..."
         },
         camera: {
             error: "Could not capture photo",

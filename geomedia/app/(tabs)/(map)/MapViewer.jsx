@@ -67,18 +67,20 @@ const MapViewer = forwardRef((props, ref) => {
                         buttonPositive: langselected.permission.location.buttonPositive,
                     }
                 );
-
                 return granted === PermissionsAndroid.RESULTS.GRANTED;
             } catch (err) {
                 console.warn(err);
                 return false;
             }
         }
-
         // iOS
         return true;
     }
 
+
+    /**
+     * GET THE INITIAL LOCATION OF THE USER
+     */
     async function getLocation() {
 
         const hasPermission = await requestLocationPermission();
@@ -91,7 +93,7 @@ const MapViewer = forwardRef((props, ref) => {
             Geolocation.requestAuthorization();
         }
 
-        return Geolocation.getCurrentPosition(
+        Geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
                 if (positionChanged(latitude, longitude, UserPosition)) {
@@ -109,13 +111,22 @@ const MapViewer = forwardRef((props, ref) => {
                 return { latitude: latitude, longitude: longitude }
             },
             error => {
-                console.log('Location error:', error);
-                Alert.alert('Error getting location', error.message);
+                if (error.code == 2) { //no GPS
+                    ctx?.showToast({
+                        type: "info",
+                        text1: langselected.permission.location.nogps
+                    })
+                } else if (error.code == 3) { //no internet
+                    ctx?.showToast({
+                        type: "info",
+                        text1: langselected.permission.location.nointernet
+                    })
+                }
             },
             {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0,
+                enableHighAccuracy: false,
+                timeout: 15000, //15 sec
+                maximumAge: 10000,         // allow 10s cached location
             }
         );
     }
@@ -179,9 +190,9 @@ const MapViewer = forwardRef((props, ref) => {
     }
 
     useFocusEffect( //to handle the back on routing
-        useCallback(() => {
-            get_posts_map()
-            check_cache_collection_chosen()
+        useCallback(async () => {
+            let cols = await check_cache_collection_chosen()
+            get_posts_map(UserPosition, cols)
             load_map_preference_style() //thus to get the change of style
         }, [UserPosition]) //when position or collections change (or are loaded) refresh posts
     )
@@ -215,7 +226,7 @@ const MapViewer = forwardRef((props, ref) => {
                                 longitudeDelta: 0.1,
                             }}
                             customMapStyle={
-                                mapPreferenceStyle == "system" ?
+                                mapPreferenceStyle == "system" ? //here thus to render automatically when toggled by user via status-bar
                                     colorScheme == "dark" ? MapDarkMode : MapLightMode
                                     :
                                     mapPreferenceStyle
@@ -278,9 +289,6 @@ const MapViewer = forwardRef((props, ref) => {
                         >
                             <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
                         </TouchableOpacity>
-
-
-
                     </ThemedView>
             }
             <BottomSheet
@@ -296,6 +304,12 @@ const MapViewer = forwardRef((props, ref) => {
                     borderTopRightRadius: 24,
                     backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff',
                 }}
+                // onClose={async () => {
+                //     let cols = await check_cache_collection_chosen()
+                //     console.log(cols);
+                    
+                //     get_posts_map(UserPosition, cols)
+                // }}
             >
 
                 <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, flex: 1 }}>

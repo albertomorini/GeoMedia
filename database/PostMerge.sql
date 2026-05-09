@@ -38,7 +38,7 @@ BEGIN
                 LATITUDE FLOAT,
                 LONGITUDE FLOAT,
                 ALTITUDE FLOAT,
-                VISIBILITY_AREA_KM INT,
+                VISIBILITY_AREA_KM FLOAT,
                 COLLECTION_ID INT,
                 EXCLUSIVITY NVARCHAR(MAX) AS JSON,
                 viewers NVARCHAR(MAX) '$.EXCLUSIVITY.viewers' AS JSON 

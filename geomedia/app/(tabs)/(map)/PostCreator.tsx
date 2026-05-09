@@ -6,6 +6,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import Geolocation from '@react-native-community/geolocation';
 
+// slider for area
+import Slider from '@react-native-community/slider';
 
 /// FILE SYSTEMS
 
@@ -74,7 +76,7 @@ const PostCreator = () => {
             DATERANGE: { DATE_START: null, DATE_END: null },
             VIEWERS: []
         },
-        VISIBILITY_AREA_KM: 2, //default 2km //TODO: sure?
+        VISIBILITY_AREA_KM: 0.6, //default 200m
         ///////////
         // these are not stored on post but dinamically loaded and inherited by collection
         COLOR: null,
@@ -130,6 +132,8 @@ const PostCreator = () => {
         }
         dummy_body.attachments = files //attach files
         dummy_body = lowercaseKeys(dummy_body)
+        console.log(dummy_body);
+        
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
@@ -265,10 +269,10 @@ const PostCreator = () => {
 
     function deletePost() {
         Alert.alert(
-            "Confirm",
-            "Are you sure?",
+            langselected.confirm,
+            langselected.fileUpload.confirm,
             [
-                { text: "Cancel", style: "cancel" },
+                { text: langselected.cancel, style: "cancel" },
                 {
                     text: "OK", onPress: () => {
                         doRequest("post/" + postData?.ID, { password: ctx?.User?.User?.PASSWORD }, "DELETE").then(resQuery => {
@@ -361,21 +365,22 @@ const PostCreator = () => {
                                     }));
                                 }}
                             />
-                            <ThemedText style={style.label}>{langselected?.postCreator?.area}: </ThemedText>
-                            <ThemedInput type='outlined'
-                                value={postData?.VISIBILITY_AREA_KM.toString()}
-                                placeholder={langselected?.postCreator?.area}
-                                onChangeText={(txt) => {
-                                    if (isNaN(txt)) {
-                                        Alert.alert("Must be a number")
-                                    } else {
-                                        setPostData(prev => ({
-                                            ...prev,
-                                            VISIBILITY_AREA_KM: txt
-                                        }))
-                                    }
-                                }} />
-
+                            <ThemedText style={style.label}>{langselected?.postCreator?.area}: {postData?.VISIBILITY_AREA_KM} KM </ThemedText>
+                            <Slider
+                                style={{ width: "100%", height: 40 }}
+                                minimumValue={0.2}
+                                maximumValue={30}
+                                minimumTrackTintColor="#b03535"
+                                maximumTrackTintColor="#d62f2f"
+                                thumbTintColor={"rgb(170, 170, 163)"}
+                                thumbSize={22}
+                                value={parseFloat(postData?.VISIBILITY_AREA_KM)}
+                                step={0.2}
+                                onSlidingComplete={(val) => {
+                                    let rounded = val.toFixed(2)
+                                    setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
+                                }}
+                            />
                             <>
                                 {
                                     isUsingCurrentLocation() ?
