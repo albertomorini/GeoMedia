@@ -6,7 +6,7 @@ import SegmentedControl from '@react-native-community/segmented-control';
 import { style } from '@/components/globalstyle';
 import RangeTimePicker from '../../mycomponents/RangeTimePicker';
 import ListItem from '@/app/mycomponents/ListItem';
-import { doRequest } from '@/app/utility';
+import { date2ISODatetime, datetime2datehour, doRequest } from '@/app/utility';
 import { MyContext } from '@/app/_layout';
 import { ThemedView } from '@/components/themed-view';
 import { useFocusEffect } from 'expo-router';
@@ -78,7 +78,7 @@ const ExclusivityPicking = (props) => {
                     let dummy_creators = refCreators?.current?.get_item_selected()
 
 
-                    /// TODO: dunno, maybe if I want that all users to see, i uncheck the exclusivity... is just need to be a comunication/tutorial
+                    /// if I want that all users to see, i uncheck the exclusivity... is just need to be a comunication/tutorial
                     // // if (dummy_viewers?.length == listUsers?.length) { // IF ALL USERS ARE SELECTED, REMOVE THE EXCLUSIVITY
                     // //     dummy_viewers = []
                     // // }
@@ -88,9 +88,7 @@ const ExclusivityPicking = (props) => {
 
                     excl.VIEWERS = dummy_viewers
                     excl.CREATORS = dummy_creators
-
                     props?.setExclusivity(excl)
-
                 }}>
                 <ThemedText>{langselected.confirm}</ThemedText>
             </TouchableOpacity>

@@ -14,7 +14,6 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
 
     const { langselected } = useLanguage()
 
-    // const recurrencyOptions = ["Never", "Monthly", "Yearly"]
     const recurrencyOptions = langselected.rangeTimePicker.rec_values
     const [mode, setMode] = useState(null); // 'startDate', 'startTime', 'endDate', 'endTime'
 
@@ -126,7 +125,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     value={start || new Date()} // Use current date as fallback
                     mode="date"
                     onValueChange={handleStartDate}
-                    maximumDate={end || new Date()} // Prevent picking start date after end date
+                    // // maximumDate={end || new Date()} // Prevent picking start date after end date
                 />
             )}
 

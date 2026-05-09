@@ -27,12 +27,19 @@ const ListItem = forwardRef((props: any, ref: any) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter((item) => item !== id));
             // if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
-            props?.onSelect(selectedItems.filter((item) => item !== id))
+            try {
+                props?.onSelect(selectedItems.filter((item) => item !== id))
+            } catch (error) {
+
+            }
             // }
         } else {
             setSelectedItems([...selectedItems, id]);
             // if (!props?.searchable) { //if not searchable there's no button for confirm, thus return the selected item on select
-            props?.onSelect([...selectedItems, id])
+            try {
+                props?.onSelect([...selectedItems, id])
+            } catch (error) {
+            }
             // }
         }
     };

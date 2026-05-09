@@ -43,9 +43,9 @@ BEGIN
                 EXCLUSIVITY NVARCHAR(MAX) AS JSON,
                 viewers NVARCHAR(MAX) '$.EXCLUSIVITY.viewers' AS JSON 
             ) JJ OUTER APPLY OPENJSON(EXCLUSIVITY,'$.daterange')WITH(
-                DATE_START DATETIME,
-                DATE_END DATETIME,
-                RECURRENT INT
+                date_start DATETIME,
+                date_end DATETIME,
+                recurrent INT
             ) DATE_EXL
             WHERE TITLE IS NOT NULL
 

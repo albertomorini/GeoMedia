@@ -1,9 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
-import { Alert } from "react-native";
 
 
-// let URL = "https://geomediasrv.duckdns.org:9911/"
-let URL = "http://10.0.0.3:9911/"
+let URL = "https://geomediasrv.duckdns.org:9911/"
+// let URL = "http://10.0.0.3:9911/"
 const SHARED_KEY = "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="
 
 
@@ -39,20 +38,14 @@ export const doRequest = (api, body = {}, method = "POST") => {
             method: method,
             // mode: "cors",
             headers: { "authorization": SHARED_KEY },
-        }).then(res => res.json()).catch(err => {
-            console.log(URL, err);
-            Alert.alert("Network error, try later..")
-        })
+        }).then(res => res.json())
     } else {
         return fetch(URL + api, {
             method: method,
             // mode: "cors",
             headers: { "authorization": SHARED_KEY, "content-type": "application/json" },
             body: JSON.stringify(body)
-        }).then(res => res.json()).catch(err => {
-            console.log(URL, err);
-            Alert.alert("Network error, try later..")
-        })
+        }).then(res => res.json())
     }
 }
 
@@ -88,6 +81,9 @@ export function datetime2datehour(datep = null) {
 export function lowercaseKeys(obj) {
     if (Array.isArray(obj)) {
         return obj.map(lowercaseKeys);
+    }
+    if (obj instanceof Date) {
+        return obj;
     }
 
     if (obj !== null && typeof obj === "object") {

@@ -124,6 +124,7 @@ const PostCreator = () => {
 
         let dummy_body = postData
 
+        
         //SET THE POSITION ONLY ON NEW POSTS OR IN EDIT WHEN POSITION OVVERRIDED (it has changed, otherwise will override always even on different changes (like title/comments/etc))
         if (
             (PositionOverrided && (dummy_body.ID != undefined || dummy_body.ID != -1))
@@ -140,8 +141,6 @@ const PostCreator = () => {
         }
         dummy_body.attachments = files //attach files
         dummy_body = lowercaseKeys(dummy_body)
-        console.log(dummy_body);
-
 
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
@@ -154,6 +153,8 @@ const PostCreator = () => {
             setBtnCreateDisabled(false)
 
         } else {
+            console.log("going",dummy_body);
+            
             doRequest("post", dummy_body, "POST").then(res => {
                 if (res?.OK) {
                     setBtnCreateDisabled(false)

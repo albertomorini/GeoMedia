@@ -226,7 +226,7 @@ async def collections_by_tag(uid:int):
 @app.post("/post",  tags=["POST"])
 async def post_merge(body: post_merge, request: Request):
     
-
+    print(body.exclusivity)
     files = body.attachments or {}
     query_results = await geomedia_helper.post_merge({
         "ID": body.id,
