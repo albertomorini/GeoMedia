@@ -78,7 +78,7 @@ class post_merge(BaseModel):
     comment: Optional[str] = None
     author_id: int
     exclusivity: Optional[dict] = None
-    visibility_area_km: int
+    visibility_area_km: float
     color: str
     icon: str
     collection_name: str
