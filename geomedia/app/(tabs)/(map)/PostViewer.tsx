@@ -211,7 +211,9 @@ const PostViewer = () => {
                         </TouchableOpacity>
                     )}
 
-                    <ReportPost postid={postData?.ID} />
+                    {parseInt(ctx?.getUID()) == (postData?.AUTHOR_ID) ? null :
+                        <ReportPost postid={postData?.ID} />
+                    }
                 </ScrollView>
 
                 <ThemedView style={style.bottom_bar}>
