@@ -36,7 +36,7 @@ const CarouselFileViewer = (props) => {
             data={props?.attachments}
             pagingEnabled
             snapEnabled
-            loop={true}
+            loop={props?.attachments?.length > 1}
             mode="parallax"
             modeConfig={{
                 parallaxScrollingScale: 0.9,
