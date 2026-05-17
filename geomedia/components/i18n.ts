@@ -10,7 +10,7 @@ export const it = {
         buttonOther: "Non hai un account?",
         errorMessage: "Credenziali errate",
         login: "Accedi",
-        pswForget: "Password dimenticata?"
+        pswForget: "Password dimenticata?",
     },
     signup: {
         placeholderEmail: "Inserisci la tua email",
@@ -65,7 +65,9 @@ export const it = {
         insertSurname: "Inserisci il cognome",
         editPic: "Clicca per cambiare foto", // tap to edit picture
         viewmode: "Visualizzatore",
-        activefrom: "Attivo dal"
+        activefrom: "Attivo dal",
+        pswReset:"Cambia password"
+
     },
     postCreator: {
         title: "Titolo",
@@ -213,7 +215,7 @@ export const en = {
         buttonOther: "Not registered yet?",
         errorMessage: "Invalid credentials",
         login: "Login",
-        pswForget: "Forgot password?"
+        pswForget: "Forgot password?",
     },
     signup: {
         placeholderEmail: "Enter your email",
@@ -268,7 +270,8 @@ export const en = {
         insertSurname: "Enter last name",
         editPic: "Tap to change picture",
         viewmode: "Viewer mode",
-        activefrom: "Active from"
+        activefrom: "Active from",
+        pswReset:"Change password"
     },
     postCreator: {
         title: "Title",

@@ -10,7 +10,7 @@ import { MyContext } from "../_layout"
 import { ThemedPassword } from "@/components/themed-password"
 import { useLanguage } from "@/components/LanguageProvider"
 
-const ModalPswReset = () => {
+const ModalPswReset = (props) => {
 
 
     const { langselected } = useLanguage();
@@ -119,14 +119,18 @@ const ModalPswReset = () => {
         <>
             <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel={langselected.login.pswForget}
-
+                accessibilityLabel={props?.isProfile ? langselected.profile.pswReset : langselected.login.pswForget}
                 onPress={() => {
                     setModalPswReset(true)
                 }}>
                 <ThemedText
-                    style={{ textAlign: "right", color: "grey", fontStyle: "italic" }}
-                >{langselected.login.pswForget}</ThemedText>
+                    style={
+                        props?.isProfile ?
+                            { textAlign: "left", color: "grey", fontStyle: "italic", marginBottom: "15" }
+                            :
+                            { textAlign: "right", color: "grey", fontStyle: "italic", marginBottom: "15" }
+                    }
+                >{props?.isProfile ? langselected.profile.pswReset : langselected.login.pswForget}</ThemedText>
             </TouchableOpacity>
 
             <Modal visible={modalPswReset}
