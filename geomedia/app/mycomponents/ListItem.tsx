@@ -19,7 +19,11 @@ const ListItem = forwardRef((props: any, ref: any) => {
         <ItemIconizable item={item}
             isImage={props?.isImage}
             onPress={() => {
-                props?.onSelect(item)
+                try {
+                    props?.onSelect(item)
+                } catch (error) {
+
+                }
             }} />
     );
 
@@ -151,10 +155,18 @@ const ListItem = forwardRef((props: any, ref: any) => {
                                     let alls = props?.DATA.map(s => s?.ID);
                                     if (selectedItems?.length == alls.length) {
                                         setSelectedItems([])
-                                        props?.onSelect([])
+                                        try {
+                                            props?.onSelect([])
+                                        } catch (error) {
+
+                                        }
                                     } else {
                                         setSelectedItems([...alls])
-                                        props?.onSelect([...alls])
+                                        try {
+                                            props?.onSelect([...alls])
+                                        } catch (error) {
+
+                                        }
                                     }
                                 }}>
                                 {props?.DATA?.length == selectedItems?.length ?

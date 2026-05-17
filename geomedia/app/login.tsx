@@ -75,7 +75,7 @@ export default function LoginScreen(props) {
             alert(langselected?.signup?.weakPassword)
         } else if (password != passwordRep) {
             seterrorPassword(langselected?.signup?.diffPass)
-        } else if (!validUsername && validUsername != null) {
+        } else if (!validUsername && validUsername != null && username != null) {
             seterrorPassword(langselected.signup.usernametaken)
         } else {
             doRequest("auth/signin", {
@@ -83,8 +83,6 @@ export default function LoginScreen(props) {
                 username: username,
                 password: React_MD5(password)
             }).then(res => {
-                console.log(res);
-
                 if (res.AUTH == 2) { //pending OTP
                     setOTP("")
                 } else {
@@ -126,33 +124,39 @@ export default function LoginScreen(props) {
     }
 
     function check_username(username: string) {
-        doRequest("auth/check_username", {
-            username: username
-        }, "GET").then(resQuery => {
-            if (parseInt(resQuery[0]?.OK)) {
-                setValidUsername(true)
+        if (username != null && username?.toString().length > 0) {
+            doRequest("auth/check_username", {
+                username: username
+            }, "GET").then(resQuery => {
+                if (parseInt(resQuery[0]?.OK)) {
+                    setValidUsername(true)
+                    ctx?.showToast({
+                        type: 'success',
+                        text1: langselected.signup.usernamefree,
+                        text2: langselected.profile.hello + " " + username
+                    })
+                } else {
+                    ctx?.showToast({
+                        type: 'error',
+                        text1: langselected.signup.usernametaken,
+                    })
+                }
+            }).catch(err => {
                 ctx?.showToast({
-                    type: 'success',
-                    text1: langselected.signup.usernamefree,
-                    text2: langselected.profile.hello + " " + username
+                    type: "error",
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2
                 })
-            } else {
-                ctx?.showToast({
-                    type: 'error',
-                    text1: langselected.signup.usernametaken,
-                })
-            }
-        }).catch(err => {
-            ctx?.showToast({
-                type: "error",
-                text1: langselected.network.offline1,
-                text2: langselected.network.offline2
             })
-        })
+        } else {
+            setValidUsername(false)
+        }
     }
 
     //////////////////////////////////////////////////////////////////
     function switchMode() {
+        setEmail(null)
+        setUsername(null)
         seterrorPassword("")
         setOTP(null)
         setIsLogin(!isLogin)
@@ -176,30 +180,53 @@ export default function LoginScreen(props) {
     }, [langselected])
 
     return (
-        <GestureHandlerRootView >
+        <GestureHandlerRootView style={{ flex: 1 }}>
 
             <ThemedView style={{ flex: 1, padding: 16 }}>
 
+                <TouchableOpacity
+                    style={{
+                        position: "static",
+                        marginTop: "20%",
+                        alignSelf: "flex-end",
+                        backgroundColor: "#a5a4a4",
+                        borderRadius: 20,
+                        padding: 10,
+                    }}
+                    onPress={() => {
+                        setModalVisible(true);
+                    }}
+                >
+                    <Ionicons name="cog-outline" size={28} color="#70726d" />
+                </TouchableOpacity>
 
-                <ThemedView style={[style.center, { flex: 1 }]}>
+
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps="handled" // Adjusted to allow tapping to dismiss keyboard
+                >
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                        style={{ flex: 1 }}
+                    >
+
+                        <Text variant="heading" style={style.login.title}>GeoMedia</Text><></>
+                        {
+                            (isLogin) ?
 
 
-                    <Text variant="heading" style={style.login.title}>GeoMedia</Text><></>
-                    {
-                        (isLogin) ?
-
-                            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "padding"} style={{ width: "100%" }}>
                                 <ThemedView style={style.containerContent}>
 
                                     <ThemedView style={{ width: "100%" }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
 
-                                        <ThemedText>{langselected.login.emailOrUsername}</ThemedText>
-                                        <ThemedInput placeholder={langselected.login.placeholderEmail} onChangeText={setEmail} />
+                                        <ThemedText style={[style.label, { textAlign: "left" }]}>{langselected.login.emailOrUsername}</ThemedText>
+                                        <ThemedInput type='outlined' placeholder={langselected.login.placeholderEmail} onChangeText={setEmail} />
 
-                                        <ThemedText>Password</ThemedText>
-                                        <ThemedPassword placeholder={langselected.login.placeholderPassord} onChangeText={setPassword} />
+                                        <ThemedText style={[style.label, { textAlign: "left" }]}>Password</ThemedText>
+                                        <ThemedPassword type='outlined' placeholder={langselected.login.placeholderPassord} onChangeText={setPassword} />
+                                        <ModalPswReset />
 
-                                        <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={doLogin}>
+                                        <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green, { marginTop: "25" }]} onPress={doLogin}>
                                             <ThemedText style={{ color: 'white', textAlign: 'center' }}>{langselected.login.login}</ThemedText>
                                         </TouchableOpacity>
                                         {errorPassword?.length > 0 ?
@@ -211,10 +238,8 @@ export default function LoginScreen(props) {
                                     </ThemedView>
                                 </ThemedView>
 
-                            </KeyboardAvoidingView>
-                            :
-                            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "padding"} style={{ width: "100%" }}>
-                                <ThemedView style={[style.container]}>
+                                :
+                                <ThemedView style={[style.containerContent]}>
                                     {
                                         (OTP != null) ?
                                             <>
@@ -250,12 +275,12 @@ export default function LoginScreen(props) {
 
                                                 <ThemedText style={[style.label, { textAlign: "left" }]} >Username</ThemedText>
                                                 <ThemedInput type='outlined'
-                                                    borderColor={validUsername == null ? null : validUsername ? "succes" : "error"}
-                                                    name="email"
+                                                    // borderColor={validUsername == undefined ? undefined : validUsername ? "succes" : "error"}
+                                                    name="username"
                                                     placeholder={"Username"}
                                                     onChangeText={(text) => {
                                                         setUsername(text)
-                                                        setValidUsername(null) //will be checked onblur
+                                                        setValidUsername(undefined) //will be checked onblur
                                                     }}
                                                     onBlur={() => {
                                                         check_username(username);
@@ -265,11 +290,10 @@ export default function LoginScreen(props) {
                                                 <ThemedText style={[style.label, { textAlign: "left" }]} >Password</ThemedText>
 
                                                 <ThemedPassword type='outlined' name="password" placeholder={langselected.signup.placeholderPassord} onChangeText={(val) => { setPassword(val) }} />
-                                                {/* <ThemedText style={[style.label, { textAlign: "left" }]} >Repeat password</ThemedText> */}
                                                 <ThemedPassword type='outlined' name="repPassword" placeholder={langselected.signup.placeholderPassordRepeat} onChangeText={(val) => { setPasswordRep(val) }} />
 
 
-                                                <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green]} onPress={() => doSignUp()}>
+                                                <TouchableOpacity style={[style?.buttons?.full_screen, style.colors.geomedia_green, { marginTop: "20" }]} onPress={() => doSignUp()}>
                                                     <ThemedText>
                                                         {langselected?.signup?.buttonConfirm}
                                                     </ThemedText>
@@ -284,26 +308,25 @@ export default function LoginScreen(props) {
                                             </>
                                     }
                                 </ThemedView>
-                            </KeyboardAvoidingView>
-                    }
-                    <ModalPswReset />
+                        }
+                        <TouchableOpacity style={[style.buttons.full_screen, style.colors.geomedia_blue]}
+                            onPress={switchMode}
+                        >
 
-                </ThemedView>
+                            <ThemedText  //style={{ textAlign: 'right', marginTop: 60, bottom: "25%", fontStyle: 'italic', right: 0 }}
+                            >
+                                {isLogin ?
+                                    langselected?.login.buttonOther
+                                    :
+                                    langselected?.signup.buttonOther
 
-                <ThemedText onPress={switchMode} style={{ textAlign: 'right', marginTop: 60, bottom: "25%", fontStyle: 'italic', right: 0 }}>
-                    {isLogin ?
-                        langselected?.login.buttonOther
-                        :
-                        langselected?.signup.buttonOther
+                                }
+                            </ThemedText>
+                        </TouchableOpacity>
 
-                    }
-                </ThemedText>
+                    </KeyboardAvoidingView>
+                </ScrollView>
 
-                <TouchableOpacity onPress={() => {
-                    setModalVisible(true)
-                }}>
-                    <ThemedText>{langselected?.settings.settings}</ThemedText>
-                </TouchableOpacity>
                 <Modal
                     visible={modalVisible}
                     transparent={true}

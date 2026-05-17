@@ -11,6 +11,7 @@ import { MyContext } from '@/app/_layout';
 import { ThemedView } from '@/components/themed-view';
 import { useFocusEffect } from 'expo-router';
 import { useLanguage } from '@/components/LanguageProvider';
+import { default_account_profilepic } from '@/assets/images/default_pictures';
 
 const ExclusivityPicking = (props) => {
 
@@ -36,7 +37,7 @@ const ExclusivityPicking = (props) => {
                 return {
                     ID: s?.UID,
                     TITLE: s?.USERNAME,
-                    ICON: s?.PROFILE_PICTURE
+                    ICON: s?.PROFILE_PICTURE == null ? default_account_profilepic : s?.PROFILE_PICTURE
                 }
             })
             setListUsers(x)

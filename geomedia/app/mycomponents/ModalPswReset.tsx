@@ -120,10 +120,13 @@ const ModalPswReset = () => {
             <TouchableOpacity
                 accessibilityRole="button"
                 accessibilityLabel={langselected.login.pswForget}
+
                 onPress={() => {
                     setModalPswReset(true)
                 }}>
-                <ThemedText>{langselected.login.pswForget}</ThemedText>
+                <ThemedText
+                    style={{ textAlign: "right", color: "grey", fontStyle: "italic" }}
+                >{langselected.login.pswForget}</ThemedText>
             </TouchableOpacity>
 
             <Modal visible={modalPswReset}

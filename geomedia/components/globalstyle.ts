@@ -6,9 +6,10 @@ export const style = StyleSheet.create({
         width: "100%",
     }
     , containerContent: {
-        paddingTop: 50
+        paddingTop: 25
     }
-    , center: {
+    , 
+    center: {
         flex: 3,
         padding: 5,
         justifyContent: "center",
@@ -17,7 +18,6 @@ export const style = StyleSheet.create({
     },
     login: {
         title: {
-            marginBottom: 20,
             textAlign: "center",
             color: "#bfea7f"
         }
@@ -134,7 +134,7 @@ export const style = StyleSheet.create({
 
         paddingHorizontal: 20,
         paddingVertical: 14,
-        flex:1,
+        flex: 1,
 
         borderTopWidth: 1,
         borderTopColor: "rgba(255,255,255,0.1)",
@@ -151,9 +151,9 @@ export const style = StyleSheet.create({
         // Android
         elevation: 10,
     },
-    bottom_bar_item:{
+    bottom_bar_item: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 8, 
+        gap: 8,
     }
 })

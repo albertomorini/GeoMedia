@@ -19,7 +19,7 @@ export const it = {
         buttonConfirm: "Registrati",
         buttonOther: "Indietro",
         emailNotValid: "Email non valida",
-        weakPassword: "La password non soddisfa i requisiti di 6 caratteri minimi, almeno un simbolo e almeno cifra",
+        weakPassword: "La password non soddisfa i requisiti di 6 caratteri minimi: almeno una lettera maiuscola, un simbolo e una cifra",
         diffPass: "Le password non coincidono",
         usernametaken: "Username già in uso",
         usernamefree: "Username disponibile"
@@ -222,7 +222,7 @@ export const en = {
         buttonConfirm: "Sign up",
         buttonOther: "Back",
         emailNotValid: "Invalid email",
-        weakPassword: "Password must be at least 6 characters, include at least one number and one symbol",
+        weakPassword: "Password must be at least 6 characters, include at least one number, one symbol and one upper case letter",
         diffPass: "Passwords do not match",
         usernametaken: "Username already taken",
         usernamefree: "Username available",
