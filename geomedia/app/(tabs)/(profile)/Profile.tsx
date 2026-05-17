@@ -104,7 +104,9 @@ export default function Profile() {
           />
         </ThemedView>
 
-        <ModalPswReset />
+        <TouchableOpacity>
+          <ModalPswReset isProfile={true} />
+        </TouchableOpacity>
         <ThemedView
           style={{
             flexDirection: "row",

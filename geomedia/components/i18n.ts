@@ -108,7 +108,7 @@ export const it = {
     reportPost: {
         title: "Segnala il post",
         report: "Segnala",
-        reportMotive: " Motivazione della segnalazione (almeno cinque parole)",
+        reportMotive: " Motivazione della segnalazione (minimo 100 caratteri)",
         values: {
             default: "Scegli il tipo di segnalazione",
             misinformation: "Luoghi/informazioni errati",
@@ -311,7 +311,7 @@ export const en = {
     reportPost: {
         title: "Report post",
         report: "Report",
-        reportMotive: "Report reason (at least five words)",
+        reportMotive: "Report reason (at least 100 characters)",
         values: {
             default: "Choose the kind of report",
             misinformation: "Wrong places/information",

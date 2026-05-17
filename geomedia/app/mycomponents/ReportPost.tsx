@@ -16,13 +16,14 @@ const ReportPost = (props) => {
     const [visibleModalReport, setVisibleModalReport] = useState(false)
     const [kind, setKind] = useState(null)
     const [motive, setMotive] = useState(null)
+    const min_motivation_length = 100
 
     function wordCount(text) {
         return text.trim().split(/\s+/).length;
     }
     function createReport() {
         if (kind != null && motive != null) {
-            if (wordCount(motive) > 4) {
+            if (wordCount(motive) > 4 && motive?.trim().length > min_motivation_length) {
 
                 doRequest("post/report_new", {
                     postid: props?.postid,
@@ -69,7 +70,7 @@ const ReportPost = (props) => {
                 transparent={true}
                 animationType="slide">
                 <ThemedView style={{
-                    backgroundColor: "rgba(138, 138, 138, 0.9)",
+                    backgroundColor: "rgba(138, 138, 138, 0.1)",
                     height: "100%",
                     padding: 10,
                 }}>
@@ -88,7 +89,8 @@ const ReportPost = (props) => {
                             height: 40,
                             justifyContent: "space-between",
                             backgroundColor: "#b4a5a5",
-                            padding: 5
+                            padding: 5,
+                            
                         }}>
                             <ThemedText style={style.title}>{langselected.reportPost.report}</ThemedText>
                             <TouchableOpacity
@@ -120,6 +122,7 @@ const ReportPost = (props) => {
                             </Picker>
                             <ThemedInput
                                 multiline={true}
+                                style={{ height: "100", textAlignVertical: "top" }}
                                 type="outlined"
                                 accessibilityLabel={langselected.reportPost.reportMotive}
                                 placeholder={langselected.reportPost.reportMotive}
