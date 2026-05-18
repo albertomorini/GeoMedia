@@ -47,13 +47,13 @@ export default function ProfileLayout() {
                     animation: 'slide_from_right', // optional
                 }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="ProfileViewer"
                 options={{
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
                     animation: 'slide_from_bottom', // optional
                 }}
-            />
+            /> */}
         </Stack>
     );
 }

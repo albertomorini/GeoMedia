@@ -1,7 +1,7 @@
 import { style } from '@/components/globalstyle';
 import { Image } from "expo-image"; // really, huge improveement
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { MyContext } from '../../_layout';
+import { MyContext } from '../_layout';
 
 import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -11,7 +11,7 @@ import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
 import { Animated, useColorScheme } from 'react-native';
 import { BarChart, PieChart } from 'react-native-gifted-charts';
-import { datetime2date, doRequest } from '../../utility';
+import { datetime2date, doRequest } from '../utility';
 
 
 

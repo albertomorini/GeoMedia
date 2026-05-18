@@ -179,7 +179,7 @@ const CollectionViewer = () => {
                             isImage={true}
                             onPress={() => {
                                 router.push({
-                                    pathname: "/ProfileViewer",
+                                    pathname: "viewer/ProfileViewer",
                                     params: { uid: userCreator?.uid },
                                 });
                             }}

@@ -48,8 +48,8 @@ export default function MapLayout() {
                     animation: 'slide_from_right',
                 }}
             />
-            <Stack.Screen
-                name="PostViewer"
+            {/* <Stack.Screen
+                name="post/PostViewer"
                 options={{
                     presentation: 'modal',       // 'fullScreenModal' or 'card' for push style
                     animation: 'slide_from_bottom',
@@ -60,7 +60,7 @@ export default function MapLayout() {
                     sheetCornerRadius: 24,
                     sheetExpandsWhenScrolledToEdge: true,
                 }}
-            />
+            /> */}
 
         </Stack>
     );

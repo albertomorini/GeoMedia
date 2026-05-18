@@ -135,7 +135,7 @@ export default function Profile() {
             accessibilityLabel={langselected?.profile?.viewmode}
             onPress={() => {
               router.push({
-                pathname: '/ProfileViewer',
+                pathname: 'viewer/ProfileViewer',
                 params: {
                   uid: user?.UID,
                 }
@@ -160,7 +160,7 @@ export default function Profile() {
             label="Posts"
             onSelect={(pickedItem) => {
               router.push({
-                pathname: '/PostViewer',
+                pathname: 'viewer/PostViewer',
                 params: {
                   postid: pickedItem?.ID,
                 }

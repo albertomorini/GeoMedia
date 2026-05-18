@@ -271,7 +271,7 @@ const MapViewer = forwardRef((props, ref) => {
                                         title={p?.TITLE}
                                         onPress={() => { ///redirect to post viewer
                                             router.push({
-                                                pathname: '/PostViewer',
+                                                pathname: 'viewer/PostViewer',
                                                 params: {
                                                     postid: p?.ID,
                                                 }
