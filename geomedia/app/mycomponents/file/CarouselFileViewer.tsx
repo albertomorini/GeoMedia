@@ -9,8 +9,12 @@ import { useLanguage } from "@/components/LanguageProvider";
 
 const width = Dimensions.get('window').width;
 
+import RNFS from "react-native-fs";
+import Share from 'react-native-share';
 
 async function file_share(base64Data: any, fileName: string, mimeType: string) {
+    console.log(base64Data.split(0, 30)[0], fileName, mimeType);
+
     try {
         const path = `${RNFS.CachesDirectoryPath}/${fileName}`;
 
