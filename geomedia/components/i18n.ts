@@ -66,7 +66,7 @@ export const it = {
         editPic: "Clicca per cambiare foto", // tap to edit picture
         viewmode: "Visualizzatore",
         activefrom: "Attivo dal",
-        pswReset:"Cambia password"
+        pswReset: "Cambia password"
 
     },
     postCreator: {
@@ -79,7 +79,7 @@ export const it = {
         disabledRemote: "Posizione remota disabilitata",
         esclusivity: "Esclusività",
         create: "Crea",
-        modify: "Modifica",
+        modify: "Conferma modifiche",
         lat: "Latitudine",
         lon: "Longitudine",
         pickLocaton: "Scegli la posizione",
@@ -271,7 +271,7 @@ export const en = {
         editPic: "Tap to change picture",
         viewmode: "Viewer mode",
         activefrom: "Active from",
-        pswReset:"Change password"
+        pswReset: "Change password"
     },
     postCreator: {
         title: "Title",
@@ -283,7 +283,7 @@ export const en = {
         disabledRemote: "Remote location disabled",
         esclusivity: "Exclusivity",
         create: "Create",
-        modify: "Edit",
+        modify: "Save changes",
         lat: "Latitude",
         lon: "Longitude",
         pickLocaton: "Pick a location",
