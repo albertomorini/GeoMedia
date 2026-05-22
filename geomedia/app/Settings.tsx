@@ -120,8 +120,8 @@ export default function Settings(props) {
                     onValueChange={(itemValue, itemIndex) => changeLang(itemValue)}
                     style={{ height: 70, width: 200 }}
                 >
-                    <Picker.Item label="Italiano 🇮🇹" value="IT" />
-                    <Picker.Item label="English 🇬🇧" value="EN" />
+                    <Picker.Item label="Italiano" value="IT" />
+                    <Picker.Item label="English" value="EN" />
                 </Picker>
             </>
 
