@@ -240,8 +240,9 @@ async def collection_posts_get(collectionid: int):
 async def collections_by_tag(uid:int):
     return await geomedia_helper.collections_by_tag(uid)
 
-@app.get("/collection/get_local",tags=["COLLECTION"])
-async def collections_get_local(uid:int,curr_lat,curr_lon):
+@app.get("/collections/get_local",tags=["COLLECTION"])
+async def collections_get_local(uid:int,curr_lat:float,curr_lon:float):
+    print(uid,curr_lat,curr_lon)
     return await geomedia_helper.collections_get_local(uid,curr_lat,curr_lon)
 
 #---------------------------------------------------------------------------------------------------------------------------------

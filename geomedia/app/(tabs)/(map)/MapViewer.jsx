@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { ActivityIndicator, Alert, PermissionsAndroid, Platform, Pressable, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import Geolocation from '@react-native-community/geolocation';
@@ -17,6 +17,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } from "@/assets/MapStyler";
 import { useLanguage } from "@/components/LanguageProvider";
+import TagSelector from '../(collections)/TagSelector';
 
 
 const MapViewer = forwardRef((props, ref) => {
@@ -38,6 +39,7 @@ const MapViewer = forwardRef((props, ref) => {
     const collectionPickerSheet = useRef()
 
     const [collectionsChosen, setCollectionsChosen] = useState([]);
+    const [localCollections, setLocalCollections] = useState([])
 
     /////////////////////////////////////////////////////////////
 
@@ -175,6 +177,30 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
 
+    function collections_get_local() {
+        console.log(UserPosition);
+        if (UserPosition?.latitude != 0 && UserPosition?.longitude != 0) {
+
+            doRequest("collections/get_local", {
+                uid: ctx?.getUID(),
+                curr_lat: UserPosition?.latitude,
+                curr_lon: UserPosition?.longitude
+            }, "GET").then(resQuery => {
+                console.log("ERE", resQuery);
+
+                setLocalCollections(resQuery)
+            }).catch(err => {
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.network.offline1,
+                    text2: langselected.network.offline2,
+                })
+            })
+        }
+    }
+
+    /////////////////////////////////////////////////////////////
+
     async function load_map_preference_style() {
         let style = await SecureStore.getItemAsync("map_style")
         try {
@@ -200,6 +226,7 @@ const MapViewer = forwardRef((props, ref) => {
             let cols = await check_cache_collection_chosen()
             get_posts_map(UserPosition, cols)
             load_map_preference_style() //thus to get the change of style
+            collections_get_local()
         }, [UserPosition]) //when position or collections change (or are loaded) refresh posts
     )
     useEffect(() => {
@@ -257,7 +284,7 @@ const MapViewer = forwardRef((props, ref) => {
                             }}
                             pitchEnabled={true}
                             showsBuildings={true}
-                            showsMyLocationButton={true}
+                            showsMyLocationButton={false} //make it custom thus to give space to collections
                         >
                             {//rendering the markers
                                 postMarkers?.map((p, index) => (
@@ -281,24 +308,122 @@ const MapViewer = forwardRef((props, ref) => {
                                 ))
                             }
                         </MapView>
+
+                        {/* MY LOCATION BUTTON */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                mapRef.current?.animateCamera({
+                                    center: {
+                                        latitude: UserPosition.latitude,
+                                        longitude: UserPosition.longitude,
+                                    },
+                                    zoom: 15,
+                                });
+                            }}
+                            style={[style.buttons.fab, {
+                                // position: "absolute",
+                                bottom: 100,
+                                right: 20,
+                                borderRadius: 28,
+                                backgroundColor: "#f2f2f2e7",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }]}
+                        >
+                            <Ionicons
+                                name="locate"
+                                size={24}
+                                color="#333"
+                            />
+                        </TouchableOpacity>
                         <TouchableOpacity
                             accessibilityRole="button"
                             accessibilityLabel={langselected?.newm}
-                            style={[style.buttons.fab, style.colors.geomedia_blue, { bottom: 70 }]}
+                            style={[style.buttons.fab, style.colors.geomedia_blue, {
+                                bottom: 40,
+                                justifyContent: "center",
+                            }]}
                             onPress={() => router.push('PostCreator')}
                         >
-                            <ThemedText style={style.buttons.fabText}>+</ThemedText>
+                            {/* <ThemedText style={style.buttons.fabText}>+</ThemedText> */}
+                            <Ionicons
+                                name="add"
+                                size={24}
+                                color="#333"
+                            />
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            accessibilityRole="button"
-                            accessibilityLabel={langselected?.close}
-                            style={[style.buttons.fab, style.colors.geomedia_gray, { bottom: 130 }]}
-                            onPress={() => {
-                                collectionPickerSheet?.current?.snapToIndex(0)
+
+                        {/* COLLECTIONS ON TOP */}
+                        <View
+                            style={{
+                                position: "absolute",
+                                right: 0,
+                                left: 7,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                top: 50,
                             }}
                         >
-                            <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
-                        </TouchableOpacity>
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                inverted
+                                style={{
+                                    maxWidth: 300,
+                                    marginRight: 10,
+                                    bottom: 35
+                                }}
+                                contentContainerStyle={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <ThemedView
+                                    style={{
+                                        flexDirection: "row",
+                                        backgroundColor: "transparent",
+                                    }}
+                                >
+                                    {localCollections?.map(s => (
+                                        <TouchableOpacity
+                                            style={{
+                                                paddingHorizontal: 9,
+                                                paddingVertical: 5,
+                                                borderRadius: 20,
+                                                backgroundColor: `${s?.COLOR}99`, //add transparency
+                                                marginRight: 8,
+                                            }}
+                                            onPress={() => {
+                                                const updatedCollections = collectionsChosen.includes(s?.ID)
+                                                    ? collectionsChosen.filter(id => id !== s?.ID)
+                                                    : [...collectionsChosen, s?.ID];
+
+                                                setCollectionsChosen(updatedCollections);
+
+                                                get_posts_map(UserPosition, updatedCollections);
+
+                                            }}
+                                        >
+                                            <ThemedText>{s?.TITLE}</ThemedText>
+                                        </TouchableOpacity>
+                                    ))}
+
+                                </ThemedView>
+                            </ScrollView>
+
+                            {/* ALL COLLECTION BOTTOM SHEET VIEWER */}
+                            <TouchableOpacity
+                                accessibilityRole="button"
+                                accessibilityLabel={langselected?.close}
+                                style={[style.buttons.fab, style.colors.geomedia_gray,]}
+                                onPress={() => {
+                                    collectionPickerSheet?.current?.snapToIndex(0)
+                                }}>
+                                <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
+
+                            </TouchableOpacity>
+                        </View>
+
                     </ThemedView>
             }
             <BottomSheet

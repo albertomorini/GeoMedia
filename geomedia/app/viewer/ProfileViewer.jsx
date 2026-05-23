@@ -317,7 +317,7 @@ const ProfileViewer = () => {
                         </ThemedView>
 
                         <ThemedView style={{ flex: 1 }}>
-                            <ThemedText>{langselected.profile.allowedPost}</ThemedText>
+                            <ThemedText style={style.label}>{langselected.profile.allowedPost}</ThemedText>
                             <ListItem
                                 isImage={false} //we render icons, not expo-image
                                 isSelectable={false}
@@ -340,7 +340,7 @@ const ProfileViewer = () => {
                         </ThemedView>
 
                         <ThemedView style={{ paddingBottom: 50 }}>
-                            <ThemedText>{langselected?.profile?.stat}</ThemedText>
+                            <ThemedText style={style.label}>{langselected?.profile?.stat}</ThemedText>
                             <Carousel
                                 width={width}
                                 height={height / 3}

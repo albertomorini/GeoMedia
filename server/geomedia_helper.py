@@ -244,7 +244,8 @@ async def profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon):
 
 
 async def collections_get_local(uid,curr_lat,curr_lon):
-    query="EXEC POSTS_GETALL_ALLOWED @UID="+str(uid)
+    query="EXEC POST_GETALL_ALLOWED @UID="+str(uid)
+
     posts = SQL_MANAGER.select_query(query)
     results = []
     ## filter by allowed by visibility
