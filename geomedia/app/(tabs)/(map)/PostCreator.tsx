@@ -501,7 +501,7 @@ const PostCreator = () => {
                             onPress={save_post}
                             accessibilityRole="button"
                             accessibilityLabel={postData?.ID == null ?
-                                langselected.postCreator.create : langselected.postCreator.modify
+                                langselected.postCreator.create : langselected.postCreator.confirm_changes
                             }
                         >
 

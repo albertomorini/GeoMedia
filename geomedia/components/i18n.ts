@@ -66,8 +66,12 @@ export const it = {
         editPic: "Clicca per cambiare foto", // tap to edit picture
         viewmode: "Visualizzatore",
         activefrom: "Attivo dal",
-        pswReset: "Cambia password"
-
+        pswReset: "Cambia password",
+        allowedPost: "Contenuti visibili dalla posizione corrente",
+        stat: "Statistiche di utilizzo",
+        stat_n_post: "Contenuti per mese",
+        stat_active_on: "Attivo su",
+        stat_active_categories: " categorie"
     },
     postCreator: {
         title: "Titolo",
@@ -79,7 +83,8 @@ export const it = {
         disabledRemote: "Posizione remota disabilitata",
         esclusivity: "Esclusività",
         create: "Crea",
-        modify: "Conferma modifiche",
+        modify: "Modifica",
+        confirm_changes: "Conferma modifiche",
         lat: "Latitudine",
         lon: "Longitudine",
         pickLocaton: "Scegli la posizione",
@@ -271,7 +276,12 @@ export const en = {
         editPic: "Tap to change picture",
         viewmode: "Viewer mode",
         activefrom: "Active from",
-        pswReset: "Change password"
+        pswReset: "Change password",
+        allowedPost: "Visible posts from current position",
+        stat: "Usage statistics",
+        stat_n_post: "Posts for month",
+        stat_active_on: "Active on",
+        stat_active_categories: " categories"
     },
     postCreator: {
         title: "Title",
@@ -283,7 +293,8 @@ export const en = {
         disabledRemote: "Remote location disabled",
         esclusivity: "Exclusivity",
         create: "Create",
-        modify: "Save changes",
+        modify: "Modify ",
+        confirm_changes: "Save changes",
         lat: "Latitude",
         lon: "Longitude",
         pickLocaton: "Pick a location",

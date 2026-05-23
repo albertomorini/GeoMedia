@@ -9,19 +9,19 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
-import { Animated, useColorScheme } from 'react-native';
+import { Alert, Animated, PermissionsAndroid, Platform, ScrollView, useColorScheme } from 'react-native';
 import { BarChart, PieChart } from 'react-native-gifted-charts';
 import { datetime2date, doRequest } from '../utility';
+import ListItem from '@/app/mycomponents/ListItem';
 
-
-
-
-
+///////////////////////////////////////////////////////////
 import { Dimensions, TouchableOpacity } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { Ionicons } from "@expo/vector-icons";
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const ProfileViewer = () => {
 
@@ -54,6 +54,9 @@ const ProfileViewer = () => {
     ];
     const [activeIndex, setActiveIndex] = useState(0);
 
+    const [allowedPost, setAllowedPost] = useState()
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     function getProfilePic(username) {
         doRequest("profile/pfp", {
@@ -127,10 +130,104 @@ const ProfileViewer = () => {
         })
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    async function requestLocationPermission() {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: langselected.permission.location.title,
+                        message: langselected.permission.location.message,
+                        buttonNeutral: langselected.permission.location.buttonNeutral,
+                        buttonNegative: langselected.permission.location.buttonNegative,
+                        buttonPositive: langselected.permission.location.buttonPositive,
+                    }
+                );
+                return granted === PermissionsAndroid.RESULTS.GRANTED;
+            } catch (err) {
+                console.warn(err);
+                return false;
+            }
+        }
+        // iOS
+        return true;
+    }
+    async function getLocation() {
+
+        const hasPermission = await requestLocationPermission();
+
+        if (!hasPermission) {
+            Alert.alert(langselected?.permission.location.denied);
+            return;
+        }
+        if (Platform.OS === 'ios') {
+            Geolocation.requestAuthorization();
+        }
+
+        return new Promise((resolve) => {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    resolve({
+                        latitude,
+                        longitude,
+                    });
+                },
+                (error) => {
+                    setTimeout(() => {
+                        getLocation();
+                    }, 5000);
+
+                    if (error.code === 2) {
+                        ctx?.showToast({
+                            type: "info",
+                            text1: langselected.permission.location.nogps,
+                        });
+                    } else if (error.code === 3) {
+                        ctx?.showToast({
+                            type: "info",
+                            text1: langselected.permission.location.nointernet,
+                        });
+                    }
+
+                    resolve(null);
+                },
+                {
+                    enableHighAccuracy: false,
+                    timeout: 15000,
+                    maximumAge: 15000,
+                }
+            );
+        });
+    }
+
+    async function profile_show_allowed_post(profile_id) {
+        let coords = await getLocation();
+
+        doRequest("profile/show_allowed_post", {
+            uid: ctx?.getUID(),
+            profile_id: profile_id,
+            curr_lat: coords.latitude,
+            curr_lon: coords.longitude,
+        }, "GET").then(res => {
+            setAllowedPost(res);
+        }).catch(err => {
+            ctx?.showToast({
+                type: "error",
+                text1: langselected.network.offline1,
+                text2: langselected.network.offline2,
+            })
+        })
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
     useFocusEffect(
         useCallback(() => {
             if (params?.uid != null) {
-                getInfo(params.uid)
+                getInfo(params.uid);
+                profile_show_allowed_post(params.uid)
             }
         }, [])
     );
@@ -157,7 +254,7 @@ const ProfileViewer = () => {
         }
     }, [selected]);
 
-    
+
     return (
         <>
             <Stack.Screen
@@ -166,7 +263,8 @@ const ProfileViewer = () => {
                     gestureEnabled: true,
                 }}
             />
-            <ThemedView style={[style.container, { height: "100%" }]}>
+            {/* <ScrollView> */}
+            <ThemedView style={[style.container, { flex: 1 }]}>
                 <ThemedView
                     style={{
                         flexDirection: 'row',
@@ -199,11 +297,34 @@ const ProfileViewer = () => {
                     />
                 </ThemedView>
 
+                <ThemedView style={{ flex: 1 }}>
+                    <ThemedText>{langselected.profile.allowedPost}</ThemedText>
+                    <ListItem
+                        isImage={false} //we render icons, not expo-image
+                        isSelectable={false}
+                        estimatedSize={30}
+                        allowCreation={false}
+                        label="Posts"
+                        onSelect={(pickedItem) => {
+                            // console.log(pickedItem, JSON.parse(pickedItem),pickedItem.post_id);
 
-                <ThemedView>
+                            router.push({
+                                pathname: 'viewer/PostViewer',
+                                params: {
+                                    postid: pickedItem?.post_id,
+                                }
+                            });
+
+                        }}
+                        DATA={allowedPost}
+                    />
+                </ThemedView>
+
+                <ThemedView style={{ paddingBottom: 50 }}>
+                    <ThemedText>{langselected?.profile?.stat}</ThemedText>
                     <Carousel
                         width={width}
-                        height={350}
+                        height={height / 3}
                         data={carouselData}
                         pagingEnabled
                         snapEnabled
@@ -219,7 +340,6 @@ const ProfileViewer = () => {
                                 return (
                                     <ThemedView
                                         style={{
-                                            flex: 1,
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                         }}
@@ -249,13 +369,12 @@ const ProfileViewer = () => {
                             return (
                                 <ThemedView
                                     style={{
-                                        flex: 1,
                                         justifyContent: 'center',
                                         paddingHorizontal: 20,
                                     }}
                                 >
                                     <ThemedText style={style.label}>
-                                        Number of posts
+                                        {langselected?.profile.stat_n_post}
                                     </ThemedText>
 
                                     <BarChart
@@ -275,9 +394,9 @@ const ProfileViewer = () => {
                     {/* Pagination Dots */}
                     <ThemedView
                         style={{
+                            flex: 1,
                             flexDirection: 'row',
                             justifyContent: 'center',
-                            marginTop: 12,
                         }}
                     >
                         {carouselData.map((_, index) => (
@@ -289,16 +408,18 @@ const ProfileViewer = () => {
                                     borderRadius: 4,
                                     marginHorizontal: 4,
                                     backgroundColor:
-                                        activeIndex === index
-                                            ? '#555'
-                                            : '#ccc',
+                                        colorScheme == "dark" ?
+                                            activeIndex === index ? '#ccc' : '#555' :
+                                            activeIndex === index ? '#555' : '#ccc'
+                                    ,
                                 }}
                             />
                         ))}
                     </ThemedView>
                 </ThemedView>
-            </ThemedView >
 
+            </ThemedView >
+            {/* </ScrollView> */}
         </ >
     )
 }
