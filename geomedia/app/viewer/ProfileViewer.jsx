@@ -9,7 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
-import { Alert, Animated, PermissionsAndroid, Platform, ScrollView, useColorScheme } from 'react-native';
+import { ActivityIndicator, Alert, Animated, PermissionsAndroid, Platform, ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import { BarChart, PieChart } from 'react-native-gifted-charts';
 import { datetime2date, doRequest } from '../utility';
 import ListItem from '@/app/mycomponents/ListItem';
@@ -257,170 +257,193 @@ const ProfileViewer = () => {
 
     return (
         <>
-            <Stack.Screen
-                options={{
-                    title: user?.USERNAME,
-                    gestureEnabled: true,
-                }}
-            />
-            {/* <ScrollView> */}
-            <ThemedView style={[style.container, { flex: 1 }]}>
-                <ThemedView
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: 10,
-                    }}
-                >
-                    <ThemedView style={{ flex: 1, paddingRight: 10 }}>
-                        <ThemedText className="ThemedText-lg font-bold" style={style.subtitle}>
-                            {user?.NAME} {user?.SURNAME}
-                        </ThemedText>
-
-                        <ThemedText variant="caption">
-                            {user?.USERNAME}
-                        </ThemedText>
-
-                        <ThemedText variant="caption" style={{ fontStyle: 'italic', marginBottom: 2 }}>
-                            {langselected?.profile.activefrom}: {datetime2date(user?.DC)}
-                        </ThemedText>
-                    </ThemedView>
-
-                    <Image
-                        source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
-                        style={{
-                            width: 80,
-                            height: 80,
-                            borderRadius: 40,
+            {user == null ? //wait till complete
+                <ThemedView style={{
+                    flex: 1,
+                    ...StyleSheet.absoluteFillObject,
+                    height: "100%",
+                    width: "100%",
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Stack.Screen //thus to avoid the component name
+                        options={{
+                            title: langselected?.wait,
+                            gestureEnabled: true,
                         }}
                     />
+                    <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
                 </ThemedView>
-
-                <ThemedView style={{ flex: 1 }}>
-                    <ThemedText>{langselected.profile.allowedPost}</ThemedText>
-                    <ListItem
-                        isImage={false} //we render icons, not expo-image
-                        isSelectable={false}
-                        estimatedSize={30}
-                        allowCreation={false}
-                        label="Posts"
-                        onSelect={(pickedItem) => {
-                            // console.log(pickedItem, JSON.parse(pickedItem),pickedItem.post_id);
-
-                            router.push({
-                                pathname: 'viewer/PostViewer',
-                                params: {
-                                    postid: pickedItem?.post_id,
-                                }
-                            });
-
-                        }}
-                        DATA={allowedPost}
-                    />
-                </ThemedView>
-
-                <ThemedView style={{ paddingBottom: 50 }}>
-                    <ThemedText>{langselected?.profile?.stat}</ThemedText>
-                    <Carousel
-                        width={width}
-                        height={height / 3}
-                        data={carouselData}
-                        pagingEnabled
-                        snapEnabled
-                        loop={false}
-                        onSnapToItem={(index) => setActiveIndex(index)}
-                        mode="parallax"
-                        modeConfig={{
-                            parallaxScrollingScale: 0.9,
-                            parallaxScrollingOffset: 52,
-                        }}
-                        renderItem={({ item }) => {
-                            if (item.type === 'pie') {
-                                return (
-                                    <ThemedView
-                                        style={{
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <ThemedText style={style.label}>
-                                            Active on {statsCategory?.length} categories
-                                        </ThemedText>
-
-                                        <PieChart
-                                            data={statsCategory}
-                                            donut
-                                            radius={90}
-                                            textSize={12}
-                                            innerCircleColor={
-                                                colorScheme === 'dark'
-                                                    ? '#121212'
-                                                    : '#fff'
-                                            }
-                                            innerRadius={40}
-                                            onPress={(item) => setSelected(item)}
-                                            focusOnPress
-                                        />
-                                    </ThemedView>
-                                );
-                            }
-
-                            return (
-                                <ThemedView
-                                    style={{
-                                        justifyContent: 'center',
-                                        paddingHorizontal: 20,
-                                    }}
-                                >
-                                    <ThemedText style={style.label}>
-                                        {langselected?.profile.stat_n_post}
-                                    </ThemedText>
-
-                                    <BarChart
-                                        data={statsTimeMonth}
-                                        barWidth={28}
-                                        spacing={40}
-                                        roundedTop
-                                        roundedBottom
-                                        hideRules
-                                        isAnimated
-                                    />
-                                </ThemedView>
-                            );
+                :
+                <>
+                    <Stack.Screen
+                        options={{
+                            title: user?.USERNAME,
+                            gestureEnabled: true,
                         }}
                     />
+                    {/* <ScrollView> */}
+                    <ThemedView style={[style.container, { flex: 1 }]}>
+                        <ThemedView
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: 10,
+                            }}
+                        >
+                            <ThemedView style={{ flex: 1, paddingRight: 10 }}>
+                                <ThemedText className="ThemedText-lg font-bold" style={style.subtitle}>
+                                    {user?.NAME} {user?.SURNAME}
+                                </ThemedText>
 
-                    {/* Pagination Dots */}
-                    <ThemedView
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        {carouselData.map((_, index) => (
-                            <ThemedView
-                                key={index}
+                                <ThemedText variant="caption">
+                                    {user?.USERNAME}
+                                </ThemedText>
+
+                                <ThemedText variant="caption" style={{ fontStyle: 'italic', marginBottom: 2 }}>
+                                    {langselected?.profile.activefrom}: {datetime2date(user?.DC)}
+                                </ThemedText>
+                            </ThemedView>
+
+                            <Image
+                                source={{ uri: `data:image/jpeg;base64,${ProfilePic}` }}
                                 style={{
-                                    width: 8,
-                                    height: 8,
-                                    borderRadius: 4,
-                                    marginHorizontal: 4,
-                                    backgroundColor:
-                                        colorScheme == "dark" ?
-                                            activeIndex === index ? '#ccc' : '#555' :
-                                            activeIndex === index ? '#555' : '#ccc'
-                                    ,
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 40,
                                 }}
                             />
-                        ))}
-                    </ThemedView>
-                </ThemedView>
+                        </ThemedView>
 
-            </ThemedView >
-            {/* </ScrollView> */}
-        </ >
+                        <ThemedView style={{ flex: 1 }}>
+                            <ThemedText>{langselected.profile.allowedPost}</ThemedText>
+                            <ListItem
+                                isImage={false} //we render icons, not expo-image
+                                isSelectable={false}
+                                estimatedSize={30}
+                                allowCreation={false}
+                                label="Posts"
+                                onSelect={(pickedItem) => {
+                                    // console.log(pickedItem, JSON.parse(pickedItem),pickedItem.post_id);
+
+                                    router.push({
+                                        pathname: 'viewer/PostViewer',
+                                        params: {
+                                            postid: pickedItem?.post_id,
+                                        }
+                                    });
+
+                                }}
+                                DATA={allowedPost}
+                            />
+                        </ThemedView>
+
+                        <ThemedView style={{ paddingBottom: 50 }}>
+                            <ThemedText>{langselected?.profile?.stat}</ThemedText>
+                            <Carousel
+                                width={width}
+                                height={height / 3}
+                                data={carouselData}
+                                pagingEnabled
+                                snapEnabled
+                                loop={false}
+                                onSnapToItem={(index) => setActiveIndex(index)}
+                                mode="parallax"
+                                modeConfig={{
+                                    parallaxScrollingScale: 0.9,
+                                    parallaxScrollingOffset: 52,
+                                }}
+                                renderItem={({ item }) => {
+                                    if (item.type === 'pie') {
+                                        return (
+                                            <ThemedView
+                                                style={{
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <ThemedText style={style.label}>
+                                                    Active on {statsCategory?.length} categories
+                                                </ThemedText>
+
+                                                <PieChart
+                                                    data={statsCategory}
+                                                    donut
+                                                    radius={90}
+                                                    textSize={12}
+                                                    innerCircleColor={
+                                                        colorScheme === 'dark'
+                                                            ? '#121212'
+                                                            : '#fff'
+                                                    }
+                                                    innerRadius={40}
+                                                    onPress={(item) => setSelected(item)}
+                                                    focusOnPress
+                                                />
+                                            </ThemedView>
+                                        );
+                                    }
+
+                                    return (
+                                        <ThemedView
+                                            style={{
+                                                justifyContent: 'center',
+                                                paddingHorizontal: 20,
+                                            }}
+                                        >
+                                            <ThemedText style={style.label}>
+                                                {langselected?.profile.stat_n_post}
+                                            </ThemedText>
+
+                                            <BarChart
+                                                data={statsTimeMonth}
+                                                barWidth={28}
+                                                spacing={40}
+                                                roundedTop
+                                                roundedBottom
+                                                hideRules
+                                                isAnimated
+                                            />
+                                        </ThemedView>
+                                    );
+                                }}
+                            />
+
+                            {/* Pagination Dots */}
+                            <ThemedView
+                                style={{
+                                    flex: 1,
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                {carouselData.map((_, index) => (
+                                    <ThemedView
+                                        key={index}
+                                        style={{
+                                            width: 8,
+                                            height: 8,
+                                            borderRadius: 4,
+                                            marginHorizontal: 4,
+                                            backgroundColor:
+                                                colorScheme == "dark" ?
+                                                    activeIndex === index ? '#ccc' : '#555' :
+                                                    activeIndex === index ? '#555' : '#ccc'
+                                            ,
+                                        }}
+                                    />
+                                ))}
+                            </ThemedView>
+                        </ThemedView>
+
+                    </ThemedView >
+                    {/* </ScrollView> */}
+                </ >
+            }
+
+        </>
+
     )
 }
 

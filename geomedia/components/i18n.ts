@@ -2,6 +2,7 @@ export const it = {
     map: "Mappa",
     account: "Profilo",
     collections: "Collezioni",
+    wait: "Caricamento in corso...",
     login: {
         emailOrUsername: "Email o username",
         placeholderEmail: "Inserisci la tua email",
@@ -212,6 +213,7 @@ export const en = {
     map: "Map",
     account: "Account",
     collections: "Collections",
+    wait: "Loading...",
     login: {
         emailOrUsername: "Email or username",
         placeholderEmail: "Enter your email",

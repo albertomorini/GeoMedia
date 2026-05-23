@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
 
 import { Ionicons } from "@expo/vector-icons";
@@ -121,140 +121,158 @@ const PostViewer = () => {
 
     return (
         <>
-            <Stack.Screen
-                options={{
-                    title: postData?.TITLE,
-                }}
-            />
-
-
-            {/* MAIN LAYOUT */}
-            <ThemedView style={{ flex: 1 }}>
-
-                {/* SCROLLABLE CONTENT */}
-                <ScrollView
-                    contentContainerStyle={{
-                        padding: 16,
-                        paddingBottom: 100, // space for bottom bar
-                    }}
-                >
-
-
-                    <ItemIconizable
-                        item={{
-                            ICON: postData?.ICON,
-                            COLOR: postData?.COLOR,
-                            TITLE: postData?.TITLE,
-                            SUBTITLE: postData?.COLLECTION_NAME,
+            {postData == null ? //wait till data loaded
+                <ThemedView style={{
+                    flex: 1,
+                    ...StyleSheet.absoluteFillObject,
+                    height: "100%",
+                    width: "100%",
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Stack.Screen //thus to avoid the component name
+                        options={{
+                            title: langselected?.wait,
+                            gestureEnabled: true,
                         }}
                     />
-
-                    {postData?.attachments?.length > 0 && (
-                        <CarouselFileViewer
-                            attachments={postData?.attachments}
-                            isEdit={false}
-                        />
-                    )}
-
-                    {
-                        (postData?.COMMENT == undefined || postData?.COMMENT?.length == 0) ? null :
-                            <ThemedText
-                                style={[
-                                    style.subtitle,
-                                    {
-                                        backgroundColor: colorScheme === 'dark' ? "#4d4d4d" : '#f2f2f2',
-                                        borderRadius: 50,
-                                        padding: 16,
-                                        marginBottom: 5,
-                                        fontStyle: "italic"
-                                    },
-                                ]}
-                            >
-                                {postData?.COMMENT}
-                            </ThemedText>
-                    }
-
-                    <ItemIconizable
-                        isImage={true}
-                        onPress={() => {
-                            router.push({
-                                pathname: "viewer/ProfileViewer",
-                                params: { uid: userCreator?.uid },
-                            });
-                        }}
-                        item={{
-                            ICON: userCreator?.pfp,
-                            TITLE: userCreator?.username,
-                            SUBTITLE: (langselected.on + " " + datetime2date(postData?.DC))
-                        }}
-                    />
-
-
-                    {/* EDIT BUTTON */}
-                    {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (
-                        <TouchableOpacity
-                            accessibilityRole="button"
-                            accessibilityLabel={langselected.postCreator.modify + " post"}
-                            style={[
-                                style.buttons.full_screen,
-                                style.colors.geomedia_blue,
-                                { marginTop: 20 },
-                            ]}
-                            onPress={() => {
-                                router.push({
-                                    pathname: "/PostCreator",
-                                    params: { postid: postData?.ID },
-                                });
-                            }}
-                        >
-                            <ThemedText>{langselected.postCreator.modify} post</ThemedText>
-                        </TouchableOpacity>
-                    )}
-
-                    {parseInt(ctx?.getUID()) == (postData?.AUTHOR_ID) ? null :
-                        <ReportPost postid={postData?.ID} />
-                    }
-                </ScrollView>
-
-                <ThemedView style={style.bottom_bar}>
-
-                    <ThemedView style={style.bottom_bar_item}>
-                        <Ionicons name="eye-outline" size={20} color={"#555"} />
-                        <ThemedText style={{
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}>{langselected?.views}: {postData?.NUM_VIEWS}</ThemedText>
-                    </ThemedView>
-
-                    <ThemedView style={style.bottom_bar_item}>
-                        <ThemedText style={{
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}>{langselected.likes}: {postData?.NUM_LIKES}</ThemedText>
-
-                        <TouchableOpacity
-                            accessibilityRole="button"
-                            accessibilityLabel={langselected.likes}
-                            onPress={() => {
-                                toggleLike()
-                            }}
-                            style={{
-                                backgroundColor: 'rgba(0,0,0,0.4)',
-                                padding: 8,
-                                borderRadius: 20,
-                            }}
-                        >
-                            <Ionicons
-                                name={postData?.LIKED_BY_CURR_USER ? 'heart' : 'heart-outline'}
-                                size={24}
-                                color={postData?.LIKED_BY_CURR_USER ? 'red' : 'white'}
-                            />
-                        </TouchableOpacity>
-                    </ThemedView>
-
+                    <ActivityIndicator size={"large"} color={style?.colors?.geomedia_green} />
                 </ThemedView>
+                :
+                <>
+                    <Stack.Screen
+                        options={{
+                            title: postData?.TITLE,
+                        }}
+                    />
+                    < ThemedView style={{ flex: 1 }}>
 
-            </ThemedView>
+                        {/* SCROLLABLE CONTENT */}
+                        <ScrollView
+                            contentContainerStyle={{
+                                padding: 16,
+                                paddingBottom: 100, // space for bottom bar
+                            }}
+                        >
+
+
+                            <ItemIconizable
+                                item={{
+                                    ICON: postData?.ICON,
+                                    COLOR: postData?.COLOR,
+                                    TITLE: postData?.TITLE,
+                                    SUBTITLE: postData?.COLLECTION_NAME,
+                                }}
+                            />
+
+                            {postData?.attachments?.length > 0 && (
+                                <CarouselFileViewer
+                                    attachments={postData?.attachments}
+                                    isEdit={false}
+                                />
+                            )}
+
+                            {
+                                (postData?.COMMENT == undefined || postData?.COMMENT?.length == 0) ? null :
+                                    <ThemedText
+                                        style={[
+                                            style.subtitle,
+                                            {
+                                                backgroundColor: colorScheme === 'dark' ? "#4d4d4d" : '#f2f2f2',
+                                                borderRadius: 50,
+                                                padding: 16,
+                                                marginBottom: 5,
+                                                fontStyle: "italic"
+                                            },
+                                        ]}
+                                    >
+                                        {postData?.COMMENT}
+                                    </ThemedText>
+                            }
+
+                            <ItemIconizable
+                                isImage={true}
+                                onPress={() => {
+                                    router.push({
+                                        pathname: "viewer/ProfileViewer",
+                                        params: { uid: userCreator?.uid },
+                                    });
+                                }}
+                                item={{
+                                    ICON: userCreator?.pfp,
+                                    TITLE: userCreator?.username,
+                                    SUBTITLE: (langselected.on + " " + datetime2date(postData?.DC))
+                                }}
+                            />
+
+
+                            {/* EDIT BUTTON */}
+                            {(parseInt(ctx?.getUID()) === parseInt(postData?.AUTHOR_ID)) && (
+                                <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected.postCreator.modify + " post"}
+                                    style={[
+                                        style.buttons.full_screen,
+                                        style.colors.geomedia_blue,
+                                        { marginTop: 20 },
+                                    ]}
+                                    onPress={() => {
+                                        router.push({
+                                            pathname: "/PostCreator",
+                                            params: { postid: postData?.ID },
+                                        });
+                                    }}
+                                >
+                                    <ThemedText>{langselected.postCreator.modify} post</ThemedText>
+                                </TouchableOpacity>
+                            )}
+
+                            {parseInt(ctx?.getUID()) == (postData?.AUTHOR_ID) ? null :
+                                <ReportPost postid={postData?.ID} />
+                            }
+                        </ScrollView>
+
+                        <ThemedView style={style.bottom_bar}>
+
+                            <ThemedView style={style.bottom_bar_item}>
+                                <Ionicons name="eye-outline" size={20} color={"#555"} />
+                                <ThemedText style={{
+                                    fontSize: 16,
+                                    fontWeight: "500",
+                                }}>{langselected?.views}: {postData?.NUM_VIEWS}</ThemedText>
+                            </ThemedView>
+
+                            <ThemedView style={style.bottom_bar_item}>
+                                <ThemedText style={{
+                                    fontSize: 16,
+                                    fontWeight: "500",
+                                }}>{langselected.likes}: {postData?.NUM_LIKES}</ThemedText>
+
+                                <TouchableOpacity
+                                    accessibilityRole="button"
+                                    accessibilityLabel={langselected.likes}
+                                    onPress={() => {
+                                        toggleLike()
+                                    }}
+                                    style={{
+                                        backgroundColor: 'rgba(0,0,0,0.4)',
+                                        padding: 8,
+                                        borderRadius: 20,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name={postData?.LIKED_BY_CURR_USER ? 'heart' : 'heart-outline'}
+                                        size={24}
+                                        color={postData?.LIKED_BY_CURR_USER ? 'red' : 'white'}
+                                    />
+                                </TouchableOpacity>
+                            </ThemedView>
+
+                        </ThemedView>
+
+                    </ThemedView >
+                </>
+            }
         </>
     );
 }
