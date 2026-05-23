@@ -310,7 +310,7 @@ const PostCreator = () => {
     useFocusEffect( //to handle the back on routing
         useCallback(async () => {
             load_current_location()
-            if (params != null) {
+            if (params?.postid != null) {
                 loadFullPost()
             }
         }, []) //when position or collections change (or are loaded) refresh posts
@@ -394,10 +394,15 @@ const PostCreator = () => {
                                 thumbSize={22}
                                 value={parseFloat(postData?.VISIBILITY_AREA_KM)}
                                 step={0.2}
-                                onSlidingComplete={(val) => {
+                                onValueChange={(val) => {
                                     let rounded = val.toFixed(2)
                                     setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
+
                                 }}
+                                // onSlidingComplete={(val) => {
+                                //     let rounded = val.toFixed(2)
+                                //     setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
+                                // }}
                             />
                             <>
                                 {

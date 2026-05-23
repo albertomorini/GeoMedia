@@ -178,7 +178,6 @@ const MapViewer = forwardRef((props, ref) => {
     /////////////////////////////////////////////////////////////
 
     function collections_get_local() {
-        console.log(UserPosition);
         if (UserPosition?.latitude != 0 && UserPosition?.longitude != 0) {
 
             doRequest("collections/get_local", {
@@ -186,8 +185,6 @@ const MapViewer = forwardRef((props, ref) => {
                 curr_lat: UserPosition?.latitude,
                 curr_lon: UserPosition?.longitude
             }, "GET").then(resQuery => {
-                console.log("ERE", resQuery);
-
                 setLocalCollections(resQuery)
             }).catch(err => {
                 ctx?.showToast({
@@ -439,12 +436,7 @@ const MapViewer = forwardRef((props, ref) => {
                     borderTopRightRadius: 24,
                     backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff',
                 }}
-            // onClose={async () => {
-            //     let cols = await check_cache_collection_chosen()
-            //     console.log(cols);
-
-            //     get_posts_map(UserPosition, cols)
-            // }}
+     
             >
 
                 <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, flex: 1 }}>
