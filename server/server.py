@@ -156,8 +156,6 @@ async def profile_get_stats(
     username: str ,
     mode: str
 ):
-    print("THERE",mode,username)
-    
     if(mode=="categories"):
         return await geomedia_helper.generic_query("profile_getstats_categories",{"username":username})
     elif(mode=="timemonths"):
@@ -178,6 +176,12 @@ async def profile_editinfo(
             "PROFILE_PICTURE": body.profile_picture
         },
     )
+
+
+@app.get("/profile/show_allowed_post",tags=["USERS"])
+async def profile_show_allowed_post(uid: int, profile_id: int, curr_lat: float, curr_lon: float):
+    return await geomedia_helper.profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon)
+
 
 @app.get("/users",tags=["USERS"])
 async def users_list(uid:int):
@@ -200,7 +204,6 @@ async def collection_merge(body: dict, request: Request):
     body["IP"] = request.client.host
     body["HEADERS"] = dict(request.headers)
     query_results = await geomedia_helper.collection_merge(body)
-    print("QR",query_results)
 
     if not query_results[0].get("OK"):
         raise HTTPException(
@@ -237,6 +240,10 @@ async def collection_posts_get(collectionid: int):
 async def collections_by_tag(uid:int):
     return await geomedia_helper.collections_by_tag(uid)
 
+@app.get("/collection/get_local",tags=["COLLECTION"])
+async def collections_get_local(uid:int,curr_lat,curr_lon):
+    return await geomedia_helper.collections_get_local(uid,curr_lat,curr_lon)
+
 #---------------------------------------------------------------------------------------------------------------------------------
 
 ## POSTS
@@ -245,7 +252,6 @@ async def collections_by_tag(uid:int):
 @app.post("/post",  tags=["POST"])
 async def post_merge(body: post_merge, request: Request):
     
-    print(body.exclusivity)
     files = body.attachments or {}
     query_results = await geomedia_helper.post_merge({
         "ID": body.id,
@@ -259,7 +265,6 @@ async def post_merge(body: post_merge, request: Request):
         "COLLECTION_ID": body.collection_id,
         "EXCLUSIVITY": body.exclusivity
     })
-    print(query_results)
 
     if not query_results[0].get("OK"):
         raise HTTPException(
@@ -319,7 +324,6 @@ async def delete_post(post_id: int, password: str):
 
 @app.get("/post/by_author",tags=["POST"])
 async def post_by_author(uid: str,authorid: str):
-    print("received", uid, authorid)
     return await geomedia_helper.generic_query("post_by_author",{
         "uid":uid,"authorid":authorid
     })

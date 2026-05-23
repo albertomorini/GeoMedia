@@ -170,6 +170,12 @@ async def auth_signin(procedure: str, body: dict):
 def checkAREA(areaKM, post_lat, post_lon, curr_lat, curr_lon):
     from math import cos, asin, sqrt, pi
 
+    post_lat = float(post_lat)
+    post_lon = float(post_lon)
+    curr_lat = float(curr_lat)
+    curr_lon = float(curr_lon)
+
+
     dLat = (post_lat - curr_lat) * pi / 180
     dLon = (post_lon - curr_lon) * pi / 180
 
@@ -212,6 +218,66 @@ async def post_get_map(uid, current_position, collection_chosen=None):
 
     return results
 
+
+async def profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon):
+    query = (
+        "EXEC PROFILE_GET_ALLOWEDPOST "
+        f"@UID='{uid}', "
+        f"@PROFILE_ID='{profile_id}'"
+    )
+
+    posts = SQL_MANAGER.select_query(query)
+
+    results = []
+    ## filter by allowed by visibility
+    for pp in posts:
+        if checkAREA(
+            pp["VISIBILITY_AREA_KM"],
+            pp["LATITUDE"],
+            pp["LONGITUDE"],
+            curr_lat,
+            curr_lon
+        ):
+            results.append(pp)
+
+    return results
+
+
+async def collections_get_local(uid,curr_lat,curr_lon):
+    query="EXEC POSTS_GETALL_ALLOWED @UID="+str(uid)
+    posts = SQL_MANAGER.select_query(query)
+    results = []
+    ## filter by allowed by visibility
+    for pp in posts:
+        if checkAREA(
+            pp["VISIBILITY_AREA_KM"],
+            pp["LATITUDE"],
+            pp["LONGITUDE"],
+            curr_lat,
+            curr_lon
+        ):
+            results.append(pp)
+
+    collection_rank = dict()
+    for p in results:
+        c = p["COLLECTION_ID"]
+        if(c not in collection_rank):
+            collection_rank[c] = 1
+        else:
+            collection_rank[c] += 1
+
+    
+    collection_ids = [
+        k for k, v in sorted(
+            collection_rank.items(),
+            key=lambda item: item[1],
+            reverse=True
+        )[:10]
+    ]
+    id_collections = ", ".join(map(str, collection_ids))
+
+    query = f"SELECT * FROM COLLECTIONS WHERE ID IN ({id_collections})"
+    return SQL_MANAGER.select_query(query)
 
 # ------------------------
 # DELETE POST
