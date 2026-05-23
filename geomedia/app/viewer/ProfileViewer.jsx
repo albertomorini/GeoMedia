@@ -15,9 +15,19 @@ import { datetime2date, doRequest } from '../utility';
 
 
 
+
+
+import { Dimensions, TouchableOpacity } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
+import { Ionicons } from "@expo/vector-icons";
+
+const width = Dimensions.get('window').width;
+
 const ProfileViewer = () => {
 
     const ctx = useContext(MyContext)
+    const colorScheme = useColorScheme();
+
     const { langselected } = useLanguage()
     const [ProfilePic, setProfilePic] = useState(default_account_profilepic)
     const params = useLocalSearchParams()
@@ -36,6 +46,13 @@ const ProfileViewer = () => {
         '#BAE1FF',
         '#E3BAFF',
     ]
+
+    /// FOR CAROUSEL STATS
+    const carouselData = [
+        { type: 'pie' },
+        { type: 'bar' },
+    ];
+    const [activeIndex, setActiveIndex] = useState(0);
 
 
     function getProfilePic(username) {
@@ -140,12 +157,13 @@ const ProfileViewer = () => {
         }
     }, [selected]);
 
+    
     return (
         <>
             <Stack.Screen
                 options={{
                     title: user?.USERNAME,
-                    gestureEnabled: true, 
+                    gestureEnabled: true,
                 }}
             />
             <ThemedView style={[style.container, { height: "100%" }]}>
@@ -182,66 +200,105 @@ const ProfileViewer = () => {
                 </ThemedView>
 
 
-                <ThemedView style={{ flex: 1, width: "100%" }}>
-                    <ThemedText style={style.label}>
-                        Active on {statsCategory?.length} categories
-                    </ThemedText>
+                <ThemedView>
+                    <Carousel
+                        width={width}
+                        height={350}
+                        data={carouselData}
+                        pagingEnabled
+                        snapEnabled
+                        loop={false}
+                        onSnapToItem={(index) => setActiveIndex(index)}
+                        mode="parallax"
+                        modeConfig={{
+                            parallaxScrollingScale: 0.9,
+                            parallaxScrollingOffset: 52,
+                        }}
+                        renderItem={({ item }) => {
+                            if (item.type === 'pie') {
+                                return (
+                                    <ThemedView
+                                        style={{
+                                            flex: 1,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <ThemedText style={style.label}>
+                                            Active on {statsCategory?.length} categories
+                                        </ThemedText>
 
-                    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <PieChart
-                            data={statsCategory}
-                            donut
-                            radius={90}
-                            textSize={12}
-                            innerCircleColor={useColorScheme() === 'dark' ? '#121212' : '#fff'}  //thus to allow dark mode
-                            innerRadius={40}
-                            onPress={(item, index) => {
-                                setSelected(item);
-                            }}
-                            focusOnPress
-                        />
-                        {selected == null ?
-                            <ThemedText>Tap on a category to see more</ThemedText>
-                            :
-                            (
-                                <Animated.View
+                                        <PieChart
+                                            data={statsCategory}
+                                            donut
+                                            radius={90}
+                                            textSize={12}
+                                            innerCircleColor={
+                                                colorScheme === 'dark'
+                                                    ? '#121212'
+                                                    : '#fff'
+                                            }
+                                            innerRadius={40}
+                                            onPress={(item) => setSelected(item)}
+                                            focusOnPress
+                                        />
+                                    </ThemedView>
+                                );
+                            }
+
+                            return (
+                                <ThemedView
                                     style={{
-                                        marginTop: 20,
-                                        transform: [{ scale: opacityAnim }],
-                                        opacity: opacityAnim,
+                                        flex: 1,
+                                        justifyContent: 'center',
+                                        paddingHorizontal: 20,
                                     }}
                                 >
-                                    <ThemedText style={{ fontSize: 16 }}>
-                                        {selected.text}: with {selected.value} posts
+                                    <ThemedText style={style.label}>
+                                        Number of posts
                                     </ThemedText>
-                                </Animated.View>
-                            )}
 
+                                    <BarChart
+                                        data={statsTimeMonth}
+                                        barWidth={28}
+                                        spacing={40}
+                                        roundedTop
+                                        roundedBottom
+                                        hideRules
+                                        isAnimated
+                                    />
+                                </ThemedView>
+                            );
+                        }}
+                    />
+
+                    {/* Pagination Dots */}
+                    <ThemedView
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            marginTop: 12,
+                        }}
+                    >
+                        {carouselData.map((_, index) => (
+                            <ThemedView
+                                key={index}
+                                style={{
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: 4,
+                                    marginHorizontal: 4,
+                                    backgroundColor:
+                                        activeIndex === index
+                                            ? '#555'
+                                            : '#ccc',
+                                }}
+                            />
+                        ))}
                     </ThemedView>
-
-
-                    <ThemedView style={{ flex: 1, width: "100%" }}>
-                        <ThemedText style={style.label}>
-                            Number of posts
-                        </ThemedText>
-
-                        <BarChart
-                            data={statsTimeMonth}
-                            barWidth={28}
-                            spacing={40}
-                            roundedTop
-                            roundedBottom
-                            hideRules={true}
-                            xAxisLabelTextStyle={{ color: "#666", fontSize: 12 }}
-                            yAxisTextStyle={{ color: "#666" }}
-                            xAxisColor="#ddd"
-                            yAxisColor="#ddd"
-                            isAnimated={true}
-                        />
-                    </ThemedView>
-
                 </ThemedView>
             </ThemedView >
+
         </ >
     )
 }
