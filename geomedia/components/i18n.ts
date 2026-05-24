@@ -76,7 +76,7 @@ export const it = {
     },
     postCreator: {
         title: "Titolo",
-        comment: "Commento",
+        comment: "Commento (opzionale)",
         comment_placeholder: "Aggiungi un commento",
         area: "Area di visibilità",
         locationCurrent: "Posizione corrente",
@@ -136,7 +136,7 @@ export const it = {
         missing_data_empty: "Motivo e tipologia obbligatorie"
     },
     fileUpload: {
-        uploadFile: "Carica dei file",
+        uploadFile: "Carica dei file (opzionale)",
         pickfile: "Scegli i file", // pick a file
         attached: "File caricati",
         takepic: "Scatta una foto",
@@ -164,6 +164,8 @@ export const it = {
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Campi obbligatori: ",
+    requiredfields_post: "Titolo e collezione",
+
     sequentiality: {
         title: "Post sequenziali",
         seq: "Sequenzialità",
@@ -287,7 +289,7 @@ export const en = {
     },
     postCreator: {
         title: "Title",
-        comment: "Comment",
+        comment: "Comment (optional)",
         comment_placeholder: "Add a comment",
         area: "Visibility area (in KM)",
         locationCurrent: "Current location",
@@ -347,7 +349,7 @@ export const en = {
         missing_data_empty: "Kind and motive are required"
     },
     fileUpload: {
-        uploadFile: "Upload files",
+        uploadFile: "Upload files (optional)",
         pickfile: "Choose files",
         attached: "Uploaded files",
         takepic: "Take a picture",
@@ -375,6 +377,7 @@ export const en = {
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Required fields: ",
+    requiredfields_post: "Title and collection",
     sequentiality: {
         title: "Sequential posts",
         seq: "Sequentiality",

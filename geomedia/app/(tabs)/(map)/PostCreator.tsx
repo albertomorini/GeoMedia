@@ -148,12 +148,11 @@ const PostCreator = () => {
             ctx?.showToast({
                 type: "error",
                 text1: langselected.reportPost.missing_data,
-                text2: langselected.requiredfields + JSON.stringify(missing_fields)
+                text2: langselected.requiredfields + langselected?.requiredfields_post
             })
             setBtnCreateDisabled(false)
 
         } else {
-            console.log("going", dummy_body);
 
             doRequest("post", dummy_body, "POST").then(res => {
                 if (res?.OK) {
@@ -399,10 +398,10 @@ const PostCreator = () => {
                                     setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
 
                                 }}
-                                // onSlidingComplete={(val) => {
-                                //     let rounded = val.toFixed(2)
-                                //     setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
-                                // }}
+                            // onSlidingComplete={(val) => {
+                            //     let rounded = val.toFixed(2)
+                            //     setPostData(prev => ({ ...prev, VISIBILITY_AREA_KM: rounded }))
+                            // }}
                             />
                             <>
                                 {
