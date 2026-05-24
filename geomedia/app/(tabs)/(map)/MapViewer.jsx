@@ -280,6 +280,7 @@ const MapViewer = forwardRef((props, ref) => {
                                 zoom: 13.7, // optional, overrides altitude
                             }}
                             pitchEnabled={true}
+                            showsCompass={false}
                             showsBuildings={true}
                             showsMyLocationButton={false} //make it custom thus to give space to collections
                         >
@@ -436,7 +437,7 @@ const MapViewer = forwardRef((props, ref) => {
                     borderTopRightRadius: 24,
                     backgroundColor: colorScheme === 'dark' ? '#121212' : '#fff',
                 }}
-     
+
             >
 
                 <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, flex: 1 }}>

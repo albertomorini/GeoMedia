@@ -381,6 +381,23 @@ const ProfileViewer = () => {
                                                     onPress={(item) => setSelected(item)}
                                                     focusOnPress
                                                 />
+                                                {selected == null ?
+                                                    <ThemedText>Tap on a category to see more</ThemedText>
+                                                    :
+                                                    (
+                                                        <Animated.View
+                                                            style={{
+                                                                marginTop: 20,
+                                                                transform: [{ scale: opacityAnim }],
+                                                                opacity: opacityAnim,
+                                                            }}
+                                                        >
+                                                            <ThemedText style={{ fontSize: 16 }}>
+                                                                {selected.text}: with {selected.value} posts
+                                                            </ThemedText>
+                                                        </Animated.View>
+                                                    )}
+
                                             </ThemedView>
                                         );
                                     }
@@ -404,6 +421,14 @@ const ProfileViewer = () => {
                                                 roundedBottom
                                                 hideRules
                                                 isAnimated
+                                                xAxisColor={colorScheme == "dark" ? '#fff' : '#000'}
+                                                yAxisColor={colorScheme == "dark" ? '#fff' : '#000'}
+                                                xAxisLabelTextStyle={{
+                                                    color: colorScheme == "dark" ? '#fff' : '#000',
+                                                }}
+                                                yAxisTextStyle={{
+                                                    color: colorScheme == "dark" ? '#fff' : '#000',
+                                                }}
                                             />
                                         </ThemedView>
                                     );
