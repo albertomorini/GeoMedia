@@ -185,7 +185,9 @@ const MapViewer = forwardRef((props, ref) => {
                 curr_lat: UserPosition?.latitude,
                 curr_lon: UserPosition?.longitude
             }, "GET").then(resQuery => {
-                setLocalCollections(resQuery)
+                if (resQuery?.length > 0) {
+                    setLocalCollections(resQuery)
+                }
             }).catch(err => {
                 ctx?.showToast({
                     type: "error",
@@ -360,6 +362,7 @@ const MapViewer = forwardRef((props, ref) => {
                                 flexDirection: "row",
                                 alignItems: "center",
                                 top: 50,
+                                paddingTop: localCollections?.length > 0 ? 0 : 35 //workaround in order to make the button of collection visible
                             }}
                         >
                             <ScrollView
