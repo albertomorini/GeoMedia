@@ -362,17 +362,19 @@ const MapViewer = forwardRef((props, ref) => {
                                 flexDirection: "row",
                                 alignItems: "center",
                                 top: 50,
-                                paddingTop: localCollections?.length > 0 ? 0 : 35 //workaround in order to make the button of collection visible
+                                // paddingTop: localCollections?.length > 0 ? 0 : 35,
                             }}
                         >
+
+                            {/* SCROLLABLE COLLECTIONS */}
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 inverted
                                 style={{
-                                    maxWidth: 300,
+                                    flex: 1,
                                     marginRight: 10,
-                                    bottom: 35
+                                    bottom: 35,
                                 }}
                                 contentContainerStyle={{
                                     flexDirection: "row",
@@ -387,11 +389,12 @@ const MapViewer = forwardRef((props, ref) => {
                                 >
                                     {localCollections?.map(s => (
                                         <TouchableOpacity
+                                            key={s?.ID}
                                             style={{
                                                 paddingHorizontal: 9,
                                                 paddingVertical: 5,
                                                 borderRadius: 20,
-                                                backgroundColor: `${s?.COLOR}99`, //add transparency
+                                                backgroundColor: `${s?.COLOR}99`,
                                                 marginRight: 8,
                                             }}
                                             onPress={() => {
@@ -402,27 +405,35 @@ const MapViewer = forwardRef((props, ref) => {
                                                 setCollectionsChosen(updatedCollections);
 
                                                 get_posts_map(UserPosition, updatedCollections);
-
                                             }}
                                         >
                                             <ThemedText>{s?.TITLE}</ThemedText>
                                         </TouchableOpacity>
                                     ))}
-
                                 </ThemedView>
                             </ScrollView>
 
-                            {/* ALL COLLECTION BOTTOM SHEET VIEWER */}
+                            {/* FIXED BUTTON */}
                             <TouchableOpacity
                                 accessibilityRole="button"
                                 accessibilityLabel={langselected?.close}
-                                style={[style.buttons.fab, style.colors.geomedia_gray,]}
+                                style={[
+                                    style.colors.geomedia_gray,
+                                    {
+                                        paddingHorizontal: 9,
+                                        paddingVertical: 5,
+                                        borderRadius: 20,
+                                        marginRight: 8,
+                                        bottom: 35,
+                                    }
+                                ]}
                                 onPress={() => {
                                     collectionPickerSheet?.current?.snapToIndex(0)
-                                }}>
+                                }}
+                            >
                                 <Ionicons name={"layers"} size={24} style={{ color: "#555" }} />
-
                             </TouchableOpacity>
+
                         </View>
 
                     </ThemedView>
