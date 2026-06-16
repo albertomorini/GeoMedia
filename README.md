@@ -6,11 +6,15 @@
 - Supervisor: Professor Claudio Enrico Palazzi
 - Co-Supervisor: Lorenzo Perinello
 
-> The first version of this project was implemented with <a href="https://ionicframework.com/">IonicFramework<a/> and <a href="https://pigeon-maps.js.org/">Piegon Maps</a>, for Wireless Network for Mobile Application course.
-- _See the Ionic branch for that version_ (same repository)
+Made with ReactNative for Android platform, Python and FastAPI for backend server, MSSQL for data layer; adopting three-tier paradigm.
 
+--------------------------------------------------------------
+
+> The first version of this project was implemented with <a href="https://ionicframework.com/">IonicFramework<a/> and <a href="https://pigeon-maps.js.org/">Piegon Maps</a>, for Wireless Network for Mobile Application course. --> _see the respective branch for that version_
 Also presented at <a href="https://goodit2025.idlab.uantwerpen.be/">GoodIT 2025 </a> (Antwerp, Belgium)
+
 - Full research available on <a href="https://www.research.unipd.it/handle/11577/3575540">UNIPD site</a>
+--------------------------------------------------------------
 
 ## Concept
 GeoMedia insert itself among the others Online Social Networks (OSNS), offering another way to share content in order to discover new places by adding a comment or a multimedia file in the current user location.
@@ -34,7 +38,7 @@ This project reflect the ["three tier architecture"](https://www.ibm.com/think/t
 ## Dependendices and tecnologies
 
 ### Client application:
-> ReactNative with Expo framework
+> made with ReactNative with Expo framework
 
 **Functionalities**:
 - GPS location (precise or approximate) for GoogleMaps
