@@ -16,7 +16,6 @@ import { ThemedPassword } from '@/components/themed-password';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useLanguage } from '@/components/LanguageProvider';
 import ModalPswReset from './mycomponents/ModalPswReset';
-import { router } from 'expo-router';
 import Settings from './Settings';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -59,7 +58,7 @@ export default function LoginScreen(props) {
                     text1: langselected.login.errorMessage,
                     visibilityTime: 3000,
                 });
-                seterrorPassword(res[0]?.MSG)
+                seterrorPassword(langselected.login.errorMessage)
             }
         }).catch(err => {
             console.warn(err);
@@ -92,8 +91,6 @@ export default function LoginScreen(props) {
                     }, 3000);
                 }
             }).catch(err => {
-                console.log(err);
-
                 ctx?.showToast({
                     type: "error",
                     text1: langselected.network.offline1,
@@ -170,7 +167,6 @@ export default function LoginScreen(props) {
                 ctx?.User?.setUser(j)
             } catch (error) {
                 console.error(error);
-
             }
         }
     }

@@ -56,19 +56,22 @@ export default function ProfileEditor() {
                 copyToCacheDirectory: true,
             });
 
-            if (result.type === "cancel") return;
+            if (result.type == "cancel") {
+                return 0
+            }
 
-            const { name, uri } = result?.assets[0];
-
-            // Read file as base64
-            const file = new FileSystem.File(uri); //load the file
-            const base64 = await file.base64();
-
-            setUserInfo(prev => ({
-                ...prev,
-                PROFILE_PICTURE: base64
-            }))
-            setProfilePic(base64) //just to render immediately after picked
+            if(result!=undefined && result?.assets?.length>0){
+                const { name, uri } = result?.assets[0];
+                // Read file as base64
+                const file = new FileSystem.File(uri); //load the file
+                const base64 = await file.base64();
+    
+                setUserInfo(prev => ({
+                    ...prev,
+                    PROFILE_PICTURE: base64
+                }))
+                setProfilePic(base64) //just to render immediately after picked
+            }
 
         } catch (error) {
             console.error(langselected.fileUpload.readingError, error);
