@@ -74,7 +74,7 @@ export const it = {
         stat_active_on: "Attivo su",
         stat_active_categories: " categorie",
         stat_pie_tap_category: "Seleziona una categoria per più informazioni",
-        stat_with:" con",
+        stat_with: " con",
         stat_posts: " contenuti"
     },
     postCreator: {
@@ -167,8 +167,9 @@ export const it = {
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Campi obbligatori: ",
-    requiredfields_post: "Titolo e collezione",
-
+    requiredfields_post_title: "Titolo post mancante",
+    requiredfields_post_collection: "Collezione mancante",
+    requiredfields_post_visibilty: "Area di visibilità mancante",
     sequentiality: {
         title: "Post sequenziali",
         seq: "Sequenzialità",
@@ -290,7 +291,7 @@ export const en = {
         stat_active_on: "Active on",
         stat_active_categories: " categories",
         stat_pie_tap_category: "Tap on a category to see more",
-        stat_with:" with",
+        stat_with: " with",
         stat_posts: " posts"
     },
     postCreator: {
@@ -383,7 +384,9 @@ export const en = {
         preferences_saved: "Preference saved!"
     },
     requiredfields: "Required fields: ",
-    requiredfields_post: "Title and collection",
+    requiredfields_post_title: "Missing post's title",
+    requiredfields_post_collection: "Missing collection",
+    requiredfields_post_visibilty: "Missing visibility area",
     sequentiality: {
         title: "Sequential posts",
         seq: "Sequentiality",

@@ -145,11 +145,28 @@ const PostCreator = () => {
         // the exclusivity (date, recurrency, viewers) are already setted by the modal
         let missing_fields = validatePost(dummy_body)
         if (missing_fields.length > 0) {
-            ctx?.showToast({
-                type: "error",
-                text1: langselected.reportPost.missing_data,
-                text2: langselected.requiredfields + langselected?.requiredfields_post
-            })
+
+            if (missing_fields.includes("title")) {
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.reportPost.missing_data,
+                    text2: langselected?.requiredfields_post_title
+                })
+
+            } else if (missing_fields.includes("visibility_area_km")) {
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.reportPost.missing_data,
+                    text2: langselected?.requiredfields_post_visibilty
+                })
+
+            } else if (missing_fields.includes("collection_id")) {
+                ctx?.showToast({
+                    type: "error",
+                    text1: langselected.reportPost.missing_data,
+                    text2: langselected?.requiredfields_post_collection
+                })
+            }
             setBtnCreateDisabled(false)
 
         } else {
