@@ -382,7 +382,7 @@ const ProfileViewer = () => {
                                                     focusOnPress
                                                 />
                                                 {selected == null ?
-                                                    <ThemedText>Tap on a category to see more</ThemedText>
+                                                    <ThemedText>{langselected?.profile?.stat_pie_tap_category}</ThemedText>
                                                     :
                                                     (
                                                         <Animated.View
@@ -393,7 +393,7 @@ const ProfileViewer = () => {
                                                             }}
                                                         >
                                                             <ThemedText style={{ fontSize: 16 }}>
-                                                                {selected.text}: with {selected.value} posts
+                                                                {selected.text}: {langselected?.profile?.stat_with} {selected.value} {langselected?.profile?.stat_posts}
                                                             </ThemedText>
                                                         </Animated.View>
                                                     )}

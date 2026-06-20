@@ -72,7 +72,10 @@ export const it = {
         stat: "Statistiche di utilizzo",
         stat_n_post: "Contenuti per mese",
         stat_active_on: "Attivo su",
-        stat_active_categories: " categorie"
+        stat_active_categories: " categorie",
+        stat_pie_tap_category: "Seleziona una categoria per più informazioni",
+        stat_with:" con",
+        stat_posts: " contenuti"
     },
     postCreator: {
         title: "Titolo",
@@ -285,7 +288,10 @@ export const en = {
         stat: "Usage statistics",
         stat_n_post: "Posts for month",
         stat_active_on: "Active on",
-        stat_active_categories: " categories"
+        stat_active_categories: " categories",
+        stat_pie_tap_category: "Tap on a category to see more",
+        stat_with:" with",
+        stat_posts: " posts"
     },
     postCreator: {
         title: "Title",
