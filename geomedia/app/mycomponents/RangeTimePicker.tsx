@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/themed-text";
 import { style } from "@/components/globalstyle";
@@ -31,8 +31,17 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
     const handleStartTime = (event, selectedTime) => {
         if (!selectedTime) return setMode(null);
 
+
+        const now = new Date();
+
         const updated = new Date(start);
-        updated.setHours(selectedTime.getHours(), selectedTime.getMinutes());
+        if (selectedTime < now) {
+            Alert.alert(langselected?.rangeTimePicker?.not_past_time);
+            updated.setHours(now.getHours(), now.getMinutes());
+        } else {
+            updated.setHours(selectedTime.getHours(), selectedTime.getMinutes());
+        }
+
 
         setStart(updated);
 
@@ -101,8 +110,8 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
             <ThemedText style={style.label}>{langselected.rangeTimePicker.startTime}:</ThemedText>
 
             <TouchableOpacity style={[style.colors.geomedia_blue, style.buttons.full_screen]}
-            
-            onPress={() => setMode("startDate")}>
+
+                onPress={() => setMode("startDate")}>
                 {start != null ?
                     <ThemedText >{formatDateTime(start)}</ThemedText>
                     :
@@ -127,7 +136,8 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     value={start || new Date()} // Use current date as fallback
                     mode="date"
                     onValueChange={handleStartDate}
-                    // // maximumDate={end || new Date()} // Prevent picking start date after end date
+                    minimumDate={new Date()}
+                // maximumDate={end || new Date()} // Prevent picking start date after end date
                 />
             )}
 
@@ -136,6 +146,7 @@ const DateTimeRangePicker = forwardRef((props, ref) => {
                     value={start}
                     mode="time"
                     is24Hour={true}
+                    minimumDate={new Date()}
                     onValueChange={handleStartTime}
                 />
             )}

@@ -114,7 +114,8 @@ export const it = {
         endTime: "Il post non sarà visibile dopo", //The Post will not be visible after:
         noexpiration: "Senza scadenza",
         reccurrent: "Ricorrente",
-        rec_values: ["Mai", "Mensile", "Annuale"]
+        rec_values: ["Mai", "Mensile", "Annuale"],
+        not_past_time: "Tempo passato non consentito"
     },
     reportPost: {
         title: "Segnala il post",
@@ -331,7 +332,8 @@ export const en = {
         endTime: "The post will not be visible after",
         noexpiration: "No expiration",
         reccurrent: "Recurrent",
-        rec_values: ["Never", "Monthly", "Yearly"]
+        rec_values: ["Never", "Monthly", "Yearly"],
+        not_past_time: "Past time not allowed"
     },
     reportPost: {
         title: "Report post",
