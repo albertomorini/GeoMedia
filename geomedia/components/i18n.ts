@@ -106,7 +106,8 @@ export const it = {
         otpexpiration: "Valido per 1h",
         checkotp: "Verifica OTP",
         psw_changed: "Password cambiata",
-        otp_expired: "OTP scaduto, rifai la procedura"
+        otp_expired: "OTP scaduto",
+        otp_repeat: "Ripetere la procedura"
     },
     rangeTimePicker: {
         startTime: "Il post sarà visibile da",
@@ -324,7 +325,8 @@ export const en = {
         otpexpiration: "Valid for 1h",
         checkotp: "Verify OTP",
         psw_changed: "Password changed",
-        otp_expired: "OTP expired, restart"
+        otp_expired: "OTP expired, restart",
+        otp_repeat: "Proceed to repeat the procedure"
     },
     rangeTimePicker: {
         startTime: "The post will be visible from",

@@ -39,8 +39,8 @@ const ModalPswReset = (props) => {
             } else {
                 ctx?.showToast({
                     type: "error",
-                    text1: "OTP Expired",
-                    text2: "Proceed to repeat the procedure"
+                    text1: langselected?.pswReset.otp_expired,
+                    text2: langselected?.pswReset.otp_repeat
                 })
             }
         }).catch(err => {
