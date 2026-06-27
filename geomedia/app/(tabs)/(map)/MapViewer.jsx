@@ -19,6 +19,8 @@ import { MapDarkMode, MapLightMode, MapRetro, MapDefaultMode, MapNightMode } fro
 import { useLanguage } from "@/components/LanguageProvider";
 import TagSelector from '../(collections)/TagSelector';
 
+import * as Haptics from 'expo-haptics';
+
 
 const MapViewer = forwardRef((props, ref) => {
 
@@ -394,10 +396,14 @@ const MapViewer = forwardRef((props, ref) => {
                                                 paddingHorizontal: 9,
                                                 paddingVertical: 5,
                                                 borderRadius: 20,
-                                                backgroundColor: `${s?.COLOR}99`,
                                                 marginRight: 8,
+                                                borderColor: 'pink',
+                                                backgroundColor: collectionsChosen?.includes(s.ID)
+                                                    ? s.COLOR
+                                                    : `${s.COLOR}99`,
                                             }}
-                                            onPress={() => {
+                                            onPress={async () => {
+
                                                 const updatedCollections = collectionsChosen.includes(s?.ID)
                                                     ? collectionsChosen.filter(id => id !== s?.ID)
                                                     : [...collectionsChosen, s?.ID];
@@ -405,6 +411,7 @@ const MapViewer = forwardRef((props, ref) => {
                                                 setCollectionsChosen(updatedCollections);
 
                                                 get_posts_map(UserPosition, updatedCollections);
+                                                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                                             }}
                                         >
                                             <ThemedText>{s?.TITLE}</ThemedText>
