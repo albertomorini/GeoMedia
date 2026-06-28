@@ -333,7 +333,7 @@ export default function LoginScreen(props) {
                 >
                     <ThemedView
                         style={{
-                            backgroundColor: "rgba(114, 114, 114, 0.8)",
+                            backgroundColor: "rgba(114, 114, 114, 0.2)",
                             borderRadius: 10,
                             height: "100%",
                             padding: 10,

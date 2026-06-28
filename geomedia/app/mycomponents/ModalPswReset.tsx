@@ -141,7 +141,7 @@ const ModalPswReset = (props) => {
                 }}
                 animationType="slide">
                 <ThemedView style={{
-                    backgroundColor: "rgba(138, 138, 138, 0.8)",
+                    backgroundColor: "rgba(138, 138, 138, 0.2)",
                     // borderWidth: 3,\
                     height: "100%",
                     padding: 10,

@@ -147,7 +147,15 @@ export default function Settings(props) {
                 </Picker>
             </>
 
-            <>
+            <ThemedView
+                style={{
+                    borderColor: "gray",
+                    borderWidth: 2,
+                    borderStyle: "dashed",
+                    padding: 10,
+                    borderRadius: 10
+                }}
+            >
                 <ThemedText style={style.label}>{langselected?.settings?.labelSrv}</ThemedText>
                 <ThemedView
                     style={{
@@ -183,7 +191,7 @@ export default function Settings(props) {
                     </ThemedView>
 
                 </ThemedView>
-            </>
+            </ThemedView>
 
             {
                 ctx?.getUID() == undefined ? null : //login
