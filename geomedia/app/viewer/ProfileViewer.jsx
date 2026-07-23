@@ -7,7 +7,7 @@ import { default_account_profilepic } from '@/assets/images/default_pictures';
 import { useLanguage } from '@/components/LanguageProvider';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
 import { ActivityIndicator, Alert, Animated, PermissionsAndroid, Platform, ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import { BarChart, PieChart } from 'react-native-gifted-charts';
@@ -325,15 +325,14 @@ const ProfileViewer = () => {
                                 allowCreation={false}
                                 label="Posts"
                                 onSelect={(pickedItem) => {
-                                    // console.log(pickedItem, JSON.parse(pickedItem),pickedItem.post_id);
-
+                                    console.log(pickedItem.ID);
+                                    
                                     router.push({
-                                        pathname: 'viewer/PostViewer',
+                                        pathname: '/viewer/PostViewer',
                                         params: {
-                                            postid: pickedItem?.post_id,
+                                            postid: pickedItem?.ID,
                                         }
                                     });
-
                                 }}
                                 DATA={allowedPost}
                             />

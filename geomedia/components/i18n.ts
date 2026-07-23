@@ -166,7 +166,7 @@ export const it = {
         popular: "Popolari",
         foryou: "Per te",
         your_interests: "Tematiche seguite",
-        preferences_saved: "Preference saved!"
+        preferences_saved: "Preferenze salvate!"
     },
     requiredfields: "Campi obbligatori: ",
     requiredfields_post_title: "Titolo post mancante",

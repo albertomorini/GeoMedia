@@ -165,7 +165,6 @@ export default function Profile() {
                   postid: pickedItem?.ID,
                 }
               });
-
             }}
             DATA={Posts}
 
