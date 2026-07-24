@@ -13,8 +13,10 @@ import CarouselFileViewer from "@/app/mycomponents/file/CarouselFileViewer";
 import ItemIconizable from "@/app/mycomponents/ItemIconizable";
 import ReportPost from "@/app/mycomponents/ReportPost";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PostViewer = () => {
+    const insets = useSafeAreaInsets();
     const ctx = useContext(MyContext)
     const params = useLocalSearchParams();
     const [postData, setPostData] = useState(null)
@@ -129,6 +131,7 @@ const PostViewer = () => {
                     width: "100%",
                     justifyContent: 'center',
                     alignItems: 'center',
+
                 }}>
                     <Stack.Screen //thus to avoid the component name
                         options={{
@@ -144,8 +147,13 @@ const PostViewer = () => {
                         options={{
                             title: postData?.TITLE,
                         }}
+
                     />
-                    < ThemedView style={{ flex: 1 }}>
+                    < ThemedView style={{
+                        flex: 1,
+
+
+                    }}>
 
                         {/* SCROLLABLE CONTENT */}
                         <ScrollView
@@ -232,7 +240,9 @@ const PostViewer = () => {
                             }
                         </ScrollView>
 
-                        <ThemedView style={style.bottom_bar}>
+                        <ThemedView style={[style.bottom_bar, {
+                            bottom: insets.bottom,
+                        }]}>
 
                             <ThemedView style={style.bottom_bar_item}>
                                 <Ionicons name="eye-outline" size={20} color={"#555"} />

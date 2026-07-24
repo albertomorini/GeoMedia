@@ -179,16 +179,17 @@ const MapViewer = forwardRef((props, ref) => {
 
     /////////////////////////////////////////////////////////////
 
-    function collections_get_local() {
+    async function collections_get_local() {
         if (UserPosition?.latitude != 0 && UserPosition?.longitude != 0) {
 
-            doRequest("collections/get_local", {
+            return doRequest("collections/get_local", {
                 uid: ctx?.getUID(),
                 curr_lat: UserPosition?.latitude,
                 curr_lon: UserPosition?.longitude
             }, "GET").then(resQuery => {
                 if (resQuery?.length > 0) {
                     setLocalCollections(resQuery)
+                    return resQuery
                 }
             }).catch(err => {
                 ctx?.showToast({
@@ -225,9 +226,16 @@ const MapViewer = forwardRef((props, ref) => {
     useFocusEffect( //to handle the back on routing
         useCallback(async () => {
             let cols = await check_cache_collection_chosen()
-            get_posts_map(UserPosition, cols)
+            let local_cols = await collections_get_local()
+            if (cols?.length == 0) {
+                let lc_ids = local_cols.map(s => s?.ID)
+                setCollectionsChosen([...lc_ids])
+                get_posts_map(UserPosition, lc_ids)
+            } else {
+
+                get_posts_map(UserPosition, cols)
+            }
             load_map_preference_style() //thus to get the change of style
-            collections_get_local()
         }, [UserPosition]) //when position or collections change (or are loaded) refresh posts
     )
     useEffect(() => {
@@ -324,7 +332,7 @@ const MapViewer = forwardRef((props, ref) => {
                             }}
                             style={[style.buttons.fab, {
                                 // position: "absolute",
-                                bottom: 100,
+                                bottom: 120,
                                 right: 20,
                                 borderRadius: 28,
                                 backgroundColor: "#f2f2f2e7",
@@ -342,7 +350,7 @@ const MapViewer = forwardRef((props, ref) => {
                             accessibilityRole="button"
                             accessibilityLabel={langselected?.newm}
                             style={[style.buttons.fab, style.colors.geomedia_blue, {
-                                bottom: 40,
+                                bottom: 60,
                                 justifyContent: "center",
                             }]}
                             onPress={() => router.push('PostCreator')}
