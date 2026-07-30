@@ -167,7 +167,21 @@ async def auth_signin(procedure: str, body: dict):
 # ------------------------
 # GEO LOGIC
 
-def checkAREA(areaKM, post_lat, post_lon, curr_lat, curr_lon):
+# Haversine formula implementation
+# Compute the geodesic distance between two geographic coordinates
+# using Vincenty's inverse formula.
+
+# Args:
+#     areaKM (float): The range within the post would be visible
+#     post_lat (float): Latitude of the post.
+#     post_lon (float): Longitude of the post.
+#     curr_lat (float): Current latitude coordinate of the user.
+#     curr_lon (float): Current longitude coordinate of the user.
+
+# Returns:
+#     bool: True if the user position is included within the area of visibility of the post.
+
+def check_post_area(areaKM, post_lat, post_lon, curr_lat, curr_lon):
     from math import cos, asin, sqrt, pi
 
     post_lat = float(post_lat)
@@ -207,7 +221,7 @@ async def post_get_map(uid, current_position, collection_chosen=None):
     results = []
 
     for pp in posts:
-        if checkAREA(
+        if check_post_area(
             pp["VISIBILITY_AREA_KM"],
             pp["LATITUDE"],
             pp["LONGITUDE"],
@@ -231,7 +245,7 @@ async def profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon):
     results = []
     ## filter by allowed by visibility
     for pp in posts:
-        if checkAREA(
+        if check_post_area(
             pp["VISIBILITY_AREA_KM"],
             pp["LATITUDE"],
             pp["LONGITUDE"],
@@ -250,7 +264,7 @@ async def collections_get_local(uid,curr_lat,curr_lon):
     results = []
     ## filter by allowed by visibility
     for pp in posts:
-        if checkAREA(
+        if check_post_area(
             pp["VISIBILITY_AREA_KM"],
             pp["LATITUDE"],
             pp["LONGITUDE"],
