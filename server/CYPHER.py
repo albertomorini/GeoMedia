@@ -4,9 +4,15 @@ import binascii
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
+import json
 
 
-password = "Fidelio99"
+password = ""
+with open("./config.json") as f:
+    config = json.load(f)
+    
+password = config.get("KEY_DB_STRING")
+
 algorithm = "aes-256-cbc"
 
 

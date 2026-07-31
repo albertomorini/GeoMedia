@@ -1,9 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
-
+import { SHARED_KEY } from "./config_local";
 
 let URL = "https://geomediasrv.duckdns.org:9911/"
-// let URL = "http://10.0.0.3:9910/"
-const SHARED_KEY = "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="
+const SHARED_KEY = ""
 
 
 export async function load_config() {
