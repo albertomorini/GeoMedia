@@ -33,12 +33,12 @@ def create_connection():
 
 # ----------------------------------------------------
 # EXECUTE QUERY
-def execute_query(query, fetch=True):
+def execute_query(query, params=None, fetch=True):
     conn = create_connection()
 
     try:
         cursor = conn.cursor(as_dict=True)
-        cursor.execute(query)
+        cursor.execute(query, params or ())
 
         result = []
         if fetch:
@@ -47,28 +47,28 @@ def execute_query(query, fetch=True):
             except Exception:
                 result = []
 
-        conn.commit() 
+        conn.commit()
         return result
 
     except Exception as e:
         conn.rollback()
-        print("SQL ERROR:: ",e)
-        raise e
+        print("SQL ERROR:: ", e)
+        raise
 
     finally:
         conn.close()
 
-
 # ----------------------------------------------------
 # SELECT
-def select_query(query):
-    return execute_query(query, fetch=True)
+def select_query(query, params=None):
+    return execute_query(query, params=params, fetch=True)
+
 
 
 # ----------------------------------------------------
 # INSERT / UPDATE
-def insert_query(query):
-    return execute_query(query, fetch=False)
+def insert_query(query, params=None):
+    return execute_query(query, params=params, fetch=False)
 
 
 # ----------------------------------------------------

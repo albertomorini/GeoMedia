@@ -42,16 +42,25 @@ async def generic_query(path: str, body: dict):
 # POST / COLLECTION
 
 async def post_merge(post_content: dict):
-    dummy = json.dumps(post_content).replace("'", "''")
-    query = f"EXEC dbo.POST_MERGE @POST_CONTENT='{dummy}'"
-    print(query)
-    return SQL_MANAGER.select_query(query)
+    dummy = json.dumps(post_content)
+
+    query = """
+    EXEC dbo.POST_MERGE
+        @POST_CONTENT=%s
+    """
+
+    return SQL_MANAGER.select_query(query, (dummy))
 
 
 async def collection_merge(collection: dict):
-    dummy = json.dumps(collection).replace("'", "''") # to escale the apix
-    query = f"EXEC dbo.COLLECTION_MERGE @JSON='{dummy}'"
-    return SQL_MANAGER.select_query(query)
+    dummy = json.dumps(collection)
+
+    query = """
+    EXEC dbo.COLLECTION_MERGE
+        @JSON=%s
+    """
+
+    return SQL_MANAGER.select_query(query, (dummy,))
 
 async def hashtag_get():
     return SQL_MANAGER.select_query("SELECT TITLE FROM DBO.HASHTAGS")
@@ -92,13 +101,13 @@ async def hpmedia_merge_folder(postid: int, attachments: list):
 
         json_str = json.dumps(hypermedia_reference).replace("'", "''")
 
-        query = (
-            "EXEC HPMEDIA_MERGEFILE "
-            f"@FILESNAME_ATTACHED='{json_str}',"
-            f"@POSTID={postid}"
-        )
+        query = """
+            EXEC HPMEDIA_MERGEFILE
+            @FILESNAME_ATTACHED=%s,
+            @POSTID=%s
+        """
 
-        return SQL_MANAGER.select_query( query)
+        return SQL_MANAGER.select_query(query, (json_str, postid))
 
     except Exception as e:
         writeLog(f"Error on merge_folder: {e}", "HPMEDIA")
@@ -210,13 +219,16 @@ async def post_get_map(uid, current_position, collection_chosen=None):
     if collection_chosen is None:
         collection_chosen = []
 
-    query = (
-        "EXEC POST_GET_MAP "
-        f"@UID='{uid}', "
-        f"@COLLECTIONS_CHOSEN='{json.dumps(collection_chosen)}'"
-    )
+    query = """
+    EXEC POST_GET_MAP
+        @UID=%s,
+        @COLLECTIONS_CHOSEN=%s
+    """
 
-    posts = SQL_MANAGER.select_query( query)
+    posts = SQL_MANAGER.select_query(
+        query,
+        (uid, json.dumps(collection_chosen))
+    )
 
     results = []
 
@@ -232,25 +244,25 @@ async def post_get_map(uid, current_position, collection_chosen=None):
 
     return results
 
+async def profile_show_allowed_post(uid, profile_id, curr_lat, curr_lon):
+    query = """
+    EXEC PROFILE_GET_ALLOWEDPOST
+        @UID=%s,
+        @PROFILE_ID=%s
+    """
 
-async def profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon):
-    query = (
-        "EXEC PROFILE_GET_ALLOWEDPOST "
-        f"@UID='{uid}', "
-        f"@PROFILE_ID='{profile_id}'"
-    )
-
-    posts = SQL_MANAGER.select_query(query)
+    posts = SQL_MANAGER.select_query(query, (uid, profile_id))
 
     results = []
-    ## filter by allowed by visibility
+
+    # Filter by visibility
     for pp in posts:
         if check_post_area(
             pp["VISIBILITY_AREA_KM"],
             pp["LATITUDE"],
             pp["LONGITUDE"],
             curr_lat,
-            curr_lon
+            curr_lon,
         ):
             results.append(pp)
 
@@ -258,9 +270,11 @@ async def profile_show_allowed_post(uid,profile_id,curr_lat,curr_lon):
 
 
 async def collections_get_local(uid,curr_lat,curr_lon):
-    query="EXEC POST_GETALL_ALLOWED @UID="+str(uid)
-
-    posts = SQL_MANAGER.select_query(query)
+    query = """
+    EXEC POST_GETALL_ALLOWED
+    @UID=%s
+    """
+    posts = SQL_MANAGER.select_query(query, (uid))
     results = []
     ## filter by allowed by visibility
     for pp in posts:
@@ -301,28 +315,40 @@ async def post_delete(postid: int, password: str):
     writeLog(
         f"Requested deletion for: {postid} = with pas[10]{password[:10]}"
     )
-    query = (
-        "EXEC POST_DELETE "
-        f"@POSTID={postid}, "
-        f"@PASSWORD='{password}'"
-    )
 
-    return SQL_MANAGER.insert_query(query)
+    query = """
+    EXEC POST_DELETE
+        @POSTID=%s,
+        @PASSWORD=%s
+    """
+
+    return SQL_MANAGER.insert_query(query, (postid, password))
 
 
 ## INTEREST 
 
-async def profile_interest_merge(uid:int,interests:dict):
+async def profile_interest_merge(uid: int, interests: dict):
     interests_dicts = [interest.dict() for interest in interests]
-    dummy = json.dumps(interests_dicts).replace("'", "''")
-    query = f"EXEC dbo.PROFILE_INTEREST_MERGE @UID={uid},@JSON='{dummy}'"
-    return SQL_MANAGER.select_query(query)
+    dummy = json.dumps(interests_dicts)
 
-async def profile_interest_get(uid:int):
-    query = f"EXEC DBO.PROFILE_INTEREST_GET @UID={uid}"
-    return SQL_MANAGER.select_query(query)
+    query = """
+    EXEC dbo.PROFILE_INTEREST_MERGE
+        @UID=%s,
+        @JSON=%s
+    """
 
+    return SQL_MANAGER.select_query(query, (uid, dummy))
 
-async def collections_by_tag(uid:int):
-    query = f"EXEC DBO.COLLECTIONS_BY_TAG @UID={uid}"
-    return SQL_MANAGER.select_query(query)
+async def profile_interest_get(uid: int):
+    query = """
+    EXEC dbo.PROFILE_INTEREST_GET
+        @UID=%s
+    """
+    return SQL_MANAGER.select_query(query, (uid,))
+
+async def collections_by_tag(uid: int):
+    query = """
+    EXEC dbo.COLLECTIONS_BY_TAG
+        @UID=%s
+    """
+    return SQL_MANAGER.select_query(query, (uid,))
