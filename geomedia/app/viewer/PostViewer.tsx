@@ -131,7 +131,6 @@ const PostViewer = () => {
                     width: "100%",
                     justifyContent: 'center',
                     alignItems: 'center',
-
                 }}>
                     <Stack.Screen //thus to avoid the component name
                         options={{

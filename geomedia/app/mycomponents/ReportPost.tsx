@@ -70,7 +70,7 @@ const ReportPost = (props) => {
                 transparent={true}
                 animationType="slide">
                 <ThemedView style={{
-                    backgroundColor: "rgba(138, 138, 138, 0.1)",
+                    backgroundColor: "rgba(138, 138, 138, 0.7)",
                     height: "100%",
                     padding: 10,
                 }}>
