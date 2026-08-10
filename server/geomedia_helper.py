@@ -315,7 +315,7 @@ async def post_delete(postid: int, password: str):
     writeLog(
         f"Requested deletion for: {postid} = with pas[10]{password[:10]}"
     )
-
+    # Perpared statement to avoid SQL INJECTION
     query = """
     EXEC POST_DELETE
         @POSTID=%s,
