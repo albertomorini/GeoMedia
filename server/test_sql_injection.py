@@ -5,7 +5,7 @@ def time_fn(psw):
     start = time.time()
     x = requests.delete(
         "https://geomediasrv.duckdns.org:9911/post/1",
-        headers={"Authorization": "R2VvTWVkaWEyMDI2X0FuZHJvaWRPZmZpY2lhbA=="},
+        headers={"Authorization": ""},
         params={"password": psw}
     )
     print(x.json())
