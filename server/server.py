@@ -3,6 +3,9 @@ from fastapi import FastAPI, Request, Response, HTTPException, Depends, Header
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import hmac
+import hashlib
+import time
 
 import geomedia_helper 
 
@@ -17,19 +20,78 @@ from body_schemas import *
 
 ############################################################################################################################################
 
+def calculate_signature(path: str, timestamp: str, nonce: str, shared_secret: str) -> str:
+    payload = path + timestamp + nonce
+
+    return hmac.new(
+        shared_secret.encode("utf-8"),
+        payload.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
 
 
-def verify_auth(request: Request ,authorization: str = Header(None)):
-    if request.url.path == "/privacy" or request.url.path=="/personalData":
+def verify_auth(
+    request: Request,
+    x_signature: str | None = Header(None),
+    x_timestamp: str | None = Header(None),
+    x_nonce: str | None = Header(None),
+):
+
+    if request.url.path in ("/privacy", "/personalData"):
         return None
 
-    if authorization is None:
-        raise HTTPException(status_code=401, detail="Missing Authorization header")
+    #### CHECK FOR HEADERS PARAMS
+    if not x_signature:
+        raise HTTPException(
+            status_code=401,
+            detail="Missing X-Signature header",
+        )
+    if not x_timestamp:
+        raise HTTPException(
+            status_code=401,
+            detail="Missing X-Timestamp header",
+        )
+    if not x_nonce:
+        raise HTTPException(
+            status_code=401,
+            detail="Missing X-Nonce header",
+        )
+    # TIMESTAMP VALIDATION
+    try:
+        timestamp = int(x_timestamp)
+    except ValueError:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid timestamp",
+        )
 
-    if authorization not in SHARED_KEYS:
-        raise HTTPException(status_code=403, detail="Invalid authorization key")
+    current_time_ms = int(time.time() * 1000)
 
-    return authorization
+    if abs(current_time_ms - timestamp) >= 300_000: # 5 min
+        raise HTTPException(
+            status_code=401,
+            detail="Expired timestamp",
+        )
+    path = request.url.path
+
+    if request.url.query:
+        path += "?" + request.url.query
+
+    for shared_secret in SHARED_KEYS:
+        expected_signature = calculate_signature(
+            path,
+            x_timestamp,
+            x_nonce,
+            shared_secret,
+        )
+
+        if hmac.compare_digest(expected_signature, x_signature):
+            return True
+
+    raise HTTPException(
+        status_code=403,
+        detail="Invalid signature",
+    )
 
 app = FastAPI(title="Geomedia API",
     dependencies=[Depends(verify_auth)]
@@ -368,16 +430,16 @@ async def handle_request(request: Request, full_path: str):
 
 # # ------------------------------------------------
 # # HTTP
-# if __name__ == "__main__":
-#     print(f"Server started on port: {PORT-1}")
-#     uvicorn.run(app, host="0.0.0.0", port=PORT-1
+if __name__ == "__main__":
+    print(f"Server started on port: {PORT-1}")
+    uvicorn.run(app, host="0.0.0.0", port=PORT-1
        
-#     )
+    )
 # # # ------------------------------------------------
 # # HTTPS
-if __name__ == "__main__":
-    print(f"Server started on port: {PORT}")
-    uvicorn.run(app, host="0.0.0.0", port=PORT,
-        ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
-        ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
-    )
+# if __name__ == "__main__":
+#     print(f"Server started on port: {PORT}")
+#     uvicorn.run(app, host="0.0.0.0", port=PORT,
+#         ssl_keyfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/privkey.pem",
+#         ssl_certfile="/etc/letsencrypt/live/geomediasrv.duckdns.org/fullchain.pem",
+#     )

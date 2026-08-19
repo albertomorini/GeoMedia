@@ -1,7 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 import { SHARED_KEY } from "./config_local";
+import CryptoJS from "crypto-js";
+import * as Crypto from "expo-crypto";
 
-let URL = "https://geomediasrv.duckdns.org:9911/"
+
+// let URL = "https://geomediasrv.duckdns.org:9911/"
+let URL = "http://10.0.0.3:9910/"
 
 
 export async function load_config() {
@@ -26,26 +30,50 @@ export const checkValidityPassword = (password) => {
 
 //NETWORKING
 export const doRequest = (api, body = {}, method = "POST") => {
-    let methods_no_body = ["GET", "DELETE"]
+    const nonce = Crypto.randomUUID();
+    const timestamp = Date.now().toString();
+
+    let methods_no_body = ["GET", "DELETE"];
+
     if (methods_no_body.includes(method)) {
         if (body && Object.keys(body).length > 0) {
             const query = new URLSearchParams(body).toString();
             api += "?" + query;
         }
-        return fetch(URL + api, {
-            method: method,
-            // mode: "cors",
-            headers: { "authorization": SHARED_KEY },
-        }).then(res => res.json())
-    } else {
-        return fetch(URL + api, {
-            method: method,
-            // mode: "cors",
-            headers: { "authorization": SHARED_KEY, "content-type": "application/json" },
-            body: JSON.stringify(body)
-        }).then(res => res.json())
     }
-}
+
+    // Sign the FINAL path, including query parameters
+    const dataToSign = "/" + api + timestamp + nonce;
+
+    const signature = CryptoJS.HmacSHA256(
+        dataToSign,
+        SHARED_KEY
+    ).toString(CryptoJS.enc.Hex);
+
+    console.log(dataToSign);
+    console.log(signature, timestamp, nonce);
+
+    const headers = {
+        "Content-Type": "application/json",
+        "X-Timestamp": timestamp,
+        "X-Nonce": nonce,
+        "X-Signature": signature
+    };
+
+    if (methods_no_body.includes(method)) {
+        return fetch(URL + api, {
+            method,
+            headers: new Headers(headers),
+        }).then(res => res.json());
+    }
+
+    return fetch(URL + api, {
+        method,
+        headers: new Headers(headers),
+        body: JSON.stringify(body)
+    }).then(res => res.json());
+};
+
 
 
 //Utility stuff
