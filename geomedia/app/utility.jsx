@@ -49,9 +49,6 @@ export const doRequest = (api, body = {}, method = "POST") => {
         SHARED_KEY
     ).toString(CryptoJS.enc.Hex);
 
-    console.log(dataToSign);
-    console.log(signature, timestamp, nonce);
-
     const headers = {
         "Content-Type": "application/json",
         "X-Timestamp": timestamp,
