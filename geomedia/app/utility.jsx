@@ -4,8 +4,7 @@ import CryptoJS from "crypto-js";
 import * as Crypto from "expo-crypto";
 
 
-// let URL = "https://geomediasrv.duckdns.org:9911/"
-let URL = "http://10.0.0.3:9910/"
+let URL = "https://geomediasrv.duckdns.org:9911/"
 
 
 export async function load_config() {
