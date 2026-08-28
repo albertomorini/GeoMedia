@@ -96,4 +96,4 @@ docker run \
 -d mcr.microsoft.com/mssql/server:2025-latest
 ```
 
-![ER-Schema](/docs/img/ER_V1.png)
+![ER-Schema](docs/img/GeoMedia_ER.svg)
